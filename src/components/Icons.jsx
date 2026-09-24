@@ -90,3 +90,11 @@ export function ArrowRightIcon(props) {
     </svg>
   )
 }
+
+export function ZapIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
+    </svg>
+  )
+}

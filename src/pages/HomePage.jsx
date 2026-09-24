@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { LEVELS, ALL_WORDS, getNextUnit } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getCardStats, getDueWordIds } from '../lib/srs'
-import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon } from '../components/Icons'
+import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon, ZapIcon } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
@@ -192,6 +192,22 @@ export default function HomePage() {
           })}
         </div>
       </section>
+
+      <Link
+        to="/tro-choi"
+        className="mb-5 flex items-center justify-between rounded-2xl bg-gradient-to-br from-candy-500 via-brand-500 to-sky-500 p-4 text-white shadow-md"
+      >
+        <div className="flex items-center gap-3">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/25">
+            <ZapIcon width={22} height={22} />
+          </span>
+          <div>
+            <p className="text-lg font-semibold">Đua tốc độ</p>
+            <p className="text-xs text-white/80">Trả lời nhanh trong 60 giây, phá kỷ lục!</p>
+          </div>
+        </div>
+        <ArrowRightIcon width={22} height={22} />
+      </Link>
 
       <section className="mb-5 rounded-2xl bg-white p-4 shadow-sm">
         <p className="mb-3 text-sm text-gray-500">
