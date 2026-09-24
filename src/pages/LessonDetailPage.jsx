@@ -6,7 +6,6 @@ import { speakChinese } from '../lib/tts'
 import { ArrowLeftIcon, VolumeIcon, CheckIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
-import MnemonicIcon, { MNEMONIC_HINTS, hasMnemonic } from '../components/MnemonicIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 
 function shuffle(arr) {
@@ -103,13 +102,7 @@ export default function LessonDetailPage() {
                       <p className="text-xs text-gray-700">💡 {PICTOGRAPH_HINTS[word.hanzi]}</p>
                     </div>
                   )}
-                  {!hasPictograph(word.hanzi) && hasMnemonic(word.hanzi) && (
-                    <div className="mt-3 flex items-center gap-2 rounded-xl bg-candy-100 p-2.5">
-                      <MnemonicIcon word={word.hanzi} className="h-9 w-9 shrink-0 text-candy-700" />
-                      <p className="text-xs text-gray-700">🖼️ {MNEMONIC_HINTS[word.hanzi]}</p>
-                    </div>
-                  )}
-                  {!hasPictograph(word.hanzi) && !hasMnemonic(word.hanzi) && hasRadicalHint(word.hanzi) && (
+                  {!hasPictograph(word.hanzi) && hasRadicalHint(word.hanzi) && (
                     <div className="mt-3 flex items-center gap-2 rounded-xl bg-teal-100 p-2.5">
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-lg text-teal-700">
                         {getRadicalSymbol(word.hanzi)}

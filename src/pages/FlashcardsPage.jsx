@@ -7,7 +7,6 @@ import { speakChinese } from '../lib/tts'
 import { VolumeIcon, CheckIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
-import MnemonicIcon, { MNEMONIC_HINTS, hasMnemonic } from '../components/MnemonicIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 
 const RATINGS = [
@@ -77,13 +76,7 @@ export default function FlashcardsPage() {
                 <p className="text-left text-xs text-gray-700">💡 {PICTOGRAPH_HINTS[currentWord.hanzi]}</p>
               </div>
             )}
-            {!hasPictograph(currentWord.hanzi) && hasMnemonic(currentWord.hanzi) && (
-              <div className="mt-3 flex w-full items-center gap-2 rounded-xl bg-candy-100 p-2.5">
-                <MnemonicIcon word={currentWord.hanzi} className="h-9 w-9 shrink-0 text-candy-700" />
-                <p className="text-left text-xs text-gray-700">🖼️ {MNEMONIC_HINTS[currentWord.hanzi]}</p>
-              </div>
-            )}
-            {!hasPictograph(currentWord.hanzi) && !hasMnemonic(currentWord.hanzi) && hasRadicalHint(currentWord.hanzi) && (
+            {!hasPictograph(currentWord.hanzi) && hasRadicalHint(currentWord.hanzi) && (
               <div className="mt-3 flex w-full items-center gap-2 rounded-xl bg-teal-100 p-2.5">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-lg text-teal-700">
                   {getRadicalSymbol(currentWord.hanzi)}

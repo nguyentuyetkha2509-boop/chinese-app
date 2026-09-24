@@ -34,7 +34,7 @@ export const CHAR_RADICAL = {
   菜: 'grass', 花: 'grass', 茶: 'grass', 草: 'grass', 苦: 'grass',
   树: 'wood', 楼: 'wood', 桥: 'wood', 极: 'wood',
   快: 'heart', 慢: 'heart', 忙: 'heart', 想: 'heart', 懂: 'heart',
-  好: 'woman', 她: 'woman', 姓: 'woman',
+  她: 'woman', 姓: 'woman',
   吃: 'mouth', 喝: 'mouth', 叫: 'mouth', 吗: 'mouth', 哪: 'mouth', 呢: 'mouth', 只: 'mouth', 号: 'mouth', 哭: 'mouth', 台: 'mouth',
   是: 'sun', 春: 'sun', 晴: 'sun',
   热: 'fire',
