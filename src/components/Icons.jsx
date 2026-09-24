@@ -99,6 +99,14 @@ export function ZapIcon(props) {
   )
 }
 
+export function ChatIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4H6.5A2.5 2.5 0 0 1 4 13.5v-8Z" />
+    </svg>
+  )
+}
+
 export function TopicIcon(props) {
   return (
     <svg {...base(props)}>

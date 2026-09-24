@@ -81,7 +81,11 @@ export default function LessonDetailPage() {
             {unit.words.map((word, i) => {
               const accent = accentFor(i)
               return (
-                <div key={word.id} className={`rounded-2xl border-l-4 bg-white p-4 shadow-sm ${accent.leftBorder}`}>
+                <div
+                  key={word.id}
+                  className={`animate-card-in rounded-2xl border-l-4 bg-white p-4 shadow-sm ${accent.leftBorder}`}
+                  style={{ animationDelay: `${Math.min(i, 10) * 40}ms` }}
+                >
                   <button
                     onClick={() => speakChinese(word.hanzi)}
                     className="flex w-full items-center justify-between text-left"

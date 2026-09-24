@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { LEVELS, ALL_WORDS, getNextUnit } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getCardStats, getDueWordIds } from '../lib/srs'
-import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon, ZapIcon, TopicIcon } from '../components/Icons'
+import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon, ZapIcon, TopicIcon, ChatIcon } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
@@ -45,6 +45,12 @@ const ACTION_CARDS = [
     icon: TopicIcon,
     title: 'Học theo chủ đề',
     className: 'bg-gradient-to-br from-candy-500 to-sun-500'
+  },
+  {
+    to: '/hoi-thoai',
+    icon: ChatIcon,
+    title: 'Hội thoại',
+    className: 'bg-gradient-to-br from-teal-500 to-sky-600'
   }
 ]
 
@@ -227,7 +233,7 @@ export default function HomePage() {
                 key={b.id}
                 title={b.desc}
                 className={`flex flex-col items-center rounded-xl p-2 text-center ${
-                  earned ? 'bg-gradient-to-br from-sun-100 to-candy-100' : 'bg-gray-50 opacity-50 grayscale'
+                  earned ? 'animate-pop-in bg-gradient-to-br from-sun-100 to-candy-100' : 'bg-gray-50 opacity-50 grayscale'
                 }`}
               >
                 <span className="text-2xl">{b.icon}</span>
@@ -253,6 +259,7 @@ export default function HomePage() {
             )}
             {to === '/viet-chu' && <p className="text-xs text-white/80">Luyện nét theo thứ tự chuẩn</p>}
             {to === '/chu-de' && <p className="text-xs text-white/80">Gia đình, đồ ăn, màu sắc...</p>}
+            {to === '/hoi-thoai' && <p className="text-xs text-white/80">Xem tiếng Trung dùng thật</p>}
           </Link>
         ))}
       </section>

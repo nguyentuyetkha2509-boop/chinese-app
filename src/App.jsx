@@ -10,6 +10,8 @@ import WritingPage from './pages/WritingPage'
 import SpeedGamePage from './pages/SpeedGamePage'
 import TopicsPage from './pages/TopicsPage'
 import TopicDetailPage from './pages/TopicDetailPage'
+import DialoguesPage from './pages/DialoguesPage'
+import DialogueDetailPage from './pages/DialogueDetailPage'
 
 export default function App() {
   return (
@@ -27,6 +29,8 @@ export default function App() {
         <Route path="/tro-choi" element={<SpeedGamePage />} />
         <Route path="/chu-de" element={<TopicsPage />} />
         <Route path="/chu-de/:topicKey" element={<TopicDetailPage />} />
+        <Route path="/hoi-thoai" element={<DialoguesPage />} />
+        <Route path="/hoi-thoai/:dialogueKey" element={<DialogueDetailPage />} />
       </Routes>
       <BottomNav />
     </div>
