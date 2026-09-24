@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getLevel, ALL_WORDS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
@@ -9,24 +9,8 @@ import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 import { XP_REWARDS } from '../lib/gamification'
-
-function shuffle(arr) {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
-
-function buildQuiz(unitWords, levelWords) {
-  return unitWords.map((word) => {
-    const pool = levelWords.length > 4 ? levelWords : ALL_WORDS
-    const others = shuffle(pool.filter((w) => w.id !== word.id)).slice(0, 3)
-    const options = shuffle([word, ...others])
-    return { word, options }
-  })
-}
+import { buildQuiz } from '../lib/quiz'
+import QuizQuestion from '../components/QuizQuestion'
 
 export default function LessonDetailPage() {
   const { levelId, unitId } = useParams()
@@ -36,7 +20,10 @@ export default function LessonDetailPage() {
   const nextUnit = level?.units.find((u) => u.id === Number(unitId) + 1)
   const { markUnitComplete, addXp } = useProgress()
   const [phase, setPhase] = useState('study') // study | quiz | done
-  const quiz = useMemo(() => (unit ? buildQuiz(unit.words, level.words) : []), [unit, level])
+  const quiz = useMemo(
+    () => (unit ? buildQuiz(unit.words, level.words.length > 4 ? level.words : ALL_WORDS) : []),
+    [unit, level]
+  )
   const [quizIndex, setQuizIndex] = useState(0)
   const [correctCount, setCorrectCount] = useState(0)
   const [selected, setSelected] = useState(null)
@@ -52,10 +39,11 @@ export default function LessonDetailPage() {
     )
   }
 
-  function chooseAnswer(option) {
-    if (selected) return
-    setSelected(option)
-    const isCorrect = option.id === quiz[quizIndex].word.id
+  function chooseAnswer(answer) {
+    if (selected !== null) return
+    setSelected(answer)
+    const q = quiz[quizIndex]
+    const isCorrect = q.type === 'truefalse' ? answer === q.isTrue : answer.id === q.word.id
     if (isCorrect) {
       setCorrectCount((c) => c + 1)
       playCorrect()
@@ -145,47 +133,14 @@ export default function LessonDetailPage() {
       )}
 
       {phase === 'quiz' && quiz[quizIndex] && (
-        <div>
-          <p className="mb-2 text-sm text-gray-500">
-            Câu {quizIndex + 1}/{quiz.length}
-          </p>
-          <div className="mb-6 rounded-2xl bg-white p-6 text-center shadow-sm">
-            <p className="text-4xl text-gray-800">{quiz[quizIndex].word.hanzi}</p>
-            <p className="mt-1 text-brand-600">{quiz[quizIndex].word.pinyin}</p>
-          </div>
-          <p className="mb-2 text-sm text-gray-500">Chọn nghĩa đúng:</p>
-          <div className="space-y-2">
-            {quiz[quizIndex].options.map((opt, i) => {
-              const isChosen = selected?.id === opt.id
-              const isRight = opt.id === quiz[quizIndex].word.id
-              const showResult = selected && (isChosen || isRight)
-              const accent = accentFor(i)
-              const letter = String.fromCharCode(65 + i)
-              return (
-                <button
-                  key={opt.id}
-                  onClick={() => chooseAnswer(opt)}
-                  className={`flex w-full items-center gap-3 rounded-xl border-2 p-3 text-left ${
-                    showResult
-                      ? isRight
-                        ? 'border-brand-500 bg-brand-50 text-brand-700'
-                        : 'border-red-400 bg-red-50 text-red-600'
-                      : `${accent.border} bg-white text-gray-700`
-                  }`}
-                >
-                  <span
-                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                      showResult ? (isRight ? 'bg-brand-500 text-white' : 'bg-red-400 text-white') : `${accent.bg} ${accent.text}`
-                    }`}
-                  >
-                    {letter}
-                  </span>
-                  {opt.meaning}
-                </button>
-              )
-            })}
-          </div>
-        </div>
+        <QuizQuestion
+          key={quizIndex}
+          question={quiz[quizIndex]}
+          index={quizIndex}
+          total={quiz.length}
+          selected={selected}
+          onAnswer={chooseAnswer}
+        />
       )}
 
       {phase === 'done' && (
