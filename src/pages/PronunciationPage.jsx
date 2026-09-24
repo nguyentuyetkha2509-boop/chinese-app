@@ -3,9 +3,9 @@ import { Link, useParams } from 'react-router-dom'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
-import { playCorrect, playWrong } from '../lib/sfx'
+import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { VolumeIcon, MicIcon, ArrowLeftIcon } from '../components/Icons'
+import { VolumeIcon, MicIcon, ArrowLeftIcon, CheckIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 
@@ -25,8 +25,10 @@ function shuffle(arr) {
   return a
 }
 
-function pickToneQuestion(pool) {
-  return pool[Math.floor(Math.random() * pool.length)]
+const ROUND_SIZE = 15
+
+function buildToneRound(pool) {
+  return shuffle(pool).slice(0, Math.min(ROUND_SIZE, pool.length))
 }
 
 function ToneQuiz({ words }) {
@@ -34,13 +36,47 @@ function ToneQuiz({ words }) {
     () => words.filter((w) => w.tones.length === 1 && w.tones[0] !== 0),
     [words]
   )
-  const { recordToneAnswer, toneStats, addXp } = useProgress()
-  const [word, setWord] = useState(() => pickToneQuestion(singleToneWords))
+  const { recordToneAnswer, addXp } = useProgress()
+  const [round, setRound] = useState(() => buildToneRound(singleToneWords))
+  const [roundIndex, setRoundIndex] = useState(0)
+  const [correctCount, setCorrectCount] = useState(0)
   const [feedback, setFeedback] = useState(null)
+  const [phase, setPhase] = useState('quiz') // quiz | done
 
   if (!singleToneWords.length) {
     return <p className="text-sm text-gray-500">Cấp độ này chưa có từ đơn âm để luyện thanh điệu.</p>
   }
+
+  function startNewRound() {
+    setRound(buildToneRound(singleToneWords))
+    setRoundIndex(0)
+    setCorrectCount(0)
+    setFeedback(null)
+    setPhase('quiz')
+  }
+
+  if (phase === 'done') {
+    const accuracy = Math.round((correctCount / round.length) * 100)
+    return (
+      <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
+        <span className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-white/25 text-white">
+          <CheckIcon width={32} height={32} />
+        </span>
+        <p className="text-xl">🎉 Hoàn thành!</p>
+        <p className="mt-1 text-white/90">
+          Đúng {correctCount}/{round.length} câu ({accuracy}%)
+        </p>
+        <button
+          onClick={startNewRound}
+          className="mt-4 w-full rounded-xl bg-white py-2.5 font-semibold text-brand-700"
+        >
+          Luyện lại
+        </button>
+      </div>
+    )
+  }
+
+  const word = round[roundIndex]
 
   function playCurrent() {
     speakChinese(word.hanzi)
@@ -51,6 +87,7 @@ function ToneQuiz({ words }) {
     const correct = tone === word.tones[0]
     recordToneAnswer(correct)
     if (correct) {
+      setCorrectCount((c) => c + 1)
       playCorrect()
       addXp(XP_REWARDS.toneCorrect)
     } else playWrong()
@@ -59,16 +96,20 @@ function ToneQuiz({ words }) {
 
   function nextQuestion() {
     setFeedback(null)
-    setWord(pickToneQuestion(singleToneWords))
+    if (roundIndex + 1 < round.length) {
+      setRoundIndex((i) => i + 1)
+    } else {
+      playCelebrate()
+      setPhase('done')
+    }
   }
 
-  const accuracy = toneStats.total ? Math.round((toneStats.correct / toneStats.total) * 100) : null
   const rightTone = TONE_LABELS[word.tones[0]]
 
   return (
     <div>
       <p className="mb-3 text-sm text-gray-500">
-        Nghe rồi chọn đúng thanh điệu của chữ. {accuracy !== null && `Độ chính xác: ${accuracy}%`}
+        Nghe rồi chọn đúng thanh điệu của chữ. Câu {roundIndex + 1}/{round.length}
       </p>
       <button
         onClick={playCurrent}
@@ -130,7 +171,7 @@ function ToneQuiz({ words }) {
           onClick={nextQuestion}
           className="mt-4 w-full rounded-2xl bg-brand-700 py-3 text-center font-semibold text-white"
         >
-          Câu tiếp theo →
+          {roundIndex + 1 < round.length ? 'Câu tiếp theo →' : 'Hoàn thành'}
         </button>
       )}
     </div>
