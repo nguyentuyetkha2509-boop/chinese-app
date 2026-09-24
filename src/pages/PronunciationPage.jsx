@@ -52,13 +52,15 @@ function ToneQuiz({ words }) {
     if (correct) playCorrect()
     else playWrong()
     setFeedback({ correct, tone })
-    setTimeout(() => {
-      setFeedback(null)
-      setWord(pickToneQuestion(singleToneWords))
-    }, 900)
+  }
+
+  function nextQuestion() {
+    setFeedback(null)
+    setWord(pickToneQuestion(singleToneWords))
   }
 
   const accuracy = toneStats.total ? Math.round((toneStats.correct / toneStats.total) * 100) : null
+  const rightTone = TONE_LABELS[word.tones[0]]
 
   return (
     <div>
@@ -75,7 +77,19 @@ function ToneQuiz({ words }) {
         </span>
       </button>
 
-      <div className="mt-5 grid grid-cols-2 gap-3">
+      {feedback && (
+        <div
+          className={`mt-4 rounded-2xl p-3 text-center text-sm font-semibold ${
+            feedback.correct ? 'bg-teal-100 text-teal-700' : 'bg-red-100 text-red-600'
+          }`}
+        >
+          {feedback.correct
+            ? `✅ Chính xác! ${word.hanzi} là ${rightTone.mark} ${rightTone.name}`
+            : `❌ Chưa đúng. ${word.hanzi} là ${rightTone.mark} ${rightTone.name}, không phải ${TONE_LABELS[feedback.tone].mark} ${TONE_LABELS[feedback.tone].name}`}
+        </div>
+      )}
+
+      <div className="mt-4 grid grid-cols-2 gap-3">
         {[1, 2, 3, 4].map((tone) => {
           const isChosen = feedback?.tone === tone
           const isRight = tone === word.tones[0]
@@ -84,20 +98,38 @@ function ToneQuiz({ words }) {
             <button
               key={tone}
               onClick={() => answer(tone)}
-              className={`rounded-2xl border-2 p-4 text-center transition ${
+              className={`relative rounded-2xl border-2 p-4 text-center transition ${
                 showResult
                   ? isRight
-                    ? 'border-brand-500 bg-brand-50'
+                    ? 'border-teal-500 bg-teal-50'
                     : 'border-red-400 bg-red-50'
                   : TONE_LABELS[tone].idleClass
               }`}
             >
+              {showResult && (
+                <span
+                  className={`absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full text-xs text-white ${
+                    isRight ? 'bg-teal-500' : 'bg-red-500'
+                  }`}
+                >
+                  {isRight ? '✓' : '✕'}
+                </span>
+              )}
               <p className="text-3xl">{TONE_LABELS[tone].mark}</p>
               <p className="mt-1 text-xs opacity-80">{TONE_LABELS[tone].name}</p>
             </button>
           )
         })}
       </div>
+
+      {feedback && (
+        <button
+          onClick={nextQuestion}
+          className="mt-4 w-full rounded-2xl bg-brand-700 py-3 text-center font-semibold text-white"
+        >
+          Câu tiếp theo →
+        </button>
+      )}
     </div>
   )
 }
