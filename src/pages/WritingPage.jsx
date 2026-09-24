@@ -5,6 +5,7 @@ import { useProgress } from '../store/ProgressContext'
 import { CheckIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
+import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 
 function extractChars(words) {
   const seen = new Set()
@@ -87,6 +88,16 @@ export default function WritingPage() {
 
       <LevelTabs value={levelId} onChange={setLevelId} />
 
+      {hasPictograph(selected.char) && (
+        <div className="mb-4 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-sun-100 to-candy-100 p-4">
+          <PictographIcon char={selected.char} className="h-16 w-16 shrink-0 text-candy-700" />
+          <div>
+            <p className="text-xs font-semibold text-candy-700">💡 Mẹo nhớ chữ tượng hình</p>
+            <p className="text-sm text-gray-700">{PICTOGRAPH_HINTS[selected.char]}</p>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col items-center">
         <div ref={targetRef} className="hanzi-target bg-white" style={{ width: 260, height: 260 }} />
         <p className="mt-2 text-sm text-gray-500">{selected.meaning}</p>
@@ -122,6 +133,9 @@ export default function WritingPage() {
               }`}
             >
               {char}
+              {hasPictograph(char) && selected.char !== char && (
+                <span className="absolute left-0.5 top-0.5 text-[10px]">💡</span>
+              )}
               {done && selected.char !== char && (
                 <span className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-brand-500" />
               )}

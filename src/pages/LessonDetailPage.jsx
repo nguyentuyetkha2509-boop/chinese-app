@@ -5,6 +5,7 @@ import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { ArrowLeftIcon, VolumeIcon, CheckIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
+import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 
 function shuffle(arr) {
   const a = [...arr]
@@ -94,6 +95,12 @@ export default function LessonDetailPage() {
                       <VolumeIcon width={18} height={18} />
                     </span>
                   </button>
+                  {hasPictograph(word.hanzi) && (
+                    <div className="mt-3 flex items-center gap-2 rounded-xl bg-sun-100 p-2.5">
+                      <PictographIcon char={word.hanzi} className="h-9 w-9 shrink-0 text-sun-700" />
+                      <p className="text-xs text-gray-700">💡 {PICTOGRAPH_HINTS[word.hanzi]}</p>
+                    </div>
+                  )}
                   {word.example && (
                     <button
                       onClick={() => speakChinese(word.example.hanzi)}

@@ -6,6 +6,7 @@ import { getDueWordIds } from '../lib/srs'
 import { speakChinese } from '../lib/tts'
 import { VolumeIcon, CheckIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
+import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 
 const RATINGS = [
   { value: 0, label: 'Lại', className: 'bg-red-500' },
@@ -68,6 +69,12 @@ export default function FlashcardsPage() {
           <>
             <p className={`mt-3 text-xl ${accent.text}`}>{currentWord.pinyin}</p>
             <p className="mt-1 text-gray-600">{currentWord.meaning}</p>
+            {hasPictograph(currentWord.hanzi) && (
+              <div className="mt-3 flex w-full items-center gap-2 rounded-xl bg-sun-100 p-2.5">
+                <PictographIcon char={currentWord.hanzi} className="h-9 w-9 shrink-0 text-sun-700" />
+                <p className="text-left text-xs text-gray-700">💡 {PICTOGRAPH_HINTS[currentWord.hanzi]}</p>
+              </div>
+            )}
             {currentWord.example && (
               <div className={`mt-4 w-full rounded-xl ${accent.bg} p-3`}>
                 <p className="text-base text-gray-800">{currentWord.example.hanzi}</p>
