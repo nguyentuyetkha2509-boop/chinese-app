@@ -16,6 +16,7 @@ import StoriesPage from './pages/StoriesPage'
 import StoryDetailPage from './pages/StoryDetailPage'
 import GrammarPage from './pages/GrammarPage'
 import GrammarDetailPage from './pages/GrammarDetailPage'
+import SentenceBuilderPage from './pages/SentenceBuilderPage'
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="/truyen/:storyKey" element={<StoryDetailPage />} />
         <Route path="/ngu-phap" element={<GrammarPage />} />
         <Route path="/ngu-phap/:pointKey" element={<GrammarDetailPage />} />
+        <Route path="/sap-xep-cau" element={<SentenceBuilderPage />} />
       </Routes>
       <BottomNav />
     </div>
