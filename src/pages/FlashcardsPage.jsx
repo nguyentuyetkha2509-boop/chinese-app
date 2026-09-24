@@ -10,10 +10,10 @@ import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/P
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 
 const RATINGS = [
-  { value: 0, label: 'Lại', className: 'bg-red-500' },
-  { value: 1, label: 'Khó', className: 'bg-sun-500' },
-  { value: 2, label: 'Ổn', className: 'bg-sky-500' },
-  { value: 3, label: 'Dễ', className: 'bg-teal-500' }
+  { value: 0, label: 'Quên rồi', hint: 'gặp lại ngay', className: 'bg-red-500' },
+  { value: 1, label: 'Khó nhớ', hint: 'gặp lại sớm', className: 'bg-sun-500' },
+  { value: 2, label: 'Nhớ được', hint: 'vài ngày sau', className: 'bg-sky-500' },
+  { value: 3, label: 'Nhớ rõ', hint: 'lâu mới gặp lại', className: 'bg-teal-500' }
 ]
 
 export default function FlashcardsPage() {
@@ -58,10 +58,13 @@ export default function FlashcardsPage() {
 
   return (
     <div className="px-4 pt-6">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-1 flex items-center justify-between">
         <h1 className="text-2xl text-brand-800">Ôn tập</h1>
         <span className="text-sm text-gray-500">Còn {queue.length} thẻ</span>
       </div>
+      <p className="mb-4 text-xs text-gray-500">
+        Đoán nghĩa trong đầu, chạm vào thẻ để xem đáp án, rồi chọn mức độ bạn nhớ được.
+      </p>
 
       {isBrandNew && reviewed === 0 && (
         <div className="mb-4 flex items-center justify-between gap-3 rounded-xl bg-sun-100 p-3">
@@ -122,17 +125,21 @@ export default function FlashcardsPage() {
       </button>
 
       {flipped && (
-        <div className="mt-6 grid grid-cols-4 gap-2">
-          {RATINGS.map((r) => (
-            <button
-              key={r.value}
-              onClick={() => handleRate(r.value)}
-              className={`rounded-xl py-3 text-sm text-white ${r.className}`}
-            >
-              {r.label}
-            </button>
-          ))}
-        </div>
+        <>
+          <p className="mt-5 text-center text-xs text-gray-500">Bạn nhớ từ này đến mức nào?</p>
+          <div className="mt-2 grid grid-cols-4 gap-2">
+            {RATINGS.map((r) => (
+              <button
+                key={r.value}
+                onClick={() => handleRate(r.value)}
+                className={`rounded-xl py-2.5 text-center text-white ${r.className}`}
+              >
+                <p className="text-xs font-semibold leading-tight">{r.label}</p>
+                <p className="mt-0.5 text-[10px] leading-tight text-white/80">{r.hint}</p>
+              </button>
+            ))}
+          </div>
+        </>
       )}
     </div>
   )

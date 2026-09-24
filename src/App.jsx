@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import BottomNav from './components/BottomNav'
+import TtsWarning from './components/TtsWarning'
 import HomePage from './pages/HomePage'
 import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
@@ -10,6 +11,7 @@ import WritingPage from './pages/WritingPage'
 export default function App() {
   return (
     <div className="mx-auto min-h-screen max-w-md bg-canvas pb-20">
+      <TtsWarning />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/bai-hoc" element={<LessonsPage />} />
