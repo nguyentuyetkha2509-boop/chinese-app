@@ -51,8 +51,8 @@ const GLYPH = [
 ]
 
 function makeIcon(size) {
-  const bg = [0xb9, 0x1c, 0x1c] // brand-700
-  const fg = [0xfb, 0xbf, 0x24] // gold-400
+  const bg = [0x15, 0x80, 0x3d] // brand-700
+  const fg = [0xc0, 0x84, 0xfc] // gold-400
   const glyphSize = GLYPH.length
   const scale = Math.floor((size * 0.6) / glyphSize)
   const glyphPixelSize = scale * glyphSize
