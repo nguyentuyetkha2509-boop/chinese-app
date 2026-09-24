@@ -124,3 +124,13 @@ export function StoryIcon(props) {
     </svg>
   )
 }
+
+export function GrammarIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M6 4v16" />
+      <path d="M18 4v16" />
+      <path d="M9 8h2M9 12h6M9 16h4" />
+    </svg>
+  )
+}

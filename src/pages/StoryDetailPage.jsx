@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getStory } from '../data/stories'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
-import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
-import { shuffle } from '../lib/quiz'
+import { playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
 import { ArrowLeftIcon, VolumeIcon, CheckIcon } from '../components/Icons'
+import MiniQuiz from '../components/MiniQuiz'
 
 export default function StoryDetailPage() {
   const { storyKey } = useParams()
@@ -18,21 +18,7 @@ export default function StoryDetailPage() {
   const [chapterIndex, setChapterIndex] = useState(0)
   const [playingAll, setPlayingAll] = useState(false)
   const [activeLine, setActiveLine] = useState(null)
-
-  const quizRound = useMemo(
-    () =>
-      story
-        ? story.quiz.map((q) => ({
-            question: q.question,
-            correct: q.options[0],
-            options: shuffle(q.options)
-          }))
-        : [],
-    [story]
-  )
-  const [quizIndex, setQuizIndex] = useState(0)
-  const [correctCount, setCorrectCount] = useState(0)
-  const [selected, setSelected] = useState(null)
+  const [result, setResult] = useState({ correct: 0, total: 0 })
 
   if (!story) {
     return (
@@ -60,43 +46,20 @@ export default function StoryDetailPage() {
   }
 
   function goToQuiz() {
-    setQuizIndex(0)
-    setCorrectCount(0)
-    setSelected(null)
     setPhase('quiz')
   }
 
-  function chooseAnswer(opt) {
-    if (selected !== null) return
-    setSelected(opt)
-    const q = quizRound[quizIndex]
-    const isCorrect = opt === q.correct
-    if (isCorrect) {
-      setCorrectCount((c) => c + 1)
-      playCorrect()
-      addXp(XP_REWARDS.storyQuizCorrect)
-    } else {
-      playWrong()
-    }
-    setTimeout(() => {
-      setSelected(null)
-      if (quizIndex + 1 < quizRound.length) {
-        setQuizIndex((i) => i + 1)
-      } else {
-        addXp(XP_REWARDS.storyComplete)
-        playCelebrate()
-        setPhase('done')
-      }
-    }, 700)
+  function handleQuizDone(correct, total) {
+    setResult({ correct, total })
+    addXp(XP_REWARDS.storyComplete)
+    playCelebrate()
+    setPhase('done')
   }
 
   function restart() {
     setChapterIndex(0)
     setPlayingAll(false)
     setActiveLine(null)
-    setQuizIndex(0)
-    setCorrectCount(0)
-    setSelected(null)
     setPhase('reading')
   }
 
@@ -179,45 +142,11 @@ export default function StoryDetailPage() {
         </>
       )}
 
-      {phase === 'quiz' && quizRound[quizIndex] && (
-        <div className="animate-quiz-in">
-          <p className="mb-2 text-sm text-gray-500">
-            Đọc hiểu · Câu {quizIndex + 1}/{quizRound.length}
-          </p>
-          <div className="mb-6 rounded-2xl bg-white p-6 text-center shadow-sm">
-            <p className="text-xl text-gray-800">{quizRound[quizIndex].question}</p>
-          </div>
-          <div className="space-y-2">
-            {quizRound[quizIndex].options.map((opt, i) => {
-              const isChosen = selected === opt
-              const isRight = opt === quizRound[quizIndex].correct
-              const showResult = selected !== null && (isChosen || isRight)
-              const letter = String.fromCharCode(65 + i)
-              return (
-                <button
-                  key={opt}
-                  onClick={() => chooseAnswer(opt)}
-                  className={`flex w-full items-center gap-3 rounded-xl border-2 p-3 text-left transition ${
-                    showResult
-                      ? isRight
-                        ? 'border-brand-500 bg-brand-50 text-brand-700'
-                        : 'border-red-400 bg-red-50 text-red-600'
-                      : 'border-gray-200 bg-white text-gray-700'
-                  }`}
-                >
-                  <span
-                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                      showResult ? (isRight ? 'bg-brand-500 text-white' : 'bg-red-400 text-white') : 'bg-gray-100 text-gray-500'
-                    }`}
-                  >
-                    {letter}
-                  </span>
-                  {opt}
-                </button>
-              )
-            })}
-          </div>
-        </div>
+      {phase === 'quiz' && (
+        <>
+          <p className="mb-2 text-sm text-gray-500">Đọc hiểu:</p>
+          <MiniQuiz items={story.quiz} onDone={handleQuizDone} xpPerCorrect={XP_REWARDS.storyQuizCorrect} addXp={addXp} />
+        </>
       )}
 
       {phase === 'done' && (
@@ -227,7 +156,7 @@ export default function StoryDetailPage() {
           </span>
           <p className="text-xl">🎉 Hoàn thành truyện!</p>
           <p className="mt-1 text-white/90">
-            Đọc hiểu đúng {correctCount}/{quizRound.length} câu
+            Đọc hiểu đúng {result.correct}/{result.total} câu
           </p>
           <div className="mt-4 flex gap-2">
             <button onClick={restart} className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white">
