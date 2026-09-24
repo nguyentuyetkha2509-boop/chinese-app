@@ -31,7 +31,7 @@ export const CHAR_RADICAL = {
   你: 'person', 他: 'person', 做: 'person', 住: 'person', 位: 'person', 借: 'person', 低: 'person', 使: 'person', 倍: 'person', 俩: 'person',
   拿: 'hand', 找: 'hand', 换: 'hand', 挂: 'hand', 拉: 'hand', 抬: 'hand', 推: 'hand', 接: 'hand', 擦: 'hand', 抱: 'hand', 扔: 'hand', 挺: 'hand',
   请: 'speech', 说: 'speech', 试: 'speech', 讲: 'speech', 让: 'speech', 谁: 'speech', 谈: 'speech',
-  菜: 'grass', 花: 'grass', 茶: 'grass', 草: 'grass', 药: 'grass', 苦: 'grass',
+  菜: 'grass', 花: 'grass', 茶: 'grass', 草: 'grass', 苦: 'grass',
   树: 'wood', 楼: 'wood', 桥: 'wood', 极: 'wood',
   快: 'heart', 慢: 'heart', 忙: 'heart', 想: 'heart', 懂: 'heart',
   好: 'woman', 她: 'woman', 姓: 'woman',
