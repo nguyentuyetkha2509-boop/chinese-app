@@ -18,7 +18,7 @@ export default function HomePage() {
       <header className="mb-6 flex items-center justify-between">
         <div>
           <p className="text-xs text-gray-500">Chào bạn 👋</p>
-          <h1 className="text-2xl text-brand-800">Học Tiếng Trung</h1>
+          <h1 className="text-2xl text-brand-800">🐼 PandaChinese</h1>
         </div>
         <div className="flex items-center gap-1 rounded-full bg-gold-100 px-3 py-1.5 text-gold-600">
           <FireIcon width={18} height={18} />

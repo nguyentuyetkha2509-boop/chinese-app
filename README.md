@@ -1,6 +1,6 @@
-# Học Tiếng Trung
+# 🐼 PandaChinese
 
-App học tiếng Trung (HSK1-3) - chạy như mobile web app (PWA). Repo hoàn toàn độc lập, không liên quan đến app bán hàng nào khác.
+App học tiếng Trung (HSK1-4) - chạy như mobile web app (PWA). Repo hoàn toàn độc lập, không liên quan đến app bán hàng nào khác.
 
 Live: https://nguyentuyetkha2509-boop.github.io/chinese-app/
 
