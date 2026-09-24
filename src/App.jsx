@@ -12,6 +12,8 @@ import TopicsPage from './pages/TopicsPage'
 import TopicDetailPage from './pages/TopicDetailPage'
 import DialoguesPage from './pages/DialoguesPage'
 import DialogueDetailPage from './pages/DialogueDetailPage'
+import StoriesPage from './pages/StoriesPage'
+import StoryDetailPage from './pages/StoryDetailPage'
 
 export default function App() {
   return (
@@ -31,6 +33,8 @@ export default function App() {
         <Route path="/chu-de/:topicKey" element={<TopicDetailPage />} />
         <Route path="/hoi-thoai" element={<DialoguesPage />} />
         <Route path="/hoi-thoai/:dialogueKey" element={<DialogueDetailPage />} />
+        <Route path="/truyen" element={<StoriesPage />} />
+        <Route path="/truyen/:storyKey" element={<StoryDetailPage />} />
       </Routes>
       <BottomNav />
     </div>

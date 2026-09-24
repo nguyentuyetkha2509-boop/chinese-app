@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { LEVELS, ALL_WORDS, getNextUnit } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getCardStats, getDueWordIds } from '../lib/srs'
-import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon, ZapIcon, TopicIcon, ChatIcon } from '../components/Icons'
+import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon, ZapIcon, TopicIcon, ChatIcon, StoryIcon } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
@@ -51,6 +51,12 @@ const ACTION_CARDS = [
     icon: ChatIcon,
     title: 'Hội thoại',
     className: 'bg-gradient-to-br from-teal-500 to-sky-600'
+  },
+  {
+    to: '/truyen',
+    icon: StoryIcon,
+    title: 'Truyện dài',
+    className: 'col-span-2 bg-gradient-to-br from-brand-600 to-sky-500'
   }
 ]
 

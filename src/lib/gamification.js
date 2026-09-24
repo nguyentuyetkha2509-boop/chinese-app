@@ -15,5 +15,7 @@ export const XP_REWARDS = {
   flashcardReview: 3,
   toneCorrect: 3,
   writingPerfect: 10,
-  writingDone: 5
+  writingDone: 5,
+  storyQuizCorrect: 5,
+  storyComplete: 15
 }
