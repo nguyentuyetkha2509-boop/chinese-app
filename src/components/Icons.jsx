@@ -137,6 +137,16 @@ export function ShuffleIcon(props) {
   )
 }
 
+export function EarIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M8 12a4 4 0 1 1 4 4" />
+      <path d="M12 16v1a3 3 0 0 0 6 0v-5a6 6 0 1 0-9.33 5" />
+      <path d="M6.5 14.5C5 16 4 17.5 4 19" />
+    </svg>
+  )
+}
+
 export function GrammarIcon(props) {
   return (
     <svg {...base(props)}>

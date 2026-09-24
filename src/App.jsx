@@ -17,6 +17,7 @@ import StoryDetailPage from './pages/StoryDetailPage'
 import GrammarPage from './pages/GrammarPage'
 import GrammarDetailPage from './pages/GrammarDetailPage'
 import SentenceBuilderPage from './pages/SentenceBuilderPage'
+import DictationPage from './pages/DictationPage'
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="/ngu-phap" element={<GrammarPage />} />
         <Route path="/ngu-phap/:pointKey" element={<GrammarDetailPage />} />
         <Route path="/sap-xep-cau" element={<SentenceBuilderPage />} />
+        <Route path="/nghe-chep-chinh-ta" element={<DictationPage />} />
       </Routes>
       <BottomNav />
     </div>
