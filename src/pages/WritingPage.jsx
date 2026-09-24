@@ -8,6 +8,7 @@ import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
+import { playCelebrate, playCorrect } from '../lib/sfx'
 
 function extractChars(words) {
   const seen = new Set()
@@ -72,6 +73,8 @@ export default function WritingPage() {
       onComplete: (summary) => {
         recordWritingPractice(selected.char)
         const mistakes = summary?.totalMistakes ?? 0
+        if (mistakes === 0) playCelebrate()
+        else playCorrect()
         setQuizResult(mistakes === 0 ? 'perfect' : `Xong! Sai ${mistakes} lần`)
       }
     })

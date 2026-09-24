@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
+import { playCorrect, playWrong } from '../lib/sfx'
 import { VolumeIcon, MicIcon, ArrowLeftIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
@@ -48,6 +49,8 @@ function ToneQuiz({ words }) {
     if (feedback) return
     const correct = tone === word.tones[0]
     recordToneAnswer(correct)
+    if (correct) playCorrect()
+    else playWrong()
     setFeedback({ correct, tone })
     setTimeout(() => {
       setFeedback(null)

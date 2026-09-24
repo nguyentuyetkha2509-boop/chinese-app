@@ -4,6 +4,7 @@ import { ALL_WORDS, getWordById } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getCardStats, getDueWordIds } from '../lib/srs'
 import { speakChinese } from '../lib/tts'
+import { playCorrect, playWrong, playCelebrate, playFlip } from '../lib/sfx'
 import { VolumeIcon, CheckIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
@@ -31,9 +32,17 @@ export default function FlashcardsPage() {
 
   function handleRate(rating) {
     rateCard(currentId, rating)
+    if (rating === 0) playWrong()
+    else playCorrect()
+    if (queue.length === 1) setTimeout(playCelebrate, 350)
     setReviewed((n) => n + 1)
     setFlipped(false)
     setQueue((q) => q.slice(1))
+  }
+
+  function handleFlip() {
+    if (!flipped) playFlip()
+    setFlipped((f) => !f)
   }
 
   if (!currentWord) {
@@ -78,7 +87,7 @@ export default function FlashcardsPage() {
       )}
 
       <button
-        onClick={() => setFlipped((f) => !f)}
+        onClick={handleFlip}
         className={`flex min-h-[16rem] w-full flex-col items-center justify-center rounded-3xl border-t-4 bg-white p-6 text-center shadow-sm ${accent.topBorder}`}
       >
         <p className="text-5xl text-gray-800">{currentWord.hanzi}</p>

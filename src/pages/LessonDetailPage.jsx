@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getLevel, ALL_WORDS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
+import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { ArrowLeftIcon, VolumeIcon, CheckIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
@@ -54,7 +55,12 @@ export default function LessonDetailPage() {
     if (selected) return
     setSelected(option)
     const isCorrect = option.id === quiz[quizIndex].word.id
-    if (isCorrect) setCorrectCount((c) => c + 1)
+    if (isCorrect) {
+      setCorrectCount((c) => c + 1)
+      playCorrect()
+    } else {
+      playWrong()
+    }
     setTimeout(() => {
       setSelected(null)
       if (quizIndex + 1 < quiz.length) {
@@ -62,6 +68,7 @@ export default function LessonDetailPage() {
       } else {
         markUnitComplete(`${levelId}:${unit.id}`)
         setPhase('done')
+        playCelebrate()
       }
     }, 700)
   }
