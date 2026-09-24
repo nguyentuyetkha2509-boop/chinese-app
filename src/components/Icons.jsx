@@ -81,3 +81,12 @@ export function ArrowLeftIcon(props) {
     </svg>
   )
 }
+
+export function ArrowRightIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M5 12h14" />
+      <path d="m13 6 6 6-6 6" />
+    </svg>
+  )
+}

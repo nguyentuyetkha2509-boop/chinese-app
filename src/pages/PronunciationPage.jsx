@@ -1,8 +1,9 @@
 import { useMemo, useRef, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
-import { VolumeIcon, MicIcon } from '../components/Icons'
+import { VolumeIcon, MicIcon, ArrowLeftIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 
@@ -212,19 +213,35 @@ const TABS = [
 ]
 
 export default function PronunciationPage() {
+  const params = useParams()
   const [tab, setTab] = useState('listen')
-  const [levelId, setLevelId] = useState('hsk1')
+  const [levelId, setLevelId] = useState(params.levelId || 'hsk1')
   const level = getLevel(levelId)
   const ttsOk = useMemo(() => isTtsSupported(), [])
 
+  const scopedUnit = params.unitId ? level.units.find((u) => u.id === Number(params.unitId)) : null
+  const words = scopedUnit ? scopedUnit.words : level.words
+
   return (
     <div className="px-4 pt-6">
-      <h1 className="mb-1 text-2xl text-brand-800">Phát âm & thanh điệu</h1>
+      {scopedUnit ? (
+        <div className="mb-3 flex items-center gap-2">
+          <Link to={`/bai-hoc/${levelId}/${scopedUnit.id}`} className="text-gray-500">
+            <ArrowLeftIcon />
+          </Link>
+          <div>
+            <h1 className="text-xl text-brand-800">Phát âm · {level.label} {scopedUnit.title}</h1>
+            <p className="text-xs text-gray-500">Chỉ luyện {words.length} từ trong bài này</p>
+          </div>
+        </div>
+      ) : (
+        <h1 className="mb-1 text-2xl text-brand-800">Phát âm & thanh điệu</h1>
+      )}
       {!ttsOk && (
         <p className="mb-3 text-sm text-red-500">Trình duyệt không hỗ trợ đọc giọng tiếng Trung.</p>
       )}
 
-      <LevelTabs value={levelId} onChange={setLevelId} />
+      {!scopedUnit && <LevelTabs value={levelId} onChange={setLevelId} />}
 
       <div className="mb-5 flex gap-2 overflow-x-auto">
         {TABS.map((t) => (
@@ -240,9 +257,9 @@ export default function PronunciationPage() {
         ))}
       </div>
 
-      {tab === 'listen' && <ListenBrowse words={level.words} key={`listen-${levelId}`} />}
-      {tab === 'tone' && <ToneQuiz words={level.words} key={`tone-${levelId}`} />}
-      {tab === 'record' && <RecordCompare words={level.words} key={`record-${levelId}`} />}
+      {tab === 'listen' && <ListenBrowse words={words} key={`listen-${levelId}-${params.unitId || ''}`} />}
+      {tab === 'tone' && <ToneQuiz words={words} key={`tone-${levelId}-${params.unitId || ''}`} />}
+      {tab === 'record' && <RecordCompare words={words} key={`record-${levelId}-${params.unitId || ''}`} />}
     </div>
   )
 }

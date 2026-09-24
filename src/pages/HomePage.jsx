@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import { LEVELS, ALL_WORDS } from '../data/levels'
+import { LEVELS, ALL_WORDS, getNextUnit } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getCardStats, getDueWordIds } from '../lib/srs'
-import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon } from '../components/Icons'
+import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 
 const STAT_STYLES = [
@@ -48,6 +48,7 @@ export default function HomePage() {
   const totalUnits = LEVELS.reduce((sum, l) => sum + l.units.length, 0)
   const unitsDone = completedUnits.length
   const percent = Math.round((stats.learned / stats.total) * 100)
+  const nextUnit = getNextUnit(completedUnits)
 
   const statValues = { total: stats.total, learned: stats.learned, percent: `${percent}%`, due: dueCount }
 
@@ -65,6 +66,34 @@ export default function HomePage() {
       </header>
 
       <PandaHero />
+
+      {nextUnit ? (
+        <Link
+          to={`/bai-hoc/${nextUnit.levelId}/${nextUnit.unit.id}`}
+          className="mt-4 flex items-center justify-between rounded-2xl bg-brand-700 p-4 text-white shadow-md"
+        >
+          <div>
+            <p className="text-xs text-white/80">
+              {unitsDone > 0 ? 'Tiếp tục học' : 'Bắt đầu học ngay'}
+            </p>
+            <p className="text-lg font-semibold">
+              {nextUnit.levelLabel} · {nextUnit.unit.title}
+            </p>
+          </div>
+          <ArrowRightIcon width={26} height={26} />
+        </Link>
+      ) : (
+        <Link
+          to="/on-tap"
+          className="mt-4 flex items-center justify-between rounded-2xl bg-brand-700 p-4 text-white shadow-md"
+        >
+          <div>
+            <p className="text-xs text-white/80">Bạn đã học hết các bài!</p>
+            <p className="text-lg font-semibold">Ôn tập lại cho chắc kiến thức</p>
+          </div>
+          <ArrowRightIcon width={26} height={26} />
+        </Link>
+      )}
 
       <section className="my-5 grid grid-cols-2 gap-3">
         {STAT_STYLES.map((s) => (
@@ -105,6 +134,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      <p className="mb-2 text-sm text-gray-500">Hoặc chọn mục khác:</p>
       <section className="mb-5 grid grid-cols-2 gap-3">
         {ACTION_CARDS.map(({ to, icon: Icon, title, className }) => (
           <Link key={to} to={to} className={`rounded-2xl p-4 text-white shadow-sm ${className}`}>

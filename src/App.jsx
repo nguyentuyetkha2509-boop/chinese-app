@@ -16,7 +16,9 @@ export default function App() {
         <Route path="/bai-hoc/:levelId/:unitId" element={<LessonDetailPage />} />
         <Route path="/on-tap" element={<FlashcardsPage />} />
         <Route path="/phat-am" element={<PronunciationPage />} />
+        <Route path="/phat-am/:levelId/:unitId" element={<PronunciationPage />} />
         <Route path="/viet-chu" element={<WritingPage />} />
+        <Route path="/viet-chu/:levelId/:unitId" element={<WritingPage />} />
       </Routes>
       <BottomNav />
     </div>

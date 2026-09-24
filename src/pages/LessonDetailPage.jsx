@@ -31,6 +31,7 @@ export default function LessonDetailPage() {
   const navigate = useNavigate()
   const level = getLevel(levelId)
   const unit = level?.units.find((u) => u.id === Number(unitId))
+  const nextUnit = level?.units.find((u) => u.id === Number(unitId) + 1)
   const { markUnitComplete } = useProgress()
   const [phase, setPhase] = useState('study') // study | quiz | done
   const quiz = useMemo(() => (unit ? buildQuiz(unit.words, level.words) : []), [unit, level])
@@ -186,12 +187,35 @@ export default function LessonDetailPage() {
           <p className="mt-1 text-white/90">
             Đúng {correctCount}/{quiz.length} câu
           </p>
-          <div className="mt-4 flex gap-2">
-            <Link to="/bai-hoc" className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white">
-              Danh sách bài
+
+          {nextUnit && (
+            <Link
+              to={`/bai-hoc/${levelId}/${nextUnit.id}`}
+              className="mt-4 block rounded-xl bg-white py-2.5 font-semibold text-brand-700"
+            >
+              Học tiếp {nextUnit.title} →
             </Link>
-            <Link to="/on-tap" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
-              Ôn tập flashcard
+          )}
+
+          <p className="mt-4 text-xs text-white/80">Củng cố bài này thêm với:</p>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <Link to="/on-tap" className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white">
+              🗂️ Ôn tập flashcard
+            </Link>
+            <Link
+              to={`/phat-am/${levelId}/${unit.id}`}
+              className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white"
+            >
+              🎧 Phát âm bài này
+            </Link>
+            <Link
+              to={`/viet-chu/${levelId}/${unit.id}`}
+              className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white"
+            >
+              ✍️ Viết chữ bài này
+            </Link>
+            <Link to="/bai-hoc" className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white">
+              📚 Danh sách bài
             </Link>
           </div>
         </div>

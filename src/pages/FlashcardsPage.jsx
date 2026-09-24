@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ALL_WORDS, getWordById } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
-import { getDueWordIds } from '../lib/srs'
+import { getCardStats, getDueWordIds } from '../lib/srs'
 import { speakChinese } from '../lib/tts'
 import { VolumeIcon, CheckIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
@@ -19,9 +19,11 @@ const RATINGS = [
 export default function FlashcardsPage() {
   const { srsState, rateCard } = useProgress()
   const allIds = useMemo(() => ALL_WORDS.map((w) => w.id), [])
+  const stats = useMemo(() => getCardStats(allIds, srsState), [allIds, srsState])
   const [queue, setQueue] = useState(() => getDueWordIds(allIds, srsState, 20))
   const [reviewed, setReviewed] = useState(0)
   const [flipped, setFlipped] = useState(false)
+  const isBrandNew = stats.learned === 0
 
   const currentId = queue[0]
   const currentWord = currentId ? getWordById(currentId) : null
@@ -60,6 +62,17 @@ export default function FlashcardsPage() {
         <h1 className="text-2xl text-brand-800">Ôn tập</h1>
         <span className="text-sm text-gray-500">Còn {queue.length} thẻ</span>
       </div>
+
+      {isBrandNew && reviewed === 0 && (
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl bg-sun-100 p-3">
+          <p className="text-xs text-gray-700">
+            💡 Bạn chưa học từ nào. Nên học ở mục <b>Bài học</b> trước, rồi quay lại đây ôn cho nhớ lâu.
+          </p>
+          <Link to="/bai-hoc" className="shrink-0 rounded-lg bg-sun-600 px-3 py-1.5 text-xs font-semibold text-white">
+            Bài học
+          </Link>
+        </div>
+      )}
 
       <button
         onClick={() => setFlipped((f) => !f)}

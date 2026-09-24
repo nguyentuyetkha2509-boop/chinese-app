@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import HanziWriter from 'hanzi-writer'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
-import { CheckIcon } from '../components/Icons'
+import { CheckIcon, ArrowLeftIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
@@ -23,10 +24,12 @@ function extractChars(words) {
 }
 
 export default function WritingPage() {
+  const params = useParams()
   const { writingStats, recordWritingPractice } = useProgress()
-  const [levelId, setLevelId] = useState('hsk1')
+  const [levelId, setLevelId] = useState(params.levelId || 'hsk1')
   const level = getLevel(levelId)
-  const chars = useMemo(() => extractChars(level.words), [level])
+  const scopedUnit = params.unitId ? level.units.find((u) => u.id === Number(params.unitId)) : null
+  const chars = useMemo(() => extractChars(scopedUnit ? scopedUnit.words : level.words), [level, scopedUnit])
   const [selected, setSelected] = useState(chars[0])
   const [quizResult, setQuizResult] = useState(null)
   const targetRef = useRef(null)
@@ -80,14 +83,28 @@ export default function WritingPage() {
 
   return (
     <div className="px-4 pt-6">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl text-brand-800">Viết chữ Hán</h1>
-        <span className="text-sm text-gray-500">
-          Đã luyện {practicedCount}/{chars.length}
-        </span>
-      </div>
+      {scopedUnit ? (
+        <div className="mb-4 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Link to={`/bai-hoc/${levelId}/${scopedUnit.id}`} className="text-gray-500">
+              <ArrowLeftIcon />
+            </Link>
+            <div>
+              <h1 className="text-xl text-brand-800">Viết chữ · {level.label} {scopedUnit.title}</h1>
+              <p className="text-xs text-gray-500">Đã luyện {practicedCount}/{chars.length}</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="mb-4 flex items-center justify-between">
+          <h1 className="text-2xl text-brand-800">Viết chữ Hán</h1>
+          <span className="text-sm text-gray-500">
+            Đã luyện {practicedCount}/{chars.length}
+          </span>
+        </div>
+      )}
 
-      <LevelTabs value={levelId} onChange={setLevelId} />
+      {!scopedUnit && <LevelTabs value={levelId} onChange={setLevelId} />}
 
       {hasPictograph(selected.char) && (
         <div className="mb-4 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-sun-100 to-candy-100 p-4">

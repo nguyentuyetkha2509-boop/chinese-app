@@ -32,3 +32,14 @@ export function getLevel(levelId) {
 export function getWordById(id) {
   return ALL_WORDS.find((w) => w.id === id)
 }
+
+export function getNextUnit(completedUnits) {
+  for (const level of LEVELS) {
+    for (const unit of level.units) {
+      if (!completedUnits.includes(`${level.id}:${unit.id}`)) {
+        return { levelId: level.id, levelLabel: level.label, unit }
+      }
+    }
+  }
+  return null
+}
