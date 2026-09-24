@@ -8,6 +8,7 @@ import { ArrowLeftIcon, VolumeIcon, CheckIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
+import { XP_REWARDS } from '../lib/gamification'
 
 function shuffle(arr) {
   const a = [...arr]
@@ -33,7 +34,7 @@ export default function LessonDetailPage() {
   const level = getLevel(levelId)
   const unit = level?.units.find((u) => u.id === Number(unitId))
   const nextUnit = level?.units.find((u) => u.id === Number(unitId) + 1)
-  const { markUnitComplete } = useProgress()
+  const { markUnitComplete, addXp } = useProgress()
   const [phase, setPhase] = useState('study') // study | quiz | done
   const quiz = useMemo(() => (unit ? buildQuiz(unit.words, level.words) : []), [unit, level])
   const [quizIndex, setQuizIndex] = useState(0)
@@ -58,6 +59,7 @@ export default function LessonDetailPage() {
     if (isCorrect) {
       setCorrectCount((c) => c + 1)
       playCorrect()
+      addXp(XP_REWARDS.quizCorrect)
     } else {
       playWrong()
     }
@@ -67,6 +69,7 @@ export default function LessonDetailPage() {
         setQuizIndex((i) => i + 1)
       } else {
         markUnitComplete(`${levelId}:${unit.id}`)
+        addXp(XP_REWARDS.unitComplete)
         setPhase('done')
         playCelebrate()
       }

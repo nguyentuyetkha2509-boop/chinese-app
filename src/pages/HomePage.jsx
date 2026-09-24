@@ -4,6 +4,9 @@ import { useProgress } from '../store/ProgressContext'
 import { getCardStats, getDueWordIds } from '../lib/srs'
 import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
+import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
+import { BADGES, getEarnedBadgeIds } from '../lib/badges'
+import { todayKey } from '../lib/date'
 
 const STAT_STYLES = [
   { key: 'total', label: 'Tổng từ', className: 'bg-sky-100 text-sky-700' },
@@ -39,8 +42,13 @@ const ACTION_CARDS = [
   }
 ]
 
+function isLevelDone(levelId, completedUnits) {
+  const level = LEVELS.find((l) => l.id === levelId)
+  return level.units.every((u) => completedUnits.includes(`${levelId}:${u.id}`))
+}
+
 export default function HomePage() {
-  const { srsState, completedUnits, streak, toneStats } = useProgress()
+  const { srsState, completedUnits, streak, toneStats, xp, dailyXp, writingPerfectCount } = useProgress()
   const allIds = ALL_WORDS.map((w) => w.id)
   const stats = getCardStats(allIds, srsState)
   const dueCount = getDueWordIds(allIds, srsState, allIds.length).length
@@ -51,6 +59,24 @@ export default function HomePage() {
   const nextUnit = getNextUnit(completedUnits)
 
   const statValues = { total: stats.total, learned: stats.learned, percent: `${percent}%`, due: dueCount }
+
+  const { level, xpInLevel, xpForNext } = getLevelInfo(xp)
+  const todayXp = dailyXp.date === todayKey() ? dailyXp.amount : 0
+  const dailyGoalPercent = Math.min(100, Math.round((todayXp / DAILY_GOAL_XP) * 100))
+  const dailyGoalDone = todayXp >= DAILY_GOAL_XP
+
+  const earnedBadgeIds = getEarnedBadgeIds({
+    streak: streak.count,
+    learned: stats.learned,
+    total: stats.total,
+    unitsDone,
+    hsk1Done: isLevelDone('hsk1', completedUnits),
+    hsk2Done: isLevelDone('hsk2', completedUnits),
+    hsk3Done: isLevelDone('hsk3', completedUnits),
+    writingPerfectCount,
+    toneTotal: toneStats.total,
+    toneAccuracy: toneAccuracy ?? 0
+  })
 
   return (
     <div className="px-4 pt-6">
@@ -65,7 +91,40 @@ export default function HomePage() {
         </div>
       </header>
 
+      <div className="mb-4 flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-candy-500 text-sm font-bold text-white">
+          Lv{level}
+        </span>
+        <div className="flex-1">
+          <div className="flex items-center justify-between text-xs text-gray-500">
+            <span>Cấp {level}</span>
+            <span>{xpInLevel}/{xpForNext} XP</span>
+          </div>
+          <div className="mt-1 h-2 overflow-hidden rounded-full bg-gray-100">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-brand-500 to-candy-500"
+              style={{ width: `${xpInLevel}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
       <PandaHero />
+
+      <div className={`mt-4 rounded-2xl p-4 shadow-sm ${dailyGoalDone ? 'bg-teal-100' : 'bg-white'}`}>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-semibold text-gray-700">
+            {dailyGoalDone ? '🎉 Đã đạt mục tiêu hôm nay!' : '🎯 Mục tiêu hôm nay'}
+          </p>
+          <span className="text-xs text-gray-500">{todayXp}/{DAILY_GOAL_XP} XP</span>
+        </div>
+        <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100">
+          <div
+            className={`h-full rounded-full ${dailyGoalDone ? 'bg-teal-500' : 'bg-gradient-to-r from-sun-400 to-candy-500'}`}
+            style={{ width: `${dailyGoalPercent}%` }}
+          />
+        </div>
+      </div>
 
       {nextUnit ? (
         <Link
@@ -129,6 +188,29 @@ export default function HomePage() {
                   {levelStats.learned}/{levelStats.total} từ · {levelUnitsDone}/{level.units.length} bài
                 </span>
               </Link>
+            )
+          })}
+        </div>
+      </section>
+
+      <section className="mb-5 rounded-2xl bg-white p-4 shadow-sm">
+        <p className="mb-3 text-sm text-gray-500">
+          Thành tích ({earnedBadgeIds.size}/{BADGES.length})
+        </p>
+        <div className="grid grid-cols-4 gap-2">
+          {BADGES.map((b) => {
+            const earned = earnedBadgeIds.has(b.id)
+            return (
+              <div
+                key={b.id}
+                title={b.desc}
+                className={`flex flex-col items-center rounded-xl p-2 text-center ${
+                  earned ? 'bg-gradient-to-br from-sun-100 to-candy-100' : 'bg-gray-50 opacity-50 grayscale'
+                }`}
+              >
+                <span className="text-2xl">{b.icon}</span>
+                <p className="mt-1 text-[10px] leading-tight text-gray-700">{b.title}</p>
+              </div>
             )
           })}
         </div>

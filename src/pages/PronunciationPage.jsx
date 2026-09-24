@@ -4,6 +4,7 @@ import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
 import { playCorrect, playWrong } from '../lib/sfx'
+import { XP_REWARDS } from '../lib/gamification'
 import { VolumeIcon, MicIcon, ArrowLeftIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
@@ -33,7 +34,7 @@ function ToneQuiz({ words }) {
     () => words.filter((w) => w.tones.length === 1 && w.tones[0] !== 0),
     [words]
   )
-  const { recordToneAnswer, toneStats } = useProgress()
+  const { recordToneAnswer, toneStats, addXp } = useProgress()
   const [word, setWord] = useState(() => pickToneQuestion(singleToneWords))
   const [feedback, setFeedback] = useState(null)
 
@@ -49,8 +50,10 @@ function ToneQuiz({ words }) {
     if (feedback) return
     const correct = tone === word.tones[0]
     recordToneAnswer(correct)
-    if (correct) playCorrect()
-    else playWrong()
+    if (correct) {
+      playCorrect()
+      addXp(XP_REWARDS.toneCorrect)
+    } else playWrong()
     setFeedback({ correct, tone })
   }
 

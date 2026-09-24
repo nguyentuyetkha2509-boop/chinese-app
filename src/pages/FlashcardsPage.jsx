@@ -9,6 +9,7 @@ import { VolumeIcon, CheckIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
+import { XP_REWARDS } from '../lib/gamification'
 
 const RATINGS = [
   { value: 0, label: 'Quên rồi', hint: 'gặp lại ngay', className: 'bg-red-500' },
@@ -18,7 +19,7 @@ const RATINGS = [
 ]
 
 export default function FlashcardsPage() {
-  const { srsState, rateCard } = useProgress()
+  const { srsState, rateCard, addXp } = useProgress()
   const allIds = useMemo(() => ALL_WORDS.map((w) => w.id), [])
   const stats = useMemo(() => getCardStats(allIds, srsState), [allIds, srsState])
   const [queue, setQueue] = useState(() => getDueWordIds(allIds, srsState, 20))
@@ -34,6 +35,7 @@ export default function FlashcardsPage() {
     rateCard(currentId, rating)
     if (rating === 0) playWrong()
     else playCorrect()
+    addXp(XP_REWARDS.flashcardReview)
     if (queue.length === 1) setTimeout(playCelebrate, 350)
     setReviewed((n) => n + 1)
     setFlipped(false)

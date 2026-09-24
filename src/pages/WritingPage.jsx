@@ -9,6 +9,7 @@ import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 import { playCelebrate, playCorrect } from '../lib/sfx'
+import { XP_REWARDS } from '../lib/gamification'
 
 function extractChars(words) {
   const seen = new Set()
@@ -26,7 +27,7 @@ function extractChars(words) {
 
 export default function WritingPage() {
   const params = useParams()
-  const { writingStats, recordWritingPractice } = useProgress()
+  const { writingStats, recordWritingPractice, addXp } = useProgress()
   const [levelId, setLevelId] = useState(params.levelId || 'hsk1')
   const level = getLevel(levelId)
   const scopedUnit = params.unitId ? level.units.find((u) => u.id === Number(params.unitId)) : null
@@ -71,11 +72,17 @@ export default function WritingPage() {
     setQuizResult(null)
     writerRef.current?.quiz({
       onComplete: (summary) => {
-        recordWritingPractice(selected.char)
         const mistakes = summary?.totalMistakes ?? 0
-        if (mistakes === 0) playCelebrate()
-        else playCorrect()
-        setQuizResult(mistakes === 0 ? 'perfect' : `Xong! Sai ${mistakes} lần`)
+        const perfect = mistakes === 0
+        recordWritingPractice(selected.char, perfect)
+        if (perfect) {
+          playCelebrate()
+          addXp(XP_REWARDS.writingPerfect)
+        } else {
+          playCorrect()
+          addXp(XP_REWARDS.writingDone)
+        }
+        setQuizResult(perfect ? 'perfect' : `Xong! Sai ${mistakes} lần`)
       }
     })
   }

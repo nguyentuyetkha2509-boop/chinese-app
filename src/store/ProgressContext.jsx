@@ -1,14 +1,13 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { loadSrsState, saveSrsState, nextSchedule } from '../lib/srs'
+import { todayKey } from '../lib/date'
+import { getLevelInfo } from '../lib/gamification'
+import { playCelebrate } from '../lib/sfx'
 
 const ProgressContext = createContext(null)
 
 const DAY_MS = 24 * 60 * 60 * 1000
-
-function todayKey() {
-  return new Date().toISOString().slice(0, 10)
-}
 
 function loadStreak() {
   return loadJSON('streak', { count: 0, lastDay: null })
@@ -20,12 +19,18 @@ export function ProgressProvider({ children }) {
   const [streak, setStreak] = useState(() => loadStreak())
   const [toneStats, setToneStats] = useState(() => loadJSON('toneStats', { correct: 0, total: 0 }))
   const [writingStats, setWritingStats] = useState(() => loadJSON('writingStats', { practiced: [] }))
+  const [writingPerfectCount, setWritingPerfectCount] = useState(() => loadJSON('writingPerfectCount', 0))
+  const [xp, setXp] = useState(() => loadJSON('xp', 0))
+  const [dailyXp, setDailyXp] = useState(() => loadJSON('dailyXp', { date: todayKey(), amount: 0 }))
 
   useEffect(() => saveSrsState(srsState), [srsState])
   useEffect(() => saveJSON('completedUnits', completedUnits), [completedUnits])
   useEffect(() => saveJSON('streak', streak), [streak])
   useEffect(() => saveJSON('toneStats', toneStats), [toneStats])
   useEffect(() => saveJSON('writingStats', writingStats), [writingStats])
+  useEffect(() => saveJSON('writingPerfectCount', writingPerfectCount), [writingPerfectCount])
+  useEffect(() => saveJSON('xp', xp), [xp])
+  useEffect(() => saveJSON('dailyXp', dailyXp), [dailyXp])
 
   function touchStreak() {
     setStreak((prev) => {
@@ -57,11 +62,24 @@ export function ProgressProvider({ children }) {
     }))
   }
 
-  function recordWritingPractice(wordId) {
+  function recordWritingPractice(wordId, perfect) {
     touchStreak()
     setWritingStats((prev) =>
       prev.practiced.includes(wordId) ? prev : { practiced: [...prev.practiced, wordId] }
     )
+    if (perfect) setWritingPerfectCount((c) => c + 1)
+  }
+
+  function addXp(amount) {
+    setXp((prev) => {
+      const next = prev + amount
+      if (getLevelInfo(next).level > getLevelInfo(prev).level) playCelebrate()
+      return next
+    })
+    setDailyXp((prev) => {
+      const today = todayKey()
+      return prev.date === today ? { date: today, amount: prev.amount + amount } : { date: today, amount }
+    })
   }
 
   const value = useMemo(
@@ -71,12 +89,16 @@ export function ProgressProvider({ children }) {
       streak,
       toneStats,
       writingStats,
+      writingPerfectCount,
+      xp,
+      dailyXp,
       rateCard,
       markUnitComplete,
       recordToneAnswer,
-      recordWritingPractice
+      recordWritingPractice,
+      addXp
     }),
-    [srsState, completedUnits, streak, toneStats, writingStats]
+    [srsState, completedUnits, streak, toneStats, writingStats, writingPerfectCount, xp, dailyXp]
   )
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>
