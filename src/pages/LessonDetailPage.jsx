@@ -77,18 +77,29 @@ export default function LessonDetailPage() {
         <>
           <div className="space-y-2">
             {unit.words.map((word) => (
-              <button
-                key={word.id}
-                onClick={() => speakChinese(word.hanzi)}
-                className="flex w-full items-center justify-between rounded-2xl bg-white p-4 text-left shadow-sm"
-              >
-                <div>
-                  <p className="text-2xl text-gray-800">{word.hanzi}</p>
-                  <p className="text-sm text-brand-600">{word.pinyin}</p>
-                  <p className="text-sm text-gray-500">{word.meaning}</p>
-                </div>
-                <VolumeIcon className="text-brand-500" />
-              </button>
+              <div key={word.id} className="rounded-2xl bg-white p-4 shadow-sm">
+                <button
+                  onClick={() => speakChinese(word.hanzi)}
+                  className="flex w-full items-center justify-between text-left"
+                >
+                  <div>
+                    <p className="text-2xl text-gray-800">{word.hanzi}</p>
+                    <p className="text-sm text-brand-600">{word.pinyin}</p>
+                    <p className="text-sm text-gray-500">{word.meaning}</p>
+                  </div>
+                  <VolumeIcon className="text-brand-500" />
+                </button>
+                {word.example && (
+                  <button
+                    onClick={() => speakChinese(word.example.hanzi)}
+                    className="mt-3 w-full rounded-xl bg-canvas p-3 text-left"
+                  >
+                    <p className="text-base text-gray-800">{word.example.hanzi}</p>
+                    <p className="text-xs text-brand-600">{word.example.pinyin}</p>
+                    <p className="text-xs text-gray-500">{word.example.meaning}</p>
+                  </button>
+                )}
+              </div>
             ))}
           </div>
           <button

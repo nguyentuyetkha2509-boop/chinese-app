@@ -66,6 +66,13 @@ export default function FlashcardsPage() {
           <>
             <p className="mt-3 text-xl text-brand-600">{currentWord.pinyin}</p>
             <p className="mt-1 text-gray-600">{currentWord.meaning}</p>
+            {currentWord.example && (
+              <div className="mt-4 border-t border-gray-100 pt-3">
+                <p className="text-base text-gray-800">{currentWord.example.hanzi}</p>
+                <p className="text-xs text-brand-600">{currentWord.example.pinyin}</p>
+                <p className="text-xs text-gray-500">{currentWord.example.meaning}</p>
+              </div>
+            )}
           </>
         ) : (
           <p className="mt-4 text-sm text-gray-400">Chạm để xem đáp án</p>
