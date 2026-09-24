@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { LEVELS, ALL_WORDS, getNextUnit } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getCardStats, getDueWordIds } from '../lib/srs'
-import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon, ZapIcon, TopicIcon, ChatIcon, StoryIcon, GrammarIcon, ShuffleIcon, EarIcon } from '../components/Icons'
+import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon, ZapIcon, TopicIcon, ChatIcon, StoryIcon, GrammarIcon, ShuffleIcon, EarIcon, SettingsIcon } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
@@ -121,9 +121,14 @@ export default function HomePage() {
           <p className="text-xs text-gray-500">Chào bạn 👋</p>
           <h1 className="text-2xl text-brand-800">🐼 PandaChinese</h1>
         </div>
-        <div className="flex items-center gap-1 rounded-full bg-sun-100 px-3 py-1.5 text-sun-600">
-          <FireIcon width={18} height={18} />
-          <span className="text-sm">{streak.count} ngày</span>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 rounded-full bg-sun-100 px-3 py-1.5 text-sun-600">
+            <FireIcon width={18} height={18} />
+            <span className="text-sm">{streak.count} ngày</span>
+          </div>
+          <Link to="/cai-dat" className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-500">
+            <SettingsIcon width={18} height={18} />
+          </Link>
         </div>
       </header>
 
