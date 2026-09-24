@@ -8,6 +8,8 @@ import FlashcardsPage from './pages/FlashcardsPage'
 import PronunciationPage from './pages/PronunciationPage'
 import WritingPage from './pages/WritingPage'
 import SpeedGamePage from './pages/SpeedGamePage'
+import TopicsPage from './pages/TopicsPage'
+import TopicDetailPage from './pages/TopicDetailPage'
 
 export default function App() {
   return (
@@ -23,6 +25,8 @@ export default function App() {
         <Route path="/viet-chu" element={<WritingPage />} />
         <Route path="/viet-chu/:levelId/:unitId" element={<WritingPage />} />
         <Route path="/tro-choi" element={<SpeedGamePage />} />
+        <Route path="/chu-de" element={<TopicsPage />} />
+        <Route path="/chu-de/:topicKey" element={<TopicDetailPage />} />
       </Routes>
       <BottomNav />
     </div>

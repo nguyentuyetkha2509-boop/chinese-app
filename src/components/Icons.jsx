@@ -98,3 +98,12 @@ export function ZapIcon(props) {
     </svg>
   )
 }
+
+export function TopicIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M11 2 20 11a2 2 0 0 1 0 2.83l-6.17 6.17a2 2 0 0 1-2.83 0L2 11V2h9Z" />
+      <circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}

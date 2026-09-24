@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { LEVELS, ALL_WORDS, getNextUnit } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getCardStats, getDueWordIds } from '../lib/srs'
-import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon, ZapIcon } from '../components/Icons'
+import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon, ZapIcon, TopicIcon } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
@@ -39,6 +39,12 @@ const ACTION_CARDS = [
     icon: PencilIcon,
     title: 'Viết chữ Hán',
     className: 'bg-gradient-to-br from-gold-500 to-teal-600'
+  },
+  {
+    to: '/chu-de',
+    icon: TopicIcon,
+    title: 'Học theo chủ đề',
+    className: 'bg-gradient-to-br from-candy-500 to-sun-500'
   }
 ]
 
@@ -246,6 +252,7 @@ export default function HomePage() {
               </p>
             )}
             {to === '/viet-chu' && <p className="text-xs text-white/80">Luyện nét theo thứ tự chuẩn</p>}
+            {to === '/chu-de' && <p className="text-xs text-white/80">Gia đình, đồ ăn, màu sắc...</p>}
           </Link>
         ))}
       </section>
