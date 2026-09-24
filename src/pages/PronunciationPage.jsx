@@ -4,6 +4,7 @@ import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
 import { VolumeIcon, MicIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
+import { accentFor } from '../lib/colors'
 
 const TONE_LABELS = {
   1: { mark: 'ˉ', name: 'Thanh 1 (ngang)', idleClass: 'border-sky-200 bg-sky-100 text-sky-700' },
@@ -101,19 +102,24 @@ function ListenBrowse({ words }) {
   const items = useMemo(() => shuffle(words).slice(0, 30), [words])
   return (
     <div className="space-y-2">
-      {items.map((word) => (
-        <button
-          key={word.id}
-          onClick={() => speakChinese(word.hanzi)}
-          className="flex w-full items-center justify-between rounded-xl bg-white p-3 shadow-sm"
-        >
-          <div className="text-left">
-            <p className="text-xl text-gray-800">{word.hanzi}</p>
-            <p className="text-sm text-brand-600">{word.pinyin}</p>
-          </div>
-          <VolumeIcon className="text-brand-500" />
-        </button>
-      ))}
+      {items.map((word, i) => {
+        const accent = accentFor(i)
+        return (
+          <button
+            key={word.id}
+            onClick={() => speakChinese(word.hanzi)}
+            className={`flex w-full items-center justify-between rounded-xl border-l-4 bg-white p-3 shadow-sm ${accent.leftBorder}`}
+          >
+            <div className="text-left">
+              <p className="text-xl text-gray-800">{word.hanzi}</p>
+              <p className={`text-sm ${accent.text}`}>{word.pinyin}</p>
+            </div>
+            <span className={`flex h-8 w-8 items-center justify-center rounded-full ${accent.bg} ${accent.text}`}>
+              <VolumeIcon width={16} height={16} />
+            </span>
+          </button>
+        )
+      })}
     </div>
   )
 }
@@ -158,13 +164,13 @@ function RecordCompare({ words }) {
   return (
     <div>
       <p className="mb-3 text-sm text-gray-500">Nghe mẫu, ghi âm giọng bạn rồi nghe lại để so sánh.</p>
-      <div className="rounded-3xl bg-white p-6 text-center shadow-sm">
-        <p className="text-5xl text-gray-800">{word.hanzi}</p>
-        <p className="mt-1 text-brand-600">{word.pinyin}</p>
-        <p className="text-sm text-gray-500">{word.meaning}</p>
+      <div className="rounded-3xl bg-gradient-to-br from-sky-500 via-teal-500 to-brand-500 p-6 text-center text-white shadow-lg">
+        <p className="text-5xl">{word.hanzi}</p>
+        <p className="mt-1 text-white/90">{word.pinyin}</p>
+        <p className="text-sm text-white/80">{word.meaning}</p>
         <button
           onClick={() => speakChinese(word.hanzi)}
-          className="mx-auto mt-3 flex items-center gap-1 text-brand-600"
+          className="mx-auto mt-3 flex items-center gap-1 rounded-full bg-white/20 px-4 py-1.5"
         >
           <VolumeIcon width={20} height={20} /> Nghe mẫu
         </button>
@@ -174,7 +180,7 @@ function RecordCompare({ words }) {
         {status !== 'recording' ? (
           <button
             onClick={startRecording}
-            className="flex items-center gap-2 rounded-full bg-brand-700 px-6 py-3 text-white"
+            className="flex items-center gap-2 rounded-full bg-candy-600 px-6 py-3 text-white"
           >
             <MicIcon width={20} height={20} /> Bắt đầu ghi âm
           </button>

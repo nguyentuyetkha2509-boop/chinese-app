@@ -4,6 +4,7 @@ import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { CheckIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
+import { accentFor } from '../lib/colors'
 
 function extractChars(words) {
   const seen = new Set()
@@ -45,9 +46,9 @@ export default function WritingPage() {
       height: 260,
       padding: 12,
       showOutline: true,
-      strokeColor: '#991b1b',
-      outlineColor: '#fecaca',
-      highlightColor: '#f59e0b',
+      strokeColor: '#7e22ce',
+      outlineColor: '#e9d5ff',
+      highlightColor: '#ec4899',
       strokeAnimationSpeed: 1,
       delayBetweenStrokes: 200
     })
@@ -109,14 +110,15 @@ export default function WritingPage() {
 
       <p className="mb-2 mt-6 text-sm text-gray-500">Chọn chữ khác:</p>
       <div className="grid grid-cols-8 gap-2">
-        {chars.map(({ char }) => {
+        {chars.map(({ char }, i) => {
           const done = writingStats.practiced.includes(char)
+          const accent = accentFor(i)
           return (
             <button
               key={char}
               onClick={() => setSelected(chars.find((c) => c.char === char))}
               className={`relative rounded-lg py-2 text-lg ${
-                selected.char === char ? 'bg-brand-700 text-white' : 'bg-white text-gray-700'
+                selected.char === char ? 'bg-brand-700 text-white' : `${accent.bg} ${accent.text}`
               }`}
             >
               {char}
