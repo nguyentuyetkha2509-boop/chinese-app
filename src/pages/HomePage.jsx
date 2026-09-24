@@ -8,7 +8,7 @@ export default function HomePage() {
   const { srsState, completedUnits, streak, toneStats } = useProgress()
   const allIds = ALL_WORDS.map((w) => w.id)
   const stats = getCardStats(allIds, srsState)
-  const dueCount = getDueWordIds(allIds, srsState, 999).length
+  const dueCount = getDueWordIds(allIds, srsState, allIds.length).length
   const toneAccuracy = toneStats.total ? Math.round((toneStats.correct / toneStats.total) * 100) : null
   const totalUnits = LEVELS.reduce((sum, l) => sum + l.units.length, 0)
   const unitsDone = completedUnits.length
@@ -27,7 +27,9 @@ export default function HomePage() {
       </header>
 
       <section className="mb-5 rounded-2xl bg-white p-4 shadow-sm">
-        <p className="text-xs text-gray-500">Tiến độ từ vựng HSK1-3</p>
+        <p className="text-xs text-gray-500">
+          Tiến độ từ vựng {LEVELS[0].label}-{LEVELS[LEVELS.length - 1].label.replace('HSK', '')}
+        </p>
         <div className="mt-1 flex items-end justify-between">
           <p className="text-xl text-brand-700">
             {stats.learned}/{stats.total} từ
@@ -71,7 +73,7 @@ export default function HomePage() {
         <Link to="/bai-hoc" className="rounded-2xl bg-white p-4 shadow-sm">
           <BookIcon width={22} height={22} className="text-brand-700" />
           <p className="mt-2 text-lg text-gray-800">Bài học</p>
-          <p className="text-xs text-gray-500">HSK1 · HSK2 · HSK3</p>
+          <p className="text-xs text-gray-500">{LEVELS.map((l) => l.label).join(' · ')}</p>
         </Link>
         <Link to="/phat-am" className="rounded-2xl bg-white p-4 shadow-sm">
           <MicIcon width={22} height={22} className="text-brand-700" />

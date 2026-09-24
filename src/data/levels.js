@@ -1,6 +1,7 @@
 import { HSK1_WORDS } from './hsk1'
 import { HSK2_WORDS } from './hsk2'
 import { HSK3_WORDS } from './hsk3'
+import { HSK4_WORDS } from './hsk4'
 
 const WORDS_PER_UNIT = 10
 
@@ -18,7 +19,8 @@ function buildUnits(words) {
 export const LEVELS = [
   { id: 'hsk1', label: 'HSK1', words: HSK1_WORDS, units: buildUnits(HSK1_WORDS) },
   { id: 'hsk2', label: 'HSK2', words: HSK2_WORDS, units: buildUnits(HSK2_WORDS) },
-  { id: 'hsk3', label: 'HSK3', words: HSK3_WORDS, units: buildUnits(HSK3_WORDS) }
+  { id: 'hsk3', label: 'HSK3', words: HSK3_WORDS, units: buildUnits(HSK3_WORDS) },
+  { id: 'hsk4', label: 'HSK4', words: HSK4_WORDS, units: buildUnits(HSK4_WORDS) }
 ]
 
 export const ALL_WORDS = LEVELS.flatMap((level) => level.words)
