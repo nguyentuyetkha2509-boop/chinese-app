@@ -6,6 +6,7 @@ import { CheckIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
+import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 
 function extractChars(words) {
   const seen = new Set()
@@ -98,6 +99,18 @@ export default function WritingPage() {
         </div>
       )}
 
+      {!hasPictograph(selected.char) && hasRadicalHint(selected.char) && (
+        <div className="mb-4 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-teal-100 to-sky-100 p-4">
+          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white text-3xl text-teal-700">
+            {getRadicalSymbol(selected.char)}
+          </span>
+          <div>
+            <p className="text-xs font-semibold text-teal-700">🧩 Mẹo nhớ theo bộ thủ</p>
+            <p className="text-sm text-gray-700">{getRadicalHint(selected.char)}</p>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col items-center">
         <div ref={targetRef} className="hanzi-target bg-white" style={{ width: 260, height: 260 }} />
         <p className="mt-2 text-sm text-gray-500">{selected.meaning}</p>
@@ -135,6 +148,9 @@ export default function WritingPage() {
               {char}
               {hasPictograph(char) && selected.char !== char && (
                 <span className="absolute left-0.5 top-0.5 text-[10px]">💡</span>
+              )}
+              {!hasPictograph(char) && hasRadicalHint(char) && selected.char !== char && (
+                <span className="absolute left-0.5 top-0.5 text-[10px]">🧩</span>
               )}
               {done && selected.char !== char && (
                 <span className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-brand-500" />

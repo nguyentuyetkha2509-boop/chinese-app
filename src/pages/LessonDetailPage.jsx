@@ -6,6 +6,7 @@ import { speakChinese } from '../lib/tts'
 import { ArrowLeftIcon, VolumeIcon, CheckIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
+import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 
 function shuffle(arr) {
   const a = [...arr]
@@ -99,6 +100,14 @@ export default function LessonDetailPage() {
                     <div className="mt-3 flex items-center gap-2 rounded-xl bg-sun-100 p-2.5">
                       <PictographIcon char={word.hanzi} className="h-9 w-9 shrink-0 text-sun-700" />
                       <p className="text-xs text-gray-700">💡 {PICTOGRAPH_HINTS[word.hanzi]}</p>
+                    </div>
+                  )}
+                  {!hasPictograph(word.hanzi) && hasRadicalHint(word.hanzi) && (
+                    <div className="mt-3 flex items-center gap-2 rounded-xl bg-teal-100 p-2.5">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-lg text-teal-700">
+                        {getRadicalSymbol(word.hanzi)}
+                      </span>
+                      <p className="text-xs text-gray-700">🧩 {getRadicalHint(word.hanzi)}</p>
                     </div>
                   )}
                   {word.example && (
