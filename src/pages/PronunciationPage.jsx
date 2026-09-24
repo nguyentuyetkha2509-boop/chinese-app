@@ -6,10 +6,10 @@ import { VolumeIcon, MicIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 
 const TONE_LABELS = {
-  1: { mark: 'ˉ', name: 'Thanh 1 (ngang)' },
-  2: { mark: 'ˊ', name: 'Thanh 2 (lên)' },
-  3: { mark: 'ˇ', name: 'Thanh 3 (xuống rồi lên)' },
-  4: { mark: 'ˋ', name: 'Thanh 4 (xuống mạnh)' }
+  1: { mark: 'ˉ', name: 'Thanh 1 (ngang)', idleClass: 'border-sky-200 bg-sky-100 text-sky-700' },
+  2: { mark: 'ˊ', name: 'Thanh 2 (lên)', idleClass: 'border-teal-200 bg-teal-100 text-teal-700' },
+  3: { mark: 'ˇ', name: 'Thanh 3 (xuống rồi lên)', idleClass: 'border-sun-200 bg-sun-100 text-sun-700' },
+  4: { mark: 'ˋ', name: 'Thanh 4 (xuống mạnh)', idleClass: 'border-candy-200 bg-candy-100 text-candy-700' }
 }
 
 function shuffle(arr) {
@@ -79,16 +79,16 @@ function ToneQuiz({ words }) {
             <button
               key={tone}
               onClick={() => answer(tone)}
-              className={`rounded-2xl border p-4 text-center ${
+              className={`rounded-2xl border-2 p-4 text-center transition ${
                 showResult
                   ? isRight
                     ? 'border-brand-500 bg-brand-50'
                     : 'border-red-400 bg-red-50'
-                  : 'border-gray-200 bg-white'
+                  : TONE_LABELS[tone].idleClass
               }`}
             >
-              <p className="text-3xl text-brand-700">{TONE_LABELS[tone].mark}</p>
-              <p className="mt-1 text-xs text-gray-500">{TONE_LABELS[tone].name}</p>
+              <p className="text-3xl">{TONE_LABELS[tone].mark}</p>
+              <p className="mt-1 text-xs opacity-80">{TONE_LABELS[tone].name}</p>
             </button>
           )
         })}
