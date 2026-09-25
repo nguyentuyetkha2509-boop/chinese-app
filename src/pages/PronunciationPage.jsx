@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
@@ -214,14 +214,28 @@ function pickSupportedMimeType() {
 
 function RecordCompare({ words }) {
   const [word, setWord] = useState(() => words[Math.floor(Math.random() * words.length)])
-  const [status, setStatus] = useState('idle') // idle | recording | recorded | error
+  const [status, setStatus] = useState('idle') // idle | requesting | recording | recorded | error
   const [audioUrl, setAudioUrl] = useState(null)
   const mediaRecorderRef = useRef(null)
+  const streamRef = useRef(null)
   const chunksRef = useRef([])
 
+  // Doi tab/roi trang giua chung khi dang ghi am se bo quen microphone dang
+  // mo - lan ghi am tiep theo phai tranh chap voi stream cu nen phan hoi cham
+  // hoac loi. Don dep khi component unmount de tranh giu micro.
+  useEffect(() => {
+    return () => {
+      if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop()
+      streamRef.current?.getTracks().forEach((t) => t.stop())
+    }
+  }, [])
+
   async function startRecording() {
+    if (status === 'requesting' || status === 'recording') return
+    setStatus('requesting')
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      streamRef.current = stream
       const mimeType = pickSupportedMimeType()
       const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined)
       chunksRef.current = []
@@ -231,6 +245,7 @@ function RecordCompare({ words }) {
         const blob = new Blob(chunksRef.current, { type: recorder.mimeType || 'audio/webm' })
         setAudioUrl(URL.createObjectURL(blob))
         stream.getTracks().forEach((t) => t.stop())
+        streamRef.current = null
         setStatus('recorded')
         playCorrect()
       }
@@ -271,16 +286,18 @@ function RecordCompare({ words }) {
       </div>
 
       <div className="mt-5 flex flex-col items-center gap-3">
-        {status !== 'recording' ? (
-          <button
-            onClick={startRecording}
-            className="flex items-center gap-2 rounded-full bg-candy-600 px-6 py-3 text-white"
-          >
-            <MicIcon width={20} height={20} /> Bắt đầu ghi âm
-          </button>
-        ) : (
+        {status === 'recording' ? (
           <button onClick={stopRecording} className="flex items-center gap-2 rounded-full bg-red-500 px-6 py-3 text-white">
             <MicIcon width={20} height={20} /> Dừng ghi âm
+          </button>
+        ) : (
+          <button
+            onClick={startRecording}
+            disabled={status === 'requesting'}
+            className="flex items-center gap-2 rounded-full bg-candy-600 px-6 py-3 text-white disabled:opacity-60"
+          >
+            <MicIcon width={20} height={20} />
+            {status === 'requesting' ? 'Đang mở micro...' : 'Bắt đầu ghi âm'}
           </button>
         )}
         {status === 'error' && (
