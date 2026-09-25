@@ -34,7 +34,7 @@ function FirebaseSyncSection() {
 
   async function handleChoicePull() {
     setBusy(true)
-    await pullNow().catch(() => playWrong())
+    await pullNow(connectChoice?.uid).catch(() => playWrong())
     setConnectChoice(null)
     setBusy(false)
   }

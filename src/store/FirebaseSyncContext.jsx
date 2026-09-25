@@ -70,7 +70,7 @@ export function FirebaseSyncProvider({ children }) {
       const result = await signInWithPopup(auth, googleProvider)
       const info = await checkRemote(result.user.uid)
       setStatus('idle')
-      return info
+      return { ...info, uid: result.user.uid }
     } catch (e) {
       setError(e.code === 'auth/popup-closed-by-user' ? 'Bạn đã đóng cửa sổ đăng nhập.' : e.message)
       setStatus('error')
@@ -100,12 +100,16 @@ export function FirebaseSyncProvider({ children }) {
     }
   }
 
-  async function pullNow() {
-    if (!user) return
+  // Nhan uidOverride de goi ngay sau signIn() ma khong phai cho user state
+  // (tu onAuthStateChanged) cap nhat xong - tranh dua giua 2 luong bat dong
+  // bo nay khien pullNow() vo tinh no-op ngay sau khi vua dang nhap.
+  async function pullNow(uidOverride) {
+    const uid = uidOverride || user?.uid
+    if (!uid) return
     setStatus('syncing')
     setError(null)
     try {
-      const remoteUpdatedAt = await pullFromFirestore(user.uid)
+      const remoteUpdatedAt = await pullFromFirestore(uid)
       setLastSyncedAt(remoteUpdatedAt)
       setStatus('synced')
       setTimeout(() => window.location.reload(), 800)

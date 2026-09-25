@@ -17,7 +17,7 @@ function markWelcomeSeen() {
 // thuong - nhung van cho phep dung thu khong can tai khoan de khong pha vo
 // trai nghiem "hoc ngay, khong rao can" da co truoc do.
 export default function WelcomeScreen({ onDone }) {
-  const { signIn } = useFirebaseSync()
+  const { signIn, pullNow } = useFirebaseSync()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
 
@@ -25,9 +25,19 @@ export default function WelcomeScreen({ onDone }) {
     setBusy(true)
     setError(null)
     try {
-      await signIn()
-      playCorrect()
+      const info = await signIn()
       markWelcomeSeen()
+      // Tai khoan nay da co ban sao luu tren dam may - may nay dang "trong"
+      // (moi mo app lan dau / vua bi mat du lieu cuc bo), nen PHAI keo ban
+      // dam may ve truoc khi vao app. Neu bo qua buoc nay, luc dong bo tu
+      // dong chay sau do se day du lieu TRONG len ghi de mat sach ban sao
+      // luu that su - day chinh la nguyen nhan gay mat tien do khi dang
+      // nhap lai.
+      if (info.hasRemoteData) {
+        await pullNow(info.uid)
+        return // pullNow() se tu reload trang, khong can goi onDone() nua
+      }
+      playCorrect()
       onDone()
     } catch (e) {
       setError(e.message)
