@@ -14,7 +14,14 @@ import { buildQuiz } from '../lib/quiz'
 import QuizQuestion from '../components/QuizQuestion'
 import CelebrationBadge from '../components/CelebrationBadge'
 
+// Xem ghi chu tuong tu trong LessonDetailPage.jsx: dat key theo topicKey de
+// remount lai tu dau khi chuyen thang sang chu de khac.
 export default function TopicDetailPage() {
+  const { topicKey } = useParams()
+  return <TopicDetailPageInner key={topicKey} />
+}
+
+function TopicDetailPageInner() {
   const { topicKey } = useParams()
   const navigate = useNavigate()
   const { addXp } = useProgress()

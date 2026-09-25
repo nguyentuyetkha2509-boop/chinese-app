@@ -5,7 +5,14 @@ import { speakChinese } from '../lib/tts'
 import { playFlip } from '../lib/sfx'
 import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
 
+// Xem ghi chu tuong tu trong LessonDetailPage.jsx: dat key theo dialogueKey
+// de remount lai tu dau khi chuyen thang sang hoi thoai khac.
 export default function DialogueDetailPage() {
+  const { dialogueKey } = useParams()
+  return <DialogueDetailPageInner key={dialogueKey} />
+}
+
+function DialogueDetailPageInner() {
   const { dialogueKey } = useParams()
   const navigate = useNavigate()
   const dialogue = getDialogue(dialogueKey)

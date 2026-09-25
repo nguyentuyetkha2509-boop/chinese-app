@@ -15,7 +15,18 @@ import QuizQuestion from '../components/QuizQuestion'
 import CelebrationBadge from '../components/CelebrationBadge'
 import { GrammarIcon } from '../components/Icons'
 
+// React Router giu nguyen 1 instance component khi chi doi params (levelId/
+// unitId) tren cung 1 route, khong tu remount - neu khong lam gi them, dieu
+// huong thang tu bai nay sang bai khac (vd tu danh sach Bai hoc) se giu
+// nguyen state cu (phase 'done', quizIndex, correctCount...) cua bai truoc,
+// khien bai moi hien ngay man hinh "Hoan thanh!" cu thay vi noi dung that.
+// Dat key theo levelId+unitId de React tu remount lai tu dau moi khi doi bai.
 export default function LessonDetailPage() {
+  const { levelId, unitId } = useParams()
+  return <LessonDetailPageInner key={`${levelId}:${unitId}`} />
+}
+
+function LessonDetailPageInner() {
   const { levelId, unitId } = useParams()
   const navigate = useNavigate()
   const level = getLevel(levelId)

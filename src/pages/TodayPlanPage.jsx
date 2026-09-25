@@ -1,8 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { ALL_WORDS, getNextUnit, getLastCompletedUnit } from '../data/levels'
+import { ALL_WORDS, LEVELS, getNextUnit } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getCardStats } from '../lib/srs'
-import { getDailyNewWordLimit, getRelatedGrammarForUnit } from '../lib/curriculum'
+import {
+  getDailyNewWordLimit,
+  getRelatedGrammarForUnit,
+  getFirstUnitNeedingWriting,
+  getFirstUnitNeedingGrammar
+} from '../lib/curriculum'
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -16,23 +21,23 @@ import {
 
 export default function TodayPlanPage() {
   const navigate = useNavigate()
-  const { srsState, completedUnits, newWordsToday, writingStats } = useProgress()
+  const { srsState, completedUnits, newWordsToday, writingStats, completedGrammar } = useProgress()
   const allIds = ALL_WORDS.map((w) => w.id)
   const dueCount = getCardStats(allIds, srsState).due
   const dailyLimit = getDailyNewWordLimit()
   const learnedToday = newWordsToday.count
   const capReached = learnedToday >= dailyLimit
   const nextUnit = getNextUnit(completedUnits)
-  const relatedGrammar = nextUnit ? getRelatedGrammarForUnit(nextUnit.levelLabel, nextUnit.unit) : null
-  const lastUnit = getLastCompletedUnit(completedUnits)
+
+  // Uu tien bai CU NHAT da hoc tu vung nhung con thieu ngu phap/viet chu -
+  // tranh tinh trang hoc lien tuc nhieu bai moi (chi phan tu vung) roi bo
+  // quen vinh vien phan cung co cua nhung bai cu hon.
+  const grammarBacklog = getFirstUnitNeedingGrammar(LEVELS, completedUnits, completedGrammar)
+  const grammarPreview = !grammarBacklog && nextUnit ? getRelatedGrammarForUnit(nextUnit.levelLabel, nextUnit.unit) : null
+  const writingBacklog = getFirstUnitNeedingWriting(LEVELS, completedUnits, writingStats)
 
   const reviewDone = dueCount === 0
   const newStepDone = capReached || !nextUnit
-
-  const lastUnitChars = lastUnit
-    ? [...new Set(lastUnit.unit.words.flatMap((w) => [...w.hanzi]).filter((ch) => /[一-鿿]/.test(ch)))]
-    : []
-  const writingDone = lastUnit ? lastUnitChars.every((ch) => writingStats.practiced.includes(ch)) : true
 
   return (
     <div className="px-4 pt-6">
@@ -116,19 +121,21 @@ export default function TodayPlanPage() {
         )}
       </div>
 
-      {relatedGrammar && !capReached && (
+      {grammarBacklog && (
         <div className="mb-4 rounded-2xl bg-gold-100 p-4 shadow-sm">
           <div className="flex items-start gap-3">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-gold-600">
               <GrammarIcon width={20} height={20} />
             </span>
             <div className="flex-1">
-              <p className="text-xs font-semibold text-gray-500">Bước 3 · Ngữ pháp liên quan</p>
-              <p className="text-base text-gray-800">{relatedGrammar.title}</p>
+              <p className="text-xs font-semibold text-gray-500">
+                Bước 3 · Ngữ pháp còn thiếu · {grammarBacklog.levelLabel} {grammarBacklog.unit.title}
+              </p>
+              <p className="text-base text-gray-800">{grammarBacklog.grammar.title}</p>
             </div>
           </div>
           <Link
-            to={`/ngu-phap/${relatedGrammar.key}`}
+            to={`/ngu-phap/${grammarBacklog.grammar.key}`}
             className="mt-3 block w-full rounded-xl bg-white py-2.5 text-center text-sm font-semibold text-gold-600"
           >
             Xem ngữ pháp này
@@ -136,35 +143,49 @@ export default function TodayPlanPage() {
         </div>
       )}
 
-      {lastUnit && (
-        <div className={`mb-4 rounded-2xl p-4 shadow-sm ${writingDone ? 'bg-teal-100' : 'bg-white'}`}>
+      {grammarPreview && !capReached && (
+        <div className="mb-4 rounded-2xl bg-gold-100 p-4 shadow-sm">
           <div className="flex items-start gap-3">
-            <span
-              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${
-                writingDone ? 'bg-teal-500 text-white' : 'bg-candy-100 text-candy-700'
-              }`}
-            >
-              {writingDone ? <CheckIcon width={20} height={20} /> : <PencilIcon width={20} height={20} />}
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-gold-600">
+              <GrammarIcon width={20} height={20} />
             </span>
             <div className="flex-1">
-              <p className="text-xs font-semibold text-gray-500">Bước 4 · Viết chữ củng cố</p>
-              <p className="text-base text-gray-800">
-                {writingDone ? `Đã viết xong chữ của ${lastUnit.unit.title} 🎉` : lastUnit.unit.title}
-              </p>
+              <p className="text-xs font-semibold text-gray-500">Bước 3 · Ngữ pháp liên quan</p>
+              <p className="text-base text-gray-800">{grammarPreview.title}</p>
             </div>
           </div>
-          {!writingDone && (
-            <Link
-              to={`/viet-chu/${lastUnit.levelId}/${lastUnit.unit.id}`}
-              className="mt-3 block w-full rounded-xl bg-candy-600 py-2.5 text-center text-sm font-semibold text-white"
-            >
-              Luyện viết bài này
-            </Link>
-          )}
+          <Link
+            to={`/ngu-phap/${grammarPreview.key}`}
+            className="mt-3 block w-full rounded-xl bg-white py-2.5 text-center text-sm font-semibold text-gold-600"
+          >
+            Xem ngữ pháp này
+          </Link>
         </div>
       )}
 
-      {lastUnit && (
+      {writingBacklog && (
+        <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-candy-100 text-candy-700">
+              <PencilIcon width={20} height={20} />
+            </span>
+            <div className="flex-1">
+              <p className="text-xs font-semibold text-gray-500">Bước 4 · Viết chữ còn thiếu</p>
+              <p className="text-base text-gray-800">
+                {writingBacklog.levelLabel} · {writingBacklog.unit.title}
+              </p>
+            </div>
+          </div>
+          <Link
+            to={`/viet-chu/${writingBacklog.levelId}/${writingBacklog.unit.id}`}
+            className="mt-3 block w-full rounded-xl bg-candy-600 py-2.5 text-center text-sm font-semibold text-white"
+          >
+            Luyện viết bài này
+          </Link>
+        </div>
+      )}
+
+      {writingBacklog && (
         <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
           <div className="flex items-start gap-3">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sun-100 text-sun-700">
@@ -172,11 +193,13 @@ export default function TodayPlanPage() {
             </span>
             <div className="flex-1">
               <p className="text-xs font-semibold text-gray-500">Bước 5 · Luyện phát âm</p>
-              <p className="text-base text-gray-800">{lastUnit.unit.title}</p>
+              <p className="text-base text-gray-800">
+                {writingBacklog.levelLabel} · {writingBacklog.unit.title}
+              </p>
             </div>
           </div>
           <Link
-            to={`/phat-am/${lastUnit.levelId}/${lastUnit.unit.id}`}
+            to={`/phat-am/${writingBacklog.levelId}/${writingBacklog.unit.id}`}
             className="mt-3 block w-full rounded-xl bg-sun-600 py-2.5 text-center text-sm font-semibold text-white"
           >
             Luyện phát âm bài này

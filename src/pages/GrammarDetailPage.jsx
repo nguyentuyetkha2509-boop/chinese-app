@@ -9,7 +9,14 @@ import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
 import CelebrationBadge from '../components/CelebrationBadge'
 
+// Xem ghi chu tuong tu trong LessonDetailPage.jsx: dat key theo pointKey de
+// remount lai tu dau khi chuyen thang sang diem ngu phap khac.
 export default function GrammarDetailPage() {
+  const { pointKey } = useParams()
+  return <GrammarDetailPageInner key={pointKey} />
+}
+
+function GrammarDetailPageInner() {
   const { pointKey } = useParams()
   const navigate = useNavigate()
   const point = getGrammarPoint(pointKey)

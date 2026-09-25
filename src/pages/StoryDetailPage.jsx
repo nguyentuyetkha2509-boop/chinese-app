@@ -9,7 +9,15 @@ import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
 import CelebrationBadge from '../components/CelebrationBadge'
 
+// Xem ghi chu tuong tu trong LessonDetailPage.jsx: dat key theo storyKey de
+// remount lai tu dau khi chuyen thang sang truyen khac, tranh giu nham
+// phase/ket qua cua truyen truoc.
 export default function StoryDetailPage() {
+  const { storyKey } = useParams()
+  return <StoryDetailPageInner key={storyKey} />
+}
+
+function StoryDetailPageInner() {
   const { storyKey } = useParams()
   const navigate = useNavigate()
   const story = getStory(storyKey)

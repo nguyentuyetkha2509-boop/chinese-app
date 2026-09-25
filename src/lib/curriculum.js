@@ -44,6 +44,45 @@ export function getRelatedGrammarForUnit(levelLabel, unit) {
   return bestScore > 0 ? best : null
 }
 
+// Bai DA hoc tu vung (co trong completedUnits) SOM NHAT ma van con thieu
+// luyen viet - dung cho goi y "cung co" thay vi chi nhin bai vua hoc gan
+// day nhat. Neu khong nhu vay, hoc lien tuc nhieu bai moi (chi lam phan tu
+// vung) se khien viet chu cua nhung bai cu bi "vuot qua" quen luon, khong
+// bao gio duoc nhac lai.
+export function getFirstUnitNeedingWriting(levels, completedUnits, writingStats) {
+  const practiced = writingStats?.practiced || []
+  for (const level of levels) {
+    for (const unit of level.units) {
+      if (!completedUnits.includes(`${level.id}:${unit.id}`)) continue
+      const chars = new Set()
+      for (const w of unit.words) {
+        for (const ch of w.hanzi) {
+          if (/[一-鿿]/.test(ch)) chars.add(ch)
+        }
+      }
+      if ([...chars].some((ch) => !practiced.includes(ch))) {
+        return { levelId: level.id, levelLabel: level.label, unit }
+      }
+    }
+  }
+  return null
+}
+
+// Tuong tu getFirstUnitNeedingWriting nhung cho Ngu phap: bai da hoc tu vung
+// SOM NHAT co diem ngu phap lien quan ma diem do chua lam bai tap xong.
+export function getFirstUnitNeedingGrammar(levels, completedUnits, completedGrammar) {
+  for (const level of levels) {
+    for (const unit of level.units) {
+      if (!completedUnits.includes(`${level.id}:${unit.id}`)) continue
+      const point = getRelatedGrammarForUnit(level.label, unit)
+      if (point && !completedGrammar.includes(point.key)) {
+        return { levelId: level.id, levelLabel: level.label, unit, grammar: point }
+      }
+    }
+  }
+  return null
+}
+
 // Tien do "Viet chu" cua 1 cap: ty le chu Han rieng biet (trong tu vung cap
 // do) da duoc luyen viet it nhat 1 lan.
 export function getWritingProgressForLevel(level, writingStats) {
