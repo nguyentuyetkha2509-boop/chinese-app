@@ -5,7 +5,7 @@ import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
+import { ArrowLeftIcon, CheckIcon, VolumeIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
 import CelebrationBadge from '../components/CelebrationBadge'
 
@@ -21,7 +21,7 @@ function StoryDetailPageInner() {
   const { storyKey } = useParams()
   const navigate = useNavigate()
   const story = getStory(storyKey)
-  const { addXp, markStoryComplete } = useProgress()
+  const { addXp, markStoryComplete, completedStories } = useProgress()
 
   const [phase, setPhase] = useState('reading') // reading | quiz | done
   const [chapterIndex, setChapterIndex] = useState(0)
@@ -42,11 +42,13 @@ function StoryDetailPageInner() {
 
   const chapter = story.chapters[chapterIndex]
   const isLastChapter = chapterIndex === story.chapters.length - 1
+  const done = completedStories.includes(story.key)
 
   function playAll(index = 0) {
     if (index >= chapter.lines.length) {
       setPlayingAll(false)
       setActiveLine(null)
+      if (isLastChapter) markStoryComplete(story.key)
       return
     }
     setPlayingAll(true)
@@ -82,6 +84,11 @@ function StoryDetailPageInner() {
         <h1 className="text-xl text-brand-800">
           {story.icon} {story.title}
         </h1>
+        {done && (
+          <span className="flex items-center gap-1 rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-700">
+            <CheckIcon width={12} height={12} /> Đã hoàn thành
+          </span>
+        )}
       </div>
 
       {phase === 'reading' && (
