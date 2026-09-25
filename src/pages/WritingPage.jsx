@@ -11,6 +11,7 @@ import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/P
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 import { playCelebrate, playCorrect } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
+import writingPanda from '../assets/panda/writing_panda.webp'
 
 function extractChars(words) {
   const seen = new Set()
@@ -107,12 +108,15 @@ export default function WritingPage() {
           </div>
         </div>
       ) : (
-        <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl text-brand-800">Viết chữ Hán</h1>
-          <span className="text-sm text-gray-500">
-            Đã luyện {practicedCount}/{chars.length}
-          </span>
-        </div>
+        <>
+          <img src={writingPanda} alt="Gấu trúc luyện viết chữ" className="mx-auto mb-2 w-36 max-w-full" />
+          <div className="mb-4 flex items-center justify-between">
+            <h1 className="text-2xl text-brand-800">Viết chữ Hán</h1>
+            <span className="text-sm text-gray-500">
+              Đã luyện {practicedCount}/{chars.length}
+            </span>
+          </div>
+        </>
       )}
 
       {!scopedUnit && <LevelTabs value={levelId} onChange={setLevelId} />}
