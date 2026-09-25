@@ -3,7 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 import HanziWriter from 'hanzi-writer'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
-import { CheckIcon, ArrowLeftIcon } from '../components/Icons'
+import { CheckIcon, ArrowLeftIcon, VolumeIcon } from '../components/Icons'
+import { speakChinese } from '../lib/tts'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
@@ -140,7 +141,13 @@ export default function WritingPage() {
 
       <div className="flex flex-col items-center">
         <div ref={targetRef} className="hanzi-target bg-white" style={{ width: 260, height: 260 }} />
-        <p className="mt-2 text-sm text-gray-500">{selected.meaning}</p>
+        <button
+          onClick={() => speakChinese(selected.char)}
+          className="mt-2 flex items-center gap-1 text-sm text-brand-600"
+        >
+          <VolumeIcon width={16} height={16} />
+          {selected.meaning} · Nghe phát âm
+        </button>
 
         {quizResult && (
           <p className="mt-2 flex items-center gap-1 text-brand-600">

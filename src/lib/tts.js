@@ -1,5 +1,9 @@
 // Phat am tu tieng Trung bang Web Speech API (SpeechSynthesis) - khong can file audio.
 let cachedVoice = null
+// Loi Chrome da biet: SpeechSynthesisUtterance bi garbage-collect neu khong co
+// bien nao giu tham chieu, khien speak() lang im ngau nhien (khong bao loi).
+// Giu 1 tham chieu o day de utterance song den khi doc xong.
+let currentUtterance = null
 
 function loadVoices() {
   const voices = window.speechSynthesis?.getVoices?.() || []
@@ -29,6 +33,7 @@ export function speakChinese(text, { rate = 0.85, onError, onEnd } = {}) {
   if (voice) utter.voice = voice
   utter.onerror = (e) => onError?.(e.error || 'unknown')
   utter.onend = () => onEnd?.()
+  currentUtterance = utter
 
   // Goi cancel() roi speak() ngay lap tuc co the bi "nuot" tieng tren Chrome/Android -
   // cho mot nhip de trinh duyet xu ly xong lenh huy truoc khi doc cau moi.

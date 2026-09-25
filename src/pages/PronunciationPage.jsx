@@ -203,6 +203,15 @@ function ListenBrowse({ words }) {
   )
 }
 
+// Safari/iOS khong ho tro audio/webm - phai hoi trinh duyet dinh dang nao no
+// thuc su dung roi gan dung vao Blob, neu khong audio ghi duoc se khong phat lai duoc.
+const MIME_CANDIDATES = ['audio/webm', 'audio/mp4', 'audio/ogg']
+
+function pickSupportedMimeType() {
+  if (typeof MediaRecorder === 'undefined' || !MediaRecorder.isTypeSupported) return ''
+  return MIME_CANDIDATES.find((t) => MediaRecorder.isTypeSupported(t)) || ''
+}
+
 function RecordCompare({ words }) {
   const [word, setWord] = useState(() => words[Math.floor(Math.random() * words.length)])
   const [status, setStatus] = useState('idle') // idle | recording | recorded | error
@@ -213,11 +222,13 @@ function RecordCompare({ words }) {
   async function startRecording() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      const recorder = new MediaRecorder(stream)
+      const mimeType = pickSupportedMimeType()
+      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined)
       chunksRef.current = []
       recorder.ondataavailable = (e) => chunksRef.current.push(e.data)
       recorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' })
+        if (audioUrl) URL.revokeObjectURL(audioUrl)
+        const blob = new Blob(chunksRef.current, { type: recorder.mimeType || 'audio/webm' })
         setAudioUrl(URL.createObjectURL(blob))
         stream.getTracks().forEach((t) => t.stop())
         setStatus('recorded')
@@ -235,6 +246,7 @@ function RecordCompare({ words }) {
   }
 
   function nextWord() {
+    if (audioUrl) URL.revokeObjectURL(audioUrl)
     setWord(words[Math.floor(Math.random() * words.length)])
     setAudioUrl(null)
     setStatus('idle')
