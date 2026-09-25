@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { exportAllData, importAllData } from '../lib/storage'
+import { playCorrect, playWrong } from '../lib/sfx'
 import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
 
 function download(filename, text) {
@@ -23,6 +24,7 @@ export default function SettingsPage() {
     const today = new Date().toISOString().slice(0, 10)
     download(`pandachinese-sao-luu-${today}.json`, JSON.stringify(data, null, 2))
     setMessage({ type: 'ok', text: 'Đã tải file sao lưu về máy.' })
+    playCorrect()
   }
 
   function handleImportClick() {
@@ -38,9 +40,11 @@ export default function SettingsPage() {
         const data = JSON.parse(reader.result)
         importAllData(data)
         setMessage({ type: 'ok', text: 'Đã khôi phục dữ liệu! Đang tải lại trang...' })
+        playCorrect()
         setTimeout(() => window.location.reload(), 1000)
       } catch {
         setMessage({ type: 'error', text: 'File không hợp lệ, không thể khôi phục.' })
+        playWrong()
       }
     }
     reader.readAsText(file)

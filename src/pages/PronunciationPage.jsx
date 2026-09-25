@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
-import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
+import { playCorrect, playWrong, playCelebrate, playFlip } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
 import { VolumeIcon, MicIcon, ArrowLeftIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
@@ -232,12 +232,15 @@ function RecordCompare({ words }) {
         setAudioUrl(URL.createObjectURL(blob))
         stream.getTracks().forEach((t) => t.stop())
         setStatus('recorded')
+        playCorrect()
       }
       recorder.start()
       mediaRecorderRef.current = recorder
       setStatus('recording')
+      playFlip()
     } catch {
       setStatus('error')
+      playWrong()
     }
   }
 

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getDialogue } from '../data/dialogues'
 import { speakChinese } from '../lib/tts'
+import { playFlip } from '../lib/sfx'
 import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
 
 export default function DialogueDetailPage() {
@@ -28,6 +29,7 @@ export default function DialogueDetailPage() {
       setActiveLine(null)
       return
     }
+    if (index === 0) playFlip()
     setPlayingAll(true)
     setActiveLine(index)
     speakChinese(dialogue.lines[index].hanzi, { onEnd: () => setTimeout(() => playAll(index + 1), 250) })
@@ -62,6 +64,7 @@ export default function DialogueDetailPage() {
             <div key={i} className={`flex ${isA ? 'justify-start' : 'justify-end'}`}>
               <button
                 onClick={() => {
+                  playFlip()
                   setActiveLine(i)
                   speakChinese(line.hanzi, { onEnd: () => setActiveLine(null) })
                 }}
