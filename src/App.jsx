@@ -1,9 +1,15 @@
+import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import BottomNav from './components/BottomNav'
 import TtsWarning from './components/TtsWarning'
+import WelcomeScreen, { hasSeenWelcome } from './components/WelcomeScreen'
+import NicknamePrompt from './components/NicknamePrompt'
+import { useFirebaseSync } from './store/FirebaseSyncContext'
 import HomePage from './pages/HomePage'
 import TodayPlanPage from './pages/TodayPlanPage'
 import RoadmapPage from './pages/RoadmapPage'
+import LeaderboardPage from './pages/LeaderboardPage'
+import AdminPage from './pages/AdminPage'
 import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
 import FlashcardsPage from './pages/FlashcardsPage'
@@ -23,13 +29,23 @@ import DictationPage from './pages/DictationPage'
 import SettingsPage from './pages/SettingsPage'
 
 export default function App() {
+  const { authReady, user } = useFirebaseSync()
+  const [welcomeDone, setWelcomeDone] = useState(() => hasSeenWelcome())
+
+  if (authReady && !user && !welcomeDone) {
+    return <WelcomeScreen onDone={() => setWelcomeDone(true)} />
+  }
+
   return (
     <div className="mx-auto min-h-screen max-w-md bg-canvas pb-20">
       <TtsWarning />
+      <NicknamePrompt />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/hoc-hom-nay" element={<TodayPlanPage />} />
         <Route path="/lo-trinh" element={<RoadmapPage />} />
+        <Route path="/bang-xep-hang" element={<LeaderboardPage />} />
+        <Route path="/quan-tri" element={<AdminPage />} />
         <Route path="/bai-hoc" element={<LessonsPage />} />
         <Route path="/bai-hoc/:levelId/:unitId" element={<LessonDetailPage />} />
         <Route path="/on-tap" element={<FlashcardsPage />} />

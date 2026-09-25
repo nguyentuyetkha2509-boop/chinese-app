@@ -16,7 +16,8 @@ import {
   GrammarIcon,
   ShuffleIcon,
   EarIcon,
-  SettingsIcon
+  SettingsIcon,
+  TrophyIcon
 } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import trophyPanda from '../assets/panda/trophy_panda.webp'
@@ -74,6 +75,12 @@ const CORE_CARDS = [
 
 // Noi dung phu / mo rong - luyen them khi da xong vong hoc chinh, dat cuoi trang.
 const EXTRA_CARDS = [
+  {
+    to: '/bang-xep-hang',
+    icon: TrophyIcon,
+    title: 'Bảng xếp hạng',
+    className: 'bg-gradient-to-br from-gold-500 to-sun-500'
+  },
   {
     to: '/chu-de',
     icon: TopicIcon,

@@ -3,10 +3,13 @@ import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 
 import { auth, googleProvider } from '../lib/firebase'
 import { useProgress } from './ProgressContext'
 import { pushToFirestore, pullFromFirestore, checkRemote } from '../lib/firebaseSync'
+import { getMyEntry, setNickname as saveNickname, updateMyStats } from '../lib/leaderboard'
+import { getLevelInfo } from '../lib/gamification'
 
 const FirebaseSyncContext = createContext(null)
 
 const AUTO_PUSH_DELAY_MS = 4000
+export const ADMIN_EMAIL = 'nguyentuyetkha2509@gmail.com'
 
 export function FirebaseSyncProvider({ children }) {
   const progress = useProgress()
@@ -15,6 +18,7 @@ export function FirebaseSyncProvider({ children }) {
   const [status, setStatus] = useState('idle') // idle | syncing | synced | error
   const [error, setError] = useState(null)
   const [lastSyncedAt, setLastSyncedAt] = useState(null)
+  const [needsNickname, setNeedsNickname] = useState(false)
   const debounceRef = useRef(null)
   const skipNextAutoPush = useRef(true)
 
@@ -22,6 +26,36 @@ export function FirebaseSyncProvider({ children }) {
     setUser(u)
     setAuthReady(true)
   }), [])
+
+  // Moi khi co phien dang nhap (dang nhap moi hoac khoi phuc tu session cu),
+  // kiem tra xem da dat bi danh cho bang xep hang chua.
+  useEffect(() => {
+    if (!user) {
+      setNeedsNickname(false)
+      return
+    }
+    getMyEntry(user.uid).then((entry) => {
+      setNeedsNickname(!entry?.nickname)
+    })
+  }, [user])
+
+  async function submitNickname(nickname) {
+    if (!user) return
+    await saveNickname(user.uid, nickname)
+    setNeedsNickname(false)
+    await pushLeaderboardStats()
+  }
+
+  async function pushLeaderboardStats() {
+    if (!user) return
+    const { level } = getLevelInfo(progress.xp)
+    await updateMyStats(user.uid, {
+      xp: progress.xp,
+      level,
+      streak: progress.streak.count,
+      wordsLearned: Object.keys(progress.srsState).length
+    })
+  }
 
   async function signIn() {
     setStatus('syncing')
@@ -51,6 +85,7 @@ export function FirebaseSyncProvider({ children }) {
     setError(null)
     try {
       const ts = await pushToFirestore(user.uid)
+      await pushLeaderboardStats()
       setLastSyncedAt(ts)
       setStatus('synced')
     } catch (e) {
@@ -107,10 +142,13 @@ export function FirebaseSyncProvider({ children }) {
     status,
     error,
     lastSyncedAt,
+    needsNickname,
+    isAdmin: user?.email === ADMIN_EMAIL,
     signIn,
     signOut: signOutUser,
     pushNow,
-    pullNow
+    pullNow,
+    submitNickname
   }
 
   return <FirebaseSyncContext.Provider value={value}>{children}</FirebaseSyncContext.Provider>

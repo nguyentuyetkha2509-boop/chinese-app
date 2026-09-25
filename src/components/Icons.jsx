@@ -165,3 +165,23 @@ export function GrammarIcon(props) {
     </svg>
   )
 }
+
+export function TrophyIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M8 4h8v6a4 4 0 0 1-8 0V4Z" />
+      <path d="M8 5H5a3 3 0 0 0 3 5" />
+      <path d="M16 5h3a3 3 0 0 1-3 5" />
+      <path d="M12 14v3M9 21h6M9.5 21c0-2 1-3 2.5-4 1.5 1 2.5 2 2.5 4" />
+    </svg>
+  )
+}
+
+export function ShieldIcon(props) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 3 5 6v5c0 4.5 3 7.7 7 10 4-2.3 7-5.5 7-10V6l-7-3Z" />
+      <path d="m9.5 12 1.8 1.8L14.5 10" />
+    </svg>
+  )
+}

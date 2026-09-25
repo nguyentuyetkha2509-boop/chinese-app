@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { getDailyNewWordLimit, setDailyNewWordLimit, NEW_WORD_LIMIT_OPTIONS } from '../lib/curriculum'
 import { useFirebaseSync } from '../store/FirebaseSyncContext'
 import { playCorrect, playWrong } from '../lib/sfx'
-import { ArrowLeftIcon } from '../components/Icons'
+import { ArrowLeftIcon, ShieldIcon } from '../components/Icons'
 
 function formatTime(ts) {
   if (!ts) return null
@@ -155,6 +155,7 @@ function FirebaseSyncSection() {
 
 export default function SettingsPage() {
   const navigate = useNavigate()
+  const { isAdmin } = useFirebaseSync()
   const [newWordLimit, setNewWordLimit] = useState(() => getDailyNewWordLimit())
 
   function handleLimitChange(n) {
@@ -193,6 +194,18 @@ export default function SettingsPage() {
       </div>
 
       <FirebaseSyncSection />
+
+      {isAdmin && (
+        <Link
+          to="/quan-tri"
+          className="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-sm"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-700">
+            <ShieldIcon width={18} height={18} />
+          </span>
+          <p className="text-sm font-semibold text-gray-800">Trang quản trị</p>
+        </Link>
+      )}
     </div>
   )
 }
