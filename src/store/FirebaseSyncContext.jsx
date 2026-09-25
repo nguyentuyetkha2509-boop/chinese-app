@@ -39,6 +39,8 @@ export function FirebaseSyncProvider({ children }) {
     getMyEntry(user.uid).then((entry) => {
       setNeedsNickname(!entry?.nickname)
       setNicknameState(entry?.nickname ?? null)
+    }).catch((e) => {
+      console.error('Không lấy được biệt danh:', e)
     })
   }, [user])
 
