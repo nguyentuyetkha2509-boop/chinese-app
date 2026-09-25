@@ -22,6 +22,7 @@ export function ProgressProvider({ children }) {
   const [writingPerfectCount, setWritingPerfectCount] = useState(() => loadJSON('writingPerfectCount', 0))
   const [xp, setXp] = useState(() => loadJSON('xp', 0))
   const [dailyXp, setDailyXp] = useState(() => loadJSON('dailyXp', { date: todayKey(), amount: 0 }))
+  const [newWordsToday, setNewWordsToday] = useState(() => loadJSON('newWordsToday', { date: todayKey(), count: 0 }))
 
   useEffect(() => saveSrsState(srsState), [srsState])
   useEffect(() => saveJSON('completedUnits', completedUnits), [completedUnits])
@@ -31,6 +32,7 @@ export function ProgressProvider({ children }) {
   useEffect(() => saveJSON('writingPerfectCount', writingPerfectCount), [writingPerfectCount])
   useEffect(() => saveJSON('xp', xp), [xp])
   useEffect(() => saveJSON('dailyXp', dailyXp), [dailyXp])
+  useEffect(() => saveJSON('newWordsToday', newWordsToday), [newWordsToday])
 
   function touchStreak() {
     setStreak((prev) => {
@@ -50,9 +52,35 @@ export function ProgressProvider({ children }) {
     }))
   }
 
-  function markUnitComplete(unitId) {
+  // Dua tu vao he thong on tap ngat quang ngay khi hoc xong bai, thay vi cho
+  // den khi user tinh co gap tu do trong Flashcards - dam bao tu nao da hoc
+  // cung se duoc len lich on lai (due sau 1 ngay), khong bi "mo coi" mai mai.
+  function seedNewCards(wordIds) {
+    setSrsState((prev) => {
+      let changed = false
+      const next = { ...prev }
+      for (const id of wordIds) {
+        if (!next[id]) {
+          changed = true
+          next[id] = { interval: 1, ease: 2.5, reps: 1, lapses: 0, due: Date.now() + DAY_MS, updatedAt: Date.now() }
+        }
+      }
+      return changed ? next : prev
+    })
+  }
+
+  function markUnitComplete(unitId, wordIds = []) {
     touchStreak()
-    setCompletedUnits((prev) => (prev.includes(unitId) ? prev : [...prev, unitId]))
+    if (completedUnits.includes(unitId)) return
+    setCompletedUnits((prev) => [...prev, unitId])
+    if (wordIds.length > 0) {
+      seedNewCards(wordIds)
+      setNewWordsToday((prev) => {
+        const today = todayKey()
+        const count = wordIds.length
+        return prev.date === today ? { date: today, count: prev.count + count } : { date: today, count }
+      })
+    }
   }
 
   function recordToneAnswer(correct) {
@@ -92,13 +120,14 @@ export function ProgressProvider({ children }) {
       writingPerfectCount,
       xp,
       dailyXp,
+      newWordsToday,
       rateCard,
       markUnitComplete,
       recordToneAnswer,
       recordWritingPractice,
       addXp
     }),
-    [srsState, completedUnits, streak, toneStats, writingStats, writingPerfectCount, xp, dailyXp]
+    [srsState, completedUnits, streak, toneStats, writingStats, writingPerfectCount, xp, dailyXp, newWordsToday]
   )
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>

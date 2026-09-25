@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { exportAllData, importAllData } from '../lib/storage'
+import { getDailyNewWordLimit, setDailyNewWordLimit, NEW_WORD_LIMIT_OPTIONS } from '../lib/curriculum'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
 
@@ -18,6 +19,12 @@ export default function SettingsPage() {
   const navigate = useNavigate()
   const fileInputRef = useRef(null)
   const [message, setMessage] = useState(null)
+  const [newWordLimit, setNewWordLimit] = useState(() => getDailyNewWordLimit())
+
+  function handleLimitChange(n) {
+    setNewWordLimit(n)
+    setDailyNewWordLimit(n)
+  }
 
   function handleExport() {
     const data = exportAllData()
@@ -58,6 +65,27 @@ export default function SettingsPage() {
           <ArrowLeftIcon />
         </button>
         <h1 className="text-xl text-brand-800">Cài đặt</h1>
+      </div>
+
+      <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
+        <p className="text-base text-gray-800">Giới hạn từ mới mỗi ngày</p>
+        <p className="mt-1 text-xs text-gray-500">
+          Học ít từ mới mỗi ngày nhưng đều đặn giúp nhớ lâu hơn và tránh dồn ứ ôn tập. Chỉ áp dụng cho mục "Học hôm
+          nay" ở trang chủ, không khóa các bài học khác.
+        </p>
+        <div className="mt-3 flex gap-2">
+          {NEW_WORD_LIMIT_OPTIONS.map((n) => (
+            <button
+              key={n}
+              onClick={() => handleLimitChange(n)}
+              className={`flex-1 rounded-xl py-2 text-sm font-semibold ${
+                newWordLimit === n ? 'bg-brand-700 text-white' : 'bg-gray-100 text-gray-600'
+              }`}
+            >
+              {n} từ
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="rounded-2xl bg-white p-4 shadow-sm">

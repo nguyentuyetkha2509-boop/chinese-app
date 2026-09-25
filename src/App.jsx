@@ -2,6 +2,8 @@ import { Route, Routes } from 'react-router-dom'
 import BottomNav from './components/BottomNav'
 import TtsWarning from './components/TtsWarning'
 import HomePage from './pages/HomePage'
+import TodayPlanPage from './pages/TodayPlanPage'
+import RoadmapPage from './pages/RoadmapPage'
 import LessonsPage from './pages/LessonsPage'
 import LessonDetailPage from './pages/LessonDetailPage'
 import FlashcardsPage from './pages/FlashcardsPage'
@@ -26,6 +28,8 @@ export default function App() {
       <TtsWarning />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/hoc-hom-nay" element={<TodayPlanPage />} />
+        <Route path="/lo-trinh" element={<RoadmapPage />} />
         <Route path="/bai-hoc" element={<LessonsPage />} />
         <Route path="/bai-hoc/:levelId/:unitId" element={<LessonDetailPage />} />
         <Route path="/on-tap" element={<FlashcardsPage />} />

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { LEVELS, ALL_WORDS, getNextUnit } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
-import { getCardStats, getDueWordIds } from '../lib/srs'
+import { getCardStats } from '../lib/srs'
 import {
   FireIcon,
   BookIcon,
@@ -21,6 +21,7 @@ import {
 import PandaHero from '../components/PandaHero'
 import trophyPanda from '../assets/panda/trophy_panda.webp'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
+import { getDailyNewWordLimit } from '../lib/curriculum'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
 import { todayKey } from '../lib/date'
 
@@ -111,15 +112,23 @@ function isLevelDone(levelId, completedUnits) {
 }
 
 export default function HomePage() {
-  const { srsState, completedUnits, streak, toneStats, xp, dailyXp, writingPerfectCount } = useProgress()
+  const { srsState, completedUnits, streak, toneStats, xp, dailyXp, writingPerfectCount, newWordsToday } =
+    useProgress()
   const allIds = ALL_WORDS.map((w) => w.id)
   const stats = getCardStats(allIds, srsState)
-  const dueCount = getDueWordIds(allIds, srsState, allIds.length).length
+  const dueCount = stats.due
   const toneAccuracy = toneStats.total ? Math.round((toneStats.correct / toneStats.total) * 100) : null
   const totalUnits = LEVELS.reduce((sum, l) => sum + l.units.length, 0)
   const unitsDone = completedUnits.length
   const percent = Math.round((stats.learned / stats.total) * 100)
   const nextUnit = getNextUnit(completedUnits)
+  const dailyNewWordLimit = getDailyNewWordLimit()
+  const newWordCapReached = newWordsToday.count >= dailyNewWordLimit
+  const todayPlanSubtitle = dueCount > 0
+    ? `${dueCount} thẻ cần ôn`
+    : nextUnit && !newWordCapReached
+      ? `${nextUnit.levelLabel} · ${nextUnit.unit.title}`
+      : 'Đã xong việc hôm nay 🎉'
 
   const statValues = { total: stats.total, learned: stats.learned, percent: `${percent}%`, due: dueCount }
 
@@ -172,33 +181,18 @@ export default function HomePage() {
 
       <PandaHero />
 
-      {nextUnit ? (
-        <Link
-          to={`/bai-hoc/${nextUnit.levelId}/${nextUnit.unit.id}`}
-          className="mt-4 flex items-center justify-between rounded-2xl bg-brand-700 p-4 text-white shadow-md"
-        >
-          <div>
-            <p className="text-xs text-white/80">
-              {unitsDone > 0 ? 'Tiếp tục học' : 'Bắt đầu học ngay'}
-            </p>
-            <p className="text-lg font-semibold">
-              {nextUnit.levelLabel} · {nextUnit.unit.title}
-            </p>
-          </div>
-          <ArrowRightIcon width={26} height={26} />
-        </Link>
-      ) : (
-        <Link
-          to="/on-tap"
-          className="mt-4 flex items-center justify-between rounded-2xl bg-brand-700 p-4 text-white shadow-md"
-        >
-          <div>
-            <p className="text-xs text-white/80">Bạn đã học hết các bài!</p>
-            <p className="text-lg font-semibold">Ôn tập lại cho chắc kiến thức</p>
-          </div>
-          <ArrowRightIcon width={26} height={26} />
-        </Link>
-      )}
+      <Link
+        to="/hoc-hom-nay"
+        className="mt-4 flex items-center justify-between rounded-2xl bg-brand-700 p-4 text-white shadow-md"
+      >
+        <div>
+          <p className="text-xs text-white/80">
+            {unitsDone > 0 ? 'Học hôm nay' : 'Bắt đầu học ngay'}
+          </p>
+          <p className="text-lg font-semibold">{todayPlanSubtitle}</p>
+        </div>
+        <ArrowRightIcon width={26} height={26} />
+      </Link>
 
       <p className="mb-2 mt-5 text-sm font-semibold text-gray-500">Học mỗi ngày</p>
       <section className="mb-6 grid grid-cols-2 gap-3">
@@ -254,6 +248,12 @@ export default function HomePage() {
       </section>
 
       <section className="mb-5 rounded-2xl bg-white p-4 shadow-sm">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-semibold text-gray-500">Tiến độ học tập</p>
+          <Link to="/lo-trinh" className="text-xs font-semibold text-brand-600">
+            Xem lộ trình →
+          </Link>
+        </div>
         <div className="mt-2 h-2 overflow-hidden rounded-full bg-brand-50">
           <div
             className="h-full rounded-full bg-gradient-to-r from-brand-500 to-candy-500"

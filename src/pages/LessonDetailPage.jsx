@@ -9,9 +9,11 @@ import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 import { XP_REWARDS } from '../lib/gamification'
+import { getRelatedGrammarForUnit } from '../lib/curriculum'
 import { buildQuiz } from '../lib/quiz'
 import QuizQuestion from '../components/QuizQuestion'
 import CelebrationBadge from '../components/CelebrationBadge'
+import { GrammarIcon } from '../components/Icons'
 
 export default function LessonDetailPage() {
   const { levelId, unitId } = useParams()
@@ -23,6 +25,10 @@ export default function LessonDetailPage() {
   const [phase, setPhase] = useState('study') // study | quiz | done
   const quiz = useMemo(
     () => (unit ? buildQuiz(unit.words, level.words.length > 4 ? level.words : ALL_WORDS) : []),
+    [unit, level]
+  )
+  const relatedGrammar = useMemo(
+    () => (unit && level ? getRelatedGrammarForUnit(level.label, unit) : null),
     [unit, level]
   )
   const [quizIndex, setQuizIndex] = useState(0)
@@ -57,7 +63,7 @@ export default function LessonDetailPage() {
       if (quizIndex + 1 < quiz.length) {
         setQuizIndex((i) => i + 1)
       } else {
-        markUnitComplete(`${levelId}:${unit.id}`)
+        markUnitComplete(`${levelId}:${unit.id}`, unit.words.map((w) => w.id))
         addXp(XP_REWARDS.unitComplete)
         setPhase('done')
         playCelebrate()
@@ -82,6 +88,20 @@ export default function LessonDetailPage() {
             <div className="mb-4 rounded-2xl bg-brand-50 p-3.5">
               <p className="text-sm text-gray-700">{unit.intro}</p>
             </div>
+          )}
+          {relatedGrammar && (
+            <Link
+              to={`/ngu-phap/${relatedGrammar.key}`}
+              className="mb-4 flex items-center gap-3 rounded-2xl bg-gold-100 p-3.5"
+            >
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-gold-600">
+                <GrammarIcon width={18} height={18} />
+              </span>
+              <div className="flex-1">
+                <p className="text-xs text-gold-600">Ngữ pháp liên quan</p>
+                <p className="text-sm font-semibold text-gray-800">{relatedGrammar.title}</p>
+              </div>
+            </Link>
           )}
           <div className="space-y-2">
             {unit.words.map((word, i) => {
