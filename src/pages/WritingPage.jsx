@@ -38,6 +38,7 @@ export default function WritingPage() {
   const [quizResult, setQuizResult] = useState(null)
   const targetRef = useRef(null)
   const writerRef = useRef(null)
+  const advanceTimeoutRef = useRef(null)
 
   useEffect(() => {
     if (!chars.some((c) => c.char === selected?.char)) {
@@ -48,6 +49,7 @@ export default function WritingPage() {
 
   useEffect(() => {
     if (!targetRef.current || !selected) return
+    clearTimeout(advanceTimeoutRef.current)
     targetRef.current.innerHTML = ''
     setQuizResult(null)
     writerRef.current = HanziWriter.create(targetRef.current, selected.char, {
@@ -63,6 +65,7 @@ export default function WritingPage() {
     })
     return () => {
       writerRef.current = null
+      clearTimeout(advanceTimeoutRef.current)
     }
   }, [selected])
 
@@ -85,6 +88,13 @@ export default function WritingPage() {
           addXp(XP_REWARDS.writingDone)
         }
         setQuizResult(perfect ? 'perfect' : `Xong! Sai ${mistakes} lần`)
+
+        // Tu chuyen sang chu tiep theo sau khi xem ket qua mot chut, thay vi
+        // dung lai o chu vua viet xong bat nguoi dung phai bam chon thu cong.
+        const nextChar = chars[chars.findIndex((c) => c.char === selected.char) + 1]
+        if (nextChar) {
+          advanceTimeoutRef.current = setTimeout(() => setSelected(nextChar), 1500)
+        }
       }
     })
   }
