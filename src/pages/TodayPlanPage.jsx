@@ -1,13 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { ALL_WORDS, getNextUnit } from '../data/levels'
+import { ALL_WORDS, getNextUnit, getLastCompletedUnit } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getCardStats } from '../lib/srs'
 import { getDailyNewWordLimit, getRelatedGrammarForUnit } from '../lib/curriculum'
-import { ArrowLeftIcon, ArrowRightIcon, CardsIcon, BookIcon, GrammarIcon, CheckIcon } from '../components/Icons'
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CardsIcon,
+  BookIcon,
+  GrammarIcon,
+  PencilIcon,
+  MicIcon,
+  CheckIcon
+} from '../components/Icons'
 
 export default function TodayPlanPage() {
   const navigate = useNavigate()
-  const { srsState, completedUnits, newWordsToday } = useProgress()
+  const { srsState, completedUnits, newWordsToday, writingStats } = useProgress()
   const allIds = ALL_WORDS.map((w) => w.id)
   const dueCount = getCardStats(allIds, srsState).due
   const dailyLimit = getDailyNewWordLimit()
@@ -15,9 +24,15 @@ export default function TodayPlanPage() {
   const capReached = learnedToday >= dailyLimit
   const nextUnit = getNextUnit(completedUnits)
   const relatedGrammar = nextUnit ? getRelatedGrammarForUnit(nextUnit.levelLabel, nextUnit.unit) : null
+  const lastUnit = getLastCompletedUnit(completedUnits)
 
   const reviewDone = dueCount === 0
   const newStepDone = capReached || !nextUnit
+
+  const lastUnitChars = lastUnit
+    ? [...new Set(lastUnit.unit.words.flatMap((w) => [...w.hanzi]).filter((ch) => /[一-鿿]/.test(ch)))]
+    : []
+  const writingDone = lastUnit ? lastUnitChars.every((ch) => writingStats.practiced.includes(ch)) : true
 
   return (
     <div className="px-4 pt-6">
@@ -28,7 +43,7 @@ export default function TodayPlanPage() {
         <h1 className="text-xl text-brand-800">Học hôm nay</h1>
       </div>
       <p className="mb-5 text-sm text-gray-500">
-        Ôn trước - học mới sau, theo đúng thứ tự giúp nhớ lâu nhất.
+        Ôn trước - học mới - củng cố bằng ngữ pháp, viết và phát âm. Theo đúng thứ tự này giúp nhớ lâu nhất.
       </p>
 
       <div className={`mb-4 rounded-2xl p-4 shadow-sm ${reviewDone ? 'bg-teal-100' : 'bg-white'}`}>
@@ -117,6 +132,54 @@ export default function TodayPlanPage() {
             className="mt-3 block w-full rounded-xl bg-white py-2.5 text-center text-sm font-semibold text-gold-600"
           >
             Xem ngữ pháp này
+          </Link>
+        </div>
+      )}
+
+      {lastUnit && (
+        <div className={`mb-4 rounded-2xl p-4 shadow-sm ${writingDone ? 'bg-teal-100' : 'bg-white'}`}>
+          <div className="flex items-start gap-3">
+            <span
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${
+                writingDone ? 'bg-teal-500 text-white' : 'bg-candy-100 text-candy-700'
+              }`}
+            >
+              {writingDone ? <CheckIcon width={20} height={20} /> : <PencilIcon width={20} height={20} />}
+            </span>
+            <div className="flex-1">
+              <p className="text-xs font-semibold text-gray-500">Bước 4 · Viết chữ củng cố</p>
+              <p className="text-base text-gray-800">
+                {writingDone ? `Đã viết xong chữ của ${lastUnit.unit.title} 🎉` : lastUnit.unit.title}
+              </p>
+            </div>
+          </div>
+          {!writingDone && (
+            <Link
+              to={`/viet-chu/${lastUnit.levelId}/${lastUnit.unit.id}`}
+              className="mt-3 block w-full rounded-xl bg-candy-600 py-2.5 text-center text-sm font-semibold text-white"
+            >
+              Luyện viết bài này
+            </Link>
+          )}
+        </div>
+      )}
+
+      {lastUnit && (
+        <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sun-100 text-sun-700">
+              <MicIcon width={20} height={20} />
+            </span>
+            <div className="flex-1">
+              <p className="text-xs font-semibold text-gray-500">Bước 5 · Luyện phát âm</p>
+              <p className="text-base text-gray-800">{lastUnit.unit.title}</p>
+            </div>
+          </div>
+          <Link
+            to={`/phat-am/${lastUnit.levelId}/${lastUnit.unit.id}`}
+            className="mt-3 block w-full rounded-xl bg-sun-600 py-2.5 text-center text-sm font-semibold text-white"
+          >
+            Luyện phát âm bài này
           </Link>
         </div>
       )}

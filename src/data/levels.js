@@ -52,3 +52,15 @@ export function getNextUnit(completedUnits) {
   }
   return null
 }
+
+// Bai hoc gan nhat da hoan thanh - dung de goi y luyen viet/phat am cung co
+// lai dung tu vua hoc, thay vi mot bai bat ky.
+export function getLastCompletedUnit(completedUnits) {
+  if (completedUnits.length === 0) return null
+  const lastKey = completedUnits[completedUnits.length - 1]
+  const [levelId, unitIdStr] = lastKey.split(':')
+  const level = getLevel(levelId)
+  const unit = level?.units.find((u) => u.id === Number(unitIdStr))
+  if (!level || !unit) return null
+  return { levelId, levelLabel: level.label, unit }
+}
