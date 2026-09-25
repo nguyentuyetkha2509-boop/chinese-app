@@ -11,6 +11,7 @@ import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/P
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 import { XP_REWARDS } from '../lib/gamification'
 import CelebrationBadge from '../components/CelebrationBadge'
+import flashcardPanda from '../assets/panda/flashcard_panda.webp'
 
 const SESSION_SIZE = 20
 
@@ -105,8 +106,16 @@ export default function FlashcardsPage() {
           ))}
         </div>
 
+        {totalRated === 0 && (
+          <img
+            src={flashcardPanda}
+            alt="Gấu trúc mời ôn tập từ vựng"
+            className="mx-auto mb-4 w-48 max-w-full"
+          />
+        )}
+
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
-          <CelebrationBadge />
+          {totalRated > 0 && <CelebrationBadge />}
           <p className="text-lg">
             {totalRated > 0 ? `🎉 Đã ôn xong ${totalRated} thẻ!` : 'Không có thẻ nào cần ôn ở mục này.'}
           </p>
