@@ -19,10 +19,6 @@ export default function PandaHero() {
         {/* than - tron, be, ngoi */}
         <ellipse cx="150" cy="166" rx="50" ry="28" fill="#ffffff" />
 
-        {/* hai tay gio len vui ve */}
-        <ellipse cx="96" cy="137" rx="12" ry="20" fill="#2b2b2b" transform="rotate(-32 96 137)" />
-        <ellipse cx="204" cy="137" rx="12" ry="20" fill="#2b2b2b" transform="rotate(32 204 137)" />
-
         {/* dau - to tron kieu chibi */}
         <circle cx="150" cy="96" r="58" fill="#ffffff" />
 
@@ -52,6 +48,20 @@ export default function PandaHero() {
         {/* ma hong */}
         <circle cx="99" cy="115" r="8.5" fill="#fbcfe8" opacity="0.8" />
         <circle cx="201" cy="115" r="8.5" fill="#fbcfe8" opacity="0.8" />
+
+        {/* hai tay om sach */}
+        <ellipse cx="106" cy="155" rx="12" ry="19" fill="#2b2b2b" transform="rotate(22 106 155)" />
+        <ellipse cx="194" cy="155" rx="12" ry="19" fill="#2b2b2b" transform="rotate(-22 194 155)" />
+
+        {/* sach dang mo */}
+        <g transform="translate(112 138)">
+          <rect x="0" y="0" width="76" height="38" rx="5" fill="#ffffff" stroke="#9333ea" strokeWidth="2.5" />
+          <line x1="38" y1="3" x2="38" y2="35" stroke="#9333ea" strokeWidth="2.5" />
+          <line x1="10" y1="12" x2="30" y2="12" stroke="#e9d5ff" strokeWidth="2.5" />
+          <line x1="10" y1="22" x2="30" y2="22" stroke="#e9d5ff" strokeWidth="2.5" />
+          <line x1="46" y1="12" x2="66" y2="12" stroke="#e9d5ff" strokeWidth="2.5" />
+          <line x1="46" y1="22" x2="66" y2="22" stroke="#e9d5ff" strokeWidth="2.5" />
+        </g>
       </svg>
 
       <p className="relative mt-1 text-center text-sm font-semibold text-white drop-shadow">
