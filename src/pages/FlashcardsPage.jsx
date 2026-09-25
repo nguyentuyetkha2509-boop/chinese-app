@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ALL_WORDS, getWordById } from '../data/levels'
+import { ALL_WORDS, LEVELS, getWordById } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
-import { getCardStats, getDueWordIds } from '../lib/srs'
+import { getCardStats, getDueWordIds, getLeechWordIds } from '../lib/srs'
 import { speakChinese } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate, playFlip } from '../lib/sfx'
 import { VolumeIcon, CheckIcon } from '../components/Icons'
@@ -11,6 +11,8 @@ import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/P
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 import { XP_REWARDS } from '../lib/gamification'
 
+const SESSION_SIZE = 20
+
 const RATINGS = [
   { value: 0, label: 'Quên rồi', hint: 'gặp lại ngay', className: 'bg-red-500' },
   { value: 1, label: 'Khó nhớ', hint: 'gặp lại sớm', className: 'bg-sun-500' },
@@ -18,26 +20,55 @@ const RATINGS = [
   { value: 3, label: 'Nhớ rõ', hint: 'lâu mới gặp lại', className: 'bg-teal-500' }
 ]
 
+function wordIdsForScope(scope) {
+  if (scope === 'all') return ALL_WORDS.map((w) => w.id)
+  const level = LEVELS.find((l) => l.id === scope)
+  return level ? level.words.map((w) => w.id) : []
+}
+
 export default function FlashcardsPage() {
   const { srsState, rateCard, addXp } = useProgress()
   const allIds = useMemo(() => ALL_WORDS.map((w) => w.id), [])
   const stats = useMemo(() => getCardStats(allIds, srsState), [allIds, srsState])
-  const [queue, setQueue] = useState(() => getDueWordIds(allIds, srsState, 20))
-  const [reviewed, setReviewed] = useState(0)
+  const leechIds = useMemo(() => getLeechWordIds(allIds, srsState), [allIds, srsState])
+
+  const [scope, setScope] = useState('all')
+  const [queue, setQueue] = useState(() => getDueWordIds(wordIdsForScope('all'), srsState, SESSION_SIZE))
+  const [sessionTotal, setSessionTotal] = useState(queue.length)
+  const [ratingCounts, setRatingCounts] = useState({ 0: 0, 1: 0, 2: 0, 3: 0 })
+  const [sessionXp, setSessionXp] = useState(0)
   const [flipped, setFlipped] = useState(false)
   const isBrandNew = stats.learned === 0
 
   const currentId = queue[0]
   const currentWord = currentId ? getWordById(currentId) : null
+  const reviewed = sessionTotal - queue.length
   const accent = accentFor(reviewed)
+
+  function buildQueueForScope(nextScope) {
+    const ids = nextScope === 'leech' ? leechIds : wordIdsForScope(nextScope)
+    const nextQueue =
+      nextScope === 'leech' ? ids.slice(0, SESSION_SIZE) : getDueWordIds(ids, srsState, SESSION_SIZE)
+    setQueue(nextQueue)
+    setSessionTotal(nextQueue.length)
+    setRatingCounts({ 0: 0, 1: 0, 2: 0, 3: 0 })
+    setSessionXp(0)
+    setFlipped(false)
+  }
+
+  function handleScopeChange(nextScope) {
+    setScope(nextScope)
+    buildQueueForScope(nextScope)
+  }
 
   function handleRate(rating) {
     rateCard(currentId, rating)
     if (rating === 0) playWrong()
     else playCorrect()
     addXp(XP_REWARDS.flashcardReview)
+    setSessionXp((n) => n + XP_REWARDS.flashcardReview)
+    setRatingCounts((c) => ({ ...c, [rating]: c[rating] + 1 }))
     if (queue.length === 1) setTimeout(playCelebrate, 350)
-    setReviewed((n) => n + 1)
     setFlipped(false)
     setQueue((q) => q.slice(1))
   }
@@ -47,21 +78,65 @@ export default function FlashcardsPage() {
     setFlipped((f) => !f)
   }
 
+  const SCOPE_CHIPS = [
+    { key: 'all', label: 'Tất cả' },
+    ...LEVELS.map((l) => ({ key: l.id, label: l.label })),
+    ...(leechIds.length > 0 ? [{ key: 'leech', label: `⚠️ Từ khó (${leechIds.length})` }] : [])
+  ]
+
   if (!currentWord) {
+    const totalRated = ratingCounts[0] + ratingCounts[1] + ratingCounts[2] + ratingCounts[3]
     return (
       <div className="px-4 pt-6">
         <h1 className="mb-4 text-2xl text-brand-800">Ôn tập</h1>
+
+        <div className="mb-4 flex gap-2 overflow-x-auto">
+          {SCOPE_CHIPS.map((c) => (
+            <button
+              key={c.key}
+              onClick={() => handleScopeChange(c.key)}
+              className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm ${
+                scope === c.key ? 'bg-brand-700 text-white' : 'bg-white text-gray-600'
+              }`}
+            >
+              {c.label}
+            </button>
+          ))}
+        </div>
+
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
           <span className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-white/25 text-white">
             <CheckIcon width={28} height={28} />
           </span>
           <p className="text-lg">
-            {reviewed > 0 ? `🎉 Đã ôn xong ${reviewed} thẻ!` : 'Không có thẻ nào cần ôn lúc này.'}
+            {totalRated > 0 ? `🎉 Đã ôn xong ${totalRated} thẻ!` : 'Không có thẻ nào cần ôn ở mục này.'}
           </p>
-          <p className="mt-1 text-sm text-white/90">Học bài mới hoặc quay lại sau nhé.</p>
-          <Link to="/bai-hoc" className="mt-4 inline-block rounded-xl bg-white px-5 py-2.5 font-semibold text-brand-700">
-            Học bài mới
-          </Link>
+          {totalRated > 0 ? (
+            <>
+              <div className="mt-3 grid grid-cols-4 gap-2 text-xs">
+                {RATINGS.map((r) => (
+                  <div key={r.value} className="rounded-lg bg-white/15 py-1.5">
+                    <p className="text-base font-semibold">{ratingCounts[r.value]}</p>
+                    <p className="text-white/80">{r.label}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-3 text-sm text-white/90">+{sessionXp} XP</p>
+            </>
+          ) : (
+            <p className="mt-1 text-sm text-white/90">Học bài mới hoặc chọn mục khác để ôn.</p>
+          )}
+          <div className="mt-4 flex gap-2">
+            <button
+              onClick={() => buildQueueForScope(scope)}
+              className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
+            >
+              Ôn thêm
+            </button>
+            <Link to="/bai-hoc" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
+              Học bài mới
+            </Link>
+          </div>
         </div>
       </div>
     )
@@ -71,8 +146,25 @@ export default function FlashcardsPage() {
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center justify-between">
         <h1 className="text-2xl text-brand-800">Ôn tập</h1>
-        <span className="text-sm text-gray-500">Còn {queue.length} thẻ</span>
+        <span className="text-sm text-gray-500">
+          Thẻ {reviewed + 1}/{sessionTotal}
+        </span>
       </div>
+
+      <div className="mb-3 flex gap-2 overflow-x-auto">
+        {SCOPE_CHIPS.map((c) => (
+          <button
+            key={c.key}
+            onClick={() => handleScopeChange(c.key)}
+            className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm ${
+              scope === c.key ? 'bg-brand-700 text-white' : 'bg-white text-gray-600'
+            }`}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+
       <p className="mb-4 text-xs text-gray-500">
         Đoán nghĩa trong đầu, chạm vào thẻ để xem đáp án, rồi chọn mức độ bạn nhớ được.
       </p>

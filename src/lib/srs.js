@@ -6,11 +6,12 @@ const DAY_MS = 24 * 60 * 60 * 1000
 
 // rating: 0 = Lai (quen), 1 = Kho, 2 = On, 3 = De
 export function nextSchedule(card, rating) {
-  const prev = card || { interval: 0, ease: 2.5, reps: 0 }
-  let { interval, ease, reps } = prev
+  const prev = card || { interval: 0, ease: 2.5, reps: 0, lapses: 0 }
+  let { interval, ease, reps, lapses = 0 } = prev
 
   if (rating === 0) {
     reps = 0
+    lapses += 1
     interval = 0.02 // ~30 phut, xem lai gan nhu ngay
   } else {
     ease = Math.max(1.3, ease + (rating === 3 ? 0.15 : rating === 1 ? -0.2 : 0))
@@ -25,6 +26,7 @@ export function nextSchedule(card, rating) {
     interval,
     ease,
     reps,
+    lapses,
     due: Date.now() + interval * DAY_MS,
     updatedAt: Date.now()
   }
@@ -54,6 +56,14 @@ export function getDueWordIds(allWordIds, srsState, limit = 20) {
     result.push(id)
   }
   return result.slice(0, limit)
+}
+
+const LEECH_THRESHOLD = 2
+
+export function getLeechWordIds(allWordIds, srsState) {
+  return allWordIds
+    .filter((id) => (srsState[id]?.lapses ?? 0) >= LEECH_THRESHOLD)
+    .sort((a, b) => (srsState[b]?.lapses ?? 0) - (srsState[a]?.lapses ?? 0))
 }
 
 export function getCardStats(allWordIds, srsState) {
