@@ -15,7 +15,7 @@ export default function LessonsPage() {
     <div className="px-4 pt-6">
       <h1 className="mb-1 text-2xl text-brand-800">Bài học {level.label}</h1>
       <p className="mb-4 text-sm text-gray-500">
-        {level.words.length} từ vựng, chia thành {level.units.length} bài, mỗi bài 10 từ.
+        {level.words.length} từ vựng, chia thành {level.units.length} bài, mỗi bài {level.units[0]?.words.length} từ.
       </p>
 
       <LevelTabs value={levelId} onChange={setLevelId} />
