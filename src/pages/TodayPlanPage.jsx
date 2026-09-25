@@ -5,8 +5,8 @@ import { getCardStats } from '../lib/srs'
 import {
   getDailyNewWordLimit,
   getRelatedGrammarForUnit,
-  getFirstUnitNeedingWriting,
-  getFirstUnitNeedingGrammar
+  getAllUnitsNeedingWriting,
+  getAllUnitsNeedingGrammar
 } from '../lib/curriculum'
 import {
   ArrowLeftIcon,
@@ -39,21 +39,21 @@ export default function TodayPlanPage() {
   const capReached = learnedToday >= dailyLimit
   const nextUnit = getNextUnit(completedUnits)
 
-  // Uu tien bai CU NHAT da hoc tu vung nhung con thieu ngu phap/viet chu -
-  // tranh tinh trang hoc lien tuc nhieu bai moi (chi phan tu vung) roi bo
-  // quen vinh vien phan cung co cua nhung bai cu hon.
-  const grammarBacklog = getFirstUnitNeedingGrammar(LEVELS, completedUnits, completedGrammar)
-  const grammarPreview = !grammarBacklog && nextUnit ? getRelatedGrammarForUnit(nextUnit.levelLabel, nextUnit.unit) : null
-  const writingBacklog = getFirstUnitNeedingWriting(LEVELS, completedUnits, writingStats)
+  // Liet ke TOAN BO bai da hoc tu vung nhung con thieu ngu phap/viet chu -
+  // moi bai la 1 muc doc lap, khong bai nao "chan" bai kia (bai 1 con thieu
+  // viet chu khong lien quan gi den bai 6 con thieu ngu phap).
+  const grammarBacklog = getAllUnitsNeedingGrammar(LEVELS, completedUnits, completedGrammar)
+  const grammarPreview =
+    grammarBacklog.length === 0 && nextUnit ? getRelatedGrammarForUnit(nextUnit.levelLabel, nextUnit.unit) : null
+  const writingBacklog = getAllUnitsNeedingWriting(LEVELS, completedUnits, writingStats)
 
   const reviewDone = dueCount === 0
   const newStepDone = capReached || !nextUnit
 
-  // Hanh trinh hom nay: gop 5 buoc thanh 1 danh sach du lieu duy nhat, theo
-  // dung thu tu nen lam. Buoc nao chua xong dau tien se duoc "mo rong" lam
-  // trong tam (current), cac buoc con lai thu gon lai (done da xong, hoac
-  // upcoming sap toi) - giong cam giac di theo 1 hanh trinh co thu tu ro
-  // rang, thay vi 5 the roi rac ngang hang nhau.
+  // Hanh trinh hom nay chi gom 2 buoc CO THU TU that su: On tap (retrieval)
+  // truoc, roi moi Hoc tu moi - lam truoc lam sau anh huong toi hieu qua
+  // nho lau. Ngu phap/Viet chu/Phat am la cac hoat dong CUNG CO doc lap,
+  // hien o danh sach rieng ben duoi, khong xep chung vao 1 hang doi.
   const steps = [
     {
       key: 'review',
@@ -86,59 +86,9 @@ export default function TodayPlanPage() {
     }
   ]
 
-  if (grammarBacklog) {
-    steps.push({
-      key: 'grammar',
-      icon: GrammarIcon,
-      color: 'gold',
-      label: `Ngữ pháp còn thiếu · ${grammarBacklog.levelLabel} ${grammarBacklog.unit.title}`,
-      done: false,
-      summary: grammarBacklog.grammar.title,
-      title: grammarBacklog.grammar.title,
-      actionLabel: 'Xem ngữ pháp này',
-      actionTo: `/ngu-phap/${grammarBacklog.grammar.key}`
-    })
-  } else if (grammarPreview && !capReached) {
-    steps.push({
-      key: 'grammar',
-      icon: GrammarIcon,
-      color: 'gold',
-      label: 'Ngữ pháp liên quan',
-      done: false,
-      summary: grammarPreview.title,
-      title: grammarPreview.title,
-      actionLabel: 'Xem ngữ pháp này',
-      actionTo: `/ngu-phap/${grammarPreview.key}`
-    })
-  }
-
-  if (writingBacklog) {
-    steps.push({
-      key: 'writing',
-      icon: PencilIcon,
-      color: 'candy',
-      label: 'Viết chữ còn thiếu',
-      done: false,
-      summary: `${writingBacklog.levelLabel} · ${writingBacklog.unit.title}`,
-      title: `${writingBacklog.levelLabel} · ${writingBacklog.unit.title}`,
-      actionLabel: 'Luyện viết bài này',
-      actionTo: `/viet-chu/${writingBacklog.levelId}/${writingBacklog.unit.id}`
-    })
-    steps.push({
-      key: 'pronunciation',
-      icon: MicIcon,
-      color: 'sun',
-      label: 'Luyện phát âm',
-      done: false,
-      summary: `${writingBacklog.levelLabel} · ${writingBacklog.unit.title}`,
-      title: `${writingBacklog.levelLabel} · ${writingBacklog.unit.title}`,
-      actionLabel: 'Luyện phát âm bài này',
-      actionTo: `/phat-am/${writingBacklog.levelId}/${writingBacklog.unit.id}`
-    })
-  }
-
   const currentIndex = steps.findIndex((s) => !s.done)
-  const allDone = currentIndex === -1
+  const bothDone = currentIndex === -1
+  const hasBacklog = grammarBacklog.length > 0 || writingBacklog.length > 0 || grammarPreview
 
   return (
     <div className="px-4 pt-6">
@@ -148,9 +98,7 @@ export default function TodayPlanPage() {
         </button>
         <h1 className="text-xl text-brand-800">Học hôm nay</h1>
       </div>
-      <p className="mb-6 text-sm text-gray-500">
-        Hành trình hôm nay: ôn trước - học mới - củng cố bằng ngữ pháp, viết và phát âm.
-      </p>
+      <p className="mb-6 text-sm text-gray-500">Ôn trước rồi mới học mới - giúp nhớ lâu nhất.</p>
 
       <div className="relative pl-2">
         <div className="absolute bottom-3 left-[19px] top-3 w-0.5 bg-gray-200" />
@@ -199,27 +147,98 @@ export default function TodayPlanPage() {
               >
                 {status === 'done' ? <CheckIcon width={12} height={12} /> : <Icon width={11} height={11} />}
               </span>
-              <p className={`text-sm ${status === 'done' ? 'text-gray-400 line-through' : 'text-gray-400'}`}>
-                <span className="font-medium">{step.label.split(' · ')[0]}</span> · {step.summary}
+              <p className={`text-sm ${status === 'done' ? 'text-gray-500' : 'text-gray-400'}`}>
+                <span className="font-medium">{step.label}</span> · {step.summary}
+                {status === 'done' && ' ✓'}
               </p>
             </div>
           )
         })}
 
-        {allDone && (
+        {bothDone && !hasBacklog && (
           <div className="relative flex gap-3">
             <span className="z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white shadow-md ring-4 ring-white">
               <CheckIcon width={20} height={20} />
             </span>
             <div className="flex-1 rounded-2xl bg-teal-50 p-4 shadow-sm">
-              <p className="text-base font-semibold text-teal-700">🎉 Xong hết hành trình hôm nay!</p>
+              <p className="text-base font-semibold text-teal-700">🎉 Xong hết hôm nay!</p>
               <p className="mt-0.5 text-xs text-gray-500">Quay lại vào ngày mai để tiếp tục nhé.</p>
             </div>
           </div>
         )}
       </div>
 
-      <Link to="/lo-trinh" className="mt-4 block text-center text-sm text-brand-600 underline">
+      {hasBacklog && (
+        <div className="mt-2">
+          <p className="mb-3 text-sm font-semibold text-gray-500">
+            Còn thiếu cần bổ sung ({grammarBacklog.length + writingBacklog.length * 2} mục)
+          </p>
+
+          <div className="space-y-2.5">
+            {grammarBacklog.map((b) => (
+              <div key={`g-${b.grammar.key}`} className="flex items-center gap-3 rounded-xl bg-gold-100 p-3 shadow-sm">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-gold-600">
+                  <GrammarIcon width={18} height={18} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs text-gray-500">
+                    {b.levelLabel} {b.unit.title}
+                  </p>
+                  <p className="truncate text-sm font-semibold text-gray-800">{b.grammar.title}</p>
+                </div>
+                <Link
+                  to={`/ngu-phap/${b.grammar.key}`}
+                  className="shrink-0 rounded-lg bg-gold-600 px-3 py-1.5 text-xs font-semibold text-white"
+                >
+                  Xem
+                </Link>
+              </div>
+            ))}
+
+            {grammarPreview && (
+              <div className="flex items-center gap-3 rounded-xl bg-gold-100 p-3 shadow-sm">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-gold-600">
+                  <GrammarIcon width={18} height={18} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs text-gray-500">Ngữ pháp liên quan (bài sắp học)</p>
+                  <p className="truncate text-sm font-semibold text-gray-800">{grammarPreview.title}</p>
+                </div>
+                <Link
+                  to={`/ngu-phap/${grammarPreview.key}`}
+                  className="shrink-0 rounded-lg bg-gold-600 px-3 py-1.5 text-xs font-semibold text-white"
+                >
+                  Xem
+                </Link>
+              </div>
+            )}
+
+            {writingBacklog.map((b) => (
+              <div key={`w-${b.levelId}-${b.unit.id}`} className="rounded-xl bg-white p-3 shadow-sm">
+                <p className="mb-2 text-xs text-gray-500">
+                  {b.levelLabel} {b.unit.title}
+                </p>
+                <div className="flex gap-2">
+                  <Link
+                    to={`/viet-chu/${b.levelId}/${b.unit.id}`}
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-candy-100 py-2 text-xs font-semibold text-candy-700"
+                  >
+                    <PencilIcon width={15} height={15} /> Viết chữ
+                  </Link>
+                  <Link
+                    to={`/phat-am/${b.levelId}/${b.unit.id}`}
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-sun-100 py-2 text-xs font-semibold text-sun-700"
+                  >
+                    <MicIcon width={15} height={15} /> Phát âm
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <Link to="/lo-trinh" className="mt-5 block text-center text-sm text-brand-600 underline">
         Xem lộ trình học toàn bộ 6 cấp
       </Link>
       <Link to="/cai-dat" className="mt-2 block text-center text-xs text-gray-400 underline">

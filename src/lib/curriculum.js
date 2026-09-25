@@ -44,13 +44,14 @@ export function getRelatedGrammarForUnit(levelLabel, unit) {
   return bestScore > 0 ? best : null
 }
 
-// Bai DA hoc tu vung (co trong completedUnits) SOM NHAT ma van con thieu
-// luyen viet - dung cho goi y "cung co" thay vi chi nhin bai vua hoc gan
-// day nhat. Neu khong nhu vay, hoc lien tuc nhieu bai moi (chi lam phan tu
-// vung) se khien viet chu cua nhung bai cu bi "vuot qua" quen luon, khong
-// bao gio duoc nhac lai.
-export function getFirstUnitNeedingWriting(levels, completedUnits, writingStats) {
+// TAT CA cac bai DA hoc tu vung (co trong completedUnits) ma van con thieu
+// luyen viet - khong chi bai som nhat. Cac bai nay doc lap voi nhau (vd bai
+// 1 con thieu viet chu khong lien quan gi den bai 6 con thieu ngu phap), nen
+// khong duoc de bai nay "chan" bai kia, phai liet ke day du de nguoi hoc tu
+// chon lam bai nao truoc.
+export function getAllUnitsNeedingWriting(levels, completedUnits, writingStats) {
   const practiced = writingStats?.practiced || []
+  const results = []
   for (const level of levels) {
     for (const unit of level.units) {
       if (!completedUnits.includes(`${level.id}:${unit.id}`)) continue
@@ -61,26 +62,30 @@ export function getFirstUnitNeedingWriting(levels, completedUnits, writingStats)
         }
       }
       if ([...chars].some((ch) => !practiced.includes(ch))) {
-        return { levelId: level.id, levelLabel: level.label, unit }
+        results.push({ levelId: level.id, levelLabel: level.label, unit })
       }
     }
   }
-  return null
+  return results
 }
 
-// Tuong tu getFirstUnitNeedingWriting nhung cho Ngu phap: bai da hoc tu vung
-// SOM NHAT co diem ngu phap lien quan ma diem do chua lam bai tap xong.
-export function getFirstUnitNeedingGrammar(levels, completedUnits, completedGrammar) {
+// Tuong tu getAllUnitsNeedingWriting nhung cho Ngu phap: tat ca cac bai da
+// hoc tu vung co diem ngu phap lien quan ma diem do chua lam bai tap xong.
+// Nhieu bai co the cung goi y 1 diem ngu phap - chi liet ke moi diem 1 lan.
+export function getAllUnitsNeedingGrammar(levels, completedUnits, completedGrammar) {
+  const results = []
+  const seenGrammarKeys = new Set()
   for (const level of levels) {
     for (const unit of level.units) {
       if (!completedUnits.includes(`${level.id}:${unit.id}`)) continue
       const point = getRelatedGrammarForUnit(level.label, unit)
-      if (point && !completedGrammar.includes(point.key)) {
-        return { levelId: level.id, levelLabel: level.label, unit, grammar: point }
+      if (point && !completedGrammar.includes(point.key) && !seenGrammarKeys.has(point.key)) {
+        seenGrammarKeys.add(point.key)
+        results.push({ levelId: level.id, levelLabel: level.label, unit, grammar: point })
       }
     }
   }
-  return null
+  return results
 }
 
 // Tien do "Viet chu" cua 1 cap: ty le chu Han rieng biet (trong tu vung cap
