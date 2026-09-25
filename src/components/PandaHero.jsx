@@ -5,55 +5,53 @@ export default function PandaHero() {
       <div className="pointer-events-none absolute -right-8 top-10 h-20 w-20 rounded-full bg-white/10" />
       <div className="pointer-events-none absolute bottom-0 right-6 h-14 w-14 rounded-full bg-sun-400/30" />
 
-      <svg viewBox="0 0 300 180" className="relative mx-auto h-40 w-full max-w-xs">
-        {/* sparkles */}
+      <svg viewBox="0 0 300 200" className="relative mx-auto h-40 w-full max-w-xs">
+        {/* sparkles + chu Han bay nhe */}
         <g fill="#fde68a">
-          <path d="M38 28 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4Z" />
-          <path d="M258 22 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3Z" />
-          <circle cx="28" cy="88" r="3" />
-          <circle cx="270" cy="92" r="4" />
+          <path d="M34 50 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4Z" />
+          <path d="M264 46 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3Z" />
+          <circle cx="46" cy="150" r="3" />
+          <circle cx="252" cy="150" r="3.5" />
         </g>
+        <text x="42" y="100" fontSize="20" fill="#fde68a" opacity="0.85" fontFamily="sans-serif">学</text>
+        <text x="238" y="95" fontSize="18" fill="#fde68a" opacity="0.8" fontFamily="sans-serif">中</text>
 
-        {/* body - tron, map hon */}
-        <ellipse cx="150" cy="140" rx="64" ry="34" fill="#ffffff" />
-        {/* head - to, tron nhu chibi */}
-        <circle cx="150" cy="82" r="54" fill="#ffffff" />
-        {/* ears - tron day */}
-        <circle cx="103" cy="42" r="20" fill="#2b2b2b" />
-        <circle cx="197" cy="42" r="20" fill="#2b2b2b" />
-        <circle cx="103" cy="42" r="9" fill="#4b4b4b" />
-        <circle cx="197" cy="42" r="9" fill="#4b4b4b" />
-        {/* eye patches - tron, khong nghieng, trong hien lanh hon */}
-        <circle cx="120" cy="86" r="19" fill="#2b2b2b" />
-        <circle cx="180" cy="86" r="19" fill="#2b2b2b" />
-        {/* eyes - to tron long lanh */}
-        <circle cx="120" cy="88" r="9" fill="#ffffff" />
-        <circle cx="180" cy="88" r="9" fill="#ffffff" />
-        <circle cx="122" cy="90" r="4.5" fill="#1f2937" />
-        <circle cx="182" cy="90" r="4.5" fill="#1f2937" />
-        <circle cx="124" cy="87" r="1.6" fill="#ffffff" />
-        <circle cx="184" cy="87" r="1.6" fill="#ffffff" />
-        {/* nose + mieng cuoi tron */}
-        <ellipse cx="150" cy="103" rx="7" ry="5" fill="#2b2b2b" />
-        <path d="M150 108 q0 9 -11 11" stroke="#2b2b2b" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-        <path d="M150 108 q0 9 11 11" stroke="#2b2b2b" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-        {/* cheeks hong */}
-        <circle cx="104" cy="108" r="8" fill="#fbcfe8" opacity="0.8" />
-        <circle cx="196" cy="108" r="8" fill="#fbcfe8" opacity="0.8" />
+        {/* than - tron, be, ngoi */}
+        <ellipse cx="150" cy="166" rx="50" ry="28" fill="#ffffff" />
 
-        {/* arms - map, tron */}
-        <ellipse cx="102" cy="138" rx="15" ry="20" fill="#2b2b2b" transform="rotate(25 102 138)" />
-        <ellipse cx="198" cy="138" rx="15" ry="20" fill="#2b2b2b" transform="rotate(-25 198 138)" />
+        {/* hai tay gio len vui ve */}
+        <ellipse cx="96" cy="137" rx="12" ry="20" fill="#2b2b2b" transform="rotate(-32 96 137)" />
+        <ellipse cx="204" cy="137" rx="12" ry="20" fill="#2b2b2b" transform="rotate(32 204 137)" />
 
-        {/* book */}
-        <g transform="translate(114 122)">
-          <rect x="0" y="0" width="72" height="36" rx="5" fill="#ffffff" stroke="#9333ea" strokeWidth="2.5" />
-          <line x1="36" y1="2" x2="36" y2="34" stroke="#9333ea" strokeWidth="2.5" />
-          <line x1="9" y1="11" x2="29" y2="11" stroke="#e9d5ff" strokeWidth="2.5" />
-          <line x1="9" y1="20" x2="29" y2="20" stroke="#e9d5ff" strokeWidth="2.5" />
-          <line x1="43" y1="11" x2="63" y2="11" stroke="#e9d5ff" strokeWidth="2.5" />
-          <line x1="43" y1="20" x2="63" y2="20" stroke="#e9d5ff" strokeWidth="2.5" />
-        </g>
+        {/* dau - to tron kieu chibi */}
+        <circle cx="150" cy="96" r="58" fill="#ffffff" />
+
+        {/* tai */}
+        <circle cx="100" cy="44" r="20" fill="#2b2b2b" />
+        <circle cx="200" cy="44" r="20" fill="#2b2b2b" />
+        <circle cx="100" cy="46" r="9" fill="#57575a" />
+        <circle cx="200" cy="46" r="9" fill="#57575a" />
+
+        {/* mat kinh panda - tron nho, can doi, con song mui thoang */}
+        <circle cx="124" cy="95" r="14" fill="#2b2b2b" />
+        <circle cx="176" cy="95" r="14" fill="#2b2b2b" />
+
+        {/* mat to sang long lanh */}
+        <circle cx="124" cy="97" r="7.5" fill="#ffffff" />
+        <circle cx="176" cy="97" r="7.5" fill="#ffffff" />
+        <circle cx="126" cy="99" r="4.3" fill="#1f2937" />
+        <circle cx="178" cy="99" r="4.3" fill="#1f2937" />
+        <circle cx="122" cy="94" r="1.8" fill="#ffffff" />
+        <circle cx="174" cy="94" r="1.8" fill="#ffffff" />
+
+        {/* mui nho */}
+        <ellipse cx="150" cy="117" rx="5" ry="3.5" fill="#2b2b2b" />
+        {/* cuoi tuoi mot net cong */}
+        <path d="M137 125 Q150 136 163 125" stroke="#2b2b2b" strokeWidth="3" fill="none" strokeLinecap="round" />
+
+        {/* ma hong */}
+        <circle cx="99" cy="115" r="8.5" fill="#fbcfe8" opacity="0.8" />
+        <circle cx="201" cy="115" r="8.5" fill="#fbcfe8" opacity="0.8" />
       </svg>
 
       <p className="relative mt-1 text-center text-sm font-semibold text-white drop-shadow">
