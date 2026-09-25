@@ -24,7 +24,7 @@ export default function TopicDetailPage() {
 function TopicDetailPageInner() {
   const { topicKey } = useParams()
   const navigate = useNavigate()
-  const { addXp } = useProgress()
+  const { addXp, markTopicComplete } = useProgress()
   const topic = getTopic(topicKey)
   const words = useMemo(() => getTopicWords(topicKey), [topicKey])
   const [phase, setPhase] = useState('study') // study | quiz | done
@@ -62,6 +62,7 @@ function TopicDetailPageInner() {
         setQuizIndex((i) => i + 1)
       } else {
         playCelebrate()
+        markTopicComplete(topic.key)
         setPhase('done')
       }
     }, 700)

@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getDialogue } from '../data/dialogues'
+import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { playFlip } from '../lib/sfx'
-import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
+import { ArrowLeftIcon, CheckIcon, VolumeIcon } from '../components/Icons'
 
 // Xem ghi chu tuong tu trong LessonDetailPage.jsx: dat key theo dialogueKey
 // de remount lai tu dau khi chuyen thang sang hoi thoai khac.
@@ -16,8 +17,10 @@ function DialogueDetailPageInner() {
   const { dialogueKey } = useParams()
   const navigate = useNavigate()
   const dialogue = getDialogue(dialogueKey)
+  const { completedDialogues, markDialogueComplete } = useProgress()
   const [playingAll, setPlayingAll] = useState(false)
   const [activeLine, setActiveLine] = useState(null)
+  const done = dialogue ? completedDialogues.includes(dialogue.key) : false
 
   if (!dialogue) {
     return (
@@ -34,6 +37,7 @@ function DialogueDetailPageInner() {
     if (index >= dialogue.lines.length) {
       setPlayingAll(false)
       setActiveLine(null)
+      markDialogueComplete(dialogue.key)
       return
     }
     if (index === 0) playFlip()
@@ -53,6 +57,11 @@ function DialogueDetailPageInner() {
             {dialogue.icon} {dialogue.title}
           </h1>
         </div>
+        {done && (
+          <span className="flex items-center gap-1 rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-700">
+            <CheckIcon width={12} height={12} /> Đã nghe
+          </span>
+        )}
       </div>
 
       <button
@@ -60,7 +69,7 @@ function DialogueDetailPageInner() {
         disabled={playingAll}
         className="mb-4 w-full rounded-xl bg-brand-700 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
       >
-        {playingAll ? '🔊 Đang phát...' : '🔊 Nghe cả đoạn hội thoại'}
+        {playingAll ? '🔊 Đang phát...' : done ? '🔊 Nghe lại cả đoạn' : '🔊 Nghe cả đoạn hội thoại'}
       </button>
 
       <div className="space-y-3">

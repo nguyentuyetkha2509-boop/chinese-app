@@ -21,7 +21,7 @@ function StoryDetailPageInner() {
   const { storyKey } = useParams()
   const navigate = useNavigate()
   const story = getStory(storyKey)
-  const { addXp } = useProgress()
+  const { addXp, markStoryComplete } = useProgress()
 
   const [phase, setPhase] = useState('reading') // reading | quiz | done
   const [chapterIndex, setChapterIndex] = useState(0)
@@ -61,6 +61,7 @@ function StoryDetailPageInner() {
   function handleQuizDone(correct, total) {
     setResult({ correct, total })
     addXp(XP_REWARDS.storyComplete)
+    markStoryComplete(story.key)
     playCelebrate()
     setPhase('done')
   }

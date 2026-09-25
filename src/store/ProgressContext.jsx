@@ -22,6 +22,9 @@ export function ProgressProvider({ children }) {
   const [writingStats, setWritingStats] = useState(() => loadJSON('writingStats', { practiced: [] }))
   const [writingPerfectCount, setWritingPerfectCount] = useState(() => loadJSON('writingPerfectCount', 0))
   const [completedGrammar, setCompletedGrammar] = useState(() => loadJSON('completedGrammar', []))
+  const [completedDialogues, setCompletedDialogues] = useState(() => loadJSON('completedDialogues', []))
+  const [completedStories, setCompletedStories] = useState(() => loadJSON('completedStories', []))
+  const [completedTopics, setCompletedTopics] = useState(() => loadJSON('completedTopics', []))
   const [xp, setXp] = useState(() => loadJSON('xp', 0))
   const [dailyXp, setDailyXp] = useState(() => loadJSON('dailyXp', { date: todayKey(), amount: 0 }))
   const [newWordsToday, setNewWordsToday] = useState(() => loadJSON('newWordsToday', { date: todayKey(), count: 0 }))
@@ -34,6 +37,9 @@ export function ProgressProvider({ children }) {
   useEffect(() => saveJSON('writingStats', writingStats), [writingStats])
   useEffect(() => saveJSON('writingPerfectCount', writingPerfectCount), [writingPerfectCount])
   useEffect(() => saveJSON('completedGrammar', completedGrammar), [completedGrammar])
+  useEffect(() => saveJSON('completedDialogues', completedDialogues), [completedDialogues])
+  useEffect(() => saveJSON('completedStories', completedStories), [completedStories])
+  useEffect(() => saveJSON('completedTopics', completedTopics), [completedTopics])
   useEffect(() => saveJSON('xp', xp), [xp])
   useEffect(() => saveJSON('dailyXp', dailyXp), [dailyXp])
   useEffect(() => saveJSON('newWordsToday', newWordsToday), [newWordsToday])
@@ -105,6 +111,21 @@ export function ProgressProvider({ children }) {
     setCompletedGrammar((prev) => (prev.includes(key) ? prev : [...prev, key]))
   }
 
+  function markDialogueComplete(key) {
+    touchStreak()
+    setCompletedDialogues((prev) => (prev.includes(key) ? prev : [...prev, key]))
+  }
+
+  function markStoryComplete(key) {
+    touchStreak()
+    setCompletedStories((prev) => (prev.includes(key) ? prev : [...prev, key]))
+  }
+
+  function markTopicComplete(key) {
+    touchStreak()
+    setCompletedTopics((prev) => (prev.includes(key) ? prev : [...prev, key]))
+  }
+
   function recordWritingPractice(wordId, perfect) {
     touchStreak()
     setWritingStats((prev) =>
@@ -135,6 +156,9 @@ export function ProgressProvider({ children }) {
       writingStats,
       writingPerfectCount,
       completedGrammar,
+      completedDialogues,
+      completedStories,
+      completedTopics,
       xp,
       dailyXp,
       newWordsToday,
@@ -143,6 +167,9 @@ export function ProgressProvider({ children }) {
       recordToneAnswer,
       recordWritingPractice,
       markGrammarComplete,
+      markDialogueComplete,
+      markStoryComplete,
+      markTopicComplete,
       addXp
     }),
     [
@@ -154,6 +181,9 @@ export function ProgressProvider({ children }) {
       writingStats,
       writingPerfectCount,
       completedGrammar,
+      completedDialogues,
+      completedStories,
+      completedTopics,
       xp,
       dailyXp,
       newWordsToday
