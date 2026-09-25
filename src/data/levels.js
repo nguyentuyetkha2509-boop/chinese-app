@@ -3,22 +3,12 @@ import { HSK2_WORDS } from './hsk2'
 import { HSK3_WORDS } from './hsk3'
 import { HSK4_WORDS } from './hsk4'
 import { HSK1_LESSON_PLAN } from './lessonPlans'
+import { HSK2_LESSON_PLAN } from './lessonPlans2'
+import { HSK3_LESSON_PLAN } from './lessonPlans3'
+import { HSK4_LESSON_PLAN } from './lessonPlans4'
 
-const WORDS_PER_UNIT = 10
-
-function buildUnits(words) {
-  return Array.from({ length: Math.ceil(words.length / WORDS_PER_UNIT) }, (_, i) => {
-    const slice = words.slice(i * WORDS_PER_UNIT, (i + 1) * WORDS_PER_UNIT)
-    return {
-      id: i + 1,
-      title: `Bài ${i + 1}`,
-      words: slice
-    }
-  })
-}
-
-// HSK1 co giao an theo chu de (xem lessonPlans.js) thay vi chi cat theo thu tu
-// bang chu cai, giup tu vung trong 1 bai lien quan den nhau, de nho hon.
+// Moi HSK co giao an theo chu de (xem lessonPlans*.js) thay vi chi cat theo
+// thu tu bang chu cai, giup tu vung trong 1 bai lien quan den nhau, de nho hon.
 function buildThemedUnits(words, plan) {
   const byId = new Map(words.map((w) => [w.id, w]))
   return plan.map((unit, i) => ({
@@ -31,9 +21,9 @@ function buildThemedUnits(words, plan) {
 
 export const LEVELS = [
   { id: 'hsk1', label: 'HSK1', words: HSK1_WORDS, units: buildThemedUnits(HSK1_WORDS, HSK1_LESSON_PLAN) },
-  { id: 'hsk2', label: 'HSK2', words: HSK2_WORDS, units: buildUnits(HSK2_WORDS) },
-  { id: 'hsk3', label: 'HSK3', words: HSK3_WORDS, units: buildUnits(HSK3_WORDS) },
-  { id: 'hsk4', label: 'HSK4', words: HSK4_WORDS, units: buildUnits(HSK4_WORDS) }
+  { id: 'hsk2', label: 'HSK2', words: HSK2_WORDS, units: buildThemedUnits(HSK2_WORDS, HSK2_LESSON_PLAN) },
+  { id: 'hsk3', label: 'HSK3', words: HSK3_WORDS, units: buildThemedUnits(HSK3_WORDS, HSK3_LESSON_PLAN) },
+  { id: 'hsk4', label: 'HSK4', words: HSK4_WORDS, units: buildThemedUnits(HSK4_WORDS, HSK4_LESSON_PLAN) }
 ]
 
 export const ALL_WORDS = LEVELS.flatMap((level) => level.words)
