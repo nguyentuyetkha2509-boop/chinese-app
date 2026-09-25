@@ -1,49 +1,57 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth'
+import { auth, googleProvider } from '../lib/firebase'
 import { useProgress } from './ProgressContext'
-import * as gistSync from '../lib/gistSync'
+import { pushToFirestore, pullFromFirestore, checkRemote } from '../lib/firebaseSync'
 
-const GistSyncContext = createContext(null)
+const FirebaseSyncContext = createContext(null)
 
 const AUTO_PUSH_DELAY_MS = 4000
 
-export function GistSyncProvider({ children }) {
+export function FirebaseSyncProvider({ children }) {
   const progress = useProgress()
-  const [token, setToken] = useState(() => gistSync.getSyncToken())
+  const [user, setUser] = useState(null)
+  const [authReady, setAuthReady] = useState(false)
   const [status, setStatus] = useState('idle') // idle | syncing | synced | error
   const [error, setError] = useState(null)
-  const [lastSyncedAt, setLastSyncedAt] = useState(() => gistSync.getLastSyncedAt())
+  const [lastSyncedAt, setLastSyncedAt] = useState(null)
   const debounceRef = useRef(null)
   const skipNextAutoPush = useRef(true)
 
-  async function connect(newToken) {
+  useEffect(() => onAuthStateChanged(auth, (u) => {
+    setUser(u)
+    setAuthReady(true)
+  }), [])
+
+  async function signIn() {
     setStatus('syncing')
     setError(null)
     try {
-      const info = await gistSync.connectAndCheck(newToken)
-      setToken(newToken)
+      const result = await signInWithPopup(auth, googleProvider)
+      const info = await checkRemote(result.user.uid)
       setStatus('idle')
       return info
     } catch (e) {
-      setError(e.message)
+      setError(e.code === 'auth/popup-closed-by-user' ? 'Bạn đã đóng cửa sổ đăng nhập.' : e.message)
       setStatus('error')
       throw e
     }
   }
 
-  function disconnect() {
-    gistSync.clearSync()
-    setToken(null)
+  async function signOutUser() {
+    await firebaseSignOut(auth)
     setStatus('idle')
     setError(null)
     setLastSyncedAt(null)
   }
 
   async function pushNow() {
+    if (!user) return
     setStatus('syncing')
     setError(null)
     try {
-      await gistSync.pushToGist()
-      setLastSyncedAt(gistSync.getLastSyncedAt())
+      const ts = await pushToFirestore(user.uid)
+      setLastSyncedAt(ts)
       setStatus('synced')
     } catch (e) {
       setError(e.message)
@@ -52,11 +60,12 @@ export function GistSyncProvider({ children }) {
   }
 
   async function pullNow() {
+    if (!user) return
     setStatus('syncing')
     setError(null)
     try {
-      const remoteUpdatedAt = await gistSync.pullFromGist()
-      setLastSyncedAt(gistSync.getLastSyncedAt())
+      const remoteUpdatedAt = await pullFromFirestore(user.uid)
+      setLastSyncedAt(remoteUpdatedAt)
       setStatus('synced')
       setTimeout(() => window.location.reload(), 800)
       return remoteUpdatedAt
@@ -67,11 +76,9 @@ export function GistSyncProvider({ children }) {
     }
   }
 
-  // Tu dong day len gist (debounce) moi khi tien do hoc thay doi, tranh phai
-  // nho bam dong bo tay. Bo qua lan render dau (chi phan ung voi thay doi
-  // THUC SU sau khi da ket noi).
+  // Tu dong day len Firestore (debounce) moi khi tien do hoc thay doi.
   useEffect(() => {
-    if (!token) return
+    if (!user) return
     if (skipNextAutoPush.current) {
       skipNextAutoPush.current = false
       return
@@ -83,7 +90,7 @@ export function GistSyncProvider({ children }) {
     return () => clearTimeout(debounceRef.current)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    token,
+    user,
     progress.srsState,
     progress.completedUnits,
     progress.streak,
@@ -93,13 +100,24 @@ export function GistSyncProvider({ children }) {
     progress.writingPerfectCount
   ])
 
-  const value = { connected: !!token, status, error, lastSyncedAt, connect, disconnect, pushNow, pullNow }
+  const value = {
+    user,
+    authReady,
+    connected: !!user,
+    status,
+    error,
+    lastSyncedAt,
+    signIn,
+    signOut: signOutUser,
+    pushNow,
+    pullNow
+  }
 
-  return <GistSyncContext.Provider value={value}>{children}</GistSyncContext.Provider>
+  return <FirebaseSyncContext.Provider value={value}>{children}</FirebaseSyncContext.Provider>
 }
 
-export function useGistSync() {
-  const ctx = useContext(GistSyncContext)
-  if (!ctx) throw new Error('useGistSync phai dung ben trong GistSyncProvider')
+export function useFirebaseSync() {
+  const ctx = useContext(FirebaseSyncContext)
+  if (!ctx) throw new Error('useFirebaseSync phai dung ben trong FirebaseSyncProvider')
   return ctx
 }

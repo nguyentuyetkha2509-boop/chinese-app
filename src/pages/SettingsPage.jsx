@@ -2,30 +2,24 @@ import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { exportAllData, importAllData } from '../lib/storage'
 import { getDailyNewWordLimit, setDailyNewWordLimit, NEW_WORD_LIMIT_OPTIONS } from '../lib/curriculum'
-import { useGistSync } from '../store/GistSyncContext'
+import { useFirebaseSync } from '../store/FirebaseSyncContext'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
-
-const TOKEN_CREATE_URL =
-  'https://github.com/settings/tokens/new?scopes=gist&description=PandaChinese%20Sync'
 
 function formatTime(ts) {
   if (!ts) return null
   return new Date(ts).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })
 }
 
-function GistSyncSection() {
-  const { connected, status, error, lastSyncedAt, connect, disconnect, pushNow, pullNow } = useGistSync()
-  const [tokenInput, setTokenInput] = useState('')
+function FirebaseSyncSection() {
+  const { user, authReady, status, error, lastSyncedAt, signIn, signOut, pushNow, pullNow } = useFirebaseSync()
   const [connectChoice, setConnectChoice] = useState(null) // { hasRemoteData, remoteUpdatedAt } | null
   const [busy, setBusy] = useState(false)
 
-  async function handleConnect() {
-    if (!tokenInput.trim()) return
+  async function handleSignIn() {
     setBusy(true)
     try {
-      const info = await connect(tokenInput.trim())
-      setTokenInput('')
+      const info = await signIn()
       if (info.hasRemoteData) {
         setConnectChoice(info)
       } else {
@@ -61,60 +55,48 @@ function GistSyncSection() {
   }
 
   async function handleManualPull() {
-    if (!window.confirm('Tải về sẽ GHI ĐÈ tiến độ hiện tại trên máy này bằng bản trên GitHub. Tiếp tục?')) return
+    if (!window.confirm('Tải về sẽ GHI ĐÈ tiến độ hiện tại trên máy này bằng bản trên đám mây. Tiếp tục?')) return
     setBusy(true)
     await pullNow().catch(() => playWrong())
     setBusy(false)
   }
 
-  function handleDisconnect() {
-    if (!window.confirm('Ngắt kết nối? App sẽ không còn tự động sao lưu lên GitHub nữa.')) return
-    disconnect()
+  function handleSignOut() {
+    if (!window.confirm('Đăng xuất? App sẽ không còn tự động sao lưu nữa cho đến khi bạn đăng nhập lại.')) return
+    signOut()
   }
+
+  if (!authReady) return null
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
-      <p className="text-base text-gray-800">Đồng bộ qua GitHub (khuyến nghị)</p>
+      <p className="text-base text-gray-800">Đồng bộ tài khoản (khuyến nghị)</p>
       <p className="mt-1 text-xs text-gray-500">
-        Tự động sao lưu tiến độ lên 1 Gist riêng tư của bạn. Mở app trên điện thoại hay máy tính khác đều lấy đúng
-        bản mới nhất - không sợ Safari tự xóa dữ liệu hay đổi máy bị mất.
+        Đăng nhập Google để tự động sao lưu tiến độ lên đám mây. Mở app trên điện thoại hay máy tính khác, đăng nhập
+        đúng tài khoản là lấy ngay bản mới nhất - không sợ Safari tự xóa dữ liệu hay đổi máy bị mất.
       </p>
 
-      {!connected ? (
+      {!user ? (
         <div className="mt-3">
-          <ol className="list-inside list-decimal space-y-1 text-xs text-gray-600">
-            <li>
-              Mở{' '}
-              <a href={TOKEN_CREATE_URL} target="_blank" rel="noreferrer" className="font-semibold text-brand-600 underline">
-                trang tạo token GitHub
-              </a>{' '}
-              (đã điền sẵn quyền "gist")
-            </li>
-            <li>Bấm "Generate token" ở cuối trang, rồi copy token (dạng ghp_...)</li>
-            <li>Dán vào ô bên dưới và bấm Kết nối</li>
-          </ol>
-          <input
-            type="password"
-            value={tokenInput}
-            onChange={(e) => setTokenInput(e.target.value)}
-            placeholder="ghp_xxxxxxxxxxxx"
-            className="mt-3 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm"
-          />
           <button
-            onClick={handleConnect}
-            disabled={busy || !tokenInput.trim()}
-            className="mt-2 w-full rounded-xl bg-brand-700 py-2.5 text-sm font-semibold text-white disabled:opacity-50"
+            onClick={handleSignIn}
+            disabled={busy}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-white py-2.5 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-gray-200 disabled:opacity-50"
           >
-            {busy ? 'Đang kết nối...' : 'Kết nối'}
+            <svg width="18" height="18" viewBox="0 0 18 18">
+              <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z" />
+              <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.96v2.33A9 9 0 0 0 9 18z" />
+              <path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.96H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.04l2.99-2.33z" />
+              <path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.96l2.99 2.33C4.66 5.17 6.65 3.58 9 3.58z" />
+            </svg>
+            {busy ? 'Đang đăng nhập...' : 'Đăng nhập với Google'}
           </button>
-          <p className="mt-2 text-[11px] text-gray-400">
-            Token chỉ lưu trên máy bạn và chỉ có quyền tạo/sửa gist, không đụng được gì khác trong tài khoản GitHub.
-          </p>
+          {error && <p className="mt-2 text-[11px] text-red-500">{error}</p>}
         </div>
       ) : connectChoice ? (
         <div className="mt-3 rounded-xl bg-sun-100 p-3">
           <p className="text-xs text-gray-700">
-            Tìm thấy bản sao lưu trên GitHub (cập nhật lúc {formatTime(connectChoice.remoteUpdatedAt)}). Bạn muốn
+            Tìm thấy bản sao lưu trên đám mây (cập nhật lúc {formatTime(connectChoice.remoteUpdatedAt)}). Bạn muốn
             dùng bản nào?
           </p>
           <div className="mt-2 flex gap-2">
@@ -136,12 +118,16 @@ function GistSyncSection() {
         </div>
       ) : (
         <div className="mt-3">
-          <p className="text-xs text-gray-500">
+          <div className="flex items-center gap-2">
+            {user.photoURL && <img src={user.photoURL} alt="" className="h-8 w-8 rounded-full" />}
+            <p className="text-sm text-gray-700">{user.displayName || user.email}</p>
+          </div>
+          <p className="mt-2 text-xs text-gray-500">
             {status === 'syncing' && 'Đang đồng bộ...'}
             {status === 'synced' && lastSyncedAt && `✅ Đã đồng bộ lúc ${formatTime(lastSyncedAt)}`}
             {status === 'error' && `⚠️ ${error || 'Có lỗi khi đồng bộ.'}`}
             {status === 'idle' && lastSyncedAt && `Lần đồng bộ gần nhất: ${formatTime(lastSyncedAt)}`}
-            {status === 'idle' && !lastSyncedAt && 'Đã kết nối, sẽ tự đồng bộ khi bạn học.'}
+            {status === 'idle' && !lastSyncedAt && 'Đã đăng nhập, sẽ tự đồng bộ khi bạn học.'}
           </p>
           <div className="mt-2 flex gap-2">
             <button
@@ -156,11 +142,11 @@ function GistSyncSection() {
               disabled={busy}
               className="flex-1 rounded-xl border border-brand-300 py-2.5 text-xs font-semibold text-brand-700 disabled:opacity-50"
             >
-              Tải về từ GitHub
+              Tải về từ đám mây
             </button>
           </div>
-          <button onClick={handleDisconnect} className="mt-2 w-full text-center text-[11px] text-gray-400 underline">
-            Ngắt kết nối
+          <button onClick={handleSignOut} className="mt-2 w-full text-center text-[11px] text-gray-400 underline">
+            Đăng xuất
           </button>
         </div>
       )}
@@ -251,7 +237,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <GistSyncSection />
+      <FirebaseSyncSection />
 
       <div className="rounded-2xl bg-white p-4 shadow-sm">
         <p className="text-base text-gray-800">Sao lưu & khôi phục tiến độ (thủ công)</p>

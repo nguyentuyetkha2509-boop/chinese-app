@@ -36,7 +36,8 @@ export default defineConfig({
       output: {
         manualChunks: {
           react: ['react', 'react-dom', 'react-router-dom'],
-          hanzi: ['hanzi-writer']
+          hanzi: ['hanzi-writer'],
+          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore']
         }
       }
     }
