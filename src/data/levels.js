@@ -2,6 +2,7 @@ import { HSK1_WORDS } from './hsk1'
 import { HSK2_WORDS } from './hsk2'
 import { HSK3_WORDS } from './hsk3'
 import { HSK4_WORDS } from './hsk4'
+import { HSK1_LESSON_PLAN } from './lessonPlans'
 
 const WORDS_PER_UNIT = 10
 
@@ -16,8 +17,20 @@ function buildUnits(words) {
   })
 }
 
+// HSK1 co giao an theo chu de (xem lessonPlans.js) thay vi chi cat theo thu tu
+// bang chu cai, giup tu vung trong 1 bai lien quan den nhau, de nho hon.
+function buildThemedUnits(words, plan) {
+  const byId = new Map(words.map((w) => [w.id, w]))
+  return plan.map((unit, i) => ({
+    id: i + 1,
+    title: `Bài ${i + 1}: ${unit.title}`,
+    intro: unit.intro,
+    words: unit.wordIds.map((id) => byId.get(id))
+  }))
+}
+
 export const LEVELS = [
-  { id: 'hsk1', label: 'HSK1', words: HSK1_WORDS, units: buildUnits(HSK1_WORDS) },
+  { id: 'hsk1', label: 'HSK1', words: HSK1_WORDS, units: buildThemedUnits(HSK1_WORDS, HSK1_LESSON_PLAN) },
   { id: 'hsk2', label: 'HSK2', words: HSK2_WORDS, units: buildUnits(HSK2_WORDS) },
   { id: 'hsk3', label: 'HSK3', words: HSK3_WORDS, units: buildUnits(HSK3_WORDS) },
   { id: 'hsk4', label: 'HSK4', words: HSK4_WORDS, units: buildUnits(HSK4_WORDS) }

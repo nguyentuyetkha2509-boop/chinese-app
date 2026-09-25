@@ -77,6 +77,11 @@ export default function LessonDetailPage() {
 
       {phase === 'study' && (
         <>
+          {unit.intro && (
+            <div className="mb-4 rounded-2xl bg-brand-50 p-3.5">
+              <p className="text-sm text-gray-700">{unit.intro}</p>
+            </div>
+          )}
           <div className="space-y-2">
             {unit.words.map((word, i) => {
               const accent = accentFor(i)
