@@ -1,7 +1,12 @@
-// Diem ngu phap co ban, tu soan va kiem tra vi du/pinyin thu cong. Day la buoc
-// dau (HSK1) - se bo sung them HSK2-3 sau. Moi diem co giai thich ngan + vi du
-// + bai tap trac nghiem de kiem tra hieu, khong chi hoc thuoc.
-export const GRAMMAR_POINTS = [
+// Diem ngu phap co ban, tu soan va kiem tra vi du/pinyin thu cong. Moi diem co
+// giai thich ngan + vi du + bai tap trac nghiem de kiem tra hieu, khong chi
+// hoc thuoc. HSK1 nam trong file nay, HSK2-4 nam o grammar2/3/4.js va duoc
+// gop lai ben duoi de cac trang dung GRAMMAR_POINTS khong can doi gi ca.
+import { HSK2_GRAMMAR } from './grammar2'
+import { HSK3_GRAMMAR } from './grammar3'
+import { HSK4_GRAMMAR } from './grammar4'
+
+const HSK1_GRAMMAR = [
   {
     key: 'shi',
     level: 'HSK1',
@@ -139,6 +144,8 @@ export const GRAMMAR_POINTS = [
     ]
   }
 ]
+
+export const GRAMMAR_POINTS = [...HSK1_GRAMMAR, ...HSK2_GRAMMAR, ...HSK3_GRAMMAR, ...HSK4_GRAMMAR]
 
 export function getGrammarPoint(key) {
   return GRAMMAR_POINTS.find((g) => g.key === key)
