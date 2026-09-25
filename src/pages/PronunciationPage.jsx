@@ -213,7 +213,10 @@ function pickSupportedMimeType() {
 }
 
 function RecordCompare({ words }) {
-  const [word, setWord] = useState(() => words[Math.floor(Math.random() * words.length)])
+  const [round, setRound] = useState(() => buildToneRound(words))
+  const [index, setIndex] = useState(0)
+  const [phase, setPhase] = useState('practice') // practice | done
+  const word = round[index]
   const [status, setStatus] = useState('idle') // idle | requesting | recording | recorded | error
   const [audioUrl, setAudioUrl] = useState(null)
   const mediaRecorderRef = useRef(null)
@@ -272,16 +275,50 @@ function RecordCompare({ words }) {
     mediaRecorderRef.current?.stop()
   }
 
-  function nextWord() {
+  function resetRecording() {
     if (audioUrl) URL.revokeObjectURL(audioUrl)
-    setWord(words[Math.floor(Math.random() * words.length)])
     setAudioUrl(null)
     setStatus('idle')
   }
 
+  function nextWord() {
+    resetRecording()
+    if (index + 1 < round.length) {
+      setIndex((i) => i + 1)
+    } else {
+      playCelebrate()
+      setPhase('done')
+    }
+  }
+
+  function startNewRound() {
+    resetRecording()
+    setRound(buildToneRound(words))
+    setIndex(0)
+    setPhase('practice')
+  }
+
+  if (phase === 'done') {
+    return (
+      <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
+        <CelebrationBadge />
+        <p className="text-xl">🎉 Hoàn thành!</p>
+        <p className="mt-1 text-white/90">Đã luyện ghi âm {round.length} từ</p>
+        <button
+          onClick={startNewRound}
+          className="mt-4 w-full rounded-xl bg-white py-2.5 font-semibold text-brand-700"
+        >
+          Luyện lại
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div>
-      <p className="mb-3 text-sm text-gray-500">Nghe mẫu, ghi âm giọng bạn rồi nghe lại để so sánh.</p>
+      <p className="mb-3 text-sm text-gray-500">
+        Nghe mẫu, ghi âm giọng bạn rồi nghe lại để so sánh. Từ {index + 1}/{round.length}
+      </p>
       <div className="rounded-3xl bg-gradient-to-br from-sky-500 via-teal-500 to-brand-500 p-6 text-center text-white shadow-lg">
         <p className="text-5xl">{word.hanzi}</p>
         <p className="mt-1 text-white/90">{word.pinyin}</p>
@@ -320,7 +357,7 @@ function RecordCompare({ words }) {
           </div>
         )}
         <button onClick={nextWord} className="text-sm text-gray-500 underline">
-          Từ khác
+          {index + 1 < round.length ? 'Từ tiếp theo' : 'Hoàn thành'}
         </button>
       </div>
     </div>
