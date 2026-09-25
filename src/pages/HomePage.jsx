@@ -174,7 +174,7 @@ export default function HomePage() {
     <div className="px-4 pt-6">
       <header className="mb-4 flex items-center justify-between">
         <div>
-          <p className="text-xs text-gray-500">Chào {nickname || 'bạn'} 👋</p>
+          <p className="text-base italic text-candy-600">Chào {nickname || 'bạn'} 👋</p>
           <h1 className="text-2xl text-brand-800">🐼 PandaChinese</h1>
         </div>
         <div className="flex items-center gap-2">
