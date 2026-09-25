@@ -13,7 +13,7 @@ export default function GrammarDetailPage() {
   const { pointKey } = useParams()
   const navigate = useNavigate()
   const point = getGrammarPoint(pointKey)
-  const { addXp } = useProgress()
+  const { addXp, markGrammarComplete } = useProgress()
   const [phase, setPhase] = useState('learn') // learn | quiz | done
   const [result, setResult] = useState({ correct: 0, total: 0 })
 
@@ -31,6 +31,7 @@ export default function GrammarDetailPage() {
   function handleQuizDone(correct, total) {
     setResult({ correct, total })
     addXp(XP_REWARDS.grammarComplete)
+    markGrammarComplete(point.key)
     playCelebrate()
     setPhase('done')
   }

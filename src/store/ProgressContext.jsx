@@ -18,8 +18,10 @@ export function ProgressProvider({ children }) {
   const [completedUnits, setCompletedUnits] = useState(() => loadJSON('completedUnits', []))
   const [streak, setStreak] = useState(() => loadStreak())
   const [toneStats, setToneStats] = useState(() => loadJSON('toneStats', { correct: 0, total: 0 }))
+  const [toneStatsByLevel, setToneStatsByLevel] = useState(() => loadJSON('toneStatsByLevel', {}))
   const [writingStats, setWritingStats] = useState(() => loadJSON('writingStats', { practiced: [] }))
   const [writingPerfectCount, setWritingPerfectCount] = useState(() => loadJSON('writingPerfectCount', 0))
+  const [completedGrammar, setCompletedGrammar] = useState(() => loadJSON('completedGrammar', []))
   const [xp, setXp] = useState(() => loadJSON('xp', 0))
   const [dailyXp, setDailyXp] = useState(() => loadJSON('dailyXp', { date: todayKey(), amount: 0 }))
   const [newWordsToday, setNewWordsToday] = useState(() => loadJSON('newWordsToday', { date: todayKey(), count: 0 }))
@@ -28,8 +30,10 @@ export function ProgressProvider({ children }) {
   useEffect(() => saveJSON('completedUnits', completedUnits), [completedUnits])
   useEffect(() => saveJSON('streak', streak), [streak])
   useEffect(() => saveJSON('toneStats', toneStats), [toneStats])
+  useEffect(() => saveJSON('toneStatsByLevel', toneStatsByLevel), [toneStatsByLevel])
   useEffect(() => saveJSON('writingStats', writingStats), [writingStats])
   useEffect(() => saveJSON('writingPerfectCount', writingPerfectCount), [writingPerfectCount])
+  useEffect(() => saveJSON('completedGrammar', completedGrammar), [completedGrammar])
   useEffect(() => saveJSON('xp', xp), [xp])
   useEffect(() => saveJSON('dailyXp', dailyXp), [dailyXp])
   useEffect(() => saveJSON('newWordsToday', newWordsToday), [newWordsToday])
@@ -83,11 +87,22 @@ export function ProgressProvider({ children }) {
     }
   }
 
-  function recordToneAnswer(correct) {
+  function recordToneAnswer(levelId, correct) {
     setToneStats((prev) => ({
       correct: prev.correct + (correct ? 1 : 0),
       total: prev.total + 1
     }))
+    setToneStatsByLevel((prev) => {
+      const s = prev[levelId] || { correct: 0, total: 0 }
+      return {
+        ...prev,
+        [levelId]: { correct: s.correct + (correct ? 1 : 0), total: s.total + 1 }
+      }
+    })
+  }
+
+  function markGrammarComplete(key) {
+    setCompletedGrammar((prev) => (prev.includes(key) ? prev : [...prev, key]))
   }
 
   function recordWritingPractice(wordId, perfect) {
@@ -116,8 +131,10 @@ export function ProgressProvider({ children }) {
       completedUnits,
       streak,
       toneStats,
+      toneStatsByLevel,
       writingStats,
       writingPerfectCount,
+      completedGrammar,
       xp,
       dailyXp,
       newWordsToday,
@@ -125,9 +142,22 @@ export function ProgressProvider({ children }) {
       markUnitComplete,
       recordToneAnswer,
       recordWritingPractice,
+      markGrammarComplete,
       addXp
     }),
-    [srsState, completedUnits, streak, toneStats, writingStats, writingPerfectCount, xp, dailyXp, newWordsToday]
+    [
+      srsState,
+      completedUnits,
+      streak,
+      toneStats,
+      toneStatsByLevel,
+      writingStats,
+      writingPerfectCount,
+      completedGrammar,
+      xp,
+      dailyXp,
+      newWordsToday
+    ]
   )
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>

@@ -32,7 +32,7 @@ function buildToneRound(pool) {
   return shuffle(pool).slice(0, Math.min(ROUND_SIZE, pool.length))
 }
 
-function ToneQuiz({ words }) {
+function ToneQuiz({ words, levelId }) {
   const singleToneWords = useMemo(
     () => words.filter((w) => w.tones.length === 1 && w.tones[0] !== 0),
     [words]
@@ -84,7 +84,7 @@ function ToneQuiz({ words }) {
   function answer(tone) {
     if (feedback) return
     const correct = tone === word.tones[0]
-    recordToneAnswer(correct)
+    recordToneAnswer(levelId, correct)
     if (correct) {
       setCorrectCount((c) => c + 1)
       playCorrect()
@@ -379,7 +379,9 @@ export default function PronunciationPage() {
       </div>
 
       {tab === 'listen' && <ListenBrowse words={words} key={`listen-${levelId}-${params.unitId || ''}`} />}
-      {tab === 'tone' && <ToneQuiz words={words} key={`tone-${levelId}-${params.unitId || ''}`} />}
+      {tab === 'tone' && (
+        <ToneQuiz words={words} levelId={levelId} key={`tone-${levelId}-${params.unitId || ''}`} />
+      )}
       {tab === 'record' && <RecordCompare words={words} key={`record-${levelId}-${params.unitId || ''}`} />}
     </div>
   )

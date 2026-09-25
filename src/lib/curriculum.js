@@ -44,6 +44,53 @@ export function getRelatedGrammarForUnit(levelLabel, unit) {
   return bestScore > 0 ? best : null
 }
 
+// Tien do "Viet chu" cua 1 cap: ty le chu Han rieng biet (trong tu vung cap
+// do) da duoc luyen viet it nhat 1 lan.
+export function getWritingProgressForLevel(level, writingStats) {
+  const chars = new Set()
+  for (const w of level.words) {
+    for (const ch of w.hanzi) {
+      if (/[一-鿿]/.test(ch)) chars.add(ch)
+    }
+  }
+  const total = chars.size
+  const practiced = writingStats?.practiced || []
+  const done = [...chars].filter((ch) => practiced.includes(ch)).length
+  return { done, total, percent: total ? Math.round((done / total) * 100) : 0 }
+}
+
+// Tien do "Ngu phap" cua 1 cap: ty le diem ngu phap da lam xong bai tap.
+// HSK5/6 chua co du lieu ngu phap nen total se la 0.
+export function getGrammarProgressForLevel(levelLabel, completedGrammar) {
+  const points = GRAMMAR_POINTS.filter((g) => g.level === levelLabel)
+  const total = points.length
+  const done = points.filter((g) => completedGrammar.includes(g.key)).length
+  return { done, total, percent: total ? Math.round((done / total) * 100) : 0 }
+}
+
+// Tien do "On tap" cua 1 cap: trong so tu da duoc gioi thieu (co the trong
+// SRS), bao nhieu tu da "vung" (interval >= 7 ngay, tuc da nho lau dai) -
+// khac voi tien do "Tu vung" (chi tinh da hoc qua bai hay chua).
+export function getReviewProgressForLevel(level, srsState) {
+  const ids = level.words.map((w) => w.id)
+  let introduced = 0
+  let matured = 0
+  for (const id of ids) {
+    const card = srsState[id]
+    if (card) {
+      introduced += 1
+      if (card.interval >= 7) matured += 1
+    }
+  }
+  return { introduced, matured, total: ids.length, percent: introduced ? Math.round((matured / introduced) * 100) : 0 }
+}
+
+// Tien do "Phat am" cua 1 cap: ty le tra loi dung trong Luyen thanh dieu.
+export function getPronunciationProgressForLevel(levelId, toneStatsByLevel) {
+  const s = toneStatsByLevel?.[levelId] || { correct: 0, total: 0 }
+  return { correct: s.correct, total: s.total, percent: s.total ? Math.round((s.correct / s.total) * 100) : 0 }
+}
+
 // Uoc tinh lo trinh: voi moi cap, con bao nhieu tu chua "hoc" (chua hoan
 // thanh bai chua tu do), va con bao nhieu ngay nua (tinh don, cong don tu
 // dau) neu giu deu toc do dailyLimit tu moi/ngay.

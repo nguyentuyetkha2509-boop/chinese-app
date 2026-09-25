@@ -22,10 +22,12 @@ const RATINGS = [
   { value: 3, label: 'Nhớ rõ', hint: 'lâu mới gặp lại', className: 'bg-teal-500' }
 ]
 
-function wordIdsForScope(scope) {
-  if (scope === 'all') return ALL_WORDS.map((w) => w.id)
-  const level = LEVELS.find((l) => l.id === scope)
-  return level ? level.words.map((w) => w.id) : []
+// Chi tra ve nhung tu DA duoc gioi thieu qua Bai hoc (co san trong SRS) -
+// On tap la noi rev on lai tu da hoc, khong phai noi am tham day them tu
+// moi ngoai gioi han moi ngay, keo lam sai lech thong ke "da hoc".
+function wordIdsForScope(scope, srsState) {
+  const ids = scope === 'all' ? ALL_WORDS.map((w) => w.id) : LEVELS.find((l) => l.id === scope)?.words.map((w) => w.id) || []
+  return ids.filter((id) => srsState[id])
 }
 
 export default function FlashcardsPage() {
@@ -35,7 +37,7 @@ export default function FlashcardsPage() {
   const leechIds = useMemo(() => getLeechWordIds(allIds, srsState), [allIds, srsState])
 
   const [scope, setScope] = useState('all')
-  const [queue, setQueue] = useState(() => getDueWordIds(wordIdsForScope('all'), srsState, SESSION_SIZE))
+  const [queue, setQueue] = useState(() => getDueWordIds(wordIdsForScope('all', srsState), srsState, SESSION_SIZE))
   const [sessionTotal, setSessionTotal] = useState(queue.length)
   const [ratingCounts, setRatingCounts] = useState({ 0: 0, 1: 0, 2: 0, 3: 0 })
   const [sessionXp, setSessionXp] = useState(0)
@@ -48,7 +50,7 @@ export default function FlashcardsPage() {
   const accent = accentFor(reviewed)
 
   function buildQueueForScope(nextScope) {
-    const ids = nextScope === 'leech' ? leechIds : wordIdsForScope(nextScope)
+    const ids = nextScope === 'leech' ? leechIds : wordIdsForScope(nextScope, srsState)
     const nextQueue =
       nextScope === 'leech' ? ids.slice(0, SESSION_SIZE) : getDueWordIds(ids, srsState, SESSION_SIZE)
     setQueue(nextQueue)
