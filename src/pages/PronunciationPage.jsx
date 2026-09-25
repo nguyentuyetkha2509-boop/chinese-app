@@ -220,9 +220,8 @@ function RecordCompare({ words }) {
   const streamRef = useRef(null)
   const chunksRef = useRef([])
 
-  // Doi tab/roi trang giua chung khi dang ghi am se bo quen microphone dang
-  // mo - lan ghi am tiep theo phai tranh chap voi stream cu nen phan hoi cham
-  // hoac loi. Don dep khi component unmount de tranh giu micro.
+  // Doi tab/roi trang trong luc dang ghi se bo quen microphone dang mo - don
+  // dep khi component unmount de tranh giu micro vinh vien.
   useEffect(() => {
     return () => {
       if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop()
@@ -230,12 +229,24 @@ function RecordCompare({ words }) {
     }
   }, [])
 
+  // Xin quyen + khoi dong microphone (getUserMedia) la buoc cham nhat - moi lan
+  // ghi lai tu dau deu phai xin lai se rat "lag". Giu nguyen 1 stream cho ca
+  // phien, tai su dung cho moi lan ghi tiep theo thay vi mo/dong lien tuc.
+  async function ensureStream() {
+    if (streamRef.current?.active) return streamRef.current
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    streamRef.current = stream
+    return stream
+  }
+
   async function startRecording() {
     if (status === 'requesting' || status === 'recording') return
     setStatus('requesting')
+    // Dung TTS truoc khi mo mic - phat ("Nghe mau") roi ghi am ngay sau co the
+    // khien thiet bi di dong phai chuyen doi phien am thanh phat->thu, gay cham.
+    window.speechSynthesis?.cancel()
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      streamRef.current = stream
+      const stream = await ensureStream()
       const mimeType = pickSupportedMimeType()
       const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined)
       chunksRef.current = []
@@ -244,8 +255,6 @@ function RecordCompare({ words }) {
         if (audioUrl) URL.revokeObjectURL(audioUrl)
         const blob = new Blob(chunksRef.current, { type: recorder.mimeType || 'audio/webm' })
         setAudioUrl(URL.createObjectURL(blob))
-        stream.getTracks().forEach((t) => t.stop())
-        streamRef.current = null
         setStatus('recorded')
         playCorrect()
       }
@@ -294,7 +303,9 @@ function RecordCompare({ words }) {
           <button
             onClick={startRecording}
             disabled={status === 'requesting'}
-            className="flex items-center gap-2 rounded-full bg-candy-600 px-6 py-3 text-white disabled:opacity-60"
+            className={`flex items-center gap-2 rounded-full bg-candy-600 px-6 py-3 text-white disabled:opacity-70 ${
+              status === 'requesting' ? 'animate-pulse' : ''
+            }`}
           >
             <MicIcon width={20} height={20} />
             {status === 'requesting' ? 'Đang mở micro...' : 'Bắt đầu ghi âm'}
