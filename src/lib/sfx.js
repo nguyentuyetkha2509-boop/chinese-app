@@ -9,7 +9,6 @@ function getCtx() {
   const AudioContextClass = window.AudioContext || window.webkitAudioContext
   if (!AudioContextClass) return null
   if (!ctx) ctx = new AudioContextClass()
-  if (ctx.state === 'suspended') ctx.resume()
   return ctx
 }
 
@@ -27,32 +26,43 @@ function tone(audioCtx, freq, startTime, duration, { type = 'sine', gain = 0.18 
   osc.stop(startTime + duration)
 }
 
-export function playCorrect() {
+// Trinh duyet tao AudioContext o trang thai "suspended" cho den khi co tuong
+// tac cua nguoi dung, va co the tu suspend lai sau mot luc khong dung den
+// (Safari kha nang cao). resume() la bat dong bo - goi roi phat luon ngay sau
+// (nhu code cu) khi context chua thuc su resume xong se bi "nuot" tieng ma
+// khong bao loi gi ca, tao cam giac "bai nay khong co am". Cho resume() xong
+// hoac chay ngay neu context da o trang thai running.
+function playScheduled(schedule) {
   const audioCtx = getCtx()
   if (!audioCtx) return
-  const now = audioCtx.currentTime
-  tone(audioCtx, 880, now, 0.12)
-  tone(audioCtx, 1318.5, now + 0.09, 0.2)
+  const run = () => schedule(audioCtx, audioCtx.currentTime)
+  if (audioCtx.state === 'running') run()
+  else audioCtx.resume().then(run).catch(() => {})
+}
+
+export function playCorrect() {
+  playScheduled((audioCtx, now) => {
+    tone(audioCtx, 880, now, 0.12)
+    tone(audioCtx, 1318.5, now + 0.09, 0.2)
+  })
 }
 
 export function playWrong() {
-  const audioCtx = getCtx()
-  if (!audioCtx) return
-  const now = audioCtx.currentTime
-  tone(audioCtx, 330, now, 0.16, { type: 'triangle', gain: 0.14 })
-  tone(audioCtx, 220, now + 0.11, 0.22, { type: 'triangle', gain: 0.14 })
+  playScheduled((audioCtx, now) => {
+    tone(audioCtx, 330, now, 0.16, { type: 'triangle', gain: 0.14 })
+    tone(audioCtx, 220, now + 0.11, 0.22, { type: 'triangle', gain: 0.14 })
+  })
 }
 
 export function playCelebrate() {
-  const audioCtx = getCtx()
-  if (!audioCtx) return
-  const now = audioCtx.currentTime
-  const notes = [523.25, 659.25, 783.99, 1046.5] // Do-Mi-Sol-Do (hop am vui)
-  notes.forEach((freq, i) => tone(audioCtx, freq, now + i * 0.1, 0.25, { gain: 0.16 }))
+  playScheduled((audioCtx, now) => {
+    const notes = [523.25, 659.25, 783.99, 1046.5] // Do-Mi-Sol-Do (hop am vui)
+    notes.forEach((freq, i) => tone(audioCtx, freq, now + i * 0.1, 0.25, { gain: 0.16 }))
+  })
 }
 
 export function playFlip() {
-  const audioCtx = getCtx()
-  if (!audioCtx) return
-  tone(audioCtx, 600, audioCtx.currentTime, 0.06, { type: 'sine', gain: 0.08 })
+  playScheduled((audioCtx, now) => {
+    tone(audioCtx, 600, now, 0.06, { type: 'sine', gain: 0.08 })
+  })
 }
