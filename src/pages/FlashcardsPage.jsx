@@ -5,11 +5,12 @@ import { useProgress } from '../store/ProgressContext'
 import { getCardStats, getDueWordIds, getLeechWordIds } from '../lib/srs'
 import { speakChinese } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate, playFlip } from '../lib/sfx'
-import { VolumeIcon, CheckIcon } from '../components/Icons'
+import { VolumeIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 import { XP_REWARDS } from '../lib/gamification'
+import CelebrationBadge from '../components/CelebrationBadge'
 
 const SESSION_SIZE = 20
 
@@ -105,9 +106,7 @@ export default function FlashcardsPage() {
         </div>
 
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
-          <span className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-white/25 text-white">
-            <CheckIcon width={28} height={28} />
-          </span>
+          <CelebrationBadge />
           <p className="text-lg">
             {totalRated > 0 ? `🎉 Đã ôn xong ${totalRated} thẻ!` : 'Không có thẻ nào cần ôn ở mục này.'}
           </p>

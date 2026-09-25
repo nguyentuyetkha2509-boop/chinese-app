@@ -19,6 +19,7 @@ import {
   SettingsIcon
 } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
+import trophyPanda from '../assets/panda/trophy_panda.webp'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
 import { todayKey } from '../lib/date'
@@ -283,9 +284,12 @@ export default function HomePage() {
       </section>
 
       <section className="mb-5 rounded-2xl bg-white p-4 shadow-sm">
-        <p className="mb-3 text-sm text-gray-500">
-          Thành tích ({earnedBadgeIds.size}/{BADGES.length})
-        </p>
+        <div className="mb-3 flex items-center gap-2">
+          <img src={trophyPanda} alt="" className="h-9 w-9 rounded-full object-cover" />
+          <p className="text-sm text-gray-500">
+            Thành tích ({earnedBadgeIds.size}/{BADGES.length})
+          </p>
+        </div>
         <div className="grid grid-cols-4 gap-2">
           {BADGES.map((b) => {
             const earned = earnedBadgeIds.has(b.id)

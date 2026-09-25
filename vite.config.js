@@ -12,6 +12,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: false,
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,webmanifest}']
+      },
       manifest: {
         name: 'PandaChinese',
         short_name: 'PandaChinese',

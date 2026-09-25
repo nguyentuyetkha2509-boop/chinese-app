@@ -4,13 +4,14 @@ import { getLevel, ALL_WORDS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
-import { ArrowLeftIcon, VolumeIcon, CheckIcon } from '../components/Icons'
+import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 import { XP_REWARDS } from '../lib/gamification'
 import { buildQuiz } from '../lib/quiz'
 import QuizQuestion from '../components/QuizQuestion'
+import CelebrationBadge from '../components/CelebrationBadge'
 
 export default function LessonDetailPage() {
   const { levelId, unitId } = useParams()
@@ -154,9 +155,7 @@ export default function LessonDetailPage() {
 
       {phase === 'done' && (
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
-          <span className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-white/25 text-white">
-            <CheckIcon width={32} height={32} />
-          </span>
+          <CelebrationBadge />
           <p className="text-xl">🎉 Hoàn thành!</p>
           <p className="mt-1 text-white/90">
             Đúng {correctCount}/{quiz.length} câu

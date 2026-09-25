@@ -6,7 +6,7 @@ import { speakChinese } from '../lib/tts'
 import { shuffle } from '../lib/quiz'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { CheckIcon } from '../components/Icons'
+import CelebrationBadge from '../components/CelebrationBadge'
 
 const ROUND_SIZE = 10
 
@@ -86,9 +86,7 @@ export default function SentenceBuilderPage() {
       <div className="px-4 pt-6">
         <h1 className="mb-4 text-2xl text-brand-800">Sắp xếp câu</h1>
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
-          <span className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-white/25 text-white">
-            <CheckIcon width={32} height={32} />
-          </span>
+          <CelebrationBadge />
           <p className="text-xl">🎉 Hoàn thành!</p>
           <p className="mt-1 text-white/90">
             Đúng {correctCount}/{round.length} câu

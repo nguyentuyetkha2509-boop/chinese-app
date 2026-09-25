@@ -5,8 +5,9 @@ import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { ArrowLeftIcon, VolumeIcon, CheckIcon } from '../components/Icons'
+import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
+import CelebrationBadge from '../components/CelebrationBadge'
 
 export default function GrammarDetailPage() {
   const { pointKey } = useParams()
@@ -88,9 +89,7 @@ export default function GrammarDetailPage() {
 
       {phase === 'done' && (
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
-          <span className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-white/25 text-white">
-            <CheckIcon width={32} height={32} />
-          </span>
+          <CelebrationBadge />
           <p className="text-xl">🎉 Hoàn thành!</p>
           <p className="mt-1 text-white/90">
             Đúng {result.correct}/{result.total} câu

@@ -5,9 +5,10 @@ import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { VolumeIcon, MicIcon, ArrowLeftIcon, CheckIcon } from '../components/Icons'
+import { VolumeIcon, MicIcon, ArrowLeftIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
+import CelebrationBadge from '../components/CelebrationBadge'
 
 const TONE_LABELS = {
   1: { mark: 'ˉ', name: 'Thanh 1 (ngang)', idleClass: 'border-sky-200 bg-sky-100 text-sky-700' },
@@ -59,9 +60,7 @@ function ToneQuiz({ words }) {
     const accuracy = Math.round((correctCount / round.length) * 100)
     return (
       <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
-        <span className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-white/25 text-white">
-          <CheckIcon width={32} height={32} />
-        </span>
+        <CelebrationBadge />
         <p className="text-xl">🎉 Hoàn thành!</p>
         <p className="mt-1 text-white/90">
           Đúng {correctCount}/{round.length} câu ({accuracy}%)
