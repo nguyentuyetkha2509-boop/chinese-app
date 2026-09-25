@@ -2,7 +2,22 @@ import { Link } from 'react-router-dom'
 import { LEVELS, ALL_WORDS, getNextUnit } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getCardStats, getDueWordIds } from '../lib/srs'
-import { FireIcon, BookIcon, CardsIcon, MicIcon, PencilIcon, ArrowRightIcon, ZapIcon, TopicIcon, ChatIcon, StoryIcon, GrammarIcon, ShuffleIcon, EarIcon, SettingsIcon } from '../components/Icons'
+import {
+  FireIcon,
+  BookIcon,
+  CardsIcon,
+  MicIcon,
+  PencilIcon,
+  ArrowRightIcon,
+  ZapIcon,
+  TopicIcon,
+  ChatIcon,
+  StoryIcon,
+  GrammarIcon,
+  ShuffleIcon,
+  EarIcon,
+  SettingsIcon
+} from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
@@ -15,7 +30,8 @@ const STAT_STYLES = [
   { key: 'due', label: 'Cần ôn', className: 'bg-brand-100 text-brand-700' }
 ]
 
-const ACTION_CARDS = [
+// Vong lap hoc chinh moi ngay - hien ngay sau nut "tiep tuc hoc", khong can cuon.
+const CORE_CARDS = [
   {
     to: '/on-tap',
     icon: CardsIcon,
@@ -27,6 +43,12 @@ const ACTION_CARDS = [
     icon: BookIcon,
     title: 'Bài học',
     className: 'bg-gradient-to-br from-sky-500 to-teal-500'
+  },
+  {
+    to: '/ngu-phap',
+    icon: GrammarIcon,
+    title: 'Ngữ pháp',
+    className: 'bg-gradient-to-br from-gold-500 to-brand-600'
   },
   {
     to: '/phat-am',
@@ -41,6 +63,16 @@ const ACTION_CARDS = [
     className: 'bg-gradient-to-br from-gold-500 to-teal-600'
   },
   {
+    to: '/sap-xep-cau',
+    icon: ShuffleIcon,
+    title: 'Sắp xếp câu',
+    className: 'bg-gradient-to-br from-candy-600 to-teal-500'
+  }
+]
+
+// Noi dung phu / mo rong - luyen them khi da xong vong hoc chinh, dat cuoi trang.
+const EXTRA_CARDS = [
+  {
     to: '/chu-de',
     icon: TopicIcon,
     title: 'Học theo chủ đề',
@@ -53,16 +85,10 @@ const ACTION_CARDS = [
     className: 'bg-gradient-to-br from-teal-500 to-sky-600'
   },
   {
-    to: '/ngu-phap',
-    icon: GrammarIcon,
-    title: 'Ngữ pháp',
-    className: 'col-span-2 bg-gradient-to-br from-gold-500 to-brand-600'
-  },
-  {
-    to: '/sap-xep-cau',
-    icon: ShuffleIcon,
-    title: 'Sắp xếp câu',
-    className: 'col-span-2 bg-gradient-to-br from-candy-600 to-teal-500'
+    to: '/truyen',
+    icon: StoryIcon,
+    title: 'Truyện dài',
+    className: 'col-span-2 bg-gradient-to-br from-brand-600 to-sky-500'
   },
   {
     to: '/nghe-chep-chinh-ta',
@@ -71,10 +97,10 @@ const ACTION_CARDS = [
     className: 'col-span-2 bg-gradient-to-br from-sky-600 to-brand-500'
   },
   {
-    to: '/truyen',
-    icon: StoryIcon,
-    title: 'Truyện dài',
-    className: 'col-span-2 bg-gradient-to-br from-brand-600 to-sky-500'
+    to: '/tro-choi',
+    icon: ZapIcon,
+    title: 'Đua tốc độ',
+    className: 'col-span-2 bg-gradient-to-br from-candy-500 via-brand-500 to-sky-500'
   }
 ]
 
@@ -114,6 +140,17 @@ export default function HomePage() {
     toneAccuracy: toneAccuracy ?? 0
   })
 
+  function cardSubtitle(to) {
+    if (to === '/on-tap') return `${dueCount} thẻ cần ôn`
+    if (to === '/bai-hoc') return LEVELS.map((l) => l.label).join(' · ')
+    if (to === '/phat-am') return toneAccuracy === null ? 'Chưa luyện' : `Độ chính xác ${toneAccuracy}%`
+    if (to === '/viet-chu') return 'Luyện nét theo thứ tự chuẩn'
+    if (to === '/chu-de') return 'Gia đình, đồ ăn, màu sắc...'
+    if (to === '/hoi-thoai') return 'Xem tiếng Trung dùng thật'
+    if (to === '/tro-choi') return 'Trả lời nhanh trong 60 giây!'
+    return null
+  }
+
   return (
     <div className="px-4 pt-6">
       <header className="mb-4 flex items-center justify-between">
@@ -132,40 +169,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      <div className="mb-4 flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-candy-500 text-sm font-bold text-white">
-          Lv{level}
-        </span>
-        <div className="flex-1">
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            <span>Cấp {level}</span>
-            <span>{xpInLevel}/{xpForNext} XP</span>
-          </div>
-          <div className="mt-1 h-2 overflow-hidden rounded-full bg-gray-100">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-brand-500 to-candy-500"
-              style={{ width: `${xpInLevel}%` }}
-            />
-          </div>
-        </div>
-      </div>
-
       <PandaHero />
-
-      <div className={`mt-4 rounded-2xl p-4 shadow-sm ${dailyGoalDone ? 'bg-teal-100' : 'bg-white'}`}>
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold text-gray-700">
-            {dailyGoalDone ? '🎉 Đã đạt mục tiêu hôm nay!' : '🎯 Mục tiêu hôm nay'}
-          </p>
-          <span className="text-xs text-gray-500">{todayXp}/{DAILY_GOAL_XP} XP</span>
-        </div>
-        <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100">
-          <div
-            className={`h-full rounded-full ${dailyGoalDone ? 'bg-teal-500' : 'bg-gradient-to-r from-sun-400 to-candy-500'}`}
-            style={{ width: `${dailyGoalPercent}%` }}
-          />
-        </div>
-      </div>
 
       {nextUnit ? (
         <Link
@@ -195,7 +199,51 @@ export default function HomePage() {
         </Link>
       )}
 
-      <section className="my-5 grid grid-cols-2 gap-3">
+      <p className="mb-2 mt-5 text-sm font-semibold text-gray-500">Học mỗi ngày</p>
+      <section className="mb-6 grid grid-cols-2 gap-3">
+        {CORE_CARDS.map(({ to, icon: Icon, title, className }) => (
+          <Link key={to} to={to} className={`rounded-2xl p-4 text-white shadow-sm ${className}`}>
+            <Icon width={22} height={22} />
+            <p className="mt-2 text-lg">{title}</p>
+            {cardSubtitle(to) && <p className="text-xs text-white/80">{cardSubtitle(to)}</p>}
+          </Link>
+        ))}
+      </section>
+
+      <div className="mb-4 flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-candy-500 text-sm font-bold text-white">
+          Lv{level}
+        </span>
+        <div className="flex-1">
+          <div className="flex items-center justify-between text-xs text-gray-500">
+            <span>Cấp {level}</span>
+            <span>{xpInLevel}/{xpForNext} XP</span>
+          </div>
+          <div className="mt-1 h-2 overflow-hidden rounded-full bg-gray-100">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-brand-500 to-candy-500"
+              style={{ width: `${xpInLevel}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className={`mb-5 rounded-2xl p-4 shadow-sm ${dailyGoalDone ? 'bg-teal-100' : 'bg-white'}`}>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-semibold text-gray-700">
+            {dailyGoalDone ? '🎉 Đã đạt mục tiêu hôm nay!' : '🎯 Mục tiêu hôm nay'}
+          </p>
+          <span className="text-xs text-gray-500">{todayXp}/{DAILY_GOAL_XP} XP</span>
+        </div>
+        <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100">
+          <div
+            className={`h-full rounded-full ${dailyGoalDone ? 'bg-teal-500' : 'bg-gradient-to-r from-sun-400 to-candy-500'}`}
+            style={{ width: `${dailyGoalPercent}%` }}
+          />
+        </div>
+      </div>
+
+      <section className="mb-5 grid grid-cols-2 gap-3">
         {STAT_STYLES.map((s) => (
           <div key={s.key} className={`rounded-2xl p-3 text-center ${s.className}`}>
             <p className="text-xl">{statValues[s.key]}</p>
@@ -234,22 +282,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Link
-        to="/tro-choi"
-        className="mb-5 flex items-center justify-between rounded-2xl bg-gradient-to-br from-candy-500 via-brand-500 to-sky-500 p-4 text-white shadow-md"
-      >
-        <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/25">
-            <ZapIcon width={22} height={22} />
-          </span>
-          <div>
-            <p className="text-lg font-semibold">Đua tốc độ</p>
-            <p className="text-xs text-white/80">Trả lời nhanh trong 60 giây, phá kỷ lục!</p>
-          </div>
-        </div>
-        <ArrowRightIcon width={22} height={22} />
-      </Link>
-
       <section className="mb-5 rounded-2xl bg-white p-4 shadow-sm">
         <p className="mb-3 text-sm text-gray-500">
           Thành tích ({earnedBadgeIds.size}/{BADGES.length})
@@ -273,22 +305,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <p className="mb-2 text-sm text-gray-500">Hoặc chọn mục khác:</p>
+      <p className="mb-2 text-sm font-semibold text-gray-500">Luyện thêm & giải trí</p>
       <section className="mb-5 grid grid-cols-2 gap-3">
-        {ACTION_CARDS.map(({ to, icon: Icon, title, className }) => (
+        {EXTRA_CARDS.map(({ to, icon: Icon, title, className }) => (
           <Link key={to} to={to} className={`rounded-2xl p-4 text-white shadow-sm ${className}`}>
             <Icon width={22} height={22} />
             <p className="mt-2 text-lg">{title}</p>
-            {to === '/on-tap' && <p className="text-xs text-white/80">{dueCount} thẻ cần ôn</p>}
-            {to === '/bai-hoc' && <p className="text-xs text-white/80">{LEVELS.map((l) => l.label).join(' · ')}</p>}
-            {to === '/phat-am' && (
-              <p className="text-xs text-white/80">
-                {toneAccuracy === null ? 'Chưa luyện' : `Độ chính xác ${toneAccuracy}%`}
-              </p>
-            )}
-            {to === '/viet-chu' && <p className="text-xs text-white/80">Luyện nét theo thứ tự chuẩn</p>}
-            {to === '/chu-de' && <p className="text-xs text-white/80">Gia đình, đồ ăn, màu sắc...</p>}
-            {to === '/hoi-thoai' && <p className="text-xs text-white/80">Xem tiếng Trung dùng thật</p>}
+            {cardSubtitle(to) && <p className="text-xs text-white/80">{cardSubtitle(to)}</p>}
           </Link>
         ))}
       </section>
