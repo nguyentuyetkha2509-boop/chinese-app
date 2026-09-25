@@ -19,6 +19,7 @@ export function FirebaseSyncProvider({ children }) {
   const [error, setError] = useState(null)
   const [lastSyncedAt, setLastSyncedAt] = useState(null)
   const [needsNickname, setNeedsNickname] = useState(false)
+  const [nickname, setNicknameState] = useState(null)
   const debounceRef = useRef(null)
   const skipNextAutoPush = useRef(true)
 
@@ -32,17 +33,20 @@ export function FirebaseSyncProvider({ children }) {
   useEffect(() => {
     if (!user) {
       setNeedsNickname(false)
+      setNicknameState(null)
       return
     }
     getMyEntry(user.uid).then((entry) => {
       setNeedsNickname(!entry?.nickname)
+      setNicknameState(entry?.nickname ?? null)
     })
   }, [user])
 
-  async function submitNickname(nickname) {
+  async function submitNickname(newNickname) {
     if (!user) return
-    await saveNickname(user.uid, nickname)
+    await saveNickname(user.uid, newNickname)
     setNeedsNickname(false)
+    setNicknameState(newNickname)
     await pushLeaderboardStats()
   }
 
@@ -143,6 +147,7 @@ export function FirebaseSyncProvider({ children }) {
     error,
     lastSyncedAt,
     needsNickname,
+    nickname,
     isAdmin: user?.email === ADMIN_EMAIL,
     signIn,
     signOut: signOutUser,

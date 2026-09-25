@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { LEVELS, ALL_WORDS, getNextUnit } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
+import { useFirebaseSync } from '../store/FirebaseSyncContext'
 import { getCardStats } from '../lib/srs'
 import {
   FireIcon,
@@ -121,6 +122,7 @@ function isLevelDone(levelId, completedUnits) {
 export default function HomePage() {
   const { srsState, completedUnits, streak, toneStats, xp, dailyXp, writingPerfectCount, newWordsToday } =
     useProgress()
+  const { nickname } = useFirebaseSync()
   const allIds = ALL_WORDS.map((w) => w.id)
   const stats = getCardStats(allIds, srsState)
   const dueCount = stats.due
@@ -172,7 +174,7 @@ export default function HomePage() {
     <div className="px-4 pt-6">
       <header className="mb-4 flex items-center justify-between">
         <div>
-          <p className="text-xs text-gray-500">Chào bạn 👋</p>
+          <p className="text-xs text-gray-500">Chào {nickname || 'bạn'} 👋</p>
           <h1 className="text-2xl text-brand-800">🐼 PandaChinese</h1>
         </div>
         <div className="flex items-center gap-2">
