@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import BottomNav from './components/BottomNav'
 import TtsWarning from './components/TtsWarning'
 import WelcomeScreen, { hasSeenWelcome } from './components/WelcomeScreen'
+import OnboardingGuide, { hasSeenOnboarding } from './components/OnboardingGuide'
 import NicknamePrompt from './components/NicknamePrompt'
 import DailyReminder from './components/DailyReminder'
 import { useFirebaseSync } from './store/FirebaseSyncContext'
@@ -32,9 +33,14 @@ import SettingsPage from './pages/SettingsPage'
 export default function App() {
   const { authReady, user } = useFirebaseSync()
   const [welcomeDone, setWelcomeDone] = useState(() => hasSeenWelcome())
+  const [onboardingDone, setOnboardingDone] = useState(() => hasSeenOnboarding())
 
   if (authReady && !user && !welcomeDone) {
     return <WelcomeScreen onDone={() => setWelcomeDone(true)} />
+  }
+
+  if (!onboardingDone) {
+    return <OnboardingGuide onDone={() => setOnboardingDone(true)} />
   }
 
   return (

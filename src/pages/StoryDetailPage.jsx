@@ -181,6 +181,9 @@ function StoryDetailPageInner() {
               Truyện khác
             </Link>
           </div>
+          <Link to="/hoc-hom-nay" className="mt-3 block text-center text-xs text-white/80 underline">
+            Về Học hôm nay
+          </Link>
         </div>
       )}
     </div>

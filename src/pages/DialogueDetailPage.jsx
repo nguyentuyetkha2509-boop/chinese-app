@@ -99,6 +99,17 @@ function DialogueDetailPageInner() {
           )
         })}
       </div>
+
+      {done && (
+        <div className="mt-5 flex gap-3 text-center text-xs">
+          <Link to="/hoi-thoai" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700 shadow-sm">
+            Hội thoại khác
+          </Link>
+          <Link to="/hoc-hom-nay" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700 shadow-sm">
+            Về Học hôm nay
+          </Link>
+        </div>
+      )}
     </div>
   )
 }

@@ -65,17 +65,17 @@ const CORE_CARDS = [
     icon: PencilIcon,
     title: 'Viết chữ Hán',
     className: 'bg-gradient-to-br from-gold-500 to-teal-600'
-  },
-  {
-    to: '/sap-xep-cau',
-    icon: ShuffleIcon,
-    title: 'Sắp xếp câu',
-    className: 'bg-gradient-to-br from-candy-600 to-teal-500'
   }
 ]
 
 // Noi dung phu / mo rong - luyen them khi da xong vong hoc chinh, dat cuoi trang.
 const EXTRA_CARDS = [
+  {
+    to: '/sap-xep-cau',
+    icon: ShuffleIcon,
+    title: 'Sắp xếp câu',
+    className: 'bg-gradient-to-br from-candy-600 to-teal-500'
+  },
   {
     to: '/bang-xep-hang',
     icon: TrophyIcon,
@@ -210,7 +210,8 @@ export default function HomePage() {
         <ArrowRightIcon width={26} height={26} />
       </Link>
 
-      <p className="mb-2 mt-5 text-sm font-semibold text-gray-500">Học mỗi ngày</p>
+      <p className="mb-0.5 mt-5 text-sm font-semibold text-gray-500">Lộ trình chính</p>
+      <p className="mb-2 text-xs text-gray-400">Lối tắt vào từng phần của "Học hôm nay" - làm theo thẻ ở trên là đủ.</p>
       <section className="mb-6 grid grid-cols-2 gap-3">
         {CORE_CARDS.map(({ to, icon: Icon, title, className }) => (
           <Link key={to} to={to} className={`rounded-2xl p-4 text-white shadow-sm ${className}`}>
@@ -325,7 +326,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <p className="mb-2 text-sm font-semibold text-gray-500">Luyện thêm & giải trí</p>
+      <p className="mb-0.5 text-sm font-semibold text-gray-500">Luyện thêm & giải trí</p>
+      <p className="mb-2 text-xs text-gray-400">Không bắt buộc mỗi ngày - ghé qua khi đã xong nhiệm vụ hôm nay và muốn luyện thêm cho vui.</p>
       <section className="mb-5 grid grid-cols-2 gap-3">
         {EXTRA_CARDS.map(({ to, icon: Icon, title, className }) => (
           <Link key={to} to={to} className={`rounded-2xl p-4 text-white shadow-sm ${className}`}>
