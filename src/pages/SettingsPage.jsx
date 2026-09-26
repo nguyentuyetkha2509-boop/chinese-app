@@ -175,8 +175,8 @@ export default function SettingsPage() {
       <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
         <p className="text-base text-gray-800">Giới hạn từ mới mỗi ngày</p>
         <p className="mt-1 text-xs text-gray-500">
-          Học ít từ mới mỗi ngày nhưng đều đặn giúp nhớ lâu hơn và tránh dồn ứ ôn tập. Chỉ áp dụng cho mục "Học hôm
-          nay" ở trang chủ, không khóa các bài học khác.
+          Học ít từ mới mỗi ngày nhưng đều đặn giúp nhớ lâu hơn và tránh dồn ứ ôn tập. Dùng để ước tính tiến độ ở
+          trang Lộ trình học, không khóa hay giới hạn việc học bài nào cả.
         </p>
         <div className="mt-3 flex gap-2">
           {NEW_WORD_LIMIT_OPTIONS.map((n) => (

@@ -110,6 +110,7 @@ export function ProgressProvider({ children }) {
   }
 
   function markGrammarComplete(key) {
+    touchStreak()
     setCompletedGrammar((prev) => (prev.includes(key) ? prev : [...prev, key]))
   }
 

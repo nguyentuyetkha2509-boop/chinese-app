@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { LEVELS, ALL_WORDS, getNextUnit } from '../data/levels'
+import { LEVELS, ALL_WORDS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { useFirebaseSync } from '../store/FirebaseSyncContext'
 import { getCardStats } from '../lib/srs'
@@ -23,7 +23,7 @@ import {
 import PandaHero from '../components/PandaHero'
 import trophyPanda from '../assets/panda/trophy_panda.webp'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
-import { getDailyNewWordLimit } from '../lib/curriculum'
+import { getCurrentCombo, getComboByUnitKey } from '../lib/curriculum'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
 import { todayKey } from '../lib/date'
 
@@ -120,7 +120,7 @@ function isLevelDone(levelId, completedUnits) {
 }
 
 export default function HomePage() {
-  const { srsState, completedUnits, streak, toneStats, xp, dailyXp, writingPerfectCount, newWordsToday } =
+  const { srsState, completedUnits, streak, toneStats, xp, dailyXp, writingPerfectCount, completedGrammar, writingStats, dailyCombo } =
     useProgress()
   const { nickname } = useFirebaseSync()
   const allIds = ALL_WORDS.map((w) => w.id)
@@ -130,14 +130,21 @@ export default function HomePage() {
   const totalUnits = LEVELS.reduce((sum, l) => sum + l.units.length, 0)
   const unitsDone = completedUnits.length
   const percent = Math.round((stats.learned / stats.total) * 100)
-  const nextUnit = getNextUnit(completedUnits)
-  const dailyNewWordLimit = getDailyNewWordLimit()
-  const newWordCapReached = newWordsToday.count >= dailyNewWordLimit
-  const todayPlanSubtitle = dueCount > 0
-    ? `${dueCount} thẻ cần ôn`
-    : nextUnit && !newWordCapReached
-      ? `${nextUnit.levelLabel} · ${nextUnit.unit.title}`
-      : 'Đã xong việc hôm nay 🎉'
+
+  // Cung logic combo voi TodayPlanPage: neu hom nay da khoa 1 bai muc tieu thi
+  // doc lai dung bai do, chua khoa thi xem truoc bai se duoc khoa (xem ghi chu
+  // chi tiet trong TodayPlanPage.jsx va lib/curriculum.js).
+  const freshCombo = getCurrentCombo(LEVELS, completedUnits, completedGrammar, writingStats)
+  const freshUnitKey = freshCombo ? `${freshCombo.levelId}:${freshCombo.unit.id}` : null
+  const lockedUnitKey = dailyCombo.date === todayKey() ? dailyCombo.unitKey : freshUnitKey
+  const todayCombo = getComboByUnitKey(LEVELS, lockedUnitKey, completedUnits, completedGrammar, writingStats)
+  const comboDone = !todayCombo || (todayCombo.vocabDone && todayCombo.grammarDone && todayCombo.writingDone)
+  const todayPlanSubtitle =
+    dueCount > 0
+      ? `${dueCount} thẻ cần ôn`
+      : !comboDone
+        ? `${todayCombo.levelLabel} · ${todayCombo.unit.title}`
+        : 'Đã xong việc hôm nay 🎉'
 
   const statValues = { total: stats.total, learned: stats.learned, percent: `${percent}%`, due: dueCount }
 
