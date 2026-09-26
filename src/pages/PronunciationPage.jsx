@@ -420,9 +420,9 @@ function RecordCompare({ words, levelId }) {
                   : 'bg-gray-100 text-gray-500'
             }`}
           >
-            {aiResult === 'match' && `✅ AI nghe đúng rồi! Nhận dạng được: "${heardText}"`}
-            {aiResult === 'mismatch' && `❌ Chưa khớp. AI nghe ra: "${heardText || '(không rõ)'}" - thử đọc lại rõ hơn nhé`}
-            {aiResult === 'no-speech' && '⚠️ AI không nghe rõ, thử ghi âm lại gần micro hơn'}
+            {aiResult === 'match' && `🎉 Tuyệt vời! AI nghe được: "${heardText}"`}
+            {aiResult === 'mismatch' && `🔁 Thử lại! AI nghe nhầm thành chữ "${heardText || '(không rõ)'}"`}
+            {aiResult === 'no-speech' && '🤔 Chưa nghe rõ, thử ghi âm lại gần micro hơn'}
           </div>
         )}
         {audioUrl && (
