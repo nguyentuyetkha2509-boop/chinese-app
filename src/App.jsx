@@ -4,6 +4,7 @@ import BottomNav from './components/BottomNav'
 import TtsWarning from './components/TtsWarning'
 import WelcomeScreen, { hasSeenWelcome } from './components/WelcomeScreen'
 import NicknamePrompt from './components/NicknamePrompt'
+import DailyReminder from './components/DailyReminder'
 import { useFirebaseSync } from './store/FirebaseSyncContext'
 import HomePage from './pages/HomePage'
 import TodayPlanPage from './pages/TodayPlanPage'
@@ -40,6 +41,7 @@ export default function App() {
     <div className="mx-auto min-h-screen max-w-md bg-canvas pb-20">
       <TtsWarning />
       <NicknamePrompt />
+      <DailyReminder />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/hoc-hom-nay" element={<TodayPlanPage />} />

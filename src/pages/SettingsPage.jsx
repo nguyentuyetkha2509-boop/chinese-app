@@ -3,7 +3,82 @@ import { useNavigate, Link } from 'react-router-dom'
 import { getDailyNewWordLimit, setDailyNewWordLimit, NEW_WORD_LIMIT_OPTIONS } from '../lib/curriculum'
 import { useFirebaseSync } from '../store/FirebaseSyncContext'
 import { playCorrect, playWrong } from '../lib/sfx'
-import { ArrowLeftIcon, ShieldIcon } from '../components/Icons'
+import { loadJSON, saveJSON } from '../lib/storage'
+import { ArrowLeftIcon, ShieldIcon, BellIcon } from '../components/Icons'
+
+const REMINDER_KEY = 'dailyReminder'
+const DEFAULT_REMINDER = { enabled: false, hour: 20, minute: 0 }
+
+function ReminderSection() {
+  const supported = typeof window !== 'undefined' && 'Notification' in window
+  const [settings, setSettings] = useState(() => loadJSON(REMINDER_KEY, DEFAULT_REMINDER))
+  const [permission, setPermission] = useState(() => (supported ? Notification.permission : 'unsupported'))
+
+  function persist(next) {
+    setSettings(next)
+    saveJSON(REMINDER_KEY, next)
+  }
+
+  async function handleToggle() {
+    if (!supported) return
+    if (settings.enabled) {
+      persist({ ...settings, enabled: false })
+      return
+    }
+    const perm = await Notification.requestPermission()
+    setPermission(perm)
+    if (perm === 'granted') persist({ ...settings, enabled: true })
+  }
+
+  function handleTimeChange(e) {
+    const [h, m] = e.target.value.split(':').map(Number)
+    persist({ ...settings, hour: h, minute: m })
+  }
+
+  const timeValue = `${String(settings.hour).padStart(2, '0')}:${String(settings.minute).padStart(2, '0')}`
+
+  return (
+    <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
+      <div className="flex items-center gap-2">
+        <BellIcon width={18} height={18} className="text-brand-600" />
+        <p className="text-base text-gray-800">Nhắc học mỗi ngày</p>
+      </div>
+
+      {!supported ? (
+        <p className="mt-1 text-xs text-gray-500">Trình duyệt này không hỗ trợ thông báo nhắc nhở.</p>
+      ) : permission === 'denied' ? (
+        <p className="mt-1 text-xs text-red-500">
+          Bạn đã chặn thông báo cho trang này. Vào cài đặt thông báo của trình duyệt/điện thoại để bật lại quyền
+          nếu muốn dùng tính năng này.
+        </p>
+      ) : (
+        <>
+          <p className="mt-1 text-xs text-gray-500">
+            Đến giờ đã đặt mà nhiệm vụ hôm nay (ôn tập + bài học) chưa xong thì app sẽ nhắc. Chỉ hoạt động khi app
+            còn mở nền trên trình duyệt/điện thoại, không đảm bảo khi app đã tắt hẳn.
+          </p>
+          <div className="mt-3 flex items-center gap-2">
+            <input
+              type="time"
+              value={timeValue}
+              onChange={handleTimeChange}
+              disabled={!settings.enabled}
+              className="rounded-xl border border-gray-200 px-3 py-2 text-sm disabled:opacity-50"
+            />
+            <button
+              onClick={handleToggle}
+              className={`flex-1 rounded-xl py-2.5 text-sm font-semibold ${
+                settings.enabled ? 'bg-gray-100 text-gray-600' : 'bg-brand-700 text-white'
+              }`}
+            >
+              {settings.enabled ? 'Tắt nhắc nhở' : 'Bật nhắc nhở'}
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
 
 function formatTime(ts) {
   if (!ts) return null
@@ -171,6 +246,8 @@ export default function SettingsPage() {
         </button>
         <h1 className="text-xl text-brand-800">Cài đặt</h1>
       </div>
+
+      <ReminderSection />
 
       <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
         <p className="text-base text-gray-800">Giới hạn từ mới mỗi ngày</p>
