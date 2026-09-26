@@ -11,6 +11,7 @@ import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/P
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 import { playCelebrate, playCorrect } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
+import CelebrationBadge from '../components/CelebrationBadge'
 import writingPanda from '../assets/panda/writing_panda.webp'
 
 function extractChars(words) {
@@ -36,6 +37,7 @@ export default function WritingPage() {
   const chars = useMemo(() => extractChars(scopedUnit ? scopedUnit.words : level.words), [level, scopedUnit])
   const [selected, setSelected] = useState(chars[0])
   const [quizResult, setQuizResult] = useState(null)
+  const [justCompletedUnit, setJustCompletedUnit] = useState(false)
   const targetRef = useRef(null)
   const writerRef = useRef(null)
   const advanceTimeoutRef = useRef(null)
@@ -52,6 +54,7 @@ export default function WritingPage() {
     clearTimeout(advanceTimeoutRef.current)
     targetRef.current.innerHTML = ''
     setQuizResult(null)
+    setJustCompletedUnit(false)
     writerRef.current = HanziWriter.create(targetRef.current, selected.char, {
       width: 260,
       height: 260,
@@ -79,6 +82,12 @@ export default function WritingPage() {
       onComplete: (summary) => {
         const mistakes = summary?.totalMistakes ?? 0
         const perfect = mistakes === 0
+        // Kiem tra TRUOC khi ghi nhan: day co phai chu cuoi cung con thieu cua
+        // bai khong, de biet luot nay co hoan thanh ca bai hay chua.
+        const alreadyPracticed = writingStats.practiced.includes(selected.char)
+        const remainingBefore = chars.filter((c) => !writingStats.practiced.includes(c.char)).length
+        const willCompleteUnit = !!scopedUnit && !alreadyPracticed && remainingBefore <= 1
+
         recordWritingPractice(selected.char, perfect)
         if (perfect) {
           playCelebrate()
@@ -88,6 +97,12 @@ export default function WritingPage() {
           addXp(XP_REWARDS.writingDone)
         }
         setQuizResult(perfect ? 'perfect' : `Xong! Sai ${mistakes} lần`)
+
+        if (willCompleteUnit) {
+          playCelebrate()
+          setJustCompletedUnit(true)
+          return
+        }
 
         // Tu chuyen sang chu tiep theo sau khi xem ket qua mot chut, thay vi
         // dung lai o chu vua viet xong bat nguoi dung phai bam chon thu cong.
@@ -130,6 +145,27 @@ export default function WritingPage() {
       )}
 
       {!scopedUnit && <LevelTabs value={levelId} onChange={setLevelId} />}
+
+      {justCompletedUnit && scopedUnit && (
+        <div className="mb-4 rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
+          <CelebrationBadge />
+          <p className="text-xl">🎉 Hoàn thành viết chữ bài này!</p>
+          <p className="mt-1 text-white/90">
+            Đã luyện đủ {chars.length}/{chars.length} chữ của {scopedUnit.title}
+          </p>
+          <div className="mt-4 flex gap-2">
+            <button
+              onClick={() => setJustCompletedUnit(false)}
+              className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
+            >
+              Luyện thêm
+            </button>
+            <Link to="/" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
+              Về Học hôm nay
+            </Link>
+          </div>
+        </div>
+      )}
 
       {hasPictograph(selected.char) && (
         <div className="mb-4 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-sun-100 to-candy-100 p-4">
