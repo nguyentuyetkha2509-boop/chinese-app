@@ -88,7 +88,10 @@ export default function TodayPlanPage() {
 
   const currentIndex = steps.findIndex((s) => !s.done)
   const bothDone = currentIndex === -1
-  const hasBacklog = grammarBacklog.length > 0 || writingBacklog.length > 0 || grammarPreview
+  // grammarPreview chi la xem truoc ngu phap cua bai SAP hoc (chua hoc toi),
+  // khong phai thu con thieu - khong duoc tinh vao hasBacklog, neu khong trang
+  // se khong bao gio bao "xong het hom nay" du da hoc/luyen day du.
+  const hasBacklog = grammarBacklog.length > 0 || writingBacklog.length > 0
 
   return (
     <div className="px-4 pt-6">
@@ -195,24 +198,6 @@ export default function TodayPlanPage() {
               </div>
             ))}
 
-            {grammarPreview && (
-              <div className="flex items-center gap-3 rounded-xl bg-gold-100 p-3 shadow-sm">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-gold-600">
-                  <GrammarIcon width={18} height={18} />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs text-gray-500">Ngữ pháp liên quan (bài sắp học)</p>
-                  <p className="truncate text-sm font-semibold text-gray-800">{grammarPreview.title}</p>
-                </div>
-                <Link
-                  to={`/ngu-phap/${grammarPreview.key}`}
-                  className="shrink-0 rounded-lg bg-gold-600 px-3 py-1.5 text-xs font-semibold text-white"
-                >
-                  Xem
-                </Link>
-              </div>
-            )}
-
             {writingBacklog.map((b) => (
               <div key={`w-${b.levelId}-${b.unit.id}`} className="rounded-xl bg-white p-3 shadow-sm">
                 <p className="mb-2 text-xs text-gray-500">
@@ -234,6 +219,27 @@ export default function TodayPlanPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {grammarPreview && (
+        <div className="mt-4">
+          <p className="mb-3 text-sm font-semibold text-gray-500">Xem trước bài sắp học</p>
+          <div className="flex items-center gap-3 rounded-xl bg-gold-100 p-3 shadow-sm">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-gold-600">
+              <GrammarIcon width={18} height={18} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-xs text-gray-500">Ngữ pháp liên quan (bài sắp học)</p>
+              <p className="truncate text-sm font-semibold text-gray-800">{grammarPreview.title}</p>
+            </div>
+            <Link
+              to={`/ngu-phap/${grammarPreview.key}`}
+              className="shrink-0 rounded-lg bg-gold-600 px-3 py-1.5 text-xs font-semibold text-white"
+            >
+              Xem
+            </Link>
           </div>
         </div>
       )}
