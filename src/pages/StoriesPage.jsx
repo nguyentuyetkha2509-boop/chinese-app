@@ -4,7 +4,7 @@ import { STORIES } from '../data/stories'
 import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
 import { parseLevelRank } from '../lib/contentLevel'
-import { CheckIcon } from '../components/Icons'
+import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
 
 export default function StoriesPage() {
   const { completedStories } = useProgress()
@@ -19,7 +19,12 @@ export default function StoriesPage() {
 
   return (
     <div className="px-4 pt-6">
-      <h1 className="mb-1 text-2xl text-brand-800">Truyện dài</h1>
+      <div className="mb-1 flex items-center gap-2">
+        <Link to="/" className="text-gray-500">
+          <ArrowLeftIcon />
+        </Link>
+        <h1 className="text-2xl text-brand-800">Truyện dài</h1>
+      </div>
       <p className="mb-4 text-sm text-gray-500">
         Đọc truyện nhiều chương, luyện nghe và làm bài đọc hiểu, xếp từ dễ đến khó. Đã xong {doneCount}/
         {sortedStories.length}.

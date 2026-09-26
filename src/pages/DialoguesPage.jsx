@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { DIALOGUES } from '../data/dialogues'
 import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
-import { CheckIcon } from '../components/Icons'
+import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
 
 export default function DialoguesPage() {
   const { completedDialogues } = useProgress()
@@ -15,7 +15,12 @@ export default function DialoguesPage() {
 
   return (
     <div className="px-4 pt-6">
-      <h1 className="mb-1 text-2xl text-brand-800">Hội thoại</h1>
+      <div className="mb-1 flex items-center gap-2">
+        <Link to="/" className="text-gray-500">
+          <ArrowLeftIcon />
+        </Link>
+        <h1 className="text-2xl text-brand-800">Hội thoại</h1>
+      </div>
       <p className="mb-4 text-sm text-gray-500">
         Xem tiếng Trung được dùng thế nào trong tình huống thật. Đã nghe {doneCount}/{DIALOGUES.length}.
       </p>

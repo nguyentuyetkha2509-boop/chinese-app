@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { TOPICS, getTopicWords, getTopicLevel } from '../data/topics'
 import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
-import { CheckIcon } from '../components/Icons'
+import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
 
 export default function TopicsPage() {
   const { completedTopics } = useProgress()
@@ -19,7 +19,12 @@ export default function TopicsPage() {
 
   return (
     <div className="px-4 pt-6">
-      <h1 className="mb-1 text-2xl text-brand-800">Học theo chủ đề</h1>
+      <div className="mb-1 flex items-center gap-2">
+        <Link to="/" className="text-gray-500">
+          <ArrowLeftIcon />
+        </Link>
+        <h1 className="text-2xl text-brand-800">Học theo chủ đề</h1>
+      </div>
       <p className="mb-4 text-sm text-gray-500">
         Ôn từ vựng đã học theo mạch chủ đề, xếp từ dễ đến khó. Đã xong {doneCount}/{sortedTopics.length}.
       </p>

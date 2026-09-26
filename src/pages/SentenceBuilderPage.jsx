@@ -7,6 +7,7 @@ import { shuffle } from '../lib/quiz'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
 import CelebrationBadge from '../components/CelebrationBadge'
+import { ArrowLeftIcon } from '../components/Icons'
 
 const ROUND_SIZE = 10
 
@@ -106,7 +107,12 @@ export default function SentenceBuilderPage() {
 
   return (
     <div className="px-4 pt-6">
-      <h1 className="mb-1 text-2xl text-brand-800">Sắp xếp câu</h1>
+      <div className="mb-1 flex items-center gap-2">
+        <Link to="/" className="text-gray-500">
+          <ArrowLeftIcon />
+        </Link>
+        <h1 className="text-2xl text-brand-800">Sắp xếp câu</h1>
+      </div>
       <p className="mb-4 text-sm text-gray-500">
         Chạm các từ theo đúng thứ tự để ghép thành câu. Câu {index + 1}/{round.length}
       </p>

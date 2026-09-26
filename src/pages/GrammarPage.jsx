@@ -5,7 +5,7 @@ import { LEVELS } from '../data/levels'
 import { accentFor } from '../lib/colors'
 import LevelTabs from '../components/LevelTabs'
 import { useProgress } from '../store/ProgressContext'
-import { CheckIcon } from '../components/Icons'
+import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
 
 export default function GrammarPage() {
   const { completedGrammar } = useProgress()
@@ -16,7 +16,12 @@ export default function GrammarPage() {
 
   return (
     <div className="px-4 pt-6">
-      <h1 className="mb-1 text-2xl text-brand-800">Ngữ pháp</h1>
+      <div className="mb-1 flex items-center gap-2">
+        <Link to="/" className="text-gray-500">
+          <ArrowLeftIcon />
+        </Link>
+        <h1 className="text-2xl text-brand-800">Ngữ pháp</h1>
+      </div>
       <p className="mb-4 text-sm text-gray-500">
         {points.length > 0
           ? `Học cách ghép câu, không chỉ học từ rời rạc. Đã xong ${doneCount}/${points.length} điểm.`
