@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { GRAMMAR_POINTS } from '../data/grammar'
 import { LEVELS } from '../data/levels'
 import { accentFor } from '../lib/colors'
@@ -8,6 +8,7 @@ import { useProgress } from '../store/ProgressContext'
 import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
 
 export default function GrammarPage() {
+  const navigate = useNavigate()
   const { completedGrammar } = useProgress()
   const [levelId, setLevelId] = useState('hsk1')
   const levelLabel = LEVELS.find((l) => l.id === levelId)?.label
@@ -17,9 +18,9 @@ export default function GrammarPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
-        <Link to="/" className="text-gray-500">
+        <button onClick={() => navigate(-1)} className="text-gray-500">
           <ArrowLeftIcon />
-        </Link>
+        </button>
         <h1 className="text-2xl text-brand-800">Ngữ pháp</h1>
       </div>
       <p className="mb-4 text-sm text-gray-500">

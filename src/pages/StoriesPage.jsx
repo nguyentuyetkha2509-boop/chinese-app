@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { STORIES } from '../data/stories'
 import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
@@ -7,6 +7,7 @@ import { parseLevelRank } from '../lib/contentLevel'
 import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
 
 export default function StoriesPage() {
+  const navigate = useNavigate()
   const { completedStories } = useProgress()
   // Sap xep tu de den kho theo cap do co san (vd "HSK1" truoc "HSK2-3"), kem
   // so thu tu va danh dau "Tiep theo" giong trang Bai hoc.
@@ -20,9 +21,9 @@ export default function StoriesPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
-        <Link to="/" className="text-gray-500">
+        <button onClick={() => navigate(-1)} className="text-gray-500">
           <ArrowLeftIcon />
-        </Link>
+        </button>
         <h1 className="text-2xl text-brand-800">Truyện dài</h1>
       </div>
       <p className="mb-4 text-sm text-gray-500">

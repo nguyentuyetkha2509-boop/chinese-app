@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { SENTENCES } from '../data/sentenceBuilder'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
@@ -20,6 +20,7 @@ function makeTokens(chunks) {
 }
 
 export default function DictationPage() {
+  const navigate = useNavigate()
   const { addXp } = useProgress()
   const [round, setRound] = useState(buildRound)
   const [index, setIndex] = useState(0)
@@ -113,9 +114,9 @@ export default function DictationPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
-        <Link to="/" className="text-gray-500">
+        <button onClick={() => navigate(-1)} className="text-gray-500">
           <ArrowLeftIcon />
-        </Link>
+        </button>
         <h1 className="text-2xl text-brand-800">Nghe chép chính tả</h1>
       </div>
       <p className="mb-4 text-sm text-gray-500">

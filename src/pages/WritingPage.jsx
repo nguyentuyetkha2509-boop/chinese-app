@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import HanziWriter from 'hanzi-writer'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
@@ -30,6 +30,7 @@ function extractChars(words) {
 
 export default function WritingPage() {
   const params = useParams()
+  const navigate = useNavigate()
   const { writingStats, recordWritingPractice, addXp } = useProgress()
   const [levelId, setLevelId] = useState(params.levelId || 'hsk1')
   const level = getLevel(levelId)
@@ -123,9 +124,9 @@ export default function WritingPage() {
       {scopedUnit ? (
         <div className="mb-4 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Link to={`/bai-hoc/${levelId}/${scopedUnit.id}`} className="text-gray-500">
+            <button onClick={() => navigate(-1)} className="text-gray-500">
               <ArrowLeftIcon />
-            </Link>
+            </button>
             <div>
               <h1 className="text-xl text-brand-800">Viết chữ · {level.label} {scopedUnit.title}</h1>
               <p className="text-xs text-gray-500">Đã luyện {practicedCount}/{chars.length}</p>

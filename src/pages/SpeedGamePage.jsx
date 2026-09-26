@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ALL_WORDS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
@@ -26,6 +26,7 @@ function buildQuestion() {
 }
 
 export default function SpeedGamePage() {
+  const navigate = useNavigate()
   const { addXp } = useProgress()
   const [highScore, setHighScore] = useState(() => loadJSON('speedGameHighScore', 0))
   const [phase, setPhase] = useState('idle') // idle | playing | over
@@ -98,9 +99,9 @@ export default function SpeedGamePage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
-        <Link to="/" className="text-gray-500">
+        <button onClick={() => navigate(-1)} className="text-gray-500">
           <ArrowLeftIcon />
-        </Link>
+        </button>
         <h1 className="text-xl text-brand-800">⚡ Đua tốc độ</h1>
       </div>
 

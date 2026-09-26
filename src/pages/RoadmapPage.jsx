@@ -35,7 +35,7 @@ export default function RoadmapPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
-        <button onClick={() => navigate('/')} className="text-gray-500">
+        <button onClick={() => navigate(-1)} className="text-gray-500">
           <ArrowLeftIcon />
         </button>
         <h1 className="text-xl text-brand-800">Lộ trình học</h1>

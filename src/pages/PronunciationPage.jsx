@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
@@ -487,6 +487,7 @@ const TABS = [
 
 export default function PronunciationPage() {
   const params = useParams()
+  const navigate = useNavigate()
   const { completedUnits } = useProgress()
   const [tab, setTab] = useState('listen')
   const [levelId, setLevelId] = useState(params.levelId || 'hsk1')
@@ -507,9 +508,9 @@ export default function PronunciationPage() {
     <div className="px-4 pt-6">
       {scopedUnit ? (
         <div className="mb-3 flex items-center gap-2">
-          <Link to={`/bai-hoc/${levelId}/${scopedUnit.id}`} className="text-gray-500">
+          <button onClick={() => navigate(-1)} className="text-gray-500">
             <ArrowLeftIcon />
-          </Link>
+          </button>
           <div>
             <h1 className="text-xl text-brand-800">Phát âm · {level.label} {scopedUnit.title}</h1>
             <p className="text-xs text-gray-500">Chỉ luyện {words.length} từ trong bài này</p>
