@@ -1,6 +1,7 @@
 // Nhom lai tu vung DA CO (HSK1-4) theo chu de - khong them tu moi, chi giup
 // hoc/on tap theo mach chu de thay vi chi theo thu tu HSK tuan tu.
 import { ALL_WORDS } from './levels'
+import { estimateLevelFromWords } from '../lib/contentLevel'
 
 export const TOPICS = [
   {
@@ -80,4 +81,10 @@ export function getTopic(key) {
 export function getTopicWords(key) {
   const topic = getTopic(key)
   return topic ? dedupeWords(topic.hanzi) : []
+}
+
+// Cap do (1-6) cua 1 chu de, tinh tu tu kho nhat trong do - dung de sap xep
+// danh sach chu de tu de den kho thay vi thu tu tuy tien nhu truoc.
+export function getTopicLevel(key) {
+  return estimateLevelFromWords(getTopicWords(key))
 }
