@@ -212,16 +212,33 @@ function pickSupportedMimeType() {
   return MIME_CANDIDATES.find((t) => MediaRecorder.isTypeSupported(t)) || ''
 }
 
-function RecordCompare({ words }) {
+// "AI so sanh phat am": dung Web Speech API (nhan dien giong noi co san cua
+// trinh duyet, mien phi, khong can server/API key) de nghe thu ban vua noi
+// chu/tu gi roi doi chieu voi tu mau. Khong phan tich sau duoc do chuan thanh
+// dieu nhu dich vu tra phi chuyen dung, nhung sai thanh dieu thuong cung khien
+// engine nhan nham sang tu/am khac nen van bat duoc phan nao. Chrome/Android
+// ho tro tot, Safari/iOS thuong khong ho tro hoac rat han che.
+const SpeechRecognitionCtor =
+  typeof window !== 'undefined' ? window.SpeechRecognition || window.webkitSpeechRecognition : null
+
+function normalizeHanzi(s) {
+  return (s || '').replace(/[，。！？、\s.,!?]/g, '').trim()
+}
+
+function RecordCompare({ words, levelId }) {
+  const { recordToneAnswer, addXp } = useProgress()
   const [round, setRound] = useState(() => buildToneRound(words))
   const [index, setIndex] = useState(0)
   const [phase, setPhase] = useState('practice') // practice | done
   const word = round[index]
   const [status, setStatus] = useState('idle') // idle | requesting | recording | recorded | error
   const [audioUrl, setAudioUrl] = useState(null)
+  const [aiResult, setAiResult] = useState(null) // null | 'match' | 'mismatch' | 'no-speech'
+  const [heardText, setHeardText] = useState('')
   const mediaRecorderRef = useRef(null)
   const streamRef = useRef(null)
   const chunksRef = useRef([])
+  const recognitionRef = useRef(null)
 
   // Doi tab/roi trang trong luc dang ghi se bo quen microphone dang mo - don
   // dep khi component unmount de tranh giu micro vinh vien.
@@ -229,8 +246,39 @@ function RecordCompare({ words }) {
     return () => {
       if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop()
       streamRef.current?.getTracks().forEach((t) => t.stop())
+      recognitionRef.current?.stop()
     }
   }, [])
+
+  function startRecognition() {
+    if (!SpeechRecognitionCtor) return
+    let gotResult = false
+    const recognition = new SpeechRecognitionCtor()
+    recognition.lang = 'zh-CN'
+    recognition.interimResults = false
+    recognition.maxAlternatives = 3
+
+    recognition.onresult = (e) => {
+      gotResult = true
+      const alternatives = Array.from(e.results[0]).map((r) => normalizeHanzi(r.transcript))
+      const target = normalizeHanzi(word.hanzi)
+      const isMatch = alternatives.some((a) => a && (a === target || a.includes(target) || target.includes(a)))
+      setAiResult(isMatch ? 'match' : 'mismatch')
+      setHeardText(alternatives[0] || '')
+      recordToneAnswer(levelId, isMatch)
+      if (isMatch) addXp(XP_REWARDS.toneCorrect)
+    }
+    recognition.onend = () => {
+      recognitionRef.current = null
+      if (!gotResult) setAiResult('no-speech')
+    }
+    try {
+      recognition.start()
+      recognitionRef.current = recognition
+    } catch {
+      // Chi la tinh nang phu, loi thi bo qua, khong lam vo luong ghi am chinh.
+    }
+  }
 
   // Xin quyen + khoi dong microphone (getUserMedia) la buoc cham nhat - moi lan
   // ghi lai tu dau deu phai xin lai se rat "lag". Giu nguyen 1 stream cho ca
@@ -245,6 +293,8 @@ function RecordCompare({ words }) {
   async function startRecording() {
     if (status === 'requesting' || status === 'recording') return
     setStatus('requesting')
+    setAiResult(null)
+    setHeardText('')
     // Dung TTS truoc khi mo mic - phat ("Nghe mau") roi ghi am ngay sau co the
     // khien thiet bi di dong phai chuyen doi phien am thanh phat->thu, gay cham.
     window.speechSynthesis?.cancel()
@@ -263,6 +313,7 @@ function RecordCompare({ words }) {
       }
       recorder.start()
       mediaRecorderRef.current = recorder
+      startRecognition()
       setStatus('recording')
       playFlip()
     } catch {
@@ -273,12 +324,15 @@ function RecordCompare({ words }) {
 
   function stopRecording() {
     mediaRecorderRef.current?.stop()
+    recognitionRef.current?.stop()
   }
 
   function resetRecording() {
     if (audioUrl) URL.revokeObjectURL(audioUrl)
     setAudioUrl(null)
     setStatus('idle')
+    setAiResult(null)
+    setHeardText('')
   }
 
   function nextWord() {
@@ -351,6 +405,26 @@ function RecordCompare({ words }) {
         {status === 'error' && (
           <p className="text-sm text-red-500">Không dùng được micro (cần cấp quyền hoặc HTTPS).</p>
         )}
+        {!SpeechRecognitionCtor && status !== 'error' && (
+          <p className="text-center text-xs text-gray-400">
+            ℹ️ Trình duyệt này chưa hỗ trợ AI nhận diện giọng nói tự động - vẫn ghi âm để tự nghe lại so sánh được.
+          </p>
+        )}
+        {aiResult && (
+          <div
+            className={`w-full rounded-2xl p-3 text-center text-sm font-semibold ${
+              aiResult === 'match'
+                ? 'bg-teal-100 text-teal-700'
+                : aiResult === 'mismatch'
+                  ? 'bg-red-100 text-red-600'
+                  : 'bg-gray-100 text-gray-500'
+            }`}
+          >
+            {aiResult === 'match' && `✅ AI nghe đúng rồi! Nhận dạng được: "${heardText}"`}
+            {aiResult === 'mismatch' && `❌ Chưa khớp. AI nghe ra: "${heardText || '(không rõ)'}" - thử đọc lại rõ hơn nhé`}
+            {aiResult === 'no-speech' && '⚠️ AI không nghe rõ, thử ghi âm lại gần micro hơn'}
+          </div>
+        )}
         {audioUrl && (
           <div className="flex w-full items-center gap-2">
             <audio className="flex-1" controls src={audioUrl} />
@@ -419,7 +493,7 @@ export default function PronunciationPage() {
       {tab === 'tone' && (
         <ToneQuiz words={words} levelId={levelId} key={`tone-${levelId}-${params.unitId || ''}`} />
       )}
-      {tab === 'record' && <RecordCompare words={words} key={`record-${levelId}-${params.unitId || ''}`} />}
+      {tab === 'record' && <RecordCompare words={words} levelId={levelId} key={`record-${levelId}-${params.unitId || ''}`} />}
     </div>
   )
 }
