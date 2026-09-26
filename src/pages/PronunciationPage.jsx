@@ -487,13 +487,21 @@ const TABS = [
 
 export default function PronunciationPage() {
   const params = useParams()
+  const { completedUnits } = useProgress()
   const [tab, setTab] = useState('listen')
   const [levelId, setLevelId] = useState(params.levelId || 'hsk1')
   const level = getLevel(levelId)
   const ttsOk = useMemo(() => isTtsSupported(), [])
 
   const scopedUnit = params.unitId ? level.units.find((u) => u.id === Number(params.unitId)) : null
-  const words = scopedUnit ? scopedUnit.words : level.words
+  // Khong vao tu 1 bai cu the (qua tab Phat am chung) thi chi lay TU DA HOC -
+  // truoc day lay ca level.words (ca tu chua hoc toi), khien nguoi moi nghe/
+  // luyen thanh dieu nhung tu con xa la, khong khop voi tien do thuc te.
+  const learnedWords = useMemo(
+    () => level.units.filter((u) => completedUnits.includes(`${levelId}:${u.id}`)).flatMap((u) => u.words),
+    [level, levelId, completedUnits]
+  )
+  const words = scopedUnit ? scopedUnit.words : learnedWords
 
   return (
     <div className="px-4 pt-6">
@@ -508,7 +516,10 @@ export default function PronunciationPage() {
           </div>
         </div>
       ) : (
-        <h1 className="mb-1 text-2xl text-brand-800">Phát âm & thanh điệu</h1>
+        <>
+          <h1 className="mb-1 text-2xl text-brand-800">Phát âm & thanh điệu</h1>
+          <p className="mb-3 text-xs text-gray-500">Chỉ luyện trong {words.length} từ bạn đã học ở {level.label}.</p>
+        </>
       )}
       {!ttsOk && (
         <p className="mb-3 text-sm text-red-500">Trình duyệt không hỗ trợ đọc giọng tiếng Trung.</p>
@@ -516,25 +527,38 @@ export default function PronunciationPage() {
 
       {!scopedUnit && <LevelTabs value={levelId} onChange={setLevelId} />}
 
-      <div className="mb-5 flex gap-2 overflow-x-auto">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm ${
-              tab === t.key ? 'bg-brand-700 text-white' : 'bg-white text-gray-600'
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
+      {!scopedUnit && words.length === 0 ? (
+        <div className="rounded-2xl bg-white p-5 text-center shadow-sm">
+          <p className="text-sm text-gray-600">Bạn chưa học từ nào ở {level.label} cả.</p>
+          <Link to="/bai-hoc" className="mt-3 inline-block rounded-xl bg-brand-700 px-4 py-2 text-sm font-semibold text-white">
+            Học bài đầu tiên
+          </Link>
+        </div>
+      ) : (
+        <>
+          <div className="mb-5 flex gap-2 overflow-x-auto">
+            {TABS.map((t) => (
+              <button
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm ${
+                  tab === t.key ? 'bg-brand-700 text-white' : 'bg-white text-gray-600'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
 
-      {tab === 'listen' && <ListenBrowse words={words} key={`listen-${levelId}-${params.unitId || ''}`} />}
-      {tab === 'tone' && (
-        <ToneQuiz words={words} levelId={levelId} key={`tone-${levelId}-${params.unitId || ''}`} />
+          {tab === 'listen' && <ListenBrowse words={words} key={`listen-${levelId}-${params.unitId || ''}`} />}
+          {tab === 'tone' && (
+            <ToneQuiz words={words} levelId={levelId} key={`tone-${levelId}-${params.unitId || ''}`} />
+          )}
+          {tab === 'record' && (
+            <RecordCompare words={words} levelId={levelId} key={`record-${levelId}-${params.unitId || ''}`} />
+          )}
+        </>
       )}
-      {tab === 'record' && <RecordCompare words={words} levelId={levelId} key={`record-${levelId}-${params.unitId || ''}`} />}
     </div>
   )
 }
