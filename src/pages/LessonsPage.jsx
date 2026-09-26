@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
+import { getUnitCombo } from '../lib/curriculum'
 import { CheckIcon, BookIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import lessonPanda from '../assets/panda/lesson_panda.webp'
 
 export default function LessonsPage() {
-  const { completedUnits } = useProgress()
+  const { completedUnits, completedGrammar, writingStats } = useProgress()
   const [levelId, setLevelId] = useState('hsk1')
   const level = getLevel(levelId)
   // Cac bai KHONG deu so tu (vd HSK2 co bai 6 tu, co bai 12 tu) - lay dung
@@ -39,6 +40,15 @@ export default function LessonsPage() {
             const done = completedUnits.includes(unitKey)
             const isNext = !done && unit.id === nextUnitId
             const accent = accentFor(i)
+            // Da hoc tu vung (done) khong dong nghia voi da xong combo cua bai
+            // do (con ngu phap/viet chu) - phai phan biet ro 2 trang thai nay,
+            // neu khong Hoc hom nay se goi y "hoc vuot" mot bai da co dau ✓ o
+            // day, nhin vao tuong mau thuan (thuc ra la 2 tieu chi khac nhau).
+            const combo = done ? getUnitCombo(level, unit, completedUnits, completedGrammar, writingStats) : null
+            const comboDone = combo ? combo.grammarDone && combo.writingDone : false
+            const missing = combo
+              ? [!combo.grammarDone && 'ngữ pháp', !combo.writingDone && 'viết chữ'].filter(Boolean).join(', ')
+              : ''
             return (
               <Link
                 key={unit.id}
@@ -52,12 +62,20 @@ export default function LessonsPage() {
                 </span>
                 <div className="flex-1">
                   <p className="text-lg text-gray-800">{unit.title}</p>
-                  <p className="text-xs text-gray-500">
-                    {unit.words[0].hanzi} · {unit.words[unit.words.length - 1].hanzi} và {unit.words.length - 2} từ khác
-                  </p>
+                  {done && !comboDone ? (
+                    <p className="text-xs font-semibold text-sun-600">Còn thiếu: {missing}</p>
+                  ) : (
+                    <p className="text-xs text-gray-500">
+                      {unit.words[0].hanzi} · {unit.words[unit.words.length - 1].hanzi} và {unit.words.length - 2} từ khác
+                    </p>
+                  )}
                 </div>
-                {done ? (
+                {comboDone ? (
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white">
+                    <CheckIcon width={18} height={18} />
+                  </span>
+                ) : done ? (
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sun-400 text-white">
                     <CheckIcon width={18} height={18} />
                   </span>
                 ) : isNext ? (
