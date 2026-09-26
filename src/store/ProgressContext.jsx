@@ -28,6 +28,7 @@ export function ProgressProvider({ children }) {
   const [xp, setXp] = useState(() => loadJSON('xp', 0))
   const [dailyXp, setDailyXp] = useState(() => loadJSON('dailyXp', { date: todayKey(), amount: 0 }))
   const [newWordsToday, setNewWordsToday] = useState(() => loadJSON('newWordsToday', { date: todayKey(), count: 0 }))
+  const [dailyCombo, setDailyCombo] = useState(() => loadJSON('dailyCombo', { date: null, unitKey: null }))
 
   useEffect(() => saveSrsState(srsState), [srsState])
   useEffect(() => saveJSON('completedUnits', completedUnits), [completedUnits])
@@ -43,6 +44,7 @@ export function ProgressProvider({ children }) {
   useEffect(() => saveJSON('xp', xp), [xp])
   useEffect(() => saveJSON('dailyXp', dailyXp), [dailyXp])
   useEffect(() => saveJSON('newWordsToday', newWordsToday), [newWordsToday])
+  useEffect(() => saveJSON('dailyCombo', dailyCombo), [dailyCombo])
 
   function touchStreak() {
     setStreak((prev) => {
@@ -134,6 +136,16 @@ export function ProgressProvider({ children }) {
     if (perfect) setWritingPerfectCount((c) => c + 1)
   }
 
+  // "Khoa" combo muc tieu cua 1 ngay - chi doi khi sang ngay moi, de combo dang
+  // hien thi khong tu nhien nhay sang bai khac ngay khi vua lam xong bai hom
+  // nay (xem ghi chu o getCurrentCombo trong lib/curriculum.js).
+  function lockDailyCombo(unitKey) {
+    setDailyCombo((prev) => {
+      const today = todayKey()
+      return prev.date === today ? prev : { date: today, unitKey }
+    })
+  }
+
   function addXp(amount) {
     setXp((prev) => {
       const next = prev + amount
@@ -162,6 +174,7 @@ export function ProgressProvider({ children }) {
       xp,
       dailyXp,
       newWordsToday,
+      dailyCombo,
       rateCard,
       markUnitComplete,
       recordToneAnswer,
@@ -170,6 +183,7 @@ export function ProgressProvider({ children }) {
       markDialogueComplete,
       markStoryComplete,
       markTopicComplete,
+      lockDailyCombo,
       addXp
     }),
     [
@@ -186,7 +200,8 @@ export function ProgressProvider({ children }) {
       completedTopics,
       xp,
       dailyXp,
-      newWordsToday
+      newWordsToday,
+      dailyCombo
     ]
   )
 

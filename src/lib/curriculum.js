@@ -44,48 +44,48 @@ export function getRelatedGrammarForUnit(levelLabel, unit) {
   return bestScore > 0 ? best : null
 }
 
-// TAT CA cac bai DA hoc tu vung (co trong completedUnits) ma van con thieu
-// luyen viet - khong chi bai som nhat. Cac bai nay doc lap voi nhau (vd bai
-// 1 con thieu viet chu khong lien quan gi den bai 6 con thieu ngu phap), nen
-// khong duoc de bai nay "chan" bai kia, phai liet ke day du de nguoi hoc tu
-// chon lam bai nao truoc.
-export function getAllUnitsNeedingWriting(levels, completedUnits, writingStats) {
+// "Combo" cua 1 bai: tu vung + diem ngu phap lien quan (neu co) + cac chu Han
+// can luyen viet. Day la don vi "1 ngay hoc" - vua du de khong qua tai, khong
+// dua tren gioi han tu moi/ngay (vi 1 bai da duoc soan san so tu vua phai).
+export function getUnitCombo(level, unit, completedUnits, completedGrammar, writingStats) {
+  const vocabDone = completedUnits.includes(`${level.id}:${unit.id}`)
+  const grammar = getRelatedGrammarForUnit(level.label, unit)
+  const grammarDone = !grammar || completedGrammar.includes(grammar.key)
   const practiced = writingStats?.practiced || []
-  const results = []
-  for (const level of levels) {
-    for (const unit of level.units) {
-      if (!completedUnits.includes(`${level.id}:${unit.id}`)) continue
-      const chars = new Set()
-      for (const w of unit.words) {
-        for (const ch of w.hanzi) {
-          if (/[一-鿿]/.test(ch)) chars.add(ch)
-        }
-      }
-      if ([...chars].some((ch) => !practiced.includes(ch))) {
-        results.push({ levelId: level.id, levelLabel: level.label, unit })
-      }
-    }
-  }
-  return results
+  const writingChars = [...new Set(unit.words.flatMap((w) => [...w.hanzi]).filter((ch) => /[一-鿿]/.test(ch)))]
+  const writingDone = writingChars.every((ch) => practiced.includes(ch))
+  return { levelId: level.id, levelLabel: level.label, unit, vocabDone, grammar, grammarDone, writingChars, writingDone }
 }
 
-// Tuong tu getAllUnitsNeedingWriting nhung cho Ngu phap: tat ca cac bai da
-// hoc tu vung co diem ngu phap lien quan ma diem do chua lam bai tap xong.
-// Nhieu bai co the cung goi y 1 diem ngu phap - chi liet ke moi diem 1 lan.
-export function getAllUnitsNeedingGrammar(levels, completedUnits, completedGrammar) {
-  const results = []
-  const seenGrammarKeys = new Set()
+export function isComboDone(combo) {
+  return combo.vocabDone && combo.grammarDone && combo.writingDone
+}
+
+// Nhiem vu can lam: combo cua bai SOM NHAT (theo thu tu giao trinh) ma con
+// thieu bat ky phan nao trong 3 phan tu vung/ngu phap/viet chu - gom ca no cu
+// (bai da hoc tu vung tu lau nhung bo do ngu phap/viet chu) lan bai hoan toan
+// moi, quy ve DUY NHAT 1 bai muc tieu thay vi dan het backlog lich su ra.
+export function getCurrentCombo(levels, completedUnits, completedGrammar, writingStats) {
   for (const level of levels) {
     for (const unit of level.units) {
-      if (!completedUnits.includes(`${level.id}:${unit.id}`)) continue
-      const point = getRelatedGrammarForUnit(level.label, unit)
-      if (point && !completedGrammar.includes(point.key) && !seenGrammarKeys.has(point.key)) {
-        seenGrammarKeys.add(point.key)
-        results.push({ levelId: level.id, levelLabel: level.label, unit, grammar: point })
-      }
+      const combo = getUnitCombo(level, unit, completedUnits, completedGrammar, writingStats)
+      if (!isComboDone(combo)) return combo
     }
   }
-  return results
+  return null
+}
+
+// Tra ve dung combo cua 1 unit key ("hsk1:3") - dung de hien thi lai combo da
+// "khoa" cho hom nay (xem ghi chu o dailyCombo trong ProgressContext) thay vi
+// luon lay combo moi nhat, tranh muc tieu hom nay tu nhien doi sang bai khac
+// ngay khi vua hoan thanh xong.
+export function getComboByUnitKey(levels, unitKey, completedUnits, completedGrammar, writingStats) {
+  if (!unitKey) return null
+  const [levelId, unitIdStr] = unitKey.split(':')
+  const level = levels.find((l) => l.id === levelId)
+  const unit = level?.units.find((u) => u.id === Number(unitIdStr))
+  if (!level || !unit) return null
+  return getUnitCombo(level, unit, completedUnits, completedGrammar, writingStats)
 }
 
 // Tien do "Viet chu" cua 1 cap: ty le chu Han rieng biet (trong tu vung cap
