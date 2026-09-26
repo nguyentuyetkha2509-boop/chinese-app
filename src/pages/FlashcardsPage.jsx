@@ -30,6 +30,30 @@ function wordIdsForScope(scope, srsState) {
   return ids.filter((id) => srsState[id])
 }
 
+// Danh sach chip cuon ngang (Tat ca, HSK1-6, Tu kho...) - co dau mo o mep phai
+// goi y "con nua, vuot tiep" vi truoc day khong co dau hieu gi, de nham tuong
+// HSK5/HSK6 "khong co" trong khi chi la chua vuot toi.
+function ScopeChips({ chips, scope, onChange }) {
+  return (
+    <div className="relative">
+      <div className="flex gap-2 overflow-x-auto">
+        {chips.map((c) => (
+          <button
+            key={c.key}
+            onClick={() => onChange(c.key)}
+            className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm ${
+              scope === c.key ? 'bg-brand-700 text-white' : 'bg-white text-gray-600'
+            }`}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-canvas to-transparent" />
+    </div>
+  )
+}
+
 export default function FlashcardsPage() {
   const { srsState, rateCard, addXp } = useProgress()
   const allIds = useMemo(() => ALL_WORDS.map((w) => w.id), [])
@@ -97,18 +121,8 @@ export default function FlashcardsPage() {
       <div className="px-4 pt-6">
         <h1 className="mb-4 text-2xl text-brand-800">Ôn tập</h1>
 
-        <div className="mb-4 flex gap-2 overflow-x-auto">
-          {SCOPE_CHIPS.map((c) => (
-            <button
-              key={c.key}
-              onClick={() => handleScopeChange(c.key)}
-              className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm ${
-                scope === c.key ? 'bg-brand-700 text-white' : 'bg-white text-gray-600'
-              }`}
-            >
-              {c.label}
-            </button>
-          ))}
+        <div className="mb-4">
+          <ScopeChips chips={SCOPE_CHIPS} scope={scope} onChange={handleScopeChange} />
         </div>
 
         {totalRated === 0 && (
@@ -164,18 +178,8 @@ export default function FlashcardsPage() {
         </span>
       </div>
 
-      <div className="mb-3 flex gap-2 overflow-x-auto">
-        {SCOPE_CHIPS.map((c) => (
-          <button
-            key={c.key}
-            onClick={() => handleScopeChange(c.key)}
-            className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm ${
-              scope === c.key ? 'bg-brand-700 text-white' : 'bg-white text-gray-600'
-            }`}
-          >
-            {c.label}
-          </button>
-        ))}
+      <div className="mb-3">
+        <ScopeChips chips={SCOPE_CHIPS} scope={scope} onChange={handleScopeChange} />
       </div>
 
       <p className="mb-4 text-xs text-gray-500">
