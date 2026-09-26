@@ -11,13 +11,22 @@ export default function LessonsPage() {
   const { completedUnits } = useProgress()
   const [levelId, setLevelId] = useState('hsk1')
   const level = getLevel(levelId)
+  // Cac bai KHONG deu so tu (vd HSK2 co bai 6 tu, co bai 12 tu) - lay dung
+  // so tu bai dau tien roi nhan len se ra tong sai lech han so tong that (vd
+  // HSK5 hien "139 bai x 11 tu = 1529" trong khi thuc te chi co 1298 tu).
+  // Hien khoang min-max cho trung thuc, chi noi "moi bai X tu" khi TAT CA
+  // cac bai deu bang nhau.
+  const unitSizes = level.units.map((u) => u.words.length)
+  const minSize = Math.min(...unitSizes)
+  const maxSize = Math.max(...unitSizes)
+  const sizeLabel = minSize === maxSize ? `${minSize} từ` : `${minSize}-${maxSize} từ`
 
   return (
     <div className="px-4 pt-6">
       <img src={lessonPanda} alt="Gấu trúc học bài" className="mx-auto mb-2 w-36 max-w-full" />
       <h1 className="mb-1 text-2xl text-brand-800">Bài học {level.label}</h1>
       <p className="mb-4 text-sm text-gray-500">
-        {level.words.length} từ vựng, chia thành {level.units.length} bài, mỗi bài {level.units[0]?.words.length} từ.
+        {level.words.length} từ vựng, chia thành {level.units.length} bài, mỗi bài {sizeLabel}.
       </p>
 
       <LevelTabs value={levelId} onChange={setLevelId} />
