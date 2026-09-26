@@ -31,8 +31,13 @@ function extractChars(words) {
 export default function WritingPage() {
   const params = useParams()
   const navigate = useNavigate()
-  const { writingStats, recordWritingPractice, addXp } = useProgress()
+  const { writingStats, completedUnits, recordWritingPractice, addXp } = useProgress()
   const [levelId, setLevelId] = useState(params.levelId || 'hsk1')
+  // "Tat ca": luyen chung tat ca chu da hoc trong ca cap do (nhu truoc gio).
+  // "Theo bai": chon dung 1 bai da hoc xong de luyen rieng, KHONG can lam lai
+  // bai kiem tra tu vung moi thay duoc goi y luyen viet (truoc day chi vao
+  // duoc qua man "Hoan thanh!" cua bai hoc, phai lam lai quiz moi hien lai).
+  const [viewMode, setViewMode] = useState('all')
   const level = getLevel(levelId)
   const scopedUnit = params.unitId ? level.units.find((u) => u.id === Number(params.unitId)) : null
   const chars = useMemo(() => extractChars(scopedUnit ? scopedUnit.words : level.words), [level, scopedUnit])
@@ -116,6 +121,7 @@ export default function WritingPage() {
   }
 
   const practicedCount = chars.filter((c) => writingStats.practiced.includes(c.char)).length
+  const showPracticeArea = !!scopedUnit || viewMode === 'all'
 
   if (!selected) return null
 
@@ -147,103 +153,155 @@ export default function WritingPage() {
 
       {!scopedUnit && <LevelTabs value={levelId} onChange={setLevelId} />}
 
-      {justCompletedUnit && scopedUnit && (
-        <div className="mb-4 rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
-          <CelebrationBadge />
-          <p className="text-xl">🎉 Hoàn thành viết chữ bài này!</p>
-          <p className="mt-1 text-white/90">
-            Đã luyện đủ {chars.length}/{chars.length} chữ của {scopedUnit.title}
-          </p>
-          <div className="mt-4 flex gap-2">
+      {!scopedUnit && (
+        <div className="mb-5 flex gap-2">
+          {[
+            { key: 'all', label: 'Tất cả' },
+            { key: 'byLesson', label: 'Theo bài' }
+          ].map((t) => (
             <button
-              onClick={() => setJustCompletedUnit(false)}
-              className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
-            >
-              Luyện thêm
-            </button>
-            <Link to="/" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
-              Về Học hôm nay
-            </Link>
-          </div>
-        </div>
-      )}
-
-      {hasPictograph(selected.char) && (
-        <div className="mb-4 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-sun-100 to-candy-100 p-4">
-          <PictographIcon char={selected.char} className="h-16 w-16 shrink-0 text-candy-700" />
-          <div>
-            <p className="text-xs font-semibold text-candy-700">💡 Mẹo nhớ chữ tượng hình</p>
-            <p className="text-sm text-gray-700">{PICTOGRAPH_HINTS[selected.char]}</p>
-          </div>
-        </div>
-      )}
-
-      {!hasPictograph(selected.char) && hasRadicalHint(selected.char) && (
-        <div className="mb-4 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-teal-100 to-sky-100 p-4">
-          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white text-3xl text-teal-700">
-            {getRadicalSymbol(selected.char)}
-          </span>
-          <div>
-            <p className="text-xs font-semibold text-teal-700">🧩 Mẹo nhớ theo bộ thủ</p>
-            <p className="text-sm text-gray-700">{getRadicalHint(selected.char)}</p>
-          </div>
-        </div>
-      )}
-
-      <div className="flex flex-col items-center">
-        <div ref={targetRef} className="hanzi-target bg-white" style={{ width: 260, height: 260 }} />
-        <button
-          onClick={() => speakChinese(selected.char)}
-          className="mt-2 flex items-center gap-1 text-sm text-brand-600"
-        >
-          <VolumeIcon width={16} height={16} />
-          {selected.meaning} · Nghe phát âm
-        </button>
-
-        {quizResult && (
-          <p className="mt-2 flex items-center gap-1 text-brand-600">
-            <CheckIcon width={18} height={18} />
-            {quizResult === 'perfect' ? 'Hoàn hảo, không sai nét nào!' : quizResult}
-          </p>
-        )}
-
-        <div className="mt-4 flex w-full gap-2">
-          <button onClick={showAnimation} className="flex-1 rounded-xl border border-brand-300 py-2.5 text-brand-700">
-            Xem thứ tự nét
-          </button>
-          <button onClick={startQuiz} className="flex-1 rounded-xl bg-brand-700 py-2.5 text-white">
-            Tự viết thử
-          </button>
-        </div>
-      </div>
-
-      <p className="mb-2 mt-6 text-sm text-gray-500">Chọn chữ khác:</p>
-      <div className="grid grid-cols-8 gap-2">
-        {chars.map(({ char }, i) => {
-          const done = writingStats.practiced.includes(char)
-          const accent = accentFor(i)
-          return (
-            <button
-              key={char}
-              onClick={() => setSelected(chars.find((c) => c.char === char))}
-              className={`relative rounded-lg py-2 text-lg ${
-                selected.char === char ? 'bg-brand-700 text-white' : `${accent.bg} ${accent.text}`
+              key={t.key}
+              onClick={() => setViewMode(t.key)}
+              className={`rounded-full px-4 py-1.5 text-sm ${
+                viewMode === t.key ? 'bg-brand-700 text-white' : 'bg-white text-gray-600'
               }`}
             >
-              {char}
-              {hasPictograph(char) && selected.char !== char && (
-                <span className="absolute left-0.5 top-0.5 text-[10px]">💡</span>
-              )}
-              {!hasPictograph(char) && hasRadicalHint(char) && selected.char !== char && (
-                <span className="absolute left-0.5 top-0.5 text-[10px]">🧩</span>
-              )}
-              {done && selected.char !== char && (
-                <span className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-brand-500" />
-              )}
+              {t.label}
             </button>
-          )
-        })}
-      </div>
+          ))}
+        </div>
+      )}
+
+      {!scopedUnit && viewMode === 'byLesson' ? (
+        <div className="space-y-3">
+          {level.units.filter((u) => completedUnits.includes(`${levelId}:${u.id}`)).length === 0 && (
+            <p className="rounded-2xl bg-white p-4 text-center text-sm text-gray-500 shadow-sm">
+              Chưa có bài nào học xong ở {level.label} - học từ vựng xong 1 bài là luyện viết được ngay.
+            </p>
+          )}
+          {level.units
+            .filter((u) => completedUnits.includes(`${levelId}:${u.id}`))
+            .map((unit) => {
+              const unitChars = extractChars(unit.words)
+              const done = unitChars.filter((c) => writingStats.practiced.includes(c.char)).length
+              const accent = accentFor(unit.id)
+              return (
+                <Link
+                  key={unit.id}
+                  to={`/viet-chu/${levelId}/${unit.id}`}
+                  className={`flex items-center justify-between rounded-2xl border-l-4 bg-white p-4 shadow-sm ${accent.leftBorder}`}
+                >
+                  <p className="text-base text-gray-800">{unit.title}</p>
+                  <p className={`text-xs ${accent.text}`}>
+                    Đã luyện {done}/{unitChars.length}
+                  </p>
+                </Link>
+              )
+            })}
+        </div>
+      ) : null}
+
+      {showPracticeArea && (
+        <>
+          {justCompletedUnit && scopedUnit && (
+            <div className="mb-4 rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
+              <CelebrationBadge />
+              <p className="text-xl">🎉 Hoàn thành viết chữ bài này!</p>
+              <p className="mt-1 text-white/90">
+                Đã luyện đủ {chars.length}/{chars.length} chữ của {scopedUnit.title}
+              </p>
+              <div className="mt-4 flex gap-2">
+                <button
+                  onClick={() => setJustCompletedUnit(false)}
+                  className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
+                >
+                  Luyện thêm
+                </button>
+                <Link to="/" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
+                  Về Học hôm nay
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {hasPictograph(selected.char) && (
+            <div className="mb-4 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-sun-100 to-candy-100 p-4">
+              <PictographIcon char={selected.char} className="h-16 w-16 shrink-0 text-candy-700" />
+              <div>
+                <p className="text-xs font-semibold text-candy-700">💡 Mẹo nhớ chữ tượng hình</p>
+                <p className="text-sm text-gray-700">{PICTOGRAPH_HINTS[selected.char]}</p>
+              </div>
+            </div>
+          )}
+
+          {!hasPictograph(selected.char) && hasRadicalHint(selected.char) && (
+            <div className="mb-4 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-teal-100 to-sky-100 p-4">
+              <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white text-3xl text-teal-700">
+                {getRadicalSymbol(selected.char)}
+              </span>
+              <div>
+                <p className="text-xs font-semibold text-teal-700">🧩 Mẹo nhớ theo bộ thủ</p>
+                <p className="text-sm text-gray-700">{getRadicalHint(selected.char)}</p>
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col items-center">
+            <div ref={targetRef} className="hanzi-target bg-white" style={{ width: 260, height: 260 }} />
+            <button
+              onClick={() => speakChinese(selected.char)}
+              className="mt-2 flex items-center gap-1 text-sm text-brand-600"
+            >
+              <VolumeIcon width={16} height={16} />
+              {selected.meaning} · Nghe phát âm
+            </button>
+
+            {quizResult && (
+              <p className="mt-2 flex items-center gap-1 text-brand-600">
+                <CheckIcon width={18} height={18} />
+                {quizResult === 'perfect' ? 'Hoàn hảo, không sai nét nào!' : quizResult}
+              </p>
+            )}
+
+            <div className="mt-4 flex w-full gap-2">
+              <button onClick={showAnimation} className="flex-1 rounded-xl border border-brand-300 py-2.5 text-brand-700">
+                Xem thứ tự nét
+              </button>
+              <button onClick={startQuiz} className="flex-1 rounded-xl bg-brand-700 py-2.5 text-white">
+                Tự viết thử
+              </button>
+            </div>
+          </div>
+
+          <p className="mb-2 mt-6 text-sm text-gray-500">Chọn chữ khác:</p>
+          <div className="grid grid-cols-8 gap-2">
+            {chars.map(({ char }, i) => {
+              const done = writingStats.practiced.includes(char)
+              const accent = accentFor(i)
+              return (
+                <button
+                  key={char}
+                  onClick={() => setSelected(chars.find((c) => c.char === char))}
+                  className={`relative rounded-lg py-2 text-lg ${
+                    selected.char === char ? 'bg-brand-700 text-white' : `${accent.bg} ${accent.text}`
+                  }`}
+                >
+                  {char}
+                  {hasPictograph(char) && selected.char !== char && (
+                    <span className="absolute left-0.5 top-0.5 text-[10px]">💡</span>
+                  )}
+                  {!hasPictograph(char) && hasRadicalHint(char) && selected.char !== char && (
+                    <span className="absolute left-0.5 top-0.5 text-[10px]">🧩</span>
+                  )}
+                  {done && selected.char !== char && (
+                    <span className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-brand-500" />
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        </>
+      )}
     </div>
   )
 }
