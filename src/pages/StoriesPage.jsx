@@ -5,8 +5,10 @@ import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
 import { parseLevelRank } from '../lib/contentLevel'
 import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
+import { useScrollRestoration } from '../lib/useScrollRestoration'
 
 export default function StoriesPage() {
+  useScrollRestoration('stories')
   const navigate = useNavigate()
   const { completedStories } = useProgress()
   // Sap xep tu de den kho theo cap do co san (vd "HSK1" truoc "HSK2-3"), kem

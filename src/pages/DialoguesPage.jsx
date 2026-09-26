@@ -3,8 +3,10 @@ import { DIALOGUES } from '../data/dialogues'
 import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
 import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
+import { useScrollRestoration } from '../lib/useScrollRestoration'
 
 export default function DialoguesPage() {
+  useScrollRestoration('dialogues')
   const navigate = useNavigate()
   const { completedDialogues } = useProgress()
   const doneCount = DIALOGUES.filter((d) => completedDialogues.includes(d.key)).length

@@ -26,6 +26,7 @@ import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { getCurrentCombo, getComboByUnitKey } from '../lib/curriculum'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
 import { todayKey } from '../lib/date'
+import { useScrollRestoration } from '../lib/useScrollRestoration'
 
 const STAT_STYLES = [
   { key: 'total', label: 'Tổng từ', className: 'bg-sky-100 text-sky-700' },
@@ -120,6 +121,7 @@ function isLevelDone(levelId, completedUnits) {
 }
 
 export default function HomePage() {
+  useScrollRestoration('home')
   const { srsState, completedUnits, streak, toneStats, xp, dailyXp, writingPerfectCount, completedGrammar, writingStats, dailyCombo } =
     useProgress()
   const { nickname } = useFirebaseSync()

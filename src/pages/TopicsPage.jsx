@@ -4,8 +4,10 @@ import { TOPICS, getTopicWords, getTopicLevel } from '../data/topics'
 import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
 import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
+import { useScrollRestoration } from '../lib/useScrollRestoration'
 
 export default function TopicsPage() {
+  useScrollRestoration('topics')
   const navigate = useNavigate()
   const { completedTopics } = useProgress()
   // Sap xep tu de den kho (theo do kho tu vung thuc te) thay vi thu tu tuy
