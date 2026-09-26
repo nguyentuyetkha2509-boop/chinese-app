@@ -78,7 +78,10 @@ export default function FlashcardsPage() {
   }
 
   function handleFlip() {
-    if (!flipped) playFlip()
+    if (!flipped) {
+      playFlip()
+      speakChinese(currentWord.hanzi)
+    }
     setFlipped((f) => !f)
   }
 
