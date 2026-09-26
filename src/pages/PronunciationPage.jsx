@@ -235,6 +235,7 @@ function RecordCompare({ words, levelId }) {
   const [audioUrl, setAudioUrl] = useState(null)
   const [aiResult, setAiResult] = useState(null) // null | 'match' | 'mismatch' | 'no-speech'
   const [heardText, setHeardText] = useState('')
+  const [aiChecking, setAiChecking] = useState(false)
   const mediaRecorderRef = useRef(null)
   const streamRef = useRef(null)
   const chunksRef = useRef([])
@@ -250,8 +251,17 @@ function RecordCompare({ words, levelId }) {
     }
   }, [])
 
-  function startRecognition() {
-    if (!SpeechRecognitionCtor) return
+  // Chay RIENG, SAU khi da dung ghi am (khong chay dong thoi voi MediaRecorder)
+  // - chay cung luc 2 thu deu doi quyen dung mic thuong khien engine nhan
+  // dien khong nhan duoc am thanh nao ca (bao "chua nghe ro" du noi to/gan mic
+  // co the vi mic dang bi MediaRecorder giu), nen phai tach thanh 2 buoc.
+  function runAiCheck() {
+    if (!SpeechRecognitionCtor || aiChecking) return
+    // Dam bao mic da duoc tha hoan toan truoc khi AI chiem lai, tranh tranh chap.
+    streamRef.current?.getTracks().forEach((t) => t.stop())
+    streamRef.current = null
+    window.speechSynthesis?.cancel()
+
     let gotResult = false
     const recognition = new SpeechRecognitionCtor()
     recognition.lang = 'zh-CN'
@@ -268,15 +278,24 @@ function RecordCompare({ words, levelId }) {
       recordToneAnswer(levelId, isMatch)
       if (isMatch) addXp(XP_REWARDS.toneCorrect)
     }
+    recognition.onerror = () => {
+      recognitionRef.current = null
+      setAiChecking(false)
+      if (!gotResult) setAiResult('no-speech')
+    }
     recognition.onend = () => {
       recognitionRef.current = null
+      setAiChecking(false)
       if (!gotResult) setAiResult('no-speech')
     }
     try {
+      setAiResult(null)
+      setHeardText('')
+      setAiChecking(true)
       recognition.start()
       recognitionRef.current = recognition
     } catch {
-      // Chi la tinh nang phu, loi thi bo qua, khong lam vo luong ghi am chinh.
+      setAiChecking(false)
     }
   }
 
@@ -309,11 +328,14 @@ function RecordCompare({ words, levelId }) {
         const blob = new Blob(chunksRef.current, { type: recorder.mimeType || 'audio/webm' })
         setAudioUrl(URL.createObjectURL(blob))
         setStatus('recorded')
+        // Tha mic ngay sau khi ghi xong (khong giu stream cho lan sau nua) de
+        // AI nhan dien giong noi co the chiem mic sach se, khong bi tranh chap.
+        stream.getTracks().forEach((t) => t.stop())
+        streamRef.current = null
         playCorrect()
       }
       recorder.start()
       mediaRecorderRef.current = recorder
-      startRecognition()
       setStatus('recording')
       playFlip()
     } catch {
@@ -324,7 +346,6 @@ function RecordCompare({ words, levelId }) {
 
   function stopRecording() {
     mediaRecorderRef.current?.stop()
-    recognitionRef.current?.stop()
   }
 
   function resetRecording() {
@@ -333,6 +354,7 @@ function RecordCompare({ words, levelId }) {
     setStatus('idle')
     setAiResult(null)
     setHeardText('')
+    setAiChecking(false)
   }
 
   function nextWord() {
@@ -409,6 +431,25 @@ function RecordCompare({ words, levelId }) {
           <p className="text-center text-xs text-gray-400">
             ℹ️ Trình duyệt này chưa hỗ trợ AI nhận diện giọng nói tự động - vẫn ghi âm để tự nghe lại so sánh được.
           </p>
+        )}
+        {SpeechRecognitionCtor && status === 'recorded' && (
+          <>
+            {!aiResult && (
+              <p className="text-center text-xs text-gray-500">
+                Đọc lại từ này 1 lần nữa gần micro để AI chấm điểm phát âm nhé
+              </p>
+            )}
+            <button
+              onClick={runAiCheck}
+              disabled={aiChecking}
+              className={`flex items-center gap-2 rounded-full bg-brand-700 px-6 py-3 text-white disabled:opacity-70 ${
+                aiChecking ? 'animate-pulse' : ''
+              }`}
+            >
+              <MicIcon width={20} height={20} />
+              {aiChecking ? '🎤 Đang nghe...' : aiResult ? '🤖 Thử lại với AI' : '🤖 Chấm điểm bằng AI'}
+            </button>
+          </>
         )}
         {aiResult && (
           <div
