@@ -1,6 +1,7 @@
 import homeIconImg from '../assets/icons-gemini/home.png'
 import bookIconImg from '../assets/icons-gemini/book.png'
 import cardsIconImg from '../assets/icons-gemini/cards.png'
+import micIconImg from '../assets/icons-gemini/mic.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -74,25 +75,16 @@ export function CardsIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function MicIcon(props) {
+export function MicIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Panda head */}
-      <circle cx="22" cy="28" r="9" fill="white" stroke="#2d1b4e" strokeWidth="1.5"/>
-      <circle cx="18" cy="24" r="3" fill="#2d1b4e"/>
-      <circle cx="26" cy="24" r="3" fill="#2d1b4e"/>
-      <circle cx="18.5" cy="23" r="1" fill="white"/>
-      <circle cx="25.5" cy="23" r="1" fill="white"/>
-      <circle cx="22" cy="28" r="1" fill="#2d1b4e"/>
-      <path d="M20 30 Q22 32 24 30" stroke="#2d1b4e" strokeWidth="1" fill="none" strokeLinecap="round"/>
-      {/* Microphone */}
-      <rect x="10" y="18" width="4" height="8" rx="2" fill="#8b4dff" stroke="#2d1b4e" strokeWidth="1"/>
-      <path d="M12 26 L12 32" stroke="#2d1b4e" strokeWidth="1.5"/>
-      <circle cx="12" cy="33" r="2" fill="#2d1b4e"/>
-      {/* Sound waves */}
-      <path d="M 30 24 Q 34 24 34 28" fill="none" stroke="#52c41a" strokeWidth="1"/>
-      <path d="M 32 22 Q 37 22 37 28" fill="none" stroke="#52c41a" strokeWidth="1"/>
-    </svg>
+    <img
+      src={micIconImg}
+      width={width}
+      height={height}
+      alt="Phát âm"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
