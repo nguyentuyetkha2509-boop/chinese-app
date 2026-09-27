@@ -3,6 +3,8 @@ import bookIconImg from '../assets/icons-gemini/book.png'
 import cardsIconImg from '../assets/icons-gemini/cards.png'
 import micIconImg from '../assets/icons-gemini/mic.png'
 import pencilIconImg from '../assets/icons-gemini/pencil.png'
+import checkIconImg from '../assets/icons-gemini/check.png'
+import bellIconImg from '../assets/icons-gemini/bell.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -102,41 +104,29 @@ export function PencilIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function CheckIcon(props) {
+export function CheckIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Checkmark with celebration */}
-      <circle cx="32" cy="32" r="16" fill="#52c41a" stroke="#2d1b4e" strokeWidth="2"/>
-      <path d="M 22 32 L 28 38 L 40 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-      {/* Panda celebrating */}
-      <circle cx="12" cy="18" r="5" fill="white" stroke="#2d1b4e" strokeWidth="1"/>
-      <circle cx="10" cy="16" r="1.5" fill="#2d1b4e"/>
-      <circle cx="14" cy="16" r="1.5" fill="#2d1b4e"/>
-      <circle cx="12" cy="19" r="0.5" fill="#2d1b4e"/>
-      <path d="M10.5 20 Q12 21 13.5 20" stroke="#2d1b4e" strokeWidth="0.6" fill="none" strokeLinecap="round"/>
-      {/* Sparkles */}
-      <path d="M 48 20 L 49 21 L 48 22 L 47 21 Z" fill="#ffc000"/>
-      <path d="M 10 42 L 11 43 L 10 44 L 9 43 Z" fill="#ffc000"/>
-    </svg>
+    <img
+      src={checkIconImg}
+      width={width}
+      height={height}
+      alt="Hoàn thành"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
-export function BellIcon(props) {
+export function BellIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Bell shape */}
-      <path d="M 12 10 Q 10 10 10 12 Q 10 18 12 20 L 20 20 Q 22 18 22 12 Q 22 10 20 10 Z" fill="#f5d547" stroke="#2d1b4e" strokeWidth="1.5"/>
-      {/* Bell clapper */}
-      <circle cx="16" cy="21" r="2" fill="#8b6f47" stroke="#2d1b4e" strokeWidth="1"/>
-      {/* Panda ringing bell */}
-      <circle cx="28" cy="14" r="5" fill="white" stroke="#2d1b4e" strokeWidth="1"/>
-      <circle cx="26" cy="12" r="1.5" fill="#2d1b4e"/>
-      <circle cx="30" cy="12" r="1.5" fill="#2d1b4e"/>
-      <circle cx="28" cy="15" r="0.5" fill="#2d1b4e"/>
-      {/* Motion lines */}
-      <line x1="22" y1="8" x2="26" y2="6" stroke="#b19cd9" strokeWidth="1" strokeLinecap="round"/>
-      <line x1="22" y1="12" x2="25" y2="10" stroke="#b19cd9" strokeWidth="1" strokeLinecap="round"/>
-    </svg>
+    <img
+      src={bellIconImg}
+      width={width}
+      height={height}
+      alt="Thông báo"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
