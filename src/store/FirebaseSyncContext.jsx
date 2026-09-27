@@ -22,11 +22,33 @@ export function FirebaseSyncProvider({ children }) {
   const [nickname, setNicknameState] = useState(null)
   const debounceRef = useRef(null)
   const skipNextAutoPush = useRef(true)
+  const reconciledUidRef = useRef(null)
 
   useEffect(() => onAuthStateChanged(auth, (u) => {
     setUser(u)
     setAuthReady(true)
   }), [])
+
+  function isLocalProgressEmpty() {
+    return progress.xp === 0 && progress.completedUnits.length === 0 && Object.keys(progress.srsState).length === 0
+  }
+
+  // Phien dang nhap Google co the duoc khoi phuc tu dinh danh da luu (vd.
+  // localStorage bi xoa rieng nhung phien Firebase Auth van con), khien app
+  // vao thang giao dien chinh voi tien do local rong ma khong qua man hinh
+  // Chao mung/Cai dat - noi von co logic hoi Tai ve/Day len. Neu khong kiem
+  // tra o day, luot tu-dong-day-len ben duoi se am tham ghi de mat sach ban
+  // sao luu that su tren dam may bang du lieu rong nay.
+  useEffect(() => {
+    if (!user) return
+    if (reconciledUidRef.current === user.uid) return
+    reconciledUidRef.current = user.uid
+    if (!isLocalProgressEmpty()) return
+    checkRemote(user.uid).then((info) => {
+      if (info.hasRemoteData) pullNow(user.uid)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   // Moi khi co phien dang nhap (dang nhap moi hoac khoi phuc tu session cu),
   // kiem tra xem da dat bi danh cho bang xep hang chua.
@@ -128,6 +150,10 @@ export function FirebaseSyncProvider({ children }) {
       skipNextAutoPush.current = false
       return
     }
+    // Khong bao gio tu dong day tien do RONG len - tranh ghi de mat ban sao
+    // luu that su khi tien do local bi mat (vd. do trinh duyet xoa du lieu)
+    // truoc khi kip doi chieu voi dam may.
+    if (isLocalProgressEmpty()) return
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => {
       pushNow()
