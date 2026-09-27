@@ -2,6 +2,7 @@ import homeIconImg from '../assets/icons-gemini/home.png'
 import bookIconImg from '../assets/icons-gemini/book.png'
 import cardsIconImg from '../assets/icons-gemini/cards.png'
 import micIconImg from '../assets/icons-gemini/mic.png'
+import pencilIconImg from '../assets/icons-gemini/pencil.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -88,27 +89,16 @@ export function MicIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function PencilIcon(props) {
+export function PencilIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Panda */}
-      <circle cx="18" cy="32" r="8" fill="white" stroke="#2d1b4e" strokeWidth="1.5"/>
-      <circle cx="15" cy="29" r="2.5" fill="#2d1b4e"/>
-      <circle cx="21" cy="29" r="2.5" fill="#2d1b4e"/>
-      <circle cx="15.5" cy="28" r="0.7" fill="white"/>
-      <circle cx="20.5" cy="28" r="0.7" fill="white"/>
-      <circle cx="18" cy="32" r="0.8" fill="#2d1b4e"/>
-      <path d="M16.5 33.5 Q18 35 19.5 33.5" stroke="#2d1b4e" strokeWidth="0.8" fill="none" strokeLinecap="round"/>
-      {/* Brush/Pencil */}
-      <g transform="translate(22, 26)">
-        <rect x="0" y="0" width="2" height="10" fill="#8b6f47" stroke="#2d1b4e" strokeWidth="0.8"/>
-        <rect x="-2" y="10" width="6" height="2" fill="#f5d547" stroke="#2d1b4e" strokeWidth="0.8"/>
-        <path d="M -2 12 L 4 12 L 2 16 L 0 16 Z" fill="#2d1b4e" opacity="0.6"/>
-      </g>
-      {/* Paper/Canvas */}
-      <rect x="6" y="20" width="10" height="12" rx="1" fill="#fff9e6" stroke="#2d1b4e" strokeWidth="1"/>
-      <text x="11" y="28" fontSize="5" textAnchor="middle" fill="#f5d547" fontWeight="bold">汉字</text>
-    </svg>
+    <img
+      src={pencilIconImg}
+      width={width}
+      height={height}
+      alt="Viết chữ"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
