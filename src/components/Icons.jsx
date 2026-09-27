@@ -1,3 +1,5 @@
+import homeIconImg from '../assets/icons-gemini/home.png'
+
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
 }
@@ -31,25 +33,16 @@ function PandaMascot({ x = 0, y = 0, scale = 1 }) {
   )
 }
 
-export function HomeIcon(props) {
+export function HomeIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Background - roof shape */}
-      <path d="M 8 28 L 32 8 L 56 28 Z" fill="#b19cd9" stroke="#2d1b4e" strokeWidth="2"/>
-      {/* House body */}
-      <rect x="12" y="28" width="40" height="28" rx="2" fill="#e6c5ff" stroke="#2d1b4e" strokeWidth="2"/>
-      {/* Door */}
-      <rect x="26" y="36" width="12" height="20" rx="2" fill="#fff9e6" stroke="#2d1b4e" strokeWidth="1.5"/>
-      {/* Door handle */}
-      <circle cx="37" cy="46" r="1.5" fill="#ffc000"/>
-      {/* Window */}
-      <rect x="14" y="32" width="8" height="8" rx="1" fill="#fff9e6" stroke="#2d1b4e" strokeWidth="1"/>
-      {/* Bamboo decoration */}
-      <g transform="translate(48, 20)">
-        <rect x="0" y="0" width="3" height="12" rx="1" fill="#52c41a"/>
-        <path d="M-2 3 L4 3 M-2 7 L4 7" stroke="#2d1b4e" strokeWidth="0.5"/>
-      </g>
-    </svg>
+    <img
+      src={homeIconImg}
+      width={width}
+      height={height}
+      alt="Trang chủ"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
