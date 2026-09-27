@@ -9,6 +9,7 @@ import { VolumeIcon, MicIcon, ArrowLeftIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import CelebrationBadge from '../components/CelebrationBadge'
+import pronunciationPanda from '../assets/panda/pronunciation_panda.png'
 
 const TONE_LABELS = {
   1: { mark: 'ˉ', name: 'Thanh 1 (ngang)', idleClass: 'border-sky-200 bg-sky-100 text-sky-700' },
@@ -524,6 +525,10 @@ export default function PronunciationPage() {
       )}
       {!ttsOk && (
         <p className="mb-3 text-sm text-red-500">Trình duyệt không hỗ trợ đọc giọng tiếng Trung.</p>
+      )}
+
+      {!scopedUnit && (
+        <img src={pronunciationPanda} alt="Panda hát" className="mx-auto h-40 w-auto mb-4 drop-shadow-lg" />
       )}
 
       {!scopedUnit && <LevelTabs value={levelId} onChange={setLevelId} />}
