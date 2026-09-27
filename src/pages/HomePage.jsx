@@ -22,6 +22,7 @@ import {
 } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import trophyPanda from '../assets/panda/trophy_panda.webp'
+import headerPanda from '../assets/icons-gemini/header_panda.png'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { getCurrentCombo, getComboByUnitKey } from '../lib/curriculum'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
@@ -184,7 +185,10 @@ export default function HomePage() {
       <header className="mb-4 flex items-center justify-between">
         <div>
           <p className="text-base italic text-candy-600">Chào {nickname || 'bạn'} 👋</p>
-          <h1 className="text-2xl text-brand-800">🐼 PandaChinese</h1>
+          <h1 className="flex items-center gap-1.5 text-2xl text-brand-800">
+            <img src={headerPanda} alt="" width={28} height={28} className="inline-block" />
+            PandaChinese
+          </h1>
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1 rounded-full bg-sun-100 px-3 py-1.5 text-sun-600">
