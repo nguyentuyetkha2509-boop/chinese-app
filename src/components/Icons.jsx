@@ -8,6 +8,8 @@ import bellIconImg from '../assets/icons-gemini/bell.png'
 import grammarIconImg from '../assets/icons-gemini/grammar.png'
 import fireIconImg from '../assets/icons-gemini/fire.png'
 import volumeIconImg from '../assets/icons-gemini/volume.png'
+import shuffleIconImg from '../assets/icons-gemini/shuffle.png'
+import arrowRightIconImg from '../assets/icons-gemini/arrow_right.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -174,18 +176,16 @@ export function ArrowLeftIcon(props) {
   )
 }
 
-export function ArrowRightIcon(props) {
+export function ArrowRightIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Arrow pointing right with panda */}
-      <path d="M 44 32 L 56 32" stroke="#2d1b4e" strokeWidth="2.5" strokeLinecap="round"/>
-      <path d="M 54 28 L 56 32 L 54 36" stroke="#2d1b4e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-      {/* Panda */}
-      <circle cx="26" cy="32" r="6" fill="white" stroke="#2d1b4e" strokeWidth="1.2"/>
-      <circle cx="24" cy="30" r="1.8" fill="#2d1b4e"/>
-      <circle cx="28" cy="30" r="1.8" fill="#2d1b4e"/>
-      <circle cx="26" cy="33" r="0.6" fill="#2d1b4e"/>
-    </svg>
+    <img
+      src={arrowRightIconImg}
+      width={width}
+      height={height}
+      alt="Tiếp theo"
+      style={{ display: 'inline-block' }}
+      {...props}
+    />
   )
 }
 
@@ -275,22 +275,16 @@ export function StoryIcon(props) {
   )
 }
 
-export function ShuffleIcon(props) {
+export function ShuffleIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Shuffle arrows */}
-      <line x1="8" y1="10" x2="28" y2="10" stroke="#2d1b4e" strokeWidth="2"/>
-      <path d="M 26 8 L 28 10 L 26 12" fill="none" stroke="#2d1b4e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <line x1="36" y1="24" x2="16" y2="24" stroke="#2d1b4e" strokeWidth="2"/>
-      <path d="M 18 22 L 16 24 L 18 26" fill="none" stroke="#2d1b4e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      {/* Panda jumping */}
-      <circle cx="44" cy="18" r="6" fill="white" stroke="#2d1b4e" strokeWidth="1.2"/>
-      <circle cx="42" cy="16" r="1.8" fill="#2d1b4e"/>
-      <circle cx="46" cy="16" r="1.8" fill="#2d1b4e"/>
-      <path d="M 44 20 Q 46 22 48 20" stroke="#2d1b4e" strokeWidth="0.8" fill="none" strokeLinecap="round"/>
-      {/* Motion line */}
-      <line x1="50" y1="14" x2="54" y2="16" stroke="#52c41a" strokeWidth="1.5" strokeLinecap="round"/>
-    </svg>
+    <img
+      src={shuffleIconImg}
+      width={width}
+      height={height}
+      alt="Sắp xếp câu"
+      style={{ display: 'inline-block' }}
+      {...props}
+    />
   )
 }
 
