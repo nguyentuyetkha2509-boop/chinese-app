@@ -16,6 +16,8 @@ import trophyIconImg from '../assets/icons-gemini/trophy.png'
 import zapIconImg from '../assets/icons-gemini/zap.png'
 import chatIconImg from '../assets/icons-gemini/chat.png'
 import storyIconImg from '../assets/icons-gemini/story.png'
+import topicIconImg from '../assets/icons-gemini/topic.png'
+import earIconImg from '../assets/icons-gemini/ear.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -219,22 +221,16 @@ export function ChatIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function TopicIcon(props) {
+export function TopicIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Topic tag/label shape */}
-      <path d="M 8 8 L 24 8 L 28 16 L 24 24 L 8 24 Q 4 20 4 16 Q 4 12 8 8 Z" fill="#b19cd9" stroke="#2d1b4e" strokeWidth="1.5"/>
-      {/* Theme icon - Chinese temple/building */}
-      <rect x="10" y="14" width="10" height="8" fill="#e6c5ff" stroke="#2d1b4e" strokeWidth="0.8"/>
-      <polygon points="10,14 15,10 20,14" fill="#f5d547" stroke="#2d1b4e" strokeWidth="0.8"/>
-      <circle cx="12" cy="16" r="0.8" fill="#2d1b4e"/>
-      <circle cx="18" cy="16" r="0.8" fill="#2d1b4e"/>
-      {/* Panda sticker */}
-      <circle cx="26" cy="10" r="4" fill="white" stroke="#2d1b4e" strokeWidth="1"/>
-      <circle cx="24" cy="9" r="1.2" fill="#2d1b4e"/>
-      <circle cx="28" cy="9" r="1.2" fill="#2d1b4e"/>
-      <circle cx="26" cy="11" r="0.5" fill="#2d1b4e"/>
-    </svg>
+    <img
+      src={topicIconImg}
+      width={width}
+      height={height}
+      alt="Học theo chủ đề"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
@@ -277,22 +273,16 @@ export function SettingsIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function EarIcon(props) {
+export function EarIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Large ear shape */}
-      <path d="M 20 12 Q 16 12 14 16 Q 12 20 16 28 Q 20 32 24 28 Q 28 20 26 16 Q 24 12 20 12 Z" fill="#e6c5ff" stroke="#2d1b4e" strokeWidth="1.5"/>
-      {/* Inner ear */}
-      <path d="M 20 16 Q 18 18 18 22 Q 18 26 20 26 Q 22 26 22 22 Q 22 18 20 16 Z" fill="#b19cd9" stroke="#2d1b4e" strokeWidth="1"/>
-      {/* Panda head listening */}
-      <circle cx="38" cy="22" r="6" fill="white" stroke="#2d1b4e" strokeWidth="1.2"/>
-      <circle cx="36" cy="20" r="1.8" fill="#2d1b4e"/>
-      <circle cx="40" cy="20" r="1.8" fill="#2d1b4e"/>
-      <circle cx="38" cy="23" r="0.6" fill="#2d1b4e"/>
-      {/* Motion lines showing listening */}
-      <path d="M 30 14 Q 32 14 32 16" fill="none" stroke="#52c41a" strokeWidth="1" strokeLinecap="round"/>
-      <path d="M 30 26 Q 32 26 32 24" fill="none" stroke="#52c41a" strokeWidth="1" strokeLinecap="round"/>
-    </svg>
+    <img
+      src={earIconImg}
+      width={width}
+      height={height}
+      alt="Nghe"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
