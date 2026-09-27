@@ -44,7 +44,7 @@ export default function App() {
   }
 
   return (
-    <div className="mx-auto min-h-screen max-w-md bg-canvas pb-20 pt-[env(safe-area-inset-top)]">
+    <div className="mx-auto min-h-screen max-w-md bg-canvas pb-20 pt-[max(env(safe-area-inset-top),28px)]">
       <TtsWarning />
       <NicknamePrompt />
       <DailyReminder />
