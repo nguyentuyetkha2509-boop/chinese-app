@@ -6,6 +6,8 @@ import pencilIconImg from '../assets/icons-gemini/pencil.png'
 import checkIconImg from '../assets/icons-gemini/check.png'
 import bellIconImg from '../assets/icons-gemini/bell.png'
 import grammarIconImg from '../assets/icons-gemini/grammar.png'
+import fireIconImg from '../assets/icons-gemini/fire.png'
+import volumeIconImg from '../assets/icons-gemini/volume.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -131,42 +133,29 @@ export function BellIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function FireIcon(props) {
+export function FireIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Fire shape */}
-      <path d="M 24 12 Q 20 18 20 24 Q 20 32 26 36 Q 32 32 32 24 Q 32 18 28 12 Z" fill="#ff6b6b" stroke="#2d1b4e" strokeWidth="1.5"/>
-      {/* Flame middle */}
-      <path d="M 24 14 Q 22 18 22 22 Q 22 28 24 32 Q 26 28 26 22 Q 26 18 24 14 Z" fill="#ffc000" stroke="none"/>
-      {/* Panda with energy */}
-      <circle cx="38" cy="22" r="6" fill="white" stroke="#2d1b4e" strokeWidth="1.2"/>
-      <circle cx="36" cy="20" r="1.8" fill="#2d1b4e"/>
-      <circle cx="40" cy="20" r="1.8" fill="#2d1b4e"/>
-      <circle cx="38" cy="23" r="0.7" fill="#2d1b4e"/>
-      <path d="M36.5 24.5 Q38 26 39.5 24.5" stroke="#2d1b4e" strokeWidth="0.8" fill="none" strokeLinecap="round"/>
-      {/* Energy sparkles */}
-      <path d="M 44 16 L 45 17 L 44 18 L 43 17 Z" fill="#ffc000"/>
-      <path d="M 48 24 L 49 25 L 48 26 L 47 25 Z" fill="#ffc000"/>
-    </svg>
+    <img
+      src={fireIconImg}
+      width={width}
+      height={height}
+      alt="Năng lượng"
+      style={{ display: 'inline-block' }}
+      {...props}
+    />
   )
 }
 
-export function VolumeIcon(props) {
+export function VolumeIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Speaker cone */}
-      <path d="M 8 14 L 8 22 L 14 24 L 14 12 Z" fill="#b19cd9" stroke="#2d1b4e" strokeWidth="1.5"/>
-      {/* Speaker back */}
-      <rect x="6" y="14" width="4" height="8" rx="1" fill="#8b4dff" stroke="#2d1b4e" strokeWidth="1"/>
-      {/* Sound waves */}
-      <path d="M 18 18 Q 22 18 22 22" fill="none" stroke="#52c41a" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M 20 16 Q 26 16 26 22" fill="none" stroke="#52c41a" strokeWidth="2" strokeLinecap="round"/>
-      {/* Panda listening */}
-      <circle cx="38" cy="20" r="5" fill="white" stroke="#2d1b4e" strokeWidth="1"/>
-      <circle cx="36" cy="18" r="1.5" fill="#2d1b4e"/>
-      <circle cx="40" cy="18" r="1.5" fill="#2d1b4e"/>
-      <circle cx="38" cy="21" r="0.5" fill="#2d1b4e"/>
-    </svg>
+    <img
+      src={volumeIconImg}
+      width={width}
+      height={height}
+      alt="Âm lượng"
+      style={{ display: 'inline-block' }}
+      {...props}
+    />
   )
 }
 
