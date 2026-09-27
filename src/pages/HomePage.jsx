@@ -10,7 +10,7 @@ import {
   MicIcon,
   PencilIcon,
   ArrowRightIcon,
-  ZapIcon,
+  SpeedIcon,
   TopicIcon,
   ChatIcon,
   StoryIcon,
@@ -109,7 +109,7 @@ const EXTRA_CARDS = [
   },
   {
     to: '/tro-choi',
-    icon: ZapIcon,
+    icon: SpeedIcon,
     title: 'Đua tốc độ',
     className: 'col-span-2 bg-gradient-to-br from-candy-500 via-brand-500 to-sky-500'
   }

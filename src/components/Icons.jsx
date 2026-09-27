@@ -19,6 +19,7 @@ import storyIconImg from '../assets/icons-gemini/story.png'
 import topicIconImg from '../assets/icons-gemini/topic.png'
 import earIconImg from '../assets/icons-gemini/ear.png'
 import shieldIconImg from '../assets/icons-gemini/shield.png'
+import speedIconImg from '../assets/icons-gemini/speed.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -320,6 +321,19 @@ export function ShieldIcon({ width = 32, height = 32, ...props }) {
       width={width}
       height={height}
       alt="Bảo vệ"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
+  )
+}
+
+export function SpeedIcon({ width = 32, height = 32, ...props }) {
+  return (
+    <img
+      src={speedIconImg}
+      width={width}
+      height={height}
+      alt="Đua tốc độ"
       style={{ display: 'inline-block', borderRadius: '22%' }}
       {...props}
     />
