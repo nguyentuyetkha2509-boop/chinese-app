@@ -1,4 +1,5 @@
 import homeIconImg from '../assets/icons-gemini/home.png'
+import bookIconImg from '../assets/icons-gemini/book.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -46,26 +47,16 @@ export function HomeIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function BookIcon(props) {
+export function BookIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Panda with book */}
-      <circle cx="18" cy="32" r="10" fill="white" stroke="#2d1b4e" strokeWidth="1.5"/>
-      <circle cx="12" cy="26" r="4" fill="#2d1b4e"/>
-      <circle cx="24" cy="26" r="4" fill="#2d1b4e"/>
-      <circle cx="14" cy="26" r="1.5" fill="white"/>
-      <circle cx="22" cy="26" r="1.5" fill="white"/>
-      <circle cx="18" cy="30" r="1.5" fill="#2d1b4e"/>
-      <path d="M16 32 Q18 34 20 32" stroke="#2d1b4e" strokeWidth="1" fill="none" strokeLinecap="round"/>
-      {/* Book */}
-      <rect x="26" y="22" width="14" height="18" rx="1" fill="#b19cd9" stroke="#2d1b4e" strokeWidth="1.5"/>
-      <path d="M33 22 L33 40" stroke="#2d1b4e" strokeWidth="1"/>
-      <line x1="28" y1="26" x2="38" y2="26" stroke="#f5d547" strokeWidth="0.8"/>
-      <line x1="28" y1="30" x2="38" y2="30" stroke="#f5d547" strokeWidth="0.8"/>
-      <line x1="28" y1="34" x2="38" y2="34" stroke="#f5d547" strokeWidth="0.8"/>
-      {/* Sparkles */}
-      <path d="M 48 18 L 49 19 L 48 20 L 47 19 Z" fill="#ffc000"/>
-    </svg>
+    <img
+      src={bookIconImg}
+      width={width}
+      height={height}
+      alt="Bài học"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
