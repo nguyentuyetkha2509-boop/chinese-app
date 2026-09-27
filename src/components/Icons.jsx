@@ -13,6 +13,8 @@ import arrowRightIconImg from '../assets/icons-gemini/arrow_right.png'
 import arrowLeftIconImg from '../assets/icons-gemini/arrow_left.png'
 import settingsIconImg from '../assets/icons-gemini/settings.png'
 import trophyIconImg from '../assets/icons-gemini/trophy.png'
+import zapIconImg from '../assets/icons-gemini/zap.png'
+import chatIconImg from '../assets/icons-gemini/chat.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -190,49 +192,29 @@ export function ArrowRightIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function ZapIcon(props) {
+export function ZapIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Lightning bolt */}
-      <path d="M 28 8 L 22 20 L 28 20 L 20 38 L 32 24 L 26 24 Z" fill="#ffc000" stroke="#2d1b4e" strokeWidth="1.5" strokeLinejoin="round"/>
-      {/* Panda with power */}
-      <circle cx="44" cy="24" r="6" fill="white" stroke="#2d1b4e" strokeWidth="1.2"/>
-      <circle cx="42" cy="22" r="1.8" fill="#2d1b4e"/>
-      <circle cx="46" cy="22" r="1.8" fill="#2d1b4e"/>
-      <circle cx="44" cy="25" r="0.7" fill="#2d1b4e"/>
-      <path d="M42 26.5 Q44 28 46 26.5" stroke="#2d1b4e" strokeWidth="0.8" fill="none" strokeLinecap="round"/>
-      {/* Power aura */}
-      <circle cx="44" cy="24" r="9" fill="none" stroke="#ffc000" strokeWidth="1"/>
-    </svg>
+    <img
+      src={zapIconImg}
+      width={width}
+      height={height}
+      alt="Kiên trì"
+      style={{ display: 'inline-block' }}
+      {...props}
+    />
   )
 }
 
-export function ChatIcon(props) {
+export function ChatIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Left panda */}
-      <circle cx="14" cy="28" r="6" fill="white" stroke="#2d1b4e" strokeWidth="1.2"/>
-      <circle cx="12" cy="26" r="1.8" fill="#2d1b4e"/>
-      <circle cx="16" cy="26" r="1.8" fill="#2d1b4e"/>
-      <circle cx="12.5" cy="25.5" r="0.5" fill="white"/>
-      <circle cx="15.5" cy="25.5" r="0.5" fill="white"/>
-      <circle cx="14" cy="28" r="0.6" fill="#2d1b4e"/>
-      {/* Right panda */}
-      <circle cx="36" cy="28" r="6" fill="white" stroke="#2d1b4e" strokeWidth="1.2"/>
-      <circle cx="34" cy="26" r="1.8" fill="#2d1b4e"/>
-      <circle cx="38" cy="26" r="1.8" fill="#2d1b4e"/>
-      <circle cx="34.5" cy="25.5" r="0.5" fill="white"/>
-      <circle cx="37.5" cy="25.5" r="0.5" fill="white"/>
-      <circle cx="36" cy="28" r="0.6" fill="#2d1b4e"/>
-      {/* Speech bubbles */}
-      <rect x="8" y="16" width="10" height="6" rx="1.5" fill="#b19cd9" stroke="#2d1b4e" strokeWidth="0.8"/>
-      <polygon points="10,22 8,24 12,22" fill="#b19cd9"/>
-      <rect x="26" y="20" width="10" height="6" rx="1.5" fill="#52c41a" stroke="#2d1b4e" strokeWidth="0.8"/>
-      <polygon points="28,26 26,28 30,26" fill="#52c41a"/>
-      {/* Sparkles */}
-      <path d="M 44 20 L 45 21 L 44 22 L 43 21 Z" fill="#ffc000"/>
-      <path d="M 8 14 L 9 15 L 8 16 L 7 15 Z" fill="#ffc000"/>
-    </svg>
+    <img
+      src={chatIconImg}
+      width={width}
+      height={height}
+      alt="Hội thoại"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
