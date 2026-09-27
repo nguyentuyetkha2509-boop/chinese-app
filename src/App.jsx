@@ -44,11 +44,25 @@ export default function App() {
   }
 
   return (
-    <div className="mx-auto min-h-screen max-w-md bg-canvas pb-20">
-      <TtsWarning />
-      <NicknamePrompt />
-      <DailyReminder />
-      <Routes>
+    <div
+      className="relative mx-auto min-h-screen max-w-md overflow-hidden pb-20"
+      style={{ background: 'linear-gradient(160deg, #8a7ee6 0%, #7b95e8 32%, #6fb0ea 62%, #dcebfa 100%)' }}
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-50"
+        style={{
+          backgroundImage:
+            'radial-gradient(white 1px, transparent 1.5px), radial-gradient(white 1px, transparent 1.5px)',
+          backgroundSize: '48px 48px, 72px 72px',
+          backgroundPosition: '0 0, 24px 36px'
+        }}
+      />
+      <div className="relative">
+        <TtsWarning />
+        <NicknamePrompt />
+        <DailyReminder />
+        <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/hoc-hom-nay" element={<TodayPlanPage />} />
         <Route path="/lo-trinh" element={<RoadmapPage />} />
@@ -74,6 +88,7 @@ export default function App() {
         <Route path="/nghe-chep-chinh-ta" element={<DictationPage />} />
         <Route path="/cai-dat" element={<SettingsPage />} />
       </Routes>
+      </div>
       <BottomNav />
     </div>
   )
