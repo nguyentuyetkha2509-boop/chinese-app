@@ -1,4 +1,4 @@
-import heroPanda from '../assets/panda/hero_panda.png'
+import heroPanda from '../assets/panda/hero_panda.webp'
 
 export default function PandaHero() {
   return (
