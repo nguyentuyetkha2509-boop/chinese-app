@@ -13,7 +13,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,webmanifest}']
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,webmanifest}'],
+        skipWaiting: true,
+        clientsClaim: true,
+        cleanupOutdatedCaches: true
       },
       manifest: {
         name: 'PandaChinese',
