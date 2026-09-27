@@ -5,6 +5,7 @@ import micIconImg from '../assets/icons-gemini/mic.png'
 import pencilIconImg from '../assets/icons-gemini/pencil.png'
 import checkIconImg from '../assets/icons-gemini/check.png'
 import bellIconImg from '../assets/icons-gemini/bell.png'
+import grammarIconImg from '../assets/icons-gemini/grammar.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -345,24 +346,16 @@ export function EarIcon(props) {
   )
 }
 
-export function GrammarIcon(props) {
+export function GrammarIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Grammar book/text */}
-      <rect x="8" y="10" width="16" height="20" rx="2" fill="#fff9e6" stroke="#2d1b4e" strokeWidth="1.5"/>
-      {/* Text lines representing grammar rules */}
-      <line x1="12" y1="14" x2="20" y2="14" stroke="#2d1b4e" strokeWidth="1"/>
-      <line x1="12" y1="18" x2="22" y2="18" stroke="#2d1b4e" strokeWidth="1"/>
-      <line x1="12" y1="22" x2="20" y2="22" stroke="#2d1b4e" strokeWidth="1"/>
-      <line x1="12" y1="26" x2="22" y2="26" stroke="#2d1b4e" strokeWidth="1"/>
-      {/* Panda pointing at grammar */}
-      <circle cx="30" cy="22" r="6" fill="white" stroke="#2d1b4e" strokeWidth="1.2"/>
-      <circle cx="28" cy="20" r="1.8" fill="#2d1b4e"/>
-      <circle cx="32" cy="20" r="1.8" fill="#2d1b4e"/>
-      <circle cx="30" cy="24" r="0.7" fill="#2d1b4e"/>
-      {/* Pointing hand */}
-      <path d="M 35 22 L 38 22 L 38 20 L 40 20 L 38 24 L 38 22" fill="#8b4dff"/>
-    </svg>
+    <img
+      src={grammarIconImg}
+      width={width}
+      height={height}
+      alt="Ngữ pháp"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
