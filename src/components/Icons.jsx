@@ -1,5 +1,5 @@
 function base(props) {
-  return { viewBox: '0 0 64 64', width: 24, height: 24, ...props }
+  return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
 }
 
 // Panda mascot SVG để dùng lại
