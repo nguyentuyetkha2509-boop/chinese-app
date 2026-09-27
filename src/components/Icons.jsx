@@ -1,5 +1,6 @@
 import homeIconImg from '../assets/icons-gemini/home.png'
 import bookIconImg from '../assets/icons-gemini/book.png'
+import cardsIconImg from '../assets/icons-gemini/cards.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -60,27 +61,16 @@ export function BookIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function CardsIcon(props) {
+export function CardsIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Panda card */}
-      <rect x="4" y="12" width="18" height="20" rx="2" fill="white" stroke="#2d1b4e" strokeWidth="1.5"/>
-      {/* Chinese character on card */}
-      <text x="13" y="26" fontSize="10" fontWeight="bold" textAnchor="middle" fill="#2d1b4e" fontFamily="Arial">学</text>
-      <text x="13" y="38" fontSize="8" textAnchor="middle" fill="#b19cd9" fontFamily="Arial">Lesson</text>
-      {/* Panda peeking */}
-      <circle cx="10" cy="24" r="6" fill="white" stroke="#2d1b4e" strokeWidth="1.5"/>
-      <circle cx="7" cy="21" r="2" fill="#2d1b4e"/>
-      <circle cx="13" cy="21" r="2" fill="#2d1b4e"/>
-      <circle cx="7.5" cy="20" r="0.8" fill="white"/>
-      <circle cx="12.5" cy="20" r="0.8" fill="white"/>
-      <circle cx="10" cy="24" r="1" fill="#2d1b4e"/>
-      {/* Bamboo stick */}
-      <g transform="translate(42, 18)">
-        <rect x="0" y="0" width="2" height="14" fill="#52c41a"/>
-        <path d="M-1.5 4 L3.5 4 M-1.5 9 L3.5 9" stroke="#2d1b4e" strokeWidth="0.3"/>
-      </g>
-    </svg>
+    <img
+      src={cardsIconImg}
+      width={width}
+      height={height}
+      alt="Ôn tập"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
