@@ -7,7 +7,7 @@ export default function PandaHero() {
       <div className="pointer-events-none absolute -right-8 top-10 h-20 w-20 rounded-full bg-white/10" />
       <div className="pointer-events-none absolute bottom-0 right-6 h-14 w-14 rounded-full bg-sun-400/30" />
 
-      <img src={heroPanda} alt="Panda cầm sách" className="relative mx-auto h-40 w-auto drop-shadow-xl" />
+      <img src={heroPanda} alt="Panda cầm sách" className="relative mx-auto h-56 w-auto drop-shadow-xl" />
 
       <p className="relative mt-1 text-center text-sm font-semibold text-white drop-shadow">
         学中文, 加油! 💪 Học tiếng Trung mỗi ngày
