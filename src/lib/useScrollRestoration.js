@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 
 const STORE_KEY_PREFIX = 'scrollPos:'
 
@@ -11,14 +11,19 @@ const STORE_KEY_PREFIX = 'scrollPos:'
 export function useScrollRestoration(key) {
   const restored = useRef(false)
 
-  useEffect(() => {
+  // Dung useLayoutEffect (chay dong bo TRUOC khi trinh duyet ve khung hinh)
+  // thay vi useEffect + requestAnimationFrame (chay SAU khung hinh dau tien)
+  // - truoc day nguoi dung thay 2 cu nhay: mot ve dinh trang (mac dinh cua
+  // trinh duyet khi doi hash), roi mot cu nhay tiep toi vi tri da luu o
+  // khung hinh ke tiep, gay cam giac giat khi chuyen trang.
+  useLayoutEffect(() => {
     const storeKey = STORE_KEY_PREFIX + key
 
     if (!restored.current) {
       restored.current = true
       const saved = sessionStorage.getItem(storeKey)
       if (saved) {
-        requestAnimationFrame(() => window.scrollTo(0, Number(saved)))
+        window.scrollTo(0, Number(saved))
       }
     }
 
