@@ -11,6 +11,7 @@ import volumeIconImg from '../assets/icons-gemini/volume.png'
 import shuffleIconImg from '../assets/icons-gemini/shuffle.png'
 import arrowRightIconImg from '../assets/icons-gemini/arrow_right.png'
 import arrowLeftIconImg from '../assets/icons-gemini/arrow_left.png'
+import settingsIconImg from '../assets/icons-gemini/settings.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -287,25 +288,16 @@ export function ShuffleIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function SettingsIcon(props) {
+export function SettingsIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Settings gear with panda theme */}
-      <circle cx="32" cy="32" r="12" fill="none" stroke="#2d1b4e" strokeWidth="2"/>
-      {/* Gear teeth */}
-      <rect x="30" y="18" width="4" height="3" fill="#2d1b4e"/>
-      <rect x="30" y="43" width="4" height="3" fill="#2d1b4e"/>
-      <rect x="18" y="30" width="3" height="4" fill="#2d1b4e"/>
-      <rect x="43" y="30" width="3" height="4" fill="#2d1b4e"/>
-      {/* Center circle with panda */}
-      <circle cx="32" cy="32" r="8" fill="white" stroke="#2d1b4e" strokeWidth="1.5"/>
-      <circle cx="29" cy="30" r="2" fill="#2d1b4e"/>
-      <circle cx="35" cy="30" r="2" fill="#2d1b4e"/>
-      <circle cx="29.5" cy="29" r="0.6" fill="white"/>
-      <circle cx="34.5" cy="29" r="0.6" fill="white"/>
-      <circle cx="32" cy="33" r="0.6" fill="#2d1b4e"/>
-      <path d="M30 34 Q32 35 34 34" stroke="#2d1b4e" strokeWidth="0.7" fill="none" strokeLinecap="round"/>
-    </svg>
+    <img
+      src={settingsIconImg}
+      width={width}
+      height={height}
+      alt="Cài đặt"
+      style={{ display: 'inline-block' }}
+      {...props}
+    />
   )
 }
 
