@@ -10,6 +10,7 @@ import fireIconImg from '../assets/icons-gemini/fire.png'
 import volumeIconImg from '../assets/icons-gemini/volume.png'
 import shuffleIconImg from '../assets/icons-gemini/shuffle.png'
 import arrowRightIconImg from '../assets/icons-gemini/arrow_right.png'
+import arrowLeftIconImg from '../assets/icons-gemini/arrow_left.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -161,18 +162,16 @@ export function VolumeIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function ArrowLeftIcon(props) {
+export function ArrowLeftIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Arrow pointing left with panda */}
-      <path d="M 8 32 L 20 32" stroke="#2d1b4e" strokeWidth="2.5" strokeLinecap="round"/>
-      <path d="M 10 28 L 8 32 L 10 36" stroke="#2d1b4e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-      {/* Panda */}
-      <circle cx="38" cy="32" r="6" fill="white" stroke="#2d1b4e" strokeWidth="1.2"/>
-      <circle cx="36" cy="30" r="1.8" fill="#2d1b4e"/>
-      <circle cx="40" cy="30" r="1.8" fill="#2d1b4e"/>
-      <circle cx="38" cy="33" r="0.6" fill="#2d1b4e"/>
-    </svg>
+    <img
+      src={arrowLeftIconImg}
+      width={width}
+      height={height}
+      alt="Quay lại"
+      style={{ display: 'inline-block' }}
+      {...props}
+    />
   )
 }
 
