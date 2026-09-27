@@ -15,6 +15,7 @@ import settingsIconImg from '../assets/icons-gemini/settings.png'
 import trophyIconImg from '../assets/icons-gemini/trophy.png'
 import zapIconImg from '../assets/icons-gemini/zap.png'
 import chatIconImg from '../assets/icons-gemini/chat.png'
+import storyIconImg from '../assets/icons-gemini/story.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -237,24 +238,16 @@ export function TopicIcon(props) {
   )
 }
 
-export function StoryIcon(props) {
+export function StoryIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Open book pages */}
-      <path d="M8 10 Q8 8 12 8 L12 36 Q8 36 8 34 Z" fill="#b19cd9" stroke="#2d1b4e" strokeWidth="1.5"/>
-      <path d="M52 10 Q52 8 48 8 L48 36 Q52 36 52 34 Z" fill="#e6c5ff" stroke="#2d1b4e" strokeWidth="1.5"/>
-      {/* Text on pages */}
-      <line x1="12" y1="14" x2="30" y2="14" stroke="#2d1b4e" strokeWidth="0.8"/>
-      <line x1="12" y1="18" x2="35" y2="18" stroke="#2d1b4e" strokeWidth="0.8"/>
-      <line x1="12" y1="22" x2="32" y2="22" stroke="#2d1b4e" strokeWidth="0.8"/>
-      <line x1="32" y1="26" x2="48" y2="26" stroke="#2d1b4e" strokeWidth="0.8"/>
-      <line x1="30" y1="30" x2="48" y2="30" stroke="#2d1b4e" strokeWidth="0.8"/>
-      {/* Panda on the book */}
-      <circle cx="30" cy="16" r="5" fill="white" stroke="#2d1b4e" strokeWidth="1"/>
-      <circle cx="27" cy="14" r="1.5" fill="#2d1b4e"/>
-      <circle cx="33" cy="14" r="1.5" fill="#2d1b4e"/>
-      <circle cx="30" cy="17" r="0.8" fill="#2d1b4e"/>
-    </svg>
+    <img
+      src={storyIconImg}
+      width={width}
+      height={height}
+      alt="Truyện dài"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
 
