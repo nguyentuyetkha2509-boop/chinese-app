@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { TOPICS, getTopicWords, getTopicLevel } from '../data/topics'
 import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
-import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
+import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from '../components/Icons'
 import { useScrollRestoration } from '../lib/useScrollRestoration'
 
 export default function TopicsPage() {
@@ -58,7 +58,11 @@ export default function TopicsPage() {
               <p className="mt-2 text-base text-gray-800">{topic.title}</p>
               <div className="flex items-center justify-between">
                 <p className={`text-xs ${accent.text}`}>{count} từ · HSK{getTopicLevel(topic.key)}</p>
-                {isNext && <span className="text-[10px] font-semibold text-brand-600">👉 Tiếp theo</span>}
+                {isNext && (
+                  <span className="flex items-center gap-1 text-[10px] font-semibold text-brand-600">
+                    <ArrowRightIcon width={14} height={14} /> Tiếp theo
+                  </span>
+                )}
               </div>
             </Link>
           )

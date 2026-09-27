@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getUnitCombo } from '../lib/curriculum'
-import { CheckIcon, BookIcon } from '../components/Icons'
+import { CheckIcon, BookIcon, ArrowRightIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import lessonPanda from '../assets/panda/lesson_panda.webp'
@@ -79,8 +79,8 @@ export default function LessonsPage() {
                     <CheckIcon width={18} height={18} />
                   </span>
                 ) : isNext ? (
-                  <span className="shrink-0 rounded-full bg-brand-700 px-3 py-1 text-xs font-semibold text-white">
-                    👉 Tiếp theo
+                  <span className="flex shrink-0 items-center gap-1 rounded-full bg-brand-700 px-3 py-1 text-xs font-semibold text-white">
+                    <ArrowRightIcon width={14} height={14} /> Tiếp theo
                   </span>
                 ) : (
                   <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${accent.bg} ${accent.text}`}>

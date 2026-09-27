@@ -4,7 +4,7 @@ import { STORIES } from '../data/stories'
 import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
 import { parseLevelRank } from '../lib/contentLevel'
-import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
+import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from '../components/Icons'
 import { useScrollRestoration } from '../lib/useScrollRestoration'
 
 export default function StoriesPage() {
@@ -63,8 +63,8 @@ export default function StoriesPage() {
                   <CheckIcon width={14} height={14} />
                 </span>
               ) : isNext ? (
-                <span className="shrink-0 rounded-full bg-brand-700 px-2.5 py-1 text-[10px] font-semibold text-white">
-                  👉 Tiếp theo
+                <span className="flex shrink-0 items-center gap-1 rounded-full bg-brand-700 px-2.5 py-1 text-[10px] font-semibold text-white">
+                  <ArrowRightIcon width={12} height={12} /> Tiếp theo
                 </span>
               ) : null}
             </Link>
