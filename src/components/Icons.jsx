@@ -18,6 +18,7 @@ import chatIconImg from '../assets/icons-gemini/chat.png'
 import storyIconImg from '../assets/icons-gemini/story.png'
 import topicIconImg from '../assets/icons-gemini/topic.png'
 import earIconImg from '../assets/icons-gemini/ear.png'
+import shieldIconImg from '../assets/icons-gemini/shield.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -312,18 +313,15 @@ export function TrophyIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function ShieldIcon(props) {
+export function ShieldIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Shield shape */}
-      <path d="M 32 6 L 16 10 L 16 18 Q 16 28 32 34 Q 48 28 48 18 L 48 10 Z" fill="#52c41a" stroke="#2d1b4e" strokeWidth="1.5"/>
-      {/* Checkmark on shield */}
-      <path d="M 28 24 L 30 26 L 36 20" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      {/* Panda behind shield */}
-      <circle cx="44" cy="32" r="6" fill="white" stroke="#2d1b4e" strokeWidth="1.2"/>
-      <circle cx="42" cy="30" r="1.8" fill="#2d1b4e"/>
-      <circle cx="46" cy="30" r="1.8" fill="#2d1b4e"/>
-      <circle cx="44" cy="33" r="0.6" fill="#2d1b4e"/>
-    </svg>
+    <img
+      src={shieldIconImg}
+      width={width}
+      height={height}
+      alt="Bảo vệ"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
+      {...props}
+    />
   )
 }
