@@ -12,6 +12,7 @@ import shuffleIconImg from '../assets/icons-gemini/shuffle.png'
 import arrowRightIconImg from '../assets/icons-gemini/arrow_right.png'
 import arrowLeftIconImg from '../assets/icons-gemini/arrow_left.png'
 import settingsIconImg from '../assets/icons-gemini/settings.png'
+import trophyIconImg from '../assets/icons-gemini/trophy.png'
 
 function base(props) {
   return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
@@ -333,26 +334,16 @@ export function GrammarIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function TrophyIcon(props) {
+export function TrophyIcon({ width = 32, height = 32, ...props }) {
   return (
-    <svg {...base(props)}>
-      {/* Trophy cup */}
-      <path d="M 12 8 L 10 10 Q 8 12 10 14 L 12 16 L 14 16 L 16 14 Q 18 12 16 10 L 14 8 Z" fill="#f5d547" stroke="#2d1b4e" strokeWidth="1.5"/>
-      <rect x="10" y="14" width="8" height="2" fill="#2d1b4e"/>
-      <rect x="11" y="16" width="6" height="4" rx="1" fill="#8b6f47" stroke="#2d1b4e" strokeWidth="1"/>
-      {/* Trophy handles */}
-      <path d="M 10 10 Q 6 10 6 14" fill="none" stroke="#f5d547" strokeWidth="2"/>
-      <path d="M 18 10 Q 22 10 22 14" fill="none" stroke="#f5d547" strokeWidth="2"/>
-      {/* Panda on trophy */}
-      <circle cx="24" cy="20" r="5" fill="white" stroke="#2d1b4e" strokeWidth="1"/>
-      <circle cx="22" cy="18" r="1.5" fill="#2d1b4e"/>
-      <circle cx="26" cy="18" r="1.5" fill="#2d1b4e"/>
-      <circle cx="24" cy="21" r="0.6" fill="#2d1b4e"/>
-      <path d="M22.5 22 Q24 23 25.5 22" stroke="#2d1b4e" strokeWidth="0.7" fill="none" strokeLinecap="round"/>
-      {/* Sparkles */}
-      <path d="M 6 6 L 7 7 L 6 8 L 5 7 Z" fill="#ffc000"/>
-      <path d="M 28 8 L 29 9 L 28 10 L 27 9 Z" fill="#ffc000"/>
-    </svg>
+    <img
+      src={trophyIconImg}
+      width={width}
+      height={height}
+      alt="Thành tích"
+      style={{ display: 'inline-block' }}
+      {...props}
+    />
   )
 }
 
