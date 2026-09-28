@@ -3,14 +3,14 @@
 // chu uid do doc/ghi.
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { db } from './firebase'
-import { exportAllData, importAllData } from './storage'
+import { exportProgressData, importProgressData } from './storage'
 
 function progressDocRef(uid) {
   return doc(db, 'users', uid, 'progress', 'data')
 }
 
 export async function pushToFirestore(uid) {
-  const payload = { updatedAt: Date.now(), data: exportAllData() }
+  const payload = { updatedAt: Date.now(), data: exportProgressData() }
   await setDoc(progressDocRef(uid), payload)
   return payload.updatedAt
 }
@@ -20,7 +20,7 @@ export async function pullFromFirestore(uid) {
   if (!snap.exists()) return null
   const remote = snap.data()
   if (!remote?.data) return null
-  importAllData(remote.data)
+  importProgressData(remote.data)
   return remote.updatedAt
 }
 

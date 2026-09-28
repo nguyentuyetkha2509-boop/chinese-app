@@ -183,6 +183,7 @@ function FirebaseSyncSection() {
   }
 
   async function handleChoicePush() {
+    if (!window.confirm('Đẩy lên sẽ GHI ĐÈ bản sao lưu trên đám mây bằng tiến độ trên máy này. Tiếp tục?')) return
     setBusy(true)
     await pushNow()
     setConnectChoice(null)
@@ -277,7 +278,7 @@ function FirebaseSyncSection() {
               disabled={busy}
               className="flex-1 rounded-xl bg-brand-700 py-2.5 text-xs font-semibold text-white disabled:opacity-50"
             >
-              Đồng bộ ngay
+              Sao lưu ngay
             </button>
             <button
               onClick={handleManualPull}

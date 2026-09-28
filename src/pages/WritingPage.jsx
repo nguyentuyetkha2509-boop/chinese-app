@@ -43,6 +43,9 @@ export default function WritingPage() {
   const chars = useMemo(() => extractChars(scopedUnit ? scopedUnit.words : level.words), [level, scopedUnit])
   const [selected, setSelected] = useState(chars[0])
   const [quizResult, setQuizResult] = useState(null)
+  // Chu nao khong tai duoc net (vd. mat mang ma chua tung mo chu do lan nao,
+  // nen chua nam trong cache cua service worker).
+  const [loadError, setLoadError] = useState(null)
   const [justCompletedUnit, setJustCompletedUnit] = useState(false)
   const targetRef = useRef(null)
   const writerRef = useRef(null)
@@ -61,6 +64,7 @@ export default function WritingPage() {
     targetRef.current.innerHTML = ''
     setQuizResult(null)
     setJustCompletedUnit(false)
+    setLoadError(null)
     writerRef.current = HanziWriter.create(targetRef.current, selected.char, {
       width: 260,
       height: 260,
@@ -86,7 +90,12 @@ export default function WritingPage() {
             // mo nhat cho toi luc do.
             writerRef.current?.animateCharacter()
           })
-          .catch((e) => onError?.(e))
+          .catch((e) => {
+            // Truoc day chi goi onError() ma khong hien gi ca, nen nguoi dung
+            // mat mang chi thay mot khung ve trang tron khong loi giai thich.
+            setLoadError(char)
+            onError?.(e)
+          })
       }
     })
     return () => {
@@ -283,6 +292,16 @@ export default function WritingPage() {
 
           <div className="flex flex-col items-center">
             <div ref={targetRef} className="hanzi-target bg-white" style={{ width: 260, height: 260 }} />
+
+            {loadError && (
+              <div className="mt-3 w-full rounded-2xl bg-sun-100 p-3 text-center">
+                <p className="text-xs font-semibold text-sun-700">⚠️ Không tải được nét chữ này</p>
+                <p className="mt-1 text-xs text-gray-700">
+                  Chữ chưa từng mở thì cần mạng ở lần đầu. Bạn kết nối mạng rồi thử lại nhé.
+                </p>
+              </div>
+            )}
+
             <button
               onClick={() => speakChinese(selected.char)}
               className="mt-2 flex items-center gap-1 text-sm text-brand-600"

@@ -16,7 +16,28 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,webmanifest}'],
         skipWaiting: true,
         clientsClaim: true,
-        cleanupOutdatedCaches: true
+        cleanupOutdatedCaches: true,
+        // Du lieu net chu (public/hanzi-data/*.json, 2632 file ~11MB) KHONG
+        // nam trong globPatterns vi tai san ca 11MB luc cai dat la qua nang.
+        // Thay vao do cache theo nhu cau: chu nao da mo thi luu vinh vien vao
+        // may, lan sau mo lai ke ca khi mat mang van ve duoc.
+        // Truoc day khong co dong nay khien trang Viet chu Han hien khung
+        // trang hoan toan khi offline - trai voi chinh muc dich PWA cua app.
+        runtimeCaching: [
+          {
+            urlPattern: /\/hanzi-data\/.+\.json$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'hanzi-data',
+              expiration: {
+                // Phu du 2632 chu neu nguoi dung hoc het.
+                maxEntries: 3000,
+                maxAgeSeconds: 60 * 60 * 24 * 365
+              },
+              cacheableResponse: { statuses: [0, 200] }
+            }
+          }
+        ]
       },
       manifest: {
         name: 'PandaChinese',

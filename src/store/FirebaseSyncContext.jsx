@@ -28,34 +28,86 @@ export function FirebaseSyncProvider({ children }) {
   const [needsNickname, setNeedsNickname] = useState(false)
   const [nickname, setNicknameState] = useState(null)
   const debounceRef = useRef(null)
-  const skipNextAutoPush = useRef(true)
   const reconciledUidRef = useRef(null)
+  // Cong tac an toan: chi khi BAT thi tien do moi duoc TU DONG day len dam may.
+  // Xem khoi doi chieu khi dang nhap ben duoi de biet khi nao duoc bat.
+  const [autoPushArmed, setAutoPushArmed] = useState(false)
+  // Tang len moi khi trinh duyet co mang tro lai (xem effect ben duoi).
+  const [onlineTick, setOnlineTick] = useState(0)
 
   useEffect(() => onAuthStateChanged(auth, (u) => {
     setUser(u)
     setAuthReady(true)
   }), [])
 
+  // Khi trinh duyet co mang tro lai thi tang so nay de khoi doi chieu ben duoi
+  // chay lai. Khong co no thi chi can 1 lan mat mang dung luc dang nhap la viec
+  // sao luu bi khoa suot ca phien, du sau do mang da tro lai binh thuong.
+  useEffect(() => {
+    const handleOnline = () => setOnlineTick((t) => t + 1)
+    window.addEventListener('online', handleOnline)
+    return () => window.removeEventListener('online', handleOnline)
+  }, [])
+
   function isLocalProgressEmpty() {
     return progress.xp === 0 && progress.completedUnits.length === 0 && Object.keys(progress.srsState).length === 0
   }
 
+  // Doi chieu khi dang nhap - day la cho QUYET DINH xem tien do co duoc phep
+  // tu dong day len dam may hay khong.
+  //
+  // Truoc day cho nay dung co "skipNextAutoPush" chi chan duoc luot day dau
+  // tien trong moi phien mo trang, va co do KHONG BAO GIO duoc dat lai khi
+  // dang xuat. Ket hop voi reconciledUidRef cung khong duoc xoa khi dang xuat
+  // (nen dang nhap lai cung tai khoan thi bo qua luon buoc doi chieu nay),
+  // thanh ra: dang xuat roi dang nhap lai = 4 giay sau tien do CU tu dong de
+  // len ban sao MOI HON tren dam may, khong hoi gi. Do la mat du lieu that.
+  //
+  // Cach lam moi: mac dinh KHOA. Chi mo khoa khi biet chac khong the mat gi.
   // Phien dang nhap Google co the duoc khoi phuc tu dinh danh da luu (vd.
   // localStorage bi xoa rieng nhung phien Firebase Auth van con), khien app
   // vao thang giao dien chinh voi tien do local rong ma khong qua man hinh
-  // Chao mung/Cai dat - noi von co logic hoi Tai ve/Day len. Neu khong kiem
-  // tra o day, luot tu-dong-day-len ben duoi se am tham ghi de mat sach ban
-  // sao luu that su tren dam may bang du lieu rong nay.
+  // Chao mung/Cai dat - noi von co logic hoi Tai ve/Day len.
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      // Dang xuat: khoa lai va quen uid cu, de lan dang nhap sau - ke ca cung
+      // tai khoan - van duoc doi chieu lai tu dau.
+      setAutoPushArmed(false)
+      reconciledUidRef.current = null
+      return
+    }
     if (reconciledUidRef.current === user.uid) return
-    reconciledUidRef.current = user.uid
-    if (!isLocalProgressEmpty()) return
-    checkRemote(user.uid).then((info) => {
-      if (info.hasRemoteData) pullNow(user.uid)
-    })
+
+    setAutoPushArmed(false)
+    let cancelled = false
+    checkRemote(user.uid)
+      .then((info) => {
+        if (cancelled) return
+        reconciledUidRef.current = user.uid
+        if (!info.hasRemoteData) {
+          // Tren may chua co ban sao nao -> khong co gi de mat, mo khoa ngay.
+          setAutoPushArmed(true)
+          return
+        }
+        if (isLocalProgressEmpty()) {
+          // May nay dang trong ma tren may co ban sao that su -> keo ve truoc.
+          // pullNow() tu tai lai trang va mo khoa sau khi tai xong.
+          return pullNow(user.uid)
+        }
+        // Ca hai ben deu co du lieu -> giu khoa, cho nguoi dung tu chon
+        // "Tai ve" hay "Day len" o man hinh Cai dat.
+      })
+      .catch((e) => {
+        // Khong kiem tra duoc (vd. mat mang). Giu khoa: tha khong sao luu con
+        // hon am tham ghi de mat ban sao that su. Se thu lai khi co mang.
+        // reconciledUidRef co y KHONG duoc dat o day, de lan co mang con chay lai.
+        if (!cancelled) console.error('Không kiểm tra được bản sao trên mây:', e)
+      })
+    return () => {
+      cancelled = true
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
+  }, [user, onlineTick])
 
   // Moi khi co phien dang nhap (dang nhap moi hoac khoi phuc tu session cu),
   // kiem tra xem da dat bi danh cho bang xep hang chua.
@@ -65,12 +117,19 @@ export function FirebaseSyncProvider({ children }) {
       setNicknameState(null)
       return
     }
+    // Co huy: nguoi dung co the dang xuat truoc khi doc xong, ket qua ve muon
+    // khong duoc phep ghi de state cua nguoi da dang xuat.
+    let cancelled = false
     getMyEntry(user.uid).then((entry) => {
+      if (cancelled) return
       setNeedsNickname(!entry?.nickname)
       setNicknameState(entry?.nickname ?? null)
     }).catch((e) => {
-      console.error('Không lấy được biệt danh:', e)
+      if (!cancelled) console.error('Không lấy được biệt danh:', e)
     })
+    return () => {
+      cancelled = true
+    }
   }, [user])
 
   async function submitNickname(newNickname) {
@@ -123,6 +182,9 @@ export function FirebaseSyncProvider({ children }) {
       await pushLeaderboardStats()
       setLastSyncedAt(ts)
       setStatus('synced')
+      // Nguoi dung da chu dong chon huong di (hoac bam sao luu ngay) -> tu day
+      // tro di cho phep dong bo tu dong.
+      setAutoPushArmed(true)
     } catch (e) {
       setError(e.message)
       setStatus('error')
@@ -141,6 +203,11 @@ export function FirebaseSyncProvider({ children }) {
       const remoteUpdatedAt = await pullFromFirestore(uid)
       setLastSyncedAt(remoteUpdatedAt)
       setStatus('synced')
+      // Da tai xong ban tren dam may ve may nay -> khong con gi de ghi de mat,
+      // cho phep dong bo tu dong tu day tro di.
+      setAutoPushArmed(true)
+      // Tai ve se ghi de tien do dang co trong bo nho, phai tai lai trang de
+      // moi state trong app doc lai dung so lieu vua nhap.
       setTimeout(() => window.location.reload(), 800)
       return remoteUpdatedAt
     } catch (e) {
@@ -153,10 +220,11 @@ export function FirebaseSyncProvider({ children }) {
   // Tu dong day len Firestore (debounce) moi khi tien do hoc thay doi.
   useEffect(() => {
     if (!user) return
-    if (skipNextAutoPush.current) {
-      skipNextAutoPush.current = false
-      return
-    }
+    // Chi day khi cong tac an toan da BAT (xem khoi doi chieu khi dang nhap).
+    // autoPushArmed nam trong danh sach phu thuoc ben duoi, nen ngay khi vua
+    // duoc mo khoa thi tien do dang cho cung duoc day di luon, khong phai doi
+    // them mot thao tac hoc nua moi kich hoat.
+    if (!autoPushArmed) return
     // Khong bao gio tu dong day tien do RONG len - tranh ghi de mat ban sao
     // luu that su khi tien do local bi mat (vd. do trinh duyet xoa du lieu)
     // truoc khi kip doi chieu voi dam may.
@@ -169,6 +237,7 @@ export function FirebaseSyncProvider({ children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     user,
+    autoPushArmed,
     progress.srsState,
     progress.completedUnits,
     progress.streak,
