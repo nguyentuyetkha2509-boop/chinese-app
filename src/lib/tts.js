@@ -2,7 +2,9 @@
 let cachedVoice = null
 // Loi Chrome da biet: SpeechSynthesisUtterance bi garbage-collect neu khong co
 // bien nao giu tham chieu, khien speak() lang im ngau nhien (khong bao loi).
-// Giu 1 tham chieu o day de utterance song den khi doc xong.
+// Giu 1 tham chieu o day de utterance song den khi doc xong. Co y KHONG doc lai
+// bien nay - giu no song chinh la muc dich.
+// eslint-disable-next-line no-unused-vars
 let currentUtterance = null
 // Neu dang cho 50ms de goi speak() (xem cuoi file) ma nguoi dung roi trang thi
 // phai huy luon hen gio do - khong thi tieng van bat len sau khi da sang trang khac.

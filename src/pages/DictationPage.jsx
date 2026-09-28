@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { SENTENCES } from '../data/sentenceBuilder'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { shuffle } from '../lib/quiz'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
+import { VolumeIcon } from '../components/Icons'
 import CelebrationBadge from '../components/CelebrationBadge'
 
 const ROUND_SIZE = 10
@@ -20,7 +21,6 @@ function makeTokens(chunks) {
 }
 
 export default function DictationPage() {
-  const navigate = useNavigate()
   const { addXp } = useProgress()
   const [round, setRound] = useState(buildRound)
   const [index, setIndex] = useState(0)
@@ -114,9 +114,7 @@ export default function DictationPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-2xl text-brand-800">Nghe chép chính tả</h1>
       </div>
       <p className="mb-4 text-sm text-gray-500">
@@ -138,7 +136,7 @@ export default function DictationPage() {
           checked === null ? 'border-gray-300 bg-white' : checked ? 'border-teal-400 bg-teal-50' : 'border-red-400 bg-red-50'
         }`}
       >
-        {assembled.length === 0 && <p className="text-sm text-gray-400">Chạm các từ bên dưới để ghép lại câu bạn nghe được</p>}
+        {assembled.length === 0 && <p className="text-sm text-gray-500">Chạm các từ bên dưới để ghép lại câu bạn nghe được</p>}
         {assembled.map((t) => (
           <button
             key={t.id}

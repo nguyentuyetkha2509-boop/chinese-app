@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { getGrammarPoint } from '../data/grammar'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
+import { VolumeIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
 import CelebrationBadge from '../components/CelebrationBadge'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
@@ -90,7 +91,6 @@ export default function GrammarDetailPage() {
 
 function GrammarDetailPageInner() {
   const { pointKey } = useParams()
-  const navigate = useNavigate()
   const point = getGrammarPoint(pointKey)
   const { addXp, markGrammarComplete, completedGrammar } = useProgress()
   const [phase, setPhase] = useState('learn') // learn | quiz | done
@@ -122,9 +122,7 @@ function GrammarDetailPageInner() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <div>
           <h1 className="text-xl text-brand-800">{point.title}</h1>
           <p className="text-xs text-gray-500">{point.level}</p>
@@ -153,7 +151,7 @@ function GrammarDetailPageInner() {
                   <p className="text-xs text-brand-600">{ex.pinyin}</p>
                   <p className="text-xs text-gray-500">{ex.meaning}</p>
                 </div>
-                <VolumeIcon width={16} height={16} className="shrink-0 text-gray-400" />
+                <VolumeIcon width={16} height={16} className="shrink-0 text-gray-500" />
               </button>
             ))}
           </div>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeftIcon } from '../components/Icons'
+import BackButton from '../components/BackButton'
+import {  } from '../components/Icons'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 import { loadJSON, saveJSON } from '../lib/storage'
 
@@ -58,13 +59,11 @@ export default function AiChatPage() {
     <div className="flex h-[calc(100vh-140px)] flex-col px-4 pt-6">
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <button onClick={() => navigate(-1)} className="text-gray-500">
-            <ArrowLeftIcon />
-          </button>
+          <BackButton />
           <h1 className="text-xl text-brand-800">Trò chuyện với AI 🐼</h1>
         </div>
         {messages.length > 0 && (
-          <button onClick={handleClear} className="text-xs text-gray-400 underline">
+          <button onClick={handleClear} className="text-xs text-gray-500 underline">
             Xóa hội thoại
           </button>
         )}
@@ -97,7 +96,7 @@ export default function AiChatPage() {
               </div>
             ))}
             {loading && (
-              <div className="max-w-[85%] rounded-2xl bg-white p-3 text-sm text-gray-400 shadow-sm">Đang trả lời...</div>
+              <div className="max-w-[85%] rounded-2xl bg-white p-3 text-sm text-gray-500 shadow-sm">Đang trả lời...</div>
             )}
           </div>
 

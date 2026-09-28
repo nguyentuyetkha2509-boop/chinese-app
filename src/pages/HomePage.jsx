@@ -232,7 +232,7 @@ export default function HomePage() {
       </Link>
 
       <p className="mb-0.5 mt-5 text-sm font-semibold text-gray-500">Lộ trình chính</p>
-      <p className="mb-2 text-xs text-gray-400">Lối tắt vào từng phần của "Học hôm nay" - làm theo thẻ ở trên là đủ.</p>
+      <p className="mb-2 text-xs text-gray-500">Lối tắt vào từng phần của "Học hôm nay" - làm theo thẻ ở trên là đủ.</p>
       <section className="mb-6 grid grid-cols-2 gap-3">
         {CORE_CARDS.map(({ to, icon: Icon, title, className }) => (
           <Link key={to} to={to} className={`rounded-2xl p-4 text-white shadow-sm ${className}`}>
@@ -336,11 +336,16 @@ export default function HomePage() {
                 key={b.id}
                 title={b.desc}
                 className={`flex flex-col items-center rounded-xl p-2 text-center ${
-                  earned ? 'animate-pop-in bg-gradient-to-br from-sun-100 to-candy-100' : 'bg-gray-50 opacity-50 grayscale'
+                  earned ? 'animate-pop-in bg-gradient-to-br from-sun-100 to-candy-100' : 'bg-gray-100'
                 }`}
               >
-                <span className="text-2xl">{b.icon}</span>
-                <p className="mt-1 text-[10px] leading-tight text-gray-700">{b.title}</p>
+                <span className={`text-2xl ${earned ? '' : 'opacity-40 grayscale'}`}>{b.icon}</span>
+                {/* Truoc day ca o bi opacity-50 va chu chi 10px, nen huy hieu CHUA
+                    dat gan nhu khong doc duoc ten - nguoi hoc khong biet minh can
+                    lam gi de mo khoa. Chi mo bieu tuong cho thay "chua dat" la du. */}
+                <p className={`mt-1 text-xs leading-tight ${earned ? 'text-gray-700' : 'text-gray-600'}`}>
+                  {b.title}
+                </p>
               </div>
             )
           })}
@@ -348,7 +353,7 @@ export default function HomePage() {
       </section>
 
       <p className="mb-0.5 text-sm font-semibold text-gray-500">Luyện thêm & giải trí</p>
-      <p className="mb-2 text-xs text-gray-400">Không bắt buộc mỗi ngày - ghé qua khi đã xong nhiệm vụ hôm nay và muốn luyện thêm cho vui.</p>
+      <p className="mb-2 text-xs text-gray-500">Không bắt buộc mỗi ngày - ghé qua khi đã xong nhiệm vụ hôm nay và muốn luyện thêm cho vui.</p>
       <section className="mb-5 grid grid-cols-2 gap-3">
         {EXTRA_CARDS.map(({ to, icon: Icon, title, className }) => (
           <Link key={to} to={to} className={`rounded-2xl p-4 text-white shadow-sm ${className}`}>

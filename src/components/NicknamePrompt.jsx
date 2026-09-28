@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useFirebaseSync } from '../store/FirebaseSyncContext'
 import { playCorrect, playWrong } from '../lib/sfx'
+import { friendlyError } from '../lib/friendlyError'
 
 // Hien mot lop phu toan man khi da dang nhap nhung chua dat bi danh, de bi
 // danh (khong phai ten/anh Google that) hien tren bang xep hang cong khai.
@@ -8,6 +9,7 @@ export default function NicknamePrompt() {
   const { needsNickname, submitNickname } = useFirebaseSync()
   const [value, setValue] = useState('')
   const [busy, setBusy] = useState(false)
+  const [error, setError] = useState(null)
 
   if (!needsNickname) return null
 
@@ -15,11 +17,16 @@ export default function NicknamePrompt() {
     const nickname = value.trim()
     if (!nickname) return
     setBusy(true)
+    setError(null)
     try {
       await submitNickname(nickname)
       playCorrect()
-    } catch {
+    } catch (e) {
+      // Truoc day cho nay la `catch { playWrong(); setBusy(false) }` - nuot loi
+      // hoan toan. Bam "Xac nhan" ma luu that bai thi chi nghe tieng "sai" roi
+      // nut tro lai, khong biet vi sao va khong biet lam gi tiep.
       playWrong()
+      setError(friendlyError(e, 'Chưa lưu được biệt danh. Kiểm tra mạng rồi thử lại.'))
       setBusy(false)
     }
   }
@@ -40,6 +47,8 @@ export default function NicknamePrompt() {
           className="mt-4 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm"
           autoFocus
         />
+        {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+
         <button
           onClick={handleSubmit}
           disabled={busy || !value.trim()}

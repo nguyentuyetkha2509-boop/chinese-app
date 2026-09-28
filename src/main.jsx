@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { HashRouter } from 'react-router-dom'
 import App from './App.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 import { ProgressProvider } from './store/ProgressContext.jsx'
 import { FirebaseSyncProvider } from './store/FirebaseSyncContext.jsx'
 import './index.css'
@@ -15,12 +16,16 @@ registerSW({ immediate: true })
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <HashRouter>
-      <ProgressProvider>
-        <FirebaseSyncProvider>
-          <App />
-        </FirebaseSyncProvider>
-      </ProgressProvider>
-    </HashRouter>
+    {/* Dat NGOAI CUNG, boc ca HashRouter va cac Provider: loi o bat ky tang nao
+        cung duoc hung lai thay vi de trang trang tron. */}
+    <ErrorBoundary>
+      <HashRouter>
+        <ProgressProvider>
+          <FirebaseSyncProvider>
+            <App />
+          </FirebaseSyncProvider>
+        </ProgressProvider>
+      </HashRouter>
+    </ErrorBoundary>
   </React.StrictMode>
 )

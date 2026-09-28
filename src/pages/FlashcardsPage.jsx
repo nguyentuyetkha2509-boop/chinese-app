@@ -229,7 +229,7 @@ export default function FlashcardsPage() {
             )}
           </>
         ) : (
-          <p className="mt-4 text-sm text-gray-400">Chạm để xem đáp án</p>
+          <p className="mt-4 text-sm text-gray-500">Chạm để xem đáp án</p>
         )}
       </button>
 

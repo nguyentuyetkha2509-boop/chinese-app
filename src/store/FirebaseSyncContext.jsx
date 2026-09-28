@@ -5,6 +5,7 @@ import { useProgress } from './ProgressContext'
 import { pushToFirestore, pullFromFirestore, checkRemote } from '../lib/firebaseSync'
 import { getMyEntry, setNickname as saveNickname, updateMyStats } from '../lib/leaderboard'
 import { getLevelInfo } from '../lib/gamification'
+import { friendlyError } from '../lib/friendlyError'
 
 const FirebaseSyncContext = createContext(null)
 // Context rieng, chi chua { user, authReady } - it doi hon nhieu so voi
@@ -160,7 +161,7 @@ export function FirebaseSyncProvider({ children }) {
       setStatus('idle')
       return { ...info, uid: result.user.uid }
     } catch (e) {
-      setError(e.code === 'auth/popup-closed-by-user' ? 'Bạn đã đóng cửa sổ đăng nhập.' : e.message)
+      setError(friendlyError(e))
       setStatus('error')
       throw e
     }
@@ -186,7 +187,7 @@ export function FirebaseSyncProvider({ children }) {
       // tro di cho phep dong bo tu dong.
       setAutoPushArmed(true)
     } catch (e) {
-      setError(e.message)
+      setError(friendlyError(e))
       setStatus('error')
     }
   }
@@ -211,7 +212,7 @@ export function FirebaseSyncProvider({ children }) {
       setTimeout(() => window.location.reload(), 800)
       return remoteUpdatedAt
     } catch (e) {
-      setError(e.message)
+      setError(friendlyError(e))
       setStatus('error')
       throw e
     }

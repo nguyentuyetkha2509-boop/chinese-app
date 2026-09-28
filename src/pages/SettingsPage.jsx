@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { getDailyNewWordLimit, setDailyNewWordLimit, NEW_WORD_LIMIT_OPTIONS } from '../lib/curriculum'
 import { useFirebaseAuth, useFirebaseSync } from '../store/FirebaseSyncContext'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { getDeepseekKey, setDeepseekKey } from '../lib/deepseek'
-import { ArrowLeftIcon, ShieldIcon, BellIcon } from '../components/Icons'
+import { ShieldIcon, BellIcon } from '../components/Icons'
 
 const REMINDER_KEY = 'dailyReminder'
 const DEFAULT_REMINDER = { enabled: false, hour: 20, minute: 0 }
@@ -234,7 +235,7 @@ function FirebaseSyncSection() {
             </svg>
             {busy ? 'Đang đăng nhập...' : 'Đăng nhập với Google'}
           </button>
-          {error && <p className="mt-2 text-[11px] text-red-500">{error}</p>}
+          {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
         </div>
       ) : connectChoice ? (
         <div className="mt-3 rounded-xl bg-sun-100 p-3">
@@ -288,7 +289,13 @@ function FirebaseSyncSection() {
               Tải về từ đám mây
             </button>
           </div>
-          <button onClick={handleSignOut} className="mt-2 w-full text-center text-[11px] text-gray-400 underline">
+          {/* Truoc day la chu 11px gach chan, khong co padding - vua kho doc vua
+              chi cao ~20px, trong khi day la hanh dong quan trong nhat trong muc
+              nay. Nay la nut that, du cao de bam. */}
+          <button
+            onClick={handleSignOut}
+            className="mt-3 w-full rounded-xl border border-gray-200 py-3 text-sm font-semibold text-gray-600"
+          >
             Đăng xuất
           </button>
         </div>
@@ -298,7 +305,6 @@ function FirebaseSyncSection() {
 }
 
 export default function SettingsPage() {
-  const navigate = useNavigate()
   const { isAdmin } = useFirebaseAuth()
   const [newWordLimit, setNewWordLimit] = useState(() => getDailyNewWordLimit())
 
@@ -310,9 +316,7 @@ export default function SettingsPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-xl text-brand-800">Cài đặt</h1>
       </div>
 

@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom'
+
+import BackButton from '../components/BackButton'
 import { LEVELS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import {
@@ -9,12 +10,12 @@ import {
   getReviewProgressForLevel,
   getPronunciationProgressForLevel
 } from '../lib/curriculum'
-import { ArrowLeftIcon, CheckIcon } from '../components/Icons'
+import { CheckIcon } from '../components/Icons'
 
 const STATUS_STYLE = {
   done: { dot: 'bg-teal-500', text: 'text-teal-600', bar: 'bg-teal-500' },
   active: { dot: 'bg-brand-600', text: 'text-brand-600', bar: 'bg-gradient-to-r from-brand-500 to-candy-500' },
-  upcoming: { dot: 'bg-gray-300', text: 'text-gray-400', bar: 'bg-gray-200' }
+  upcoming: { dot: 'bg-gray-300', text: 'text-gray-500', bar: 'bg-gray-200' }
 }
 
 const MINI_STATS = [
@@ -25,7 +26,6 @@ const MINI_STATS = [
 ]
 
 export default function RoadmapPage() {
-  const navigate = useNavigate()
   const { completedUnits, srsState, writingStats, toneStatsByLevel, completedGrammar } = useProgress()
   const dailyLimit = getDailyNewWordLimit()
   const roadmap = estimateRoadmap(LEVELS, completedUnits, dailyLimit)
@@ -35,9 +35,7 @@ export default function RoadmapPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-xl text-brand-800">Lộ trình học</h1>
       </div>
       <p className="mb-5 text-sm text-gray-500">
@@ -70,7 +68,7 @@ export default function RoadmapPage() {
                   <span className={`text-xs font-semibold ${style.text}`}>{l.percent}%</span>
                 )}
               </div>
-              <p className="mt-0.5 text-xs text-gray-400">Từ vựng</p>
+              <p className="mt-0.5 text-xs text-gray-500">Từ vựng</p>
               <div className="mt-1 h-2 overflow-hidden rounded-full bg-gray-100">
                 <div className={`h-full rounded-full ${style.bar}`} style={{ width: `${Math.max(4, l.percent)}%` }} />
               </div>
@@ -104,7 +102,7 @@ export default function RoadmapPage() {
         })}
       </div>
 
-      <p className="mt-5 text-center text-xs text-gray-400">
+      <p className="mt-5 text-center text-xs text-gray-500">
         Từ vựng ước tính theo giới hạn từ mới/ngày trong Cài đặt. Ôn tập tính theo tỷ lệ từ đã "nhớ lâu" (≥7
         ngày), Viết chữ/Phát âm/Ngữ pháp tính theo hoạt động bạn đã luyện ở từng mục.
       </p>

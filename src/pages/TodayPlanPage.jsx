@@ -1,19 +1,12 @@
 import { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { ALL_WORDS, LEVELS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { getCardStats } from '../lib/srs'
 import { todayKey } from '../lib/date'
 import { getDailyNewWordLimit, getCurrentCombo, getComboByUnitKey } from '../lib/curriculum'
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  CardsIcon,
-  BookIcon,
-  GrammarIcon,
-  PencilIcon,
-  CheckIcon
-} from '../components/Icons'
+import { ArrowRightIcon, CardsIcon, BookIcon, GrammarIcon, PencilIcon, CheckIcon } from '../components/Icons'
 
 // Chi dung cac sac da co san trong tailwind.config.js (vd "gold" khong co
 // shade -50/-700) de tranh class bi lang le khong render.
@@ -25,7 +18,6 @@ const STEP_STYLE = {
 }
 
 export default function TodayPlanPage() {
-  const navigate = useNavigate()
   const { srsState, completedUnits, writingStats, completedGrammar, newWordsToday, dailyCombo, lockDailyCombo } =
     useProgress()
   const allIds = ALL_WORDS.map((w) => w.id)
@@ -114,9 +106,7 @@ export default function TodayPlanPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-xl text-brand-800">Học hôm nay</h1>
       </div>
       <p className="mb-6 text-sm text-gray-500">Ôn trước rồi mới học mới - giúp nhớ lâu nhất.</p>
@@ -140,7 +130,7 @@ export default function TodayPlanPage() {
                 <div className={`flex-1 rounded-2xl p-4 shadow-sm ${style.card}`}>
                   <p className="text-xs font-semibold text-gray-500">{step.label}</p>
                   <p className="mt-0.5 text-base text-gray-800">{step.title}</p>
-                  {step.subtitle && <p className="mt-0.5 text-xs text-gray-400">{step.subtitle}</p>}
+                  {step.subtitle && <p className="mt-0.5 text-xs text-gray-500">{step.subtitle}</p>}
                   {step.actionTo && (
                     <Link
                       to={step.actionTo}
@@ -163,7 +153,7 @@ export default function TodayPlanPage() {
               >
                 {status === 'done' ? <CheckIcon width={12} height={12} /> : <Icon width={11} height={11} />}
               </span>
-              <p className={`text-sm ${status === 'done' ? 'text-gray-500' : 'text-gray-400'}`}>
+              <p className={`text-sm ${status === 'done' ? 'text-gray-500' : 'text-gray-500'}`}>
                 <span className="font-medium">{step.label}</span> · {step.summary}
                 {status === 'done' && ' ✓'}
               </p>
@@ -204,7 +194,7 @@ export default function TodayPlanPage() {
       <Link to="/lo-trinh" className="mt-5 block text-center text-sm text-brand-600 underline">
         Xem lộ trình học toàn bộ 6 cấp
       </Link>
-      <Link to="/cai-dat" className="mt-2 block text-center text-xs text-gray-400 underline">
+      <Link to="/cai-dat" className="mt-2 block text-center text-xs text-gray-500 underline">
         Đổi giới hạn từ mới mỗi ngày
       </Link>
     </div>

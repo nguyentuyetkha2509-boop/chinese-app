@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate, playFlip } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { VolumeIcon, MicIcon, ArrowLeftIcon } from '../components/Icons'
+import { VolumeIcon, MicIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import CelebrationBadge from '../components/CelebrationBadge'
@@ -429,7 +430,7 @@ function RecordCompare({ words, levelId }) {
           <p className="text-sm text-red-500">Không dùng được micro (cần cấp quyền hoặc HTTPS).</p>
         )}
         {!SpeechRecognitionCtor && status !== 'error' && (
-          <p className="text-center text-xs text-gray-400">
+          <p className="text-center text-xs text-gray-500">
             ℹ️ Trình duyệt này chưa hỗ trợ AI nhận diện giọng nói tự động - vẫn ghi âm để tự nghe lại so sánh được.
           </p>
         )}
@@ -497,7 +498,6 @@ export default function PronunciationPage() {
 
 function PronunciationPageInner() {
   const params = useParams()
-  const navigate = useNavigate()
   const { completedUnits } = useProgress()
   const [tab, setTab] = useState('listen')
   const [levelId, setLevelId] = useState(params.levelId || 'hsk1')
@@ -533,9 +533,7 @@ function PronunciationPageInner() {
     <div className="px-4 pt-6">
       {scopedUnit ? (
         <div className="mb-3 flex items-center gap-2">
-          <button onClick={() => navigate(-1)} className="text-gray-500">
-            <ArrowLeftIcon />
-          </button>
+          <BackButton />
           <div>
             <h1 className="text-xl text-brand-800">Phát âm · {level.label} {scopedUnit.title}</h1>
             <p className="text-xs text-gray-500">Chỉ luyện {words.length} từ trong bài này</p>

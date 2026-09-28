@@ -24,6 +24,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Chan truoc khi deploy: mot ten viet nham (vi du quen lay `stop` ra khoi
+      # hook) se lam app chay sai ma khong he bao loi, nguoi dung chi thay no
+      # "tu nhien hong". ESLint bat duoc truoc khi len mang.
+      - run: npm run lint
       - run: npm run build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

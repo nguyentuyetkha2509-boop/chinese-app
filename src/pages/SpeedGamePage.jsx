@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { ALL_WORDS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { loadJSON, saveJSON } from '../lib/storage'
-import { ZapIcon, ArrowLeftIcon } from '../components/Icons'
+import { ZapIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 
 const GAME_SECONDS = 60
@@ -26,7 +27,6 @@ function buildQuestion() {
 }
 
 export default function SpeedGamePage() {
-  const navigate = useNavigate()
   const { addXp } = useProgress()
   const [highScore, setHighScore] = useState(() => loadJSON('speedGameHighScore', 0))
   const [phase, setPhase] = useState('idle') // idle | playing | over
@@ -104,9 +104,7 @@ export default function SpeedGamePage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-xl text-brand-800">⚡ Đua tốc độ</h1>
       </div>
 
@@ -147,7 +145,7 @@ export default function SpeedGamePage() {
             className="mb-4 flex w-full flex-col items-center justify-center rounded-3xl bg-white py-8 shadow-sm"
           >
             <p className="text-5xl text-gray-800">{question.word.hanzi}</p>
-            <p className="mt-1 text-sm text-gray-400">{question.word.pinyin}</p>
+            <p className="mt-1 text-sm text-gray-500">{question.word.pinyin}</p>
           </button>
 
           <div className="grid grid-cols-2 gap-3">

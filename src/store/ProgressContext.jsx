@@ -191,6 +191,12 @@ export function ProgressProvider({ children }) {
       lockDailyCombo,
       addXp
     }),
+    // Danh sach phu thuoc co y KHONG liet ke cac ham mark*/rateCard/addXp...:
+    // chung duoc tao lai moi lan render nhung KHONG ham nao doc state qua closure
+    // - tat ca deu dung dang setX(prev => ...) nen luon nhan duoc gia tri moi nhat
+    // tu React. Them chung vao day chi lam useMemo chay lai vo ich moi lan render.
+    //
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       srsState,
       completedUnits,

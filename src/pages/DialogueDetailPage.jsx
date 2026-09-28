@@ -1,10 +1,11 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { getDialogue } from '../data/dialogues'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { useSequencePlayer } from '../lib/useSequencePlayer'
 import { playFlip } from '../lib/sfx'
-import { ArrowLeftIcon, CheckIcon, VolumeIcon } from '../components/Icons'
+import { CheckIcon, VolumeIcon } from '../components/Icons'
 
 // Xem ghi chu tuong tu trong LessonDetailPage.jsx: dat key theo dialogueKey
 // de remount lai tu dau khi chuyen thang sang hoi thoai khac.
@@ -15,12 +16,11 @@ export default function DialogueDetailPage() {
 
 function DialogueDetailPageInner() {
   const { dialogueKey } = useParams()
-  const navigate = useNavigate()
   const dialogue = getDialogue(dialogueKey)
   const { completedDialogues, markDialogueComplete } = useProgress()
   const done = dialogue ? completedDialogues.includes(dialogue.key) : false
 
-  const { playingAll, activeLine, failed, playAll, setActiveLine } = useSequencePlayer({
+  const { playingAll, activeLine, failed, playAll, stop, setActiveLine } = useSequencePlayer({
     lines: dialogue?.lines,
     // Chi ghi "da nghe" khi chuoi phat di het that su. Neu may khong doc duoc thi
     // hook dung lai va khong goi onFinish, nen hoi thoai khong bi danh dau oan.
@@ -43,9 +43,7 @@ function DialogueDetailPageInner() {
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <button onClick={() => navigate(-1)} className="text-gray-500">
-            <ArrowLeftIcon />
-          </button>
+          <BackButton />
           <h1 className="text-xl text-brand-800">
             {dialogue.icon} {dialogue.title}
           </h1>
@@ -100,7 +98,7 @@ function DialogueDetailPageInner() {
               >
                 <div className="flex items-center gap-2">
                   <span className={`text-lg ${isA ? 'text-gray-800' : 'text-white'}`}>{line.hanzi}</span>
-                  <VolumeIcon width={14} height={14} className={isA ? 'text-gray-400' : 'text-white/70'} />
+                  <VolumeIcon width={14} height={14} className={isA ? 'text-gray-500' : 'text-white/70'} />
                 </div>
                 <p className={`mt-0.5 text-xs ${isA ? 'text-brand-600' : 'text-white/80'}`}>{line.pinyin}</p>
                 <p className={`mt-0.5 text-xs ${isA ? 'text-gray-500' : 'text-white/70'}`}>{line.meaning}</p>

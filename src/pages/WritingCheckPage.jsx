@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeftIcon } from '../components/Icons'
+import BackButton from '../components/BackButton'
+import {  } from '../components/Icons'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 
 const SYSTEM_PROMPT = `Bạn là giáo viên tiếng Trung chấm bài viết cho người Việt Nam học tiếng Trung. Khi nhận một câu hoặc đoạn văn tiếng Trung của học viên, hãy trả lời bằng tiếng Việt theo đúng cấu trúc sau:
@@ -39,9 +40,7 @@ export default function WritingCheckPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-xl text-brand-800">Chấm bài viết AI ✍️</h1>
       </div>
 

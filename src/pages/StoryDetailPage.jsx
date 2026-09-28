@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { getStory } from '../data/stories'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { useSequencePlayer } from '../lib/useSequencePlayer'
 import { playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { ArrowLeftIcon, CheckIcon, VolumeIcon } from '../components/Icons'
+import { CheckIcon, VolumeIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
 import CelebrationBadge from '../components/CelebrationBadge'
 
@@ -20,7 +21,6 @@ export default function StoryDetailPage() {
 
 function StoryDetailPageInner() {
   const { storyKey } = useParams()
-  const navigate = useNavigate()
   const story = getStory(storyKey)
   const { addXp, markStoryComplete, completedStories } = useProgress()
 
@@ -90,9 +90,7 @@ function StoryDetailPageInner() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-xl text-brand-800">
           {story.icon} {story.title}
         </h1>
@@ -163,7 +161,7 @@ function StoryDetailPageInner() {
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-lg text-gray-800">{line.hanzi}</span>
-                    <VolumeIcon width={14} height={14} className="text-gray-400" />
+                    <VolumeIcon width={14} height={14} className="text-gray-500" />
                   </div>
                   <p className="mt-0.5 text-xs text-brand-600">{line.pinyin}</p>
                   <p className="mt-0.5 text-xs text-gray-500">{line.meaning}</p>

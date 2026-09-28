@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useMemo, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { getLevel, ALL_WORDS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
-import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
+import { VolumeIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
@@ -28,7 +29,6 @@ export default function LessonDetailPage() {
 
 function LessonDetailPageInner() {
   const { levelId, unitId } = useParams()
-  const navigate = useNavigate()
   const level = getLevel(levelId)
   const unit = level?.units.find((u) => u.id === Number(unitId))
   const nextUnit = level?.units.find((u) => u.id === Number(unitId) + 1)
@@ -85,9 +85,7 @@ function LessonDetailPageInner() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-xl text-brand-800">
           {level.label} · {unit.title}
         </h1>

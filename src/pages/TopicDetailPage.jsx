@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { getTopic, getTopicWords } from '../data/topics'
 import { ALL_WORDS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
+import { VolumeIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
@@ -23,7 +24,6 @@ export default function TopicDetailPage() {
 
 function TopicDetailPageInner() {
   const { topicKey } = useParams()
-  const navigate = useNavigate()
   const { addXp, markTopicComplete, completedTopics } = useProgress()
   const topic = getTopic(topicKey)
   const words = useMemo(() => getTopicWords(topicKey), [topicKey])
@@ -77,9 +77,7 @@ function TopicDetailPageInner() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-xl text-brand-800">
           {topic.icon} {topic.title}
         </h1>

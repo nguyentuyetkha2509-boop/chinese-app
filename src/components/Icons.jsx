@@ -21,39 +21,6 @@ import earIconImg from '../assets/icons-gemini/ear.png'
 import shieldIconImg from '../assets/icons-gemini/shield.png'
 import speedIconImg from '../assets/icons-gemini/speed.png'
 
-function base(props) {
-  return { viewBox: '0 0 64 64', width: 32, height: 32, ...props }
-}
-
-// Panda mascot SVG để dùng lại
-function PandaMascot({ x = 0, y = 0, scale = 1 }) {
-  return (
-    <g transform={`translate(${x}, ${y}) scale(${scale})`}>
-      {/* Body */}
-      <circle cx="32" cy="36" r="18" fill="white" stroke="#2d1b4e" strokeWidth="2"/>
-      {/* Head */}
-      <circle cx="32" cy="20" r="16" fill="white" stroke="#2d1b4e" strokeWidth="2"/>
-      {/* Ears */}
-      <circle cx="18" cy="10" r="7" fill="#2d1b4e"/>
-      <circle cx="46" cy="10" r="7" fill="#2d1b4e"/>
-      {/* Eyes */}
-      <circle cx="26" cy="18" r="5" fill="#2d1b4e"/>
-      <circle cx="38" cy="18" r="5" fill="#2d1b4e"/>
-      {/* Eye shine */}
-      <circle cx="27" cy="17" r="2" fill="white"/>
-      <circle cx="39" cy="17" r="2" fill="white"/>
-      {/* Nose */}
-      <circle cx="32" cy="24" r="2.5" fill="#2d1b4e"/>
-      {/* Mouth */}
-      <path d="M32 24 Q28 28 26 27" fill="none" stroke="#2d1b4e" strokeWidth="1.5" strokeLinecap="round"/>
-      <path d="M32 24 Q36 28 38 27" fill="none" stroke="#2d1b4e" strokeWidth="1.5" strokeLinecap="round"/>
-      {/* Blush */}
-      <circle cx="20" cy="22" r="2.5" fill="#ff9999" opacity="0.7"/>
-      <circle cx="44" cy="22" r="2.5" fill="#ff9999" opacity="0.7"/>
-    </g>
-  )
-}
-
 export function HomeIcon({ width = 32, height = 32, ...props }) {
   return (
     <img

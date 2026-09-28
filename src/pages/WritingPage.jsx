@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import HanziWriter from 'hanzi-writer'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
@@ -39,7 +40,6 @@ export default function WritingPage() {
 
 function WritingPageInner() {
   const params = useParams()
-  const navigate = useNavigate()
   const { writingStats, completedUnits, recordWritingPractice, addXp } = useProgress()
   const [levelId, setLevelId] = useState(params.levelId || 'hsk1')
   // "Tat ca": luyen chung tat ca chu da hoc trong ca cap do (nhu truoc gio).
@@ -184,16 +184,26 @@ function WritingPageInner() {
     )
   }
 
-  if (!selected) return null
+  // Truoc day dong nay la `if (!selected) return null` - man hinh TRANG TRON,
+  // khong tieu de, khong nut quay lai, khong duong ve. Kho xay ra nhung la duong
+  // cut that. Nay hien mot loi ra ro rang.
+  if (!selected) {
+    return (
+      <div className="px-4 pt-6">
+        <p className="text-gray-700">Chưa chọn được chữ nào để luyện.</p>
+        <Link to="/viet-chu" className="mt-2 inline-block text-brand-600">
+          Về trang Viết chữ Hán
+        </Link>
+      </div>
+    )
+  }
 
   return (
     <div className="px-4 pt-6">
       {scopedUnit ? (
         <div className="mb-4 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <button onClick={() => navigate(-1)} className="text-gray-500">
-              <ArrowLeftIcon />
-            </button>
+            <BackButton />
             <div>
               <h1 className="text-xl text-brand-800">Viết chữ · {level.label} {scopedUnit.title}</h1>
               <p className="text-xs text-gray-500">Đã luyện {practicedCount}/{chars.length}</p>

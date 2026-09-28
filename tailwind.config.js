@@ -15,11 +15,26 @@ export default {
           700: '#7e22ce',
           800: '#6b21a8'
         },
+        // Bang mau VANG THAT.
+        //
+        // Truoc day cho nay chua nguyen bang mau XANH LA cua Tailwind
+        // (#dcfce7, #4ade80, #22c55e, #16a34a) - gan nhu chac chan la chep nham.
+        // Hau qua thay duoc: bieu tuong cup o Bang xep hang mau xanh, chu XP
+        // mau xanh, va o "Viet chu Han" o trang chu mau xanh trong khi moi noi
+        // khac noi ve Viet chu deu la mau hong. Trong bang mau cua app, mau xanh
+        // la viec cua `teal` (bao "da xong"), nen khong cho nao co y muon gold
+        // mang mau xanh.
+        //
+        // Rieng sac do 600 dat dam hon muc thong thuong (tuong duong amber-700)
+        // vi no duoc dung lam CHU tren nen gold-100 - lay amber-600 thi tuong
+        // phan chi ~2.8:1, kho doc.
         gold: {
-          100: '#dcfce7',
-          400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a'
+          100: '#fef3c7',
+          200: '#fde68a',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#b45309',
+          700: '#92400e'
         },
         sky: {
           100: '#dbeafe',

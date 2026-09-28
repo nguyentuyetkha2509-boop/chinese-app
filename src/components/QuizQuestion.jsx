@@ -34,7 +34,7 @@ export default function QuizQuestion({ question, index, total, selected, onAnswe
             {selected !== null ? (
               <span className="mt-1 text-2xl text-gray-800">{word.hanzi}</span>
             ) : (
-              <span className="text-xs text-gray-400">Chạm để nghe lại</span>
+              <span className="text-xs text-gray-500">Chạm để nghe lại</span>
             )}
           </button>
         )}
@@ -106,7 +106,7 @@ export default function QuizQuestion({ question, index, total, selected, onAnswe
                 {type === 'hanzi' ? (
                   <span>
                     <span className="text-xl">{opt.hanzi}</span>
-                    <span className="ml-2 text-xs text-gray-400">{opt.pinyin}</span>
+                    <span className="ml-2 text-xs text-gray-500">{opt.pinyin}</span>
                   </span>
                 ) : (
                   opt.meaning

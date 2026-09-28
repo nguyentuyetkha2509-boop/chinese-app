@@ -75,7 +75,12 @@ export default function WelcomeScreen({ onDone }) {
       <p className="mt-2 max-w-xs text-[11px] text-white/70">
         Để tự động sao lưu tiến độ và tham gia bảng xếp hạng.
       </p>
-      {error && <p className="mt-2 text-xs text-red-100">{error}</p>}
+      {/* Truoc day dong nay la text-red-100 tren nen tim/hong - do tren do
+          gan nhu khong doc duoc, ma day la man hinh DAU TIEN nguoi moi nhin
+          thay. Doi sang chu trang tren nen do dam cho doc ro. */}
+      {error && (
+        <p className="mt-3 max-w-xs rounded-lg bg-red-600/90 px-3 py-2 text-xs text-white">{error}</p>
+      )}
 
       <button onClick={handleGuest} className="mt-6 text-sm text-white/80 underline">
         Học ngay, không cần tài khoản

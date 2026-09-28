@@ -1,15 +1,15 @@
 import { useMemo } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { STORIES } from '../data/stories'
 import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
 import { parseLevelRank } from '../lib/contentLevel'
-import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from '../components/Icons'
+import { ArrowRightIcon, CheckIcon } from '../components/Icons'
 import { useScrollRestoration } from '../lib/useScrollRestoration'
 
 export default function StoriesPage() {
   useScrollRestoration('stories')
-  const navigate = useNavigate()
   const { completedStories } = useProgress()
   // Sap xep tu de den kho theo cap do co san (vd "HSK1" truoc "HSK2-3"), kem
   // so thu tu va danh dau "Tiep theo" giong trang Bai hoc.
@@ -23,9 +23,7 @@ export default function StoriesPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-2xl text-brand-800">Truyện dài</h1>
       </div>
       <p className="mb-4 text-sm text-gray-500">

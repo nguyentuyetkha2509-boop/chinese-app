@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { TOPICS, getTopicWords, getTopicLevel } from '../data/topics'
 import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
-import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from '../components/Icons'
+import { ArrowRightIcon, CheckIcon } from '../components/Icons'
 import { useScrollRestoration } from '../lib/useScrollRestoration'
 
 export default function TopicsPage() {
   useScrollRestoration('topics')
-  const navigate = useNavigate()
   const { completedTopics } = useProgress()
   // Sap xep tu de den kho (theo do kho tu vung thuc te) thay vi thu tu tuy
   // tien - kem so thu tu va danh dau "Tiep theo" giong trang Bai hoc, de biet
@@ -23,9 +23,7 @@ export default function TopicsPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-2xl text-brand-800">Học theo chủ đề</h1>
       </div>
       <p className="mb-4 text-sm text-gray-500">

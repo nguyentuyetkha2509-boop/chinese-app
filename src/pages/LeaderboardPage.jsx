@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 import { fetchTopLeaderboard } from '../lib/leaderboard'
+import { friendlyError } from '../lib/friendlyError'
 import { useFirebaseAuth } from '../store/FirebaseSyncContext'
-import { ArrowLeftIcon, TrophyIcon } from '../components/Icons'
+import { TrophyIcon } from '../components/Icons'
 
 const MEDAL = ['🥇', '🥈', '🥉']
 
 export default function LeaderboardPage() {
-  const navigate = useNavigate()
   const { user, authReady } = useFirebaseAuth()
   const [entries, setEntries] = useState(null)
   const [error, setError] = useState(null)
@@ -33,7 +34,7 @@ export default function LeaderboardPage() {
         if (!cancelled) setEntries(rows)
       })
       .catch((e) => {
-        if (!cancelled) setError(e.message)
+        if (!cancelled) setError(friendlyError(e))
       })
     return () => {
       cancelled = true
@@ -43,15 +44,13 @@ export default function LeaderboardPage() {
   return (
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
-        <button onClick={() => navigate(-1)} className="text-gray-500">
-          <ArrowLeftIcon />
-        </button>
+        <BackButton />
         <h1 className="text-xl text-brand-800">Bảng xếp hạng</h1>
       </div>
 
       {error && <p className="text-sm text-red-500">{error}</p>}
 
-      {!authReady && <p className="text-sm text-gray-400">Đang tải...</p>}
+      {!authReady && <p className="text-sm text-gray-500">Đang tải...</p>}
 
       {/* Chua dang nhap thi quy tac Firestore khong cho xem bang (xem
           firestore.rules). Bao ro rang, thay vi de trang quay mai hoac hien
@@ -71,10 +70,10 @@ export default function LeaderboardPage() {
         </div>
       )}
 
-      {user && !entries && !error && <p className="text-sm text-gray-400">Đang tải...</p>}
+      {user && !entries && !error && <p className="text-sm text-gray-500">Đang tải...</p>}
 
       {user && entries && entries.length === 0 && (
-        <p className="text-sm text-gray-400">Chưa có ai trên bảng xếp hạng. Hãy là người đầu tiên!</p>
+        <p className="text-sm text-gray-500">Chưa có ai trên bảng xếp hạng. Hãy là người đầu tiên!</p>
       )}
 
       <div className="space-y-2">
