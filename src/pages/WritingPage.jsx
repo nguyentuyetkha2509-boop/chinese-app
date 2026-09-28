@@ -28,7 +28,16 @@ function extractChars(words) {
   return list
 }
 
+// React Router giu nguyen 1 instance component khi chi doi params tren cung 1
+// route (xem giai thich day du o LessonDetailPage) - dat key theo levelId+unitId
+// de remount lai tu dau moi khi doi bai, tranh giu lai chu dang chon va ket qua
+// quiz cua bai truoc.
 export default function WritingPage() {
+  const { levelId, unitId } = useParams()
+  return <WritingPageInner key={`${levelId || ''}:${unitId || ''}`} />
+}
+
+function WritingPageInner() {
   const params = useParams()
   const navigate = useNavigate()
   const { writingStats, completedUnits, recordWritingPractice, addXp } = useProgress()
@@ -39,8 +48,12 @@ export default function WritingPage() {
   // duoc qua man "Hoan thanh!" cua bai hoc, phai lam lai quiz moi hien lai).
   const [viewMode, setViewMode] = useState(null) // null (chưa chọn) | 'all' | 'byLesson'
   const level = getLevel(levelId)
-  const scopedUnit = params.unitId ? level.units.find((u) => u.id === Number(params.unitId)) : null
-  const chars = useMemo(() => extractChars(scopedUnit ? scopedUnit.words : level.words), [level, scopedUnit])
+  // Phai dung level?. vi getLevel tra ve undefined khi ma cap do tren URL sai
+  // (nguoi dung tu sua link, hoac link cu tro toi cap do khong con) - truoc day
+  // cho nay doc thang level.units nen ca trang bi trang xoa. Chan han o duoi,
+  // sau khi moi hook da chay xong.
+  const scopedUnit = params.unitId ? level?.units.find((u) => u.id === Number(params.unitId)) : null
+  const chars = useMemo(() => extractChars(scopedUnit ? scopedUnit.words : level?.words || []), [level, scopedUnit])
   const [selected, setSelected] = useState(chars[0])
   const [quizResult, setQuizResult] = useState(null)
   // Chu nao khong tai duoc net (vd. mat mang ma chua tung mo chu do lan nao,
@@ -157,6 +170,19 @@ export default function WritingPage() {
 
   const practicedCount = chars.filter((c) => writingStats.practiced.includes(c.char)).length
   const showPracticeArea = !!scopedUnit || viewMode === 'all'
+
+  // Dat sau TAT CA cac hook (useState/useMemo/useRef/useEffect o tren) de khong
+  // pha vo thu tu goi hook giua cac lan render.
+  if (!level) {
+    return (
+      <div className="px-4 pt-6">
+        <p className="text-gray-700">Không tìm thấy cấp độ này.</p>
+        <Link to="/viet-chu" className="mt-2 inline-block text-brand-600">
+          Về trang Viết chữ Hán
+        </Link>
+      </div>
+    )
+  }
 
   if (!selected) return null
 

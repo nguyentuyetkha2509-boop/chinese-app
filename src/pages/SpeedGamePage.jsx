@@ -36,7 +36,11 @@ export default function SpeedGamePage() {
   const [question, setQuestion] = useState(() => buildQuestion())
   const [flash, setFlash] = useState(null) // { optionId, correct }
   const timerRef = useRef(null)
-  const isNewRecord = phase === 'over' && score > 0 && score === highScore
+  // Ky luc NGAY TRUOC khi vao van nay. Phai luu rieng vi luc van ket thuc,
+  // setHighScore ben duoi da cap nhat highScore bang chinh so diem vua dat - neu
+  // so voi gia tri MOI thi hoa diem cung bi tinh nham thanh "ky luc moi".
+  const recordBeforeRef = useRef(highScore)
+  const isNewRecord = phase === 'over' && score > 0 && score > recordBeforeRef.current
 
   useEffect(() => {
     if (phase !== 'playing') return
@@ -68,6 +72,7 @@ export default function SpeedGamePage() {
   }, [timeLeft, phase])
 
   function startGame() {
+    recordBeforeRef.current = highScore
     setPhase('playing')
     setTimeLeft(GAME_SECONDS)
     setScore(0)

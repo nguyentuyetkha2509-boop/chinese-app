@@ -50,7 +50,11 @@ export function ProgressProvider({ children }) {
     setStreak((prev) => {
       const today = todayKey()
       if (prev.lastDay === today) return prev
-      const yesterday = new Date(Date.now() - DAY_MS).toISOString().slice(0, 10)
+      // Phai tinh "hom qua" bang CHINH ham todayKey, khong duoc tu tinh lai bang
+      // toISOString: todayKey da theo gio dia phuong, con toISOString la gio UTC,
+      // hai ben lech nhau moi khi gio UTC va gio dia phuong roi vao 2 ngay khac
+      // nhau (o Viet Nam la tu 00:00 den 07:00 sang) => streak bi dem sai.
+      const yesterday = todayKey(new Date(Date.now() - DAY_MS))
       const count = prev.lastDay === yesterday ? prev.count + 1 : 1
       return { count, lastDay: today }
     })

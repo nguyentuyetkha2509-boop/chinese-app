@@ -486,7 +486,16 @@ const TABS = [
   { key: 'record', label: 'Ghi âm so sánh' }
 ]
 
+// React Router giu nguyen 1 instance component khi chi doi params (levelId/
+// unitId) tren cung 1 route, khong tu remount - nen dieu huong tu bai nay sang
+// bai khac se giu lai tab dang chon va tu dang nghe cua bai truoc. Dat key theo
+// levelId+unitId de React remount lai tu dau, giong cach LessonDetailPage lam.
 export default function PronunciationPage() {
+  const { levelId, unitId } = useParams()
+  return <PronunciationPageInner key={`${levelId || ''}:${unitId || ''}`} />
+}
+
+function PronunciationPageInner() {
   const params = useParams()
   const navigate = useNavigate()
   const { completedUnits } = useProgress()
@@ -495,15 +504,30 @@ export default function PronunciationPage() {
   const level = getLevel(levelId)
   const ttsOk = useMemo(() => isTtsSupported(), [])
 
-  const scopedUnit = params.unitId ? level.units.find((u) => u.id === Number(params.unitId)) : null
+  // Phai dung level?. vi getLevel tra ve undefined khi ma cap do tren URL sai
+  // (nguoi dung tu sua link, hoac link cu tro toi cap do khong con). Truoc day
+  // cho nay doc thang level.units nen ca trang bi trang xoa, khong co duong ve.
+  const scopedUnit = params.unitId ? level?.units.find((u) => u.id === Number(params.unitId)) : null
   // Khong vao tu 1 bai cu the (qua tab Phat am chung) thi chi lay TU DA HOC -
   // truoc day lay ca level.words (ca tu chua hoc toi), khien nguoi moi nghe/
   // luyen thanh dieu nhung tu con xa la, khong khop voi tien do thuc te.
   const learnedWords = useMemo(
-    () => level.units.filter((u) => completedUnits.includes(`${levelId}:${u.id}`)).flatMap((u) => u.words),
+    () =>
+      level ? level.units.filter((u) => completedUnits.includes(`${levelId}:${u.id}`)).flatMap((u) => u.words) : [],
     [level, levelId, completedUnits]
   )
   const words = scopedUnit ? scopedUnit.words : learnedWords
+
+  if (!level) {
+    return (
+      <div className="px-4 pt-6">
+        <p className="text-gray-700">Không tìm thấy cấp độ này.</p>
+        <Link to="/phat-am" className="mt-2 inline-block text-brand-600">
+          Về trang Phát âm
+        </Link>
+      </div>
+    )
+  }
 
   return (
     <div className="px-4 pt-6">
