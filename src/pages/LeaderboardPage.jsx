@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchTopLeaderboard } from '../lib/leaderboard'
-import { useFirebaseSync } from '../store/FirebaseSyncContext'
+import { useFirebaseAuth } from '../store/FirebaseSyncContext'
 import { ArrowLeftIcon, TrophyIcon } from '../components/Icons'
 
 const MEDAL = ['🥇', '🥈', '🥉']
 
 export default function LeaderboardPage() {
   const navigate = useNavigate()
-  const { user } = useFirebaseSync()
+  const { user } = useFirebaseAuth()
   const [entries, setEntries] = useState(null)
   const [error, setError] = useState(null)
 
