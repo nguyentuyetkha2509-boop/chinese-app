@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import {  } from '../components/Icons'
+import MarkdownLite from '../components/MarkdownLite'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 import { loadJSON, saveJSON } from '../lib/storage'
 
@@ -92,7 +93,7 @@ export default function AiChatPage() {
                   m.role === 'user' ? 'ml-auto bg-brand-700 text-white' : 'bg-white text-gray-800'
                 }`}
               >
-                {m.content}
+                <MarkdownLite text={m.content} />
               </div>
             ))}
             {loading && (

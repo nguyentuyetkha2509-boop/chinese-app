@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import {  } from '../components/Icons'
+import MarkdownLite from '../components/MarkdownLite'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 
 const SYSTEM_PROMPT = `Bạn là giáo viên tiếng Trung chấm bài viết cho người Việt Nam học tiếng Trung. Khi nhận một câu hoặc đoạn văn tiếng Trung của học viên, hãy trả lời bằng tiếng Việt theo đúng cấu trúc sau:
@@ -75,7 +76,7 @@ export default function WritingCheckPage() {
 
           {result && (
             <div className="mt-4 whitespace-pre-wrap rounded-2xl bg-white p-4 text-sm leading-relaxed text-gray-800 shadow-sm">
-              {result}
+              <MarkdownLite text={result} />
             </div>
           )}
         </>

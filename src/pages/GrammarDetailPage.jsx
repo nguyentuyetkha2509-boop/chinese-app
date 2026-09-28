@@ -9,6 +9,7 @@ import { XP_REWARDS } from '../lib/gamification'
 import { VolumeIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
 import CelebrationBadge from '../components/CelebrationBadge'
+import MarkdownLite from '../components/MarkdownLite'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 
 function GrammarAskAi({ point }) {
@@ -75,7 +76,11 @@ function GrammarAskAi({ point }) {
               {loading ? 'Đang hỏi...' : 'Hỏi'}
             </button>
             {error && <p className="mt-2 text-xs text-red-500">{error}</p>}
-            {answer && <p className="mt-3 whitespace-pre-wrap text-sm text-gray-700">{answer}</p>}
+            {answer && (
+              <p className="mt-3 whitespace-pre-wrap text-sm text-gray-700">
+                <MarkdownLite text={answer} />
+              </p>
+            )}
           </div>
         ))}
     </div>
