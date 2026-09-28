@@ -18,7 +18,8 @@ import {
   ShuffleIcon,
   EarIcon,
   SettingsIcon,
-  TrophyIcon
+  TrophyIcon,
+  ZapIcon
 } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import trophyPanda from '../assets/panda/trophy_panda.webp'
@@ -72,6 +73,18 @@ const CORE_CARDS = [
 
 // Noi dung phu / mo rong - luyen them khi da xong vong hoc chinh, dat cuoi trang.
 const EXTRA_CARDS = [
+  {
+    to: '/tro-chuyen-ai',
+    icon: ChatIcon,
+    title: 'Trò chuyện AI',
+    className: 'bg-gradient-to-br from-brand-700 to-candy-600'
+  },
+  {
+    to: '/cham-bai-viet',
+    icon: ZapIcon,
+    title: 'Chấm bài viết AI',
+    className: 'bg-gradient-to-br from-sun-600 to-candy-600'
+  },
   {
     to: '/sap-xep-cau',
     icon: ShuffleIcon,
@@ -177,6 +190,8 @@ export default function HomePage() {
     if (to === '/chu-de') return 'Gia đình, đồ ăn, màu sắc...'
     if (to === '/hoi-thoai') return 'Xem tiếng Trung dùng thật'
     if (to === '/tro-choi') return 'Trả lời nhanh trong 60 giây!'
+    if (to === '/tro-chuyen-ai') return 'Luyện nói với AI, sửa lỗi ngay'
+    if (to === '/cham-bai-viet') return 'AI chấm và sửa câu văn bạn viết'
     return null
   }
 

@@ -8,6 +8,78 @@ import { XP_REWARDS } from '../lib/gamification'
 import { ArrowLeftIcon, VolumeIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
 import CelebrationBadge from '../components/CelebrationBadge'
+import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
+
+function GrammarAskAi({ point }) {
+  const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
+  const [question, setQuestion] = useState('')
+  const [answer, setAnswer] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const keyReady = hasDeepseekKey()
+
+  async function handleAsk() {
+    const q = question.trim()
+    if (!q || loading) return
+    setLoading(true)
+    setError('')
+    setAnswer('')
+    const context = `Điểm ngữ pháp: ${point.title}\nCấu trúc: ${point.pattern}\nGiải thích: ${point.explanation}`
+    try {
+      const reply = await askDeepseek([
+        {
+          role: 'system',
+          content:
+            'Bạn là giáo viên tiếng Trung, trả lời ngắn gọn, dễ hiểu bằng tiếng Việt cho câu hỏi của học viên về điểm ngữ pháp dưới đây, có thể cho thêm ví dụ nếu cần.'
+        },
+        { role: 'user', content: `${context}\n\nCâu hỏi của học viên: ${q}` }
+      ])
+      setAnswer(reply)
+    } catch (e) {
+      setError(e instanceof DeepseekError ? e.message : 'Có lỗi xảy ra, thử lại sau.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="mb-5 rounded-2xl bg-teal-50 p-4">
+      <button onClick={() => setOpen((v) => !v)} className="flex w-full items-center justify-between text-left">
+        <p className="text-sm font-semibold text-teal-700">🤖 Hỏi AI về điểm ngữ pháp này</p>
+        <span className="text-teal-600">{open ? '−' : '+'}</span>
+      </button>
+      {open &&
+        (!keyReady ? (
+          <p className="mt-2 text-xs text-gray-600">
+            Cần thêm API key DeepSeek.{' '}
+            <button onClick={() => navigate('/cai-dat')} className="font-semibold text-brand-700 underline">
+              Vào Cài đặt
+            </button>
+          </p>
+        ) : (
+          <div className="mt-3">
+            <textarea
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              rows={2}
+              placeholder="Ví dụ: khác gì với 了 bình thường?"
+              className="w-full rounded-xl border border-teal-200 p-2 text-sm"
+            />
+            <button
+              onClick={handleAsk}
+              disabled={loading || !question.trim()}
+              className="mt-2 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+            >
+              {loading ? 'Đang hỏi...' : 'Hỏi'}
+            </button>
+            {error && <p className="mt-2 text-xs text-red-500">{error}</p>}
+            {answer && <p className="mt-3 whitespace-pre-wrap text-sm text-gray-700">{answer}</p>}
+          </div>
+        ))}
+    </div>
+  )
+}
 
 // Xem ghi chu tuong tu trong LessonDetailPage.jsx: dat key theo pointKey de
 // remount lai tu dau khi chuyen thang sang diem ngu phap khac.
@@ -81,6 +153,8 @@ function GrammarDetailPageInner() {
               </button>
             ))}
           </div>
+
+          <GrammarAskAi point={point} />
 
           <button
             onClick={() => setPhase('quiz')}

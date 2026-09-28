@@ -30,6 +30,8 @@ import GrammarDetailPage from './pages/GrammarDetailPage'
 import SentenceBuilderPage from './pages/SentenceBuilderPage'
 import DictationPage from './pages/DictationPage'
 import SettingsPage from './pages/SettingsPage'
+import AiChatPage from './pages/AiChatPage'
+import WritingCheckPage from './pages/WritingCheckPage'
 
 export default function App() {
   const { authReady, user } = useFirebaseAuth()
@@ -75,6 +77,8 @@ export default function App() {
         <Route path="/sap-xep-cau" element={<SentenceBuilderPage />} />
         <Route path="/nghe-chep-chinh-ta" element={<DictationPage />} />
         <Route path="/cai-dat" element={<SettingsPage />} />
+        <Route path="/tro-chuyen-ai" element={<AiChatPage />} />
+        <Route path="/cham-bai-viet" element={<WritingCheckPage />} />
       </Routes>
       <BottomNav />
     </div>

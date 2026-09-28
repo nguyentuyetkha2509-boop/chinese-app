@@ -4,6 +4,7 @@ import { getDailyNewWordLimit, setDailyNewWordLimit, NEW_WORD_LIMIT_OPTIONS } fr
 import { useFirebaseAuth, useFirebaseSync } from '../store/FirebaseSyncContext'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { loadJSON, saveJSON } from '../lib/storage'
+import { getDeepseekKey, setDeepseekKey } from '../lib/deepseek'
 import { ArrowLeftIcon, ShieldIcon, BellIcon } from '../components/Icons'
 
 const REMINDER_KEY = 'dailyReminder'
@@ -76,6 +77,73 @@ function ReminderSection() {
           </div>
         </>
       )}
+    </div>
+  )
+}
+
+function DeepseekKeySection() {
+  const [key, setKey] = useState(() => getDeepseekKey())
+  const [visible, setVisible] = useState(false)
+  const [saved, setSaved] = useState(false)
+
+  function handleSave() {
+    setDeepseekKey(key)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 1500)
+  }
+
+  function handleRemove() {
+    setKey('')
+    setDeepseekKey('')
+  }
+
+  return (
+    <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
+      <p className="text-base text-gray-800">🤖 API key DeepSeek (tính năng AI)</p>
+      <p className="mt-1 text-xs text-gray-500">
+        Cần key này để dùng Trò chuyện AI, Chấm bài viết AI và Hỏi AI ở phần Ngữ pháp. Lấy key miễn phí tại{' '}
+        <a
+          href="https://platform.deepseek.com/api_keys"
+          target="_blank"
+          rel="noreferrer"
+          className="text-brand-600 underline"
+        >
+          platform.deepseek.com
+        </a>
+        . Key chỉ lưu trong trình duyệt của bạn (localStorage), app không gửi key lên server nào khác - nhưng vì app
+        chạy tĩnh trên GitHub Pages nên đừng lưu key trên máy dùng chung với người lạ.
+      </p>
+      <div className="mt-3 flex gap-2">
+        <input
+          type={visible ? 'text' : 'password'}
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          placeholder="sk-..."
+          className="flex-1 rounded-xl border border-gray-200 px-3 py-2 text-sm"
+        />
+        <button
+          onClick={() => setVisible((v) => !v)}
+          className="rounded-xl border border-gray-200 px-3 text-xs text-gray-500"
+        >
+          {visible ? 'Ẩn' : 'Hiện'}
+        </button>
+      </div>
+      <div className="mt-2 flex gap-2">
+        <button
+          onClick={handleSave}
+          className="flex-1 rounded-xl bg-brand-700 py-2.5 text-sm font-semibold text-white"
+        >
+          {saved ? 'Đã lưu ✓' : 'Lưu key'}
+        </button>
+        {key && (
+          <button
+            onClick={handleRemove}
+            className="rounded-xl border border-red-200 px-4 text-sm font-semibold text-red-500"
+          >
+            Xóa
+          </button>
+        )}
+      </div>
     </div>
   )
 }
@@ -248,6 +316,8 @@ export default function SettingsPage() {
       </div>
 
       <ReminderSection />
+
+      <DeepseekKeySection />
 
       <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
         <p className="text-base text-gray-800">Giới hạn từ mới mỗi ngày</p>
