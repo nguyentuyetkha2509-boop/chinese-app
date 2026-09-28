@@ -160,7 +160,7 @@ export default function HomePage() {
       ? `${dueCount} thẻ cần ôn`
       : !comboDone
         ? `${todayCombo.levelLabel} · ${todayCombo.unit.title}`
-        : 'Đã xong việc hôm nay 🎉'
+        : 'Hoàn thành nhiệm vụ 🎉'
 
   const statValues = { total: stats.total, learned: stats.learned, percent: `${percent}%`, due: dueCount }
 
