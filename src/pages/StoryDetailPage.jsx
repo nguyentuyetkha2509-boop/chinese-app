@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getStory } from '../data/stories'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
+import { useSequencePlayer } from '../lib/useSequencePlayer'
 import { playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
 import { ArrowLeftIcon, CheckIcon, VolumeIcon } from '../components/Icons'
@@ -25,9 +26,24 @@ function StoryDetailPageInner() {
 
   const [phase, setPhase] = useState('reading') // reading | quiz | done
   const [chapterIndex, setChapterIndex] = useState(0)
-  const [playingAll, setPlayingAll] = useState(false)
-  const [activeLine, setActiveLine] = useState(null)
   const [result, setResult] = useState({ correct: 0, total: 0 })
+
+  const chapter = story?.chapters?.[chapterIndex]
+  const isLastChapter = story ? chapterIndex === story.chapters.length - 1 : false
+  const done = story ? completedStories.includes(story.key) : false
+
+  // Xem ghi chu o TopicDetailPage: bai da hoan thanh thi khong cong XP nua.
+  const awardXp = done ? () => {} : addXp
+
+  const { playingAll, activeLine, failed, playAll, stop, setActiveLine } = useSequencePlayer({
+    lines: chapter?.lines,
+    // Chi ghi "da doc xong" khi chuoi phat di het that su. Neu may khong doc
+    // duoc thi hook dung lai va khong goi onFinish, nen truyen khong bi danh dau
+    // oan la da nghe.
+    onFinish: () => {
+      if (isLastChapter) markStoryComplete(story.key)
+    }
+  })
 
   if (!story) {
     return (
@@ -40,38 +56,34 @@ function StoryDetailPageInner() {
     )
   }
 
-  const chapter = story.chapters[chapterIndex]
-  const isLastChapter = chapterIndex === story.chapters.length - 1
-  const done = completedStories.includes(story.key)
-
-  function playAll(index = 0) {
-    if (index >= chapter.lines.length) {
-      setPlayingAll(false)
-      setActiveLine(null)
-      if (isLastChapter) markStoryComplete(story.key)
-      return
-    }
-    setPlayingAll(true)
-    setActiveLine(index)
-    speakChinese(chapter.lines[index].hanzi, { onEnd: () => setTimeout(() => playAll(index + 1), 250) })
+  // Doi phan thi phai dung chuoi phat cua phan cu truoc. Neu khong, tieng cua
+  // phan cu van doc tiep trong khi man hinh da sang phan moi, va vien sang chay
+  // theo chi so cua danh sach cu nen nhay sai cau.
+  function goToChapter(next) {
+    stop()
+    setChapterIndex(next)
   }
 
   function goToQuiz() {
+    stop()
     setPhase('quiz')
   }
 
   function handleQuizDone(correct, total) {
     setResult({ correct, total })
-    addXp(XP_REWARDS.storyComplete)
+    // Chi cong XP cho lan hoan thanh DAU TIEN. markStoryComplete chay lai khong
+    // sao (no chi ghi de), nhung addXp thi CONG DON - nen truoc day cu bam "Doc
+    // lai" roi lam lai bai doc hieu la lai kiem duoc XP mai khong gioi han, va
+    // bang xep hang (co that, moi nguoi xem duoc) mat het y nghia.
+    awardXp(XP_REWARDS.storyComplete)
     markStoryComplete(story.key)
     playCelebrate()
     setPhase('done')
   }
 
   function restart() {
+    stop()
     setChapterIndex(0)
-    setPlayingAll(false)
-    setActiveLine(null)
     setPhase('reading')
   }
 
@@ -95,7 +107,10 @@ function StoryDetailPageInner() {
         <>
           <div className="mb-3 flex items-center justify-between">
             <p className="text-sm text-gray-500">
-              {chapter.title} · Phần {chapterIndex + 1}/{story.chapters.length}
+              {/* chapter.title da co san "Phần 1: ..." trong du lieu, nen truoc
+                  day dong nay bi lap thanh "Phần 1: ... · Phần 1/3". Chi giu lai
+                  phan dem so phan. */}
+              {chapter.title} · {chapterIndex + 1}/{story.chapters.length}
             </p>
             <div className="flex gap-1">
               {story.chapters.map((_, i) => (
@@ -115,6 +130,14 @@ function StoryDetailPageInner() {
             {playingAll ? '🔊 Đang phát...' : '🔊 Nghe cả phần này'}
           </button>
 
+          {failed && (
+            <p className="mb-4 rounded-xl bg-amber-100 p-3 text-xs text-amber-800">
+              ⚠️ Máy này chưa đọc được tiếng Trung nên không phát cả phần được. Bạn vẫn đọc được toàn
+              bộ nội dung bên dưới; muốn có tiếng thì vào Cài đặt máy → Ngôn ngữ &amp; giọng nói →
+              thêm giọng “Chinese (Mandarin)”.
+            </p>
+          )}
+
           <div className="space-y-2">
             {chapter.lines.map((line, i) => {
               const isActive = activeLine === i
@@ -122,8 +145,17 @@ function StoryDetailPageInner() {
                 <button
                   key={i}
                   onClick={() => {
+                    // Phai dung chuoi "nghe ca phan" truoc. Giua hai cau co khoang
+                    // nghi 250ms, bam dung luc do thi khong co tieng nao bi huy, nen
+                    // chuoi cu van chay tiep va doc de len cau vua bam.
+                    stop()
                     setActiveLine(i)
-                    speakChinese(line.hanzi, { onEnd: () => setActiveLine(null) })
+                    // Phai co onError: neu may khong doc duoc thi onEnd khong
+                    // chay va vien sang quanh cau se mac mai o do.
+                    speakChinese(line.hanzi, {
+                      onEnd: () => setActiveLine(null),
+                      onError: () => setActiveLine(null)
+                    })
                   }}
                   className={`w-full rounded-2xl bg-white p-3.5 text-left shadow-sm transition ${
                     isActive ? 'ring-2 ring-candy-400' : ''
@@ -143,15 +175,17 @@ function StoryDetailPageInner() {
           <div className="mt-5 flex gap-2">
             {chapterIndex > 0 && (
               <button
-                onClick={() => setChapterIndex((i) => i - 1)}
-                className="flex-1 rounded-2xl bg-white py-3 text-sm font-semibold text-gray-600 shadow-sm"
+                onClick={() => goToChapter(chapterIndex - 1)}
+                disabled={playingAll}
+                className="flex-1 rounded-2xl bg-white py-3 text-sm font-semibold text-gray-600 shadow-sm disabled:opacity-50"
               >
                 ← Phần trước
               </button>
             )}
             <button
-              onClick={() => (isLastChapter ? goToQuiz() : setChapterIndex((i) => i + 1))}
-              className="flex-1 rounded-2xl bg-brand-700 py-3 text-sm font-semibold text-white"
+              onClick={() => (isLastChapter ? goToQuiz() : goToChapter(chapterIndex + 1))}
+              disabled={playingAll}
+              className="flex-1 rounded-2xl bg-brand-700 py-3 text-sm font-semibold text-white disabled:opacity-50"
             >
               {isLastChapter ? 'Làm bài đọc hiểu →' : 'Phần tiếp theo →'}
             </button>
@@ -162,7 +196,7 @@ function StoryDetailPageInner() {
       {phase === 'quiz' && (
         <>
           <p className="mb-2 text-sm text-gray-500">Đọc hiểu:</p>
-          <MiniQuiz items={story.quiz} onDone={handleQuizDone} xpPerCorrect={XP_REWARDS.storyQuizCorrect} addXp={addXp} />
+          <MiniQuiz items={story.quiz} onDone={handleQuizDone} xpPerCorrect={XP_REWARDS.storyQuizCorrect} addXp={awardXp} />
         </>
       )}
 

@@ -24,7 +24,7 @@ export default function TopicDetailPage() {
 function TopicDetailPageInner() {
   const { topicKey } = useParams()
   const navigate = useNavigate()
-  const { addXp, markTopicComplete } = useProgress()
+  const { addXp, markTopicComplete, completedTopics } = useProgress()
   const topic = getTopic(topicKey)
   const words = useMemo(() => getTopicWords(topicKey), [topicKey])
   const [phase, setPhase] = useState('study') // study | quiz | done
@@ -32,6 +32,12 @@ function TopicDetailPageInner() {
   const [quizIndex, setQuizIndex] = useState(0)
   const [correctCount, setCorrectCount] = useState(0)
   const [selected, setSelected] = useState(null)
+
+  // Chi cong XP cho lan hoan thanh DAU TIEN. markTopicComplete chay lai thi vo
+  // hai (no chi ghi de), nhung addXp thi CONG DON - nen truoc day lam lai cung
+  // mot chu de la lai kiem duoc XP mai khong gioi han, va bang xep hang (co
+  // that, moi nguoi xem duoc) mat het y nghia.
+  const awardXp = topic && completedTopics.includes(topic.key) ? () => {} : addXp
 
   if (!topic) {
     return (
@@ -52,7 +58,7 @@ function TopicDetailPageInner() {
     if (isCorrect) {
       setCorrectCount((c) => c + 1)
       playCorrect()
-      addXp(XP_REWARDS.quizCorrect)
+      awardXp(XP_REWARDS.quizCorrect)
     } else {
       playWrong()
     }

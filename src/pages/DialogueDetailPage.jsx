@@ -1,8 +1,8 @@
-import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getDialogue } from '../data/dialogues'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
+import { useSequencePlayer } from '../lib/useSequencePlayer'
 import { playFlip } from '../lib/sfx'
 import { ArrowLeftIcon, CheckIcon, VolumeIcon } from '../components/Icons'
 
@@ -18,9 +18,15 @@ function DialogueDetailPageInner() {
   const navigate = useNavigate()
   const dialogue = getDialogue(dialogueKey)
   const { completedDialogues, markDialogueComplete } = useProgress()
-  const [playingAll, setPlayingAll] = useState(false)
-  const [activeLine, setActiveLine] = useState(null)
   const done = dialogue ? completedDialogues.includes(dialogue.key) : false
+
+  const { playingAll, activeLine, failed, playAll, setActiveLine } = useSequencePlayer({
+    lines: dialogue?.lines,
+    // Chi ghi "da nghe" khi chuoi phat di het that su. Neu may khong doc duoc thi
+    // hook dung lai va khong goi onFinish, nen hoi thoai khong bi danh dau oan.
+    onFinish: () => markDialogueComplete(dialogue.key),
+    onFirstLine: () => playFlip()
+  })
 
   if (!dialogue) {
     return (
@@ -31,19 +37,6 @@ function DialogueDetailPageInner() {
         </Link>
       </div>
     )
-  }
-
-  function playAll(index = 0) {
-    if (index >= dialogue.lines.length) {
-      setPlayingAll(false)
-      setActiveLine(null)
-      markDialogueComplete(dialogue.key)
-      return
-    }
-    if (index === 0) playFlip()
-    setPlayingAll(true)
-    setActiveLine(index)
-    speakChinese(dialogue.lines[index].hanzi, { onEnd: () => setTimeout(() => playAll(index + 1), 250) })
   }
 
   return (
@@ -72,6 +65,14 @@ function DialogueDetailPageInner() {
         {playingAll ? '🔊 Đang phát...' : done ? '🔊 Nghe lại cả đoạn' : '🔊 Nghe cả đoạn hội thoại'}
       </button>
 
+      {failed && (
+        <p className="mb-4 rounded-xl bg-amber-100 p-3 text-xs text-amber-800">
+          ⚠️ Máy này chưa đọc được tiếng Trung nên không phát cả đoạn được. Bạn vẫn xem được toàn bộ
+          nội dung bên dưới; muốn có tiếng thì vào Cài đặt máy → Ngôn ngữ &amp; giọng nói → thêm giọng
+          “Chinese (Mandarin)”.
+        </p>
+      )}
+
       <div className="space-y-3">
         {dialogue.lines.map((line, i) => {
           const isA = line.speaker === 'A'
@@ -80,9 +81,18 @@ function DialogueDetailPageInner() {
             <div key={i} className={`flex ${isA ? 'justify-start' : 'justify-end'}`}>
               <button
                 onClick={() => {
+                  // Phai dung chuoi "nghe ca doan" truoc. Giua hai cau co khoang
+                  // nghi 250ms, bam dung luc do thi khong co tieng nao bi huy, nen
+                  // chuoi cu van chay tiep va doc de len cau vua bam.
+                  stop()
                   playFlip()
                   setActiveLine(i)
-                  speakChinese(line.hanzi, { onEnd: () => setActiveLine(null) })
+                  // Phai co onError: neu may khong doc duoc thi onEnd khong chay
+                  // va vien sang bo quanh cau se mac mai o do.
+                  speakChinese(line.hanzi, {
+                    onEnd: () => setActiveLine(null),
+                    onError: () => setActiveLine(null)
+                  })
                 }}
                 className={`max-w-[80%] rounded-2xl p-3 text-left shadow-sm transition ${
                   isA ? 'rounded-tl-sm bg-white' : 'rounded-tr-sm bg-brand-600 text-white'

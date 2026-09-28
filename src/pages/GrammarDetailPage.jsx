@@ -92,9 +92,12 @@ function GrammarDetailPageInner() {
   const { pointKey } = useParams()
   const navigate = useNavigate()
   const point = getGrammarPoint(pointKey)
-  const { addXp, markGrammarComplete } = useProgress()
+  const { addXp, markGrammarComplete, completedGrammar } = useProgress()
   const [phase, setPhase] = useState('learn') // learn | quiz | done
   const [result, setResult] = useState({ correct: 0, total: 0 })
+
+  // Xem ghi chu o TopicDetailPage: bai da hoan thanh thi khong cong XP nua.
+  const awardXp = point && completedGrammar.includes(point.key) ? () => {} : addXp
 
   if (!point) {
     return (
@@ -109,7 +112,8 @@ function GrammarDetailPageInner() {
 
   function handleQuizDone(correct, total) {
     setResult({ correct, total })
-    addXp(XP_REWARDS.grammarComplete)
+    // Chi cong XP cho lan hoan thanh DAU TIEN - xem ghi chu o TopicDetailPage.
+    awardXp(XP_REWARDS.grammarComplete)
     markGrammarComplete(point.key)
     playCelebrate()
     setPhase('done')
@@ -166,7 +170,7 @@ function GrammarDetailPageInner() {
       )}
 
       {phase === 'quiz' && (
-        <MiniQuiz items={point.quiz} onDone={handleQuizDone} xpPerCorrect={XP_REWARDS.grammarQuizCorrect} addXp={addXp} />
+        <MiniQuiz items={point.quiz} onDone={handleQuizDone} xpPerCorrect={XP_REWARDS.grammarQuizCorrect} addXp={awardXp} />
       )}
 
       {phase === 'done' && (

@@ -79,7 +79,11 @@ export default function RoadmapPage() {
                   {l.wordsIntroduced}/{l.totalWords} từ · {l.unitsDone}/{l.totalUnits} bài
                 </span>
                 {l.status !== 'done' && l.daysToFinish !== null && (
-                  <span>~{l.daysToFinish} ngày nữa xong cấp này</span>
+                  // Con so nay CONG DON tu dau lo trinh (xem estimateRoadmap), chu
+                  // khong phai chi rieng cap nay - nen ghi "xong toi day" cho dung
+                  // nghia. Truoc day ghi "xong cap nay" khien nguoi hoc tuong nham
+                  // la so ngay chi de hoc rieng cap do do.
+                  <span>~{l.daysToFinish} ngày nữa xong tới đây</span>
                 )}
               </div>
 
