@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import BottomNav from './components/BottomNav'
+import TopBar from './components/TopBar'
 import TtsWarning from './components/TtsWarning'
 import WelcomeScreen, { hasSeenWelcome } from './components/WelcomeScreen'
 import OnboardingGuide, { hasSeenOnboarding } from './components/OnboardingGuide'
@@ -45,6 +46,7 @@ export default function App() {
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-canvas pb-20 pt-[max(env(safe-area-inset-top),20px)]">
+      <TopBar />
       <TtsWarning />
       <NicknamePrompt />
       <DailyReminder />
