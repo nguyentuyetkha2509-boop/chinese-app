@@ -196,7 +196,7 @@ function ListenBrowse({ words }) {
               <p className={`text-sm ${accent.text}`}>{word.pinyin}</p>
             </div>
             <span className={`flex h-8 w-8 items-center justify-center rounded-full ${accent.bg} ${accent.text}`}>
-              <VolumeIcon width={16} height={16} />
+              <VolumeIcon width={20} height={20} />
             </span>
           </button>
         )
@@ -405,14 +405,14 @@ function RecordCompare({ words, levelId }) {
           onClick={() => speakChinese(word.hanzi)}
           className="mx-auto mt-3 flex items-center gap-1 rounded-full bg-white/20 px-4 py-1.5"
         >
-          <VolumeIcon width={20} height={20} /> Nghe mẫu
+          <VolumeIcon width={24} height={24} /> Nghe mẫu
         </button>
       </div>
 
       <div className="mt-5 flex flex-col items-center gap-3">
         {status === 'recording' ? (
           <button onClick={stopRecording} className="flex items-center gap-2 rounded-full bg-red-500 px-6 py-3 text-white">
-            <MicIcon width={20} height={20} /> Dừng ghi âm
+            <MicIcon width={24} height={24} /> Dừng ghi âm
           </button>
         ) : (
           <button
@@ -422,7 +422,7 @@ function RecordCompare({ words, levelId }) {
               status === 'requesting' ? 'animate-pulse' : ''
             }`}
           >
-            <MicIcon width={20} height={20} />
+            <MicIcon width={24} height={24} />
             {status === 'requesting' ? 'Đang mở micro...' : 'Bắt đầu ghi âm'}
           </button>
         )}
@@ -448,7 +448,7 @@ function RecordCompare({ words, levelId }) {
                 aiChecking ? 'animate-pulse' : ''
               }`}
             >
-              <MicIcon width={20} height={20} />
+              <MicIcon width={24} height={24} />
               {aiChecking ? '🎤 Đang nghe...' : aiResult ? '🤖 Thử lại với AI' : '🤖 Chấm điểm bằng AI'}
             </button>
           </>

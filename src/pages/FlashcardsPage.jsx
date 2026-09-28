@@ -255,7 +255,7 @@ export default function FlashcardsPage() {
         }}
         className={`mx-auto mt-3 flex items-center gap-1 ${accent.text}`}
       >
-        <VolumeIcon width={20} height={20} />
+        <VolumeIcon width={24} height={24} />
         Nghe phát âm
       </button>
 

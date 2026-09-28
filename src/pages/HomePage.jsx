@@ -201,17 +201,17 @@ export default function HomePage() {
         <div>
           <p className="text-base italic text-candy-600">Chào {nickname || 'bạn'} 👋</p>
           <h1 className="flex items-center gap-1.5 text-2xl text-brand-800">
-            <img src={headerPanda} alt="" width={28} height={28} className="inline-block" />
+            <img src={headerPanda} alt="" width={34} height={34} className="inline-block" />
             PandaChinese
           </h1>
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1 rounded-full bg-sun-100 px-3 py-1.5 text-sun-600">
-            <FireIcon width={18} height={18} />
+            <FireIcon width={22} height={22} />
             <span className="text-sm">{streak.count} ngày</span>
           </div>
           <Link to="/cai-dat" className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-500">
-            <SettingsIcon width={18} height={18} />
+            <SettingsIcon width={22} height={22} />
           </Link>
         </div>
       </header>
@@ -228,7 +228,7 @@ export default function HomePage() {
           </p>
           <p className="text-lg font-semibold">{todayPlanSubtitle}</p>
         </div>
-        <ArrowRightIcon width={26} height={26} />
+        <ArrowRightIcon width={32} height={32} />
       </Link>
 
       <p className="mb-0.5 mt-5 text-sm font-semibold text-gray-500">Lộ trình chính</p>
@@ -236,7 +236,7 @@ export default function HomePage() {
       <section className="mb-6 grid grid-cols-2 gap-3">
         {CORE_CARDS.map(({ to, icon: Icon, title, className }) => (
           <Link key={to} to={to} className={`rounded-2xl p-4 text-white shadow-sm ${className}`}>
-            <Icon width={22} height={22} />
+            <Icon width={28} height={28} />
             <p className="mt-2 text-lg">{title}</p>
             {cardSubtitle(to) && <p className="text-xs text-white/80">{cardSubtitle(to)}</p>}
           </Link>
@@ -357,7 +357,7 @@ export default function HomePage() {
       <section className="mb-5 grid grid-cols-2 gap-3">
         {EXTRA_CARDS.map(({ to, icon: Icon, title, className }) => (
           <Link key={to} to={to} className={`rounded-2xl p-4 text-white shadow-sm ${className}`}>
-            <Icon width={22} height={22} />
+            <Icon width={28} height={28} />
             <p className="mt-2 text-lg">{title}</p>
             {cardSubtitle(to) && <p className="text-xs text-white/80">{cardSubtitle(to)}</p>}
           </Link>

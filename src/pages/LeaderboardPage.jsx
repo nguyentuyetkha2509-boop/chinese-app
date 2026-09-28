@@ -96,7 +96,7 @@ export default function LeaderboardPage() {
                 </p>
               </div>
               <div className="flex items-center gap-1 text-sm font-semibold">
-                <TrophyIcon width={16} height={16} className={isMe ? 'text-white' : 'text-gold-500'} />
+                <TrophyIcon width={20} height={20} className={isMe ? 'text-white' : 'text-gold-500'} />
                 {e.xp ?? 0}
               </div>
             </div>

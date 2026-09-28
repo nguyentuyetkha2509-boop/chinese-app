@@ -248,7 +248,7 @@ function WritingPageInner() {
           onClick={() => setViewMode(null)}
           className="mb-4 flex items-center gap-1 text-sm text-gray-500"
         >
-          <ArrowLeftIcon width={16} height={16} /> Đổi chế độ luyện
+          <ArrowLeftIcon width={20} height={20} /> Đổi chế độ luyện
         </button>
       )}
 
@@ -342,13 +342,13 @@ function WritingPageInner() {
               onClick={() => speakChinese(selected.char)}
               className="mt-2 flex items-center gap-1 text-sm text-brand-600"
             >
-              <VolumeIcon width={16} height={16} />
+              <VolumeIcon width={20} height={20} />
               {selected.meaning} · Nghe phát âm
             </button>
 
             {quizResult && (
               <p className="mt-2 flex items-center gap-1 text-brand-600">
-                <CheckIcon width={18} height={18} />
+                <CheckIcon width={22} height={22} />
                 {quizResult === 'perfect' ? 'Hoàn hảo, không sai nét nào!' : quizResult}
               </p>
             )}

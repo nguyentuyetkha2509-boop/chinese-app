@@ -50,7 +50,7 @@ function DialogueDetailPageInner() {
         </div>
         {done && (
           <span className="flex items-center gap-1 rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-700">
-            <CheckIcon width={12} height={12} /> Đã nghe
+            <CheckIcon width={16} height={16} /> Đã nghe
           </span>
         )}
       </div>
@@ -98,7 +98,7 @@ function DialogueDetailPageInner() {
               >
                 <div className="flex items-center gap-2">
                   <span className={`text-lg ${isA ? 'text-gray-800' : 'text-white'}`}>{line.hanzi}</span>
-                  <VolumeIcon width={14} height={14} className={isA ? 'text-gray-500' : 'text-white/70'} />
+                  <VolumeIcon width={18} height={18} className={isA ? 'text-gray-500' : 'text-white/70'} />
                 </div>
                 <p className={`mt-0.5 text-xs ${isA ? 'text-brand-600' : 'text-white/80'}`}>{line.pinyin}</p>
                 <p className={`mt-0.5 text-xs ${isA ? 'text-gray-500' : 'text-white/70'}`}>{line.meaning}</p>

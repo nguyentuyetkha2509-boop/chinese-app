@@ -156,7 +156,7 @@ function GrammarDetailPageInner() {
                   <p className="text-xs text-brand-600">{ex.pinyin}</p>
                   <p className="text-xs text-gray-500">{ex.meaning}</p>
                 </div>
-                <VolumeIcon width={16} height={16} className="shrink-0 text-gray-500" />
+                <VolumeIcon width={20} height={20} className="shrink-0 text-gray-500" />
               </button>
             ))}
           </div>

@@ -104,7 +104,7 @@ function TopicDetailPageInner() {
                       <p className="text-sm text-gray-500">{word.meaning}</p>
                     </div>
                     <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${accent.bg} ${accent.text}`}>
-                      <VolumeIcon width={18} height={18} />
+                      <VolumeIcon width={22} height={22} />
                     </span>
                   </button>
                   {hasPictograph(word.hanzi) && (

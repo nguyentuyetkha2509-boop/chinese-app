@@ -111,7 +111,7 @@ export default function SpeedGamePage() {
       {phase === 'idle' && (
         <div className="rounded-3xl bg-gradient-to-br from-candy-500 via-brand-500 to-sky-500 p-6 text-center text-white shadow-lg">
           <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/25">
-            <ZapIcon width={32} height={32} />
+            <ZapIcon width={38} height={38} />
           </span>
           <p className="mt-3 text-xl font-semibold">Trả lời càng nhiều càng tốt trong {GAME_SECONDS} giây!</p>
           <p className="mt-1 text-sm text-white/90">Đúng liên tiếp để nhân điểm combo 🔥</p>

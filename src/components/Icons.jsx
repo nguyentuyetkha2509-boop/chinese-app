@@ -21,7 +21,7 @@ import earIconImg from '../assets/icons-gemini/ear.png'
 import shieldIconImg from '../assets/icons-gemini/shield.png'
 import speedIconImg from '../assets/icons-gemini/speed.png'
 
-export function HomeIcon({ width = 32, height = 32, ...props }) {
+export function HomeIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={homeIconImg}
@@ -34,7 +34,7 @@ export function HomeIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function BookIcon({ width = 32, height = 32, ...props }) {
+export function BookIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={bookIconImg}
@@ -47,7 +47,7 @@ export function BookIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function CardsIcon({ width = 32, height = 32, ...props }) {
+export function CardsIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={cardsIconImg}
@@ -60,7 +60,7 @@ export function CardsIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function MicIcon({ width = 32, height = 32, ...props }) {
+export function MicIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={micIconImg}
@@ -73,7 +73,7 @@ export function MicIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function PencilIcon({ width = 32, height = 32, ...props }) {
+export function PencilIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={pencilIconImg}
@@ -86,7 +86,7 @@ export function PencilIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function CheckIcon({ width = 32, height = 32, ...props }) {
+export function CheckIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={checkIconImg}
@@ -99,7 +99,7 @@ export function CheckIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function BellIcon({ width = 32, height = 32, ...props }) {
+export function BellIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={bellIconImg}
@@ -112,7 +112,7 @@ export function BellIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function FireIcon({ width = 32, height = 32, ...props }) {
+export function FireIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={fireIconImg}
@@ -125,7 +125,7 @@ export function FireIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function VolumeIcon({ width = 32, height = 32, ...props }) {
+export function VolumeIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={volumeIconImg}
@@ -138,7 +138,7 @@ export function VolumeIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function ArrowLeftIcon({ width = 32, height = 32, ...props }) {
+export function ArrowLeftIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={arrowLeftIconImg}
@@ -151,7 +151,7 @@ export function ArrowLeftIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function ArrowRightIcon({ width = 32, height = 32, ...props }) {
+export function ArrowRightIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={arrowRightIconImg}
@@ -164,7 +164,7 @@ export function ArrowRightIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function ZapIcon({ width = 32, height = 32, ...props }) {
+export function ZapIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={zapIconImg}
@@ -177,7 +177,7 @@ export function ZapIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function ChatIcon({ width = 32, height = 32, ...props }) {
+export function ChatIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={chatIconImg}
@@ -190,7 +190,7 @@ export function ChatIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function TopicIcon({ width = 32, height = 32, ...props }) {
+export function TopicIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={topicIconImg}
@@ -203,7 +203,7 @@ export function TopicIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function StoryIcon({ width = 32, height = 32, ...props }) {
+export function StoryIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={storyIconImg}
@@ -216,7 +216,7 @@ export function StoryIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function ShuffleIcon({ width = 32, height = 32, ...props }) {
+export function ShuffleIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={shuffleIconImg}
@@ -229,7 +229,7 @@ export function ShuffleIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function SettingsIcon({ width = 32, height = 32, ...props }) {
+export function SettingsIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={settingsIconImg}
@@ -242,7 +242,7 @@ export function SettingsIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function EarIcon({ width = 32, height = 32, ...props }) {
+export function EarIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={earIconImg}
@@ -255,7 +255,7 @@ export function EarIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function GrammarIcon({ width = 32, height = 32, ...props }) {
+export function GrammarIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={grammarIconImg}
@@ -268,7 +268,7 @@ export function GrammarIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function TrophyIcon({ width = 32, height = 32, ...props }) {
+export function TrophyIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={trophyIconImg}
@@ -281,7 +281,7 @@ export function TrophyIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function ShieldIcon({ width = 32, height = 32, ...props }) {
+export function ShieldIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={shieldIconImg}
@@ -294,7 +294,7 @@ export function ShieldIcon({ width = 32, height = 32, ...props }) {
   )
 }
 
-export function SpeedIcon({ width = 32, height = 32, ...props }) {
+export function SpeedIcon({ width = 38, height = 38, ...props }) {
   return (
     <img
       src={speedIconImg}

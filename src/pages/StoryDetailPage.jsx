@@ -96,7 +96,7 @@ function StoryDetailPageInner() {
         </h1>
         {done && (
           <span className="flex items-center gap-1 rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-700">
-            <CheckIcon width={12} height={12} /> Đã hoàn thành
+            <CheckIcon width={16} height={16} /> Đã hoàn thành
           </span>
         )}
       </div>
@@ -161,7 +161,7 @@ function StoryDetailPageInner() {
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-lg text-gray-800">{line.hanzi}</span>
-                    <VolumeIcon width={14} height={14} className="text-gray-500" />
+                    <VolumeIcon width={18} height={18} className="text-gray-500" />
                   </div>
                   <p className="mt-0.5 text-xs text-brand-600">{line.pinyin}</p>
                   <p className="mt-0.5 text-xs text-gray-500">{line.meaning}</p>

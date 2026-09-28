@@ -24,7 +24,7 @@ export default function BottomNav() {
               }`
             }
           >
-            <Icon width={28} height={28} />
+            <Icon width={34} height={34} />
             {label}
           </NavLink>
         ))}

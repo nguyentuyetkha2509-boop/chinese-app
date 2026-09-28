@@ -46,7 +46,7 @@ export default function GrammarPage() {
               </div>
               {done && (
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white">
-                  <CheckIcon width={14} height={14} />
+                  <CheckIcon width={18} height={18} />
                 </span>
               )}
             </Link>

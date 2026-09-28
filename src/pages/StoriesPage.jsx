@@ -58,11 +58,11 @@ export default function StoriesPage() {
               </div>
               {done ? (
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white">
-                  <CheckIcon width={14} height={14} />
+                  <CheckIcon width={18} height={18} />
                 </span>
               ) : isNext ? (
                 <span className="flex shrink-0 items-center gap-1 rounded-full bg-brand-700 px-2.5 py-1 text-[10px] font-semibold text-white">
-                  <ArrowRightIcon width={12} height={12} /> Tiếp theo
+                  <ArrowRightIcon width={16} height={16} /> Tiếp theo
                 </span>
               ) : null}
             </Link>

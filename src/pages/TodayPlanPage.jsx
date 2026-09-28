@@ -125,7 +125,7 @@ export default function TodayPlanPage() {
                 <span
                   className={`z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white shadow-md ring-4 ring-white ${style.dot}`}
                 >
-                  <Icon width={20} height={20} />
+                  <Icon width={24} height={24} />
                 </span>
                 <div className={`flex-1 rounded-2xl p-4 shadow-sm ${style.card}`}>
                   <p className="text-xs font-semibold text-gray-500">{step.label}</p>
@@ -136,7 +136,7 @@ export default function TodayPlanPage() {
                       to={step.actionTo}
                       className={`mt-3 flex items-center justify-center gap-1 rounded-xl py-2.5 text-center text-sm font-semibold text-white ${style.button}`}
                     >
-                      {step.actionLabel} <ArrowRightIcon width={16} height={16} />
+                      {step.actionLabel} <ArrowRightIcon width={20} height={20} />
                     </Link>
                   )}
                 </div>
@@ -151,7 +151,7 @@ export default function TodayPlanPage() {
                   status === 'done' ? 'bg-teal-500 text-white' : 'border-2 border-gray-300 bg-white text-gray-300'
                 }`}
               >
-                {status === 'done' ? <CheckIcon width={12} height={12} /> : <Icon width={11} height={11} />}
+                {status === 'done' ? <CheckIcon width={16} height={16} /> : <Icon width={14} height={14} />}
               </span>
               <p className={`text-sm ${status === 'done' ? 'text-gray-500' : 'text-gray-500'}`}>
                 <span className="font-medium">{step.label}</span> · {step.summary}
@@ -164,7 +164,7 @@ export default function TodayPlanPage() {
         {allDone && (
           <div className="relative flex gap-3">
             <span className="z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teal-500 text-white shadow-md ring-4 ring-white">
-              <CheckIcon width={20} height={20} />
+              <CheckIcon width={24} height={24} />
             </span>
             <div className="flex-1 rounded-2xl bg-teal-50 p-4 shadow-sm">
               <p className="text-base font-semibold text-teal-700">

@@ -62,7 +62,7 @@ export default function RoadmapPage() {
                 <p className="text-base font-semibold text-gray-800">{l.label}</p>
                 {l.status === 'done' ? (
                   <span className="flex items-center gap-1 text-xs font-semibold text-teal-600">
-                    <CheckIcon width={14} height={14} /> Hoàn thành
+                    <CheckIcon width={18} height={18} /> Hoàn thành
                   </span>
                 ) : (
                   <span className={`text-xs font-semibold ${style.text}`}>{l.percent}%</span>

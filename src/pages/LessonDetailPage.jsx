@@ -104,7 +104,7 @@ function LessonDetailPageInner() {
               className="mb-4 flex items-center gap-3 rounded-2xl bg-gold-100 p-3.5"
             >
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-gold-600">
-                <GrammarIcon width={18} height={18} />
+                <GrammarIcon width={22} height={22} />
               </span>
               <div className="flex-1">
                 <p className="text-xs text-gold-600">Ngữ pháp liên quan</p>
@@ -131,7 +131,7 @@ function LessonDetailPageInner() {
                       <p className="text-sm text-gray-500">{word.meaning}</p>
                     </div>
                     <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${accent.bg} ${accent.text}`}>
-                      <VolumeIcon width={18} height={18} />
+                      <VolumeIcon width={22} height={22} />
                     </span>
                   </button>
                   {hasPictograph(word.hanzi) && (

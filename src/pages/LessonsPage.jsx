@@ -58,7 +58,7 @@ export default function LessonsPage() {
                 }`}
               >
                 <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${accent.bg} ${accent.text}`}>
-                  <BookIcon width={20} height={20} />
+                  <BookIcon width={24} height={24} />
                 </span>
                 <div className="flex-1">
                   <p className="text-lg text-gray-800">{unit.title}</p>
@@ -72,15 +72,15 @@ export default function LessonsPage() {
                 </div>
                 {comboDone ? (
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white">
-                    <CheckIcon width={18} height={18} />
+                    <CheckIcon width={22} height={22} />
                   </span>
                 ) : done ? (
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sun-400 text-white">
-                    <CheckIcon width={18} height={18} />
+                    <CheckIcon width={22} height={22} />
                   </span>
                 ) : isNext ? (
                   <span className="flex shrink-0 items-center gap-1 rounded-full bg-brand-700 px-3 py-1 text-xs font-semibold text-white">
-                    <ArrowRightIcon width={14} height={14} /> Tiếp theo
+                    <ArrowRightIcon width={18} height={18} /> Tiếp theo
                   </span>
                 ) : (
                   <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${accent.bg} ${accent.text}`}>

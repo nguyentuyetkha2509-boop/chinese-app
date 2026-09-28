@@ -42,7 +42,7 @@ function ReminderSection() {
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
       <div className="flex items-center gap-2">
-        <BellIcon width={18} height={18} className="text-brand-600" />
+        <BellIcon width={22} height={22} className="text-brand-600" />
         <p className="text-base text-gray-800">Nhắc học mỗi ngày</p>
       </div>
 
@@ -353,7 +353,7 @@ export default function SettingsPage() {
           className="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-sm"
         >
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-700">
-            <ShieldIcon width={18} height={18} />
+            <ShieldIcon width={22} height={22} />
           </span>
           <p className="text-sm font-semibold text-gray-800">Trang quản trị</p>
         </Link>

@@ -45,7 +45,7 @@ export default function DialoguesPage() {
               </span>
               {done && (
                 <span className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-teal-500 text-white">
-                  <CheckIcon width={12} height={12} />
+                  <CheckIcon width={16} height={16} />
                 </span>
               )}
               <span className="mt-4 block text-3xl">{d.icon}</span>
@@ -54,7 +54,7 @@ export default function DialoguesPage() {
                 <p className={`text-xs ${accent.text}`}>{d.lines.length} câu</p>
                 {isNext && (
                   <span className="flex items-center gap-1 text-[10px] font-semibold text-brand-600">
-                    <ArrowRightIcon width={14} height={14} /> Tiếp theo
+                    <ArrowRightIcon width={18} height={18} /> Tiếp theo
                   </span>
                 )}
               </div>

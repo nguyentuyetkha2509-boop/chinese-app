@@ -29,7 +29,7 @@ export default function QuizQuestion({ question, index, total, selected, onAnswe
         {type === 'listen' && (
           <button onClick={() => speakChinese(word.hanzi)} className="mx-auto flex flex-col items-center gap-2">
             <span className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-100 text-brand-700">
-              <VolumeIcon width={28} height={28} />
+              <VolumeIcon width={34} height={34} />
             </span>
             {selected !== null ? (
               <span className="mt-1 text-2xl text-gray-800">{word.hanzi}</span>
