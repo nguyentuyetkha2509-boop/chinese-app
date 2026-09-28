@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ALL_WORDS, LEVELS, getWordById } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
-import { getCardStats, getDueWordIds, getLeechWordIds } from '../lib/srs'
+import { getDueWordIds, getLeechWordIds, isDue } from '../lib/srs'
 import { speakChinese } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate, playFlip } from '../lib/sfx'
 import { VolumeIcon } from '../components/Icons'
@@ -57,7 +57,6 @@ function ScopeChips({ chips, scope, onChange }) {
 export default function FlashcardsPage() {
   const { srsState, rateCard, addXp } = useProgress()
   const allIds = useMemo(() => ALL_WORDS.map((w) => w.id), [])
-  const stats = useMemo(() => getCardStats(allIds, srsState), [allIds, srsState])
   const leechIds = useMemo(() => getLeechWordIds(allIds, srsState), [allIds, srsState])
 
   const [scope, setScope] = useState('all')
@@ -66,21 +65,27 @@ export default function FlashcardsPage() {
   const [ratingCounts, setRatingCounts] = useState({ 0: 0, 1: 0, 2: 0, 3: 0 })
   const [sessionXp, setSessionXp] = useState(0)
   const [flipped, setFlipped] = useState(false)
-  const isBrandNew = stats.learned === 0
 
   const currentId = queue[0]
   const currentWord = currentId ? getWordById(currentId) : null
   const reviewed = sessionTotal - queue.length
   const accent = accentFor(reviewed)
 
-  function buildQueueForScope(nextScope) {
+  // keepSummary: dung khi bam "On them" - neu khong con the nao thi GIU NGUYEN
+  // bang tong ket cua phien vua roi. Truoc day ham nay xoa ratingCounts va
+  // sessionXp TRUOC khi biet hang doi moi co gi, nen bam "On them" luc het the
+  // lam bien mat bang "Da on xong N the!", bieu do 4 muc va "+X XP" - ket qua
+  // phien vua hoc khong xem lai duoc nua.
+  function buildQueueForScope(nextScope, { keepSummary = false } = {}) {
     const ids = nextScope === 'leech' ? leechIds : wordIdsForScope(nextScope, srsState)
     const nextQueue =
       nextScope === 'leech' ? ids.slice(0, SESSION_SIZE) : getDueWordIds(ids, srsState, SESSION_SIZE)
+    if (!keepSummary || nextQueue.length > 0) {
+      setRatingCounts({ 0: 0, 1: 0, 2: 0, 3: 0 })
+      setSessionXp(0)
+    }
     setQueue(nextQueue)
     setSessionTotal(nextQueue.length)
-    setRatingCounts({ 0: 0, 1: 0, 2: 0, 3: 0 })
-    setSessionXp(0)
     setFlipped(false)
   }
 
@@ -90,11 +95,18 @@ export default function FlashcardsPage() {
   }
 
   function handleRate(rating) {
+    // Chi cong XP cho the THUC SU toi han. The chua toi han chi co o muc "Tu
+    // kho" (muc nay co tinh cho mo lai the bat cu luc nao), va nut "On them"
+    // dung lai dung 20 the do - nen truoc day bam vong lien tuc la an XP khong
+    // co tran. Luyen them thi khong mat gi, chi la khong tinh diem.
+    const wasDue = isDue(srsState[currentId])
     rateCard(currentId, rating)
     if (rating === 0) playWrong()
     else playCorrect()
-    addXp(XP_REWARDS.flashcardReview)
-    setSessionXp((n) => n + XP_REWARDS.flashcardReview)
+    if (wasDue) {
+      addXp(XP_REWARDS.flashcardReview)
+      setSessionXp((n) => n + XP_REWARDS.flashcardReview)
+    }
     setRatingCounts((c) => ({ ...c, [rating]: c[rating] + 1 }))
     if (queue.length === 1) setTimeout(playCelebrate, 350)
     setFlipped(false)
@@ -151,15 +163,29 @@ export default function FlashcardsPage() {
               <p className="mt-3 text-sm text-white/90">+{sessionXp} XP</p>
             </>
           ) : (
-            <p className="mt-1 text-sm text-white/90">Học bài mới hoặc chọn mục khác để ôn.</p>
+            // Truoc day cho nay chi co mot cau "Hoc bai moi hoac chon muc khac
+            // de on.". Mot khoi huong dan day du hon co viet ra nhung KHONG BAO
+            // GIO hien duoc: no nam trong nhanh render chi chay khi hang doi co
+            // the, ma co the thi tuc la da co the SRS roi. Nguoi hoc tu "Chu
+            // de"/"Ngu phap"/"Truyen" ma khong bao gio mo "Bai hoc" se thay
+            // trang nay trong mai mai ma khong hieu vi sao - vi the on tap chi
+            // sinh ra tu "Bai hoc" (markUnitComplete -> seedNewCards).
+            <p className="mt-1 text-sm text-white/90">
+              Thẻ ôn tập chỉ được tạo khi bạn học xong một bài ở mục <b>Bài học</b>. Học theo Chủ đề, Ngữ pháp hay
+              Truyện thì chưa có thẻ nào để ôn ở đây.
+            </p>
           )}
           <div className="mt-4 flex gap-2">
-            <button
-              onClick={() => buildQueueForScope(scope)}
-              className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
-            >
-              Ôn thêm
-            </button>
+            {/* Chi hien "On them" khi vua on xong mot phien - luc trang con
+                trong thi khong con the nao de on, bam vao cung khong co gi. */}
+            {totalRated > 0 && (
+              <button
+                onClick={() => buildQueueForScope(scope, { keepSummary: true })}
+                className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
+              >
+                Ôn thêm
+              </button>
+            )}
             <Link to="/bai-hoc" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
               Học bài mới
             </Link>
@@ -185,17 +211,6 @@ export default function FlashcardsPage() {
       <p className="mb-4 text-xs text-gray-500">
         Đoán nghĩa trong đầu, chạm vào thẻ để xem đáp án, rồi chọn mức độ bạn nhớ được.
       </p>
-
-      {isBrandNew && reviewed === 0 && (
-        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl bg-sun-100 p-3">
-          <p className="text-xs text-gray-700">
-            💡 Bạn chưa học từ nào. Nên học ở mục <b>Bài học</b> trước, rồi quay lại đây ôn cho nhớ lâu.
-          </p>
-          <Link to="/bai-hoc" className="shrink-0 rounded-lg bg-sun-600 px-3 py-1.5 text-xs font-semibold text-white">
-            Bài học
-          </Link>
-        </div>
-      )}
 
       <button
         onClick={handleFlip}

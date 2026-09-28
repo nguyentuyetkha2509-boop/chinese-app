@@ -4,10 +4,30 @@ import { loadJSON, saveJSON } from './storage'
 const KEY = 'srs'
 const DAY_MS = 24 * 60 * 60 * 1000
 
+export function isDue(card, now = Date.now()) {
+  return !card || card.due <= now
+}
+
 // rating: 0 = Lai (quen), 1 = Kho, 2 = On, 3 = De
 export function nextSchedule(card, rating) {
   const prev = card || { interval: 0, ease: 2.5, reps: 0, lapses: 0 }
   let { interval, ease, reps, lapses = 0 } = prev
+
+  // The da co lich ma CHUA toi han, va nguoi hoc van nho ra: day la luyen
+  // them, khong phai on tap dung han. Tra ve nguyen lich cu.
+  //
+  // Truoc day cho nay khong co gi chan: muc "Tu kho" co tinh cho phep mo lai
+  // dung nhung the do bat cu luc nao, va moi lan cham lai nhan interval len
+  // ~2.5 lan nua (xem nhanh ben duoi). Chi ~6 vong bam "On them" la interval
+  // cua dung nhung tu KHO NHAT bi day ra hon mot nam - tuc la chung bien mat
+  // khoi luong on tap theo ngay, trong khi day la nhung tu nguoi hoc can gap
+  // lai nhat. Lich hoc bi hong chu khong chi la chuyen XP.
+  //
+  // Cham "Quen roi" (0) thi KHONG di theo duong nay: quen thi phai quay lai
+  // som, du the co dang nam ngoai lich.
+  if (card && card.due > Date.now() && rating !== 0) {
+    return { ...prev, due: card.due, updatedAt: Date.now() }
+  }
 
   if (rating === 0) {
     reps = 0

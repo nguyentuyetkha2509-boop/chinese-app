@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import { SENTENCES } from '../data/sentenceBuilder'
 import { useProgress } from '../store/ProgressContext'
-import { speakChinese } from '../lib/tts'
+import { speakChinese, stopSpeaking } from '../lib/tts'
 import { shuffle } from '../lib/quiz'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
@@ -37,6 +37,10 @@ export default function DictationPage() {
     setAssembled([])
     setChecked(null)
     speakChinese(current.chunks.join(''))
+    // Khong co dong nay thi cau tieng Trung dang doc van doc tiep o trang khac
+    // sau khi nguoi hoc bam Back hoac doi tab - dung loi ma chinh tts.js da ghi
+    // chu thich san. Cleanup chay ca khi doi cau (index tang) lan khi unmount.
+    return () => stopSpeaking()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index])
 
