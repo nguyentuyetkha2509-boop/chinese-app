@@ -1,10 +1,12 @@
 // Diem ngu phap co ban, tu soan va kiem tra vi du/pinyin thu cong. Moi diem co
 // giai thich ngan + vi du + bai tap trac nghiem de kiem tra hieu, khong chi
-// hoc thuoc. HSK1 nam trong file nay, HSK2-4 nam o grammar2/3/4.js va duoc
+// hoc thuoc. HSK1 nam trong file nay, HSK2-6 nam o grammar2/3/4/5/6.js va duoc
 // gop lai ben duoi de cac trang dung GRAMMAR_POINTS khong can doi gi ca.
 import { HSK2_GRAMMAR } from './grammar2'
 import { HSK3_GRAMMAR } from './grammar3'
 import { HSK4_GRAMMAR } from './grammar4'
+import { HSK5_GRAMMAR } from './grammar5'
+import { HSK6_GRAMMAR } from './grammar6'
 
 const HSK1_GRAMMAR = [
   {
@@ -145,7 +147,14 @@ const HSK1_GRAMMAR = [
   }
 ]
 
-export const GRAMMAR_POINTS = [...HSK1_GRAMMAR, ...HSK2_GRAMMAR, ...HSK3_GRAMMAR, ...HSK4_GRAMMAR]
+export const GRAMMAR_POINTS = [
+  ...HSK1_GRAMMAR,
+  ...HSK2_GRAMMAR,
+  ...HSK3_GRAMMAR,
+  ...HSK4_GRAMMAR,
+  ...HSK5_GRAMMAR,
+  ...HSK6_GRAMMAR
+]
 
 export function getGrammarPoint(key) {
   return GRAMMAR_POINTS.find((g) => g.key === key)
