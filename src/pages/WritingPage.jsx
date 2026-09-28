@@ -37,7 +37,7 @@ export default function WritingPage() {
   // "Theo bai": chon dung 1 bai da hoc xong de luyen rieng, KHONG can lam lai
   // bai kiem tra tu vung moi thay duoc goi y luyen viet (truoc day chi vao
   // duoc qua man "Hoan thanh!" cua bai hoc, phai lam lai quiz moi hien lai).
-  const [viewMode, setViewMode] = useState('all')
+  const [viewMode, setViewMode] = useState(null) // null (chưa chọn) | 'all' | 'byLesson'
   const level = getLevel(levelId)
   const scopedUnit = params.unitId ? level.units.find((u) => u.id === Number(params.unitId)) : null
   const chars = useMemo(() => extractChars(scopedUnit ? scopedUnit.words : level.words), [level, scopedUnit])
@@ -153,23 +153,32 @@ export default function WritingPage() {
 
       {!scopedUnit && <LevelTabs value={levelId} onChange={setLevelId} />}
 
-      {!scopedUnit && (
-        <div className="mb-5 flex gap-2">
-          {[
-            { key: 'all', label: 'Tất cả' },
-            { key: 'byLesson', label: 'Theo bài' }
-          ].map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setViewMode(t.key)}
-              className={`rounded-full px-4 py-1.5 text-sm ${
-                viewMode === t.key ? 'bg-brand-700 text-white' : 'bg-white text-gray-600'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
+      {!scopedUnit && viewMode === null && (
+        <div className="mb-5 mt-2 flex flex-col gap-3">
+          <button
+            onClick={() => setViewMode('all')}
+            className="rounded-2xl bg-gradient-to-br from-brand-600 to-candy-500 p-5 text-left text-white shadow-md"
+          >
+            <p className="text-lg font-semibold">🈶 Luyện tất cả</p>
+            <p className="mt-1 text-sm text-white/90">Toàn bộ {chars.length} chữ Hán của {level.label}</p>
+          </button>
+          <button
+            onClick={() => setViewMode('byLesson')}
+            className="rounded-2xl bg-gradient-to-br from-sky-500 to-teal-500 p-5 text-left text-white shadow-md"
+          >
+            <p className="text-lg font-semibold">📚 Theo bài</p>
+            <p className="mt-1 text-sm text-white/90">Chọn đúng 1 bài đã học xong để luyện riêng</p>
+          </button>
         </div>
+      )}
+
+      {!scopedUnit && viewMode !== null && (
+        <button
+          onClick={() => setViewMode(null)}
+          className="mb-4 flex items-center gap-1 text-sm text-gray-500"
+        >
+          <ArrowLeftIcon width={16} height={16} /> Đổi chế độ luyện
+        </button>
       )}
 
       {!scopedUnit && viewMode === 'byLesson' ? (
