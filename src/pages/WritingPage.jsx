@@ -78,7 +78,14 @@ export default function WritingPage() {
       charDataLoader: (char, onLoad, onError) => {
         fetch(`${import.meta.env.BASE_URL}hanzi-data/${encodeURIComponent(char)}.json`)
           .then((res) => (res.ok ? res.json() : Promise.reject(new Error('missing char data'))))
-          .then(onLoad)
+          .then((data) => {
+            onLoad(data)
+            // Tu dong ve net chu ngay khi chon, thay vi de khung trong cho
+            // toi khi nguoi dung tu bam "Xem thu tu net" - truoc day nhin
+            // giong nhu bi "cham/khong hien gi" vi khung chi co duong vien
+            // mo nhat cho toi luc do.
+            writerRef.current?.animateCharacter()
+          })
           .catch((e) => onError?.(e))
       }
     })
@@ -86,7 +93,16 @@ export default function WritingPage() {
       writerRef.current = null
       clearTimeout(advanceTimeoutRef.current)
     }
-  }, [selected])
+    // Them viewMode vao dependency: khung <div ref={targetRef}> chi duoc mount
+    // SAU khi nguoi dung chon che do "Luyen tat ca" (showPracticeArea moi
+    // thanh true) - luc do "selected" (chu dau tien) khong doi gia tri nen
+    // effect chi khoa vao [selected] se KHONG chay lai, targetRef.current
+    // van la null tu lan chay dau tien (truoc khi khung ton tai) => chu dau
+    // tien khong bao gio duoc ve, phai doi nguoi dung tu bam sang chu khac
+    // moi thay. Day chinh la nguyen nhan "hien chu cham/khong hien" nguoi
+    // dung bao, chu khong phai do toc do tai du lieu.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected, viewMode])
 
   function showAnimation() {
     writerRef.current?.animateCharacter()
