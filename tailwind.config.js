@@ -30,6 +30,7 @@ export default {
           700: '#1d4ed8'
         },
         sun: {
+          50: '#fff7ed',
           100: '#ffedd5',
           200: '#fed7aa',
           400: '#fb923c',
@@ -38,6 +39,7 @@ export default {
           700: '#c2410c'
         },
         candy: {
+          50: '#fdf2f8',
           100: '#fce7f3',
           200: '#fbcfe8',
           400: '#f472b6',

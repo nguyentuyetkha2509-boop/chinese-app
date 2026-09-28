@@ -1,0 +1,57 @@
+rules_version = '2';
+
+// Quy tac bao mat Firestore cho PandaChinese.
+//
+// TRUOC DAY FILE NAY KHONG TON TAI trong repo: quy tac that su chi nam tren
+// trang quan tri Firebase, khong ai xem lai duoc, cung khong co lich su thay
+// doi. File nay ghi lai dung nhung gi dang chay de sau nay con doi chieu.
+//
+// SUA FILE NAY KHONG LAM THAY DOI GI CA - phai dang len Firebase thi moi co
+// tac dung. Xem huong dan dang o cuoi file.
+//
+// Da kiem chung ngay 2026-09-28 bang cach doc du lieu khi CHUA dang nhap:
+// ca tien do hoc lan bang xep hang deu tra ve 403 PERMISSION_DENIED, tuc la
+// quy tac dang chan dung. Du lieu hoc cua nguoi dung khong bi lo ra ngoai.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Tien do hoc (diem XP, chuoi ngay, tu da hoc, lich on tap...): chi chinh
+    // chu tai khoan do doc va ghi duoc. Day la du lieu rieng tu nhat cua app -
+    // de lo ra thi nguoi khac doc duoc toan bo lich su hoc cua nguoi dung.
+    match /users/{userId}/progress/{docId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Bang xep hang: nguoi da dang nhap xem duoc de thi nhau, nhung chi ghi
+    // duoc vao o cua chinh minh - khong sua duoc diem cua nguoi khac.
+    //
+    // Hien tai nguoi CHUA dang nhap cung khong xem duoc bang. LeaderboardPage
+    // da duoc sua de bao ro dieu nay thay vi hien loi ky thuat bang tieng Anh.
+    // Neu sau nay muon cho xem bang truoc khi dang nhap thi doi dong read
+    // duoi day thanh `allow read: if true;`
+    match /leaderboard/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Mac dinh: chan tat ca nhung gi khong liet ke o tren. Neu sau nay them
+    // tinh nang moi can luu tru, phai them quy tac cho no o day, neu khong se
+    // bi chan.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Cach dang quy tac nay len Firebase (chi lam khi quy tac tren may khac voi
+// nhung gi dang chay - hoi Claude de duoc huong dan cu the):
+//
+//   npm install -g firebase-tools
+//   firebase login
+//   firebase use pandachinese-e425d
+//   firebase deploy --only firestore:rules
+//
+// Hoac dan truc tiep noi dung file nay vao:
+//   Firebase console > Firestore Database > Rules > Publish
+// ---------------------------------------------------------------------------

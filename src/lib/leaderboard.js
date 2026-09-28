@@ -28,9 +28,16 @@ export async function fetchTopLeaderboard(count = 50) {
   return snap.docs.map((d) => ({ uid: d.id, ...d.data() }))
 }
 
-// Danh cho trang quan tri: lay toan bo, khong gioi han so luong.
+// Danh cho trang quan tri: lay nhieu nhat MAX_ADMIN_ROWS nguoi dung hoat dong
+// gan day nhat.
+//
+// Truoc day ham nay KHONG co gioi han nao, tuc la doc toan bo bang xep hang ve
+// may nguoi dung. Voi app hoc ca nhan thi chua thay gi, nhung so nguoi tang len
+// thi moi lan mo trang quan tri se tai het ve mot luot - cham va ton tien doc
+// Firestore. Gioi han nay khong lam hong gi: trang quan tri chi de xem qua.
+const MAX_ADMIN_ROWS = 500
 export async function fetchAllLeaderboard() {
-  const q = query(collection(db, COLLECTION), orderBy('updatedAt', 'desc'))
+  const q = query(collection(db, COLLECTION), orderBy('updatedAt', 'desc'), fsLimit(MAX_ADMIN_ROWS))
   const snap = await getDocs(q)
   return snap.docs.map((d) => ({ uid: d.id, ...d.data() }))
 }
