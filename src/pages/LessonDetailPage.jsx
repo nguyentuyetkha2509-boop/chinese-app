@@ -12,6 +12,7 @@ import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radical
 import { XP_REWARDS } from '../lib/gamification'
 import { getRelatedGrammarForUnit } from '../lib/curriculum'
 import { buildQuiz } from '../lib/quiz'
+import { QUIZ_PASS_THRESHOLD, quizPassed } from '../lib/quizResult'
 import QuizQuestion from '../components/QuizQuestion'
 import CelebrationBadge from '../components/CelebrationBadge'
 import { GrammarIcon } from '../components/Icons'
@@ -45,6 +46,7 @@ function LessonDetailPageInner() {
   const [quizIndex, setQuizIndex] = useState(0)
   const [correctCount, setCorrectCount] = useState(0)
   const [selected, setSelected] = useState(null)
+  const [passed, setPassed] = useState(true)
 
   if (!level || !unit) {
     return (
@@ -74,12 +76,25 @@ function LessonDetailPageInner() {
       if (quizIndex + 1 < quiz.length) {
         setQuizIndex((i) => i + 1)
       } else {
-        markUnitComplete(`${levelId}:${unit.id}`, unit.words.map((w) => w.id))
-        addXp(XP_REWARDS.unitComplete)
+        const finalCorrect = correctCount + (isCorrect ? 1 : 0)
+        const didPass = quizPassed(finalCorrect, quiz.length)
+        setPassed(didPass)
+        if (didPass) {
+          markUnitComplete(`${levelId}:${unit.id}`, unit.words.map((w) => w.id))
+          addXp(XP_REWARDS.unitComplete)
+        }
         setPhase('done')
-        playCelebrate()
+        if (didPass) playCelebrate()
+        else playWrong()
       }
     }, 700)
+  }
+
+  function retryQuiz() {
+    setQuizIndex(0)
+    setCorrectCount(0)
+    setSelected(null)
+    setPhase('quiz')
   }
 
   return (
@@ -182,7 +197,7 @@ function LessonDetailPageInner() {
         />
       )}
 
-      {phase === 'done' && (
+      {phase === 'done' && passed && (
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
           <CelebrationBadge />
           <p className="text-xl">🎉 Hoàn thành!</p>
@@ -220,6 +235,21 @@ function LessonDetailPageInner() {
               📚 Danh sách bài
             </Link>
           </div>
+        </div>
+      )}
+
+      {phase === 'done' && !passed && (
+        <div className="rounded-2xl bg-white p-6 text-center shadow-sm">
+          <p className="text-xl">😅 Chưa đạt</p>
+          <p className="mt-1 text-gray-600">
+            Đúng {correctCount}/{quiz.length} câu - cần đúng từ {Math.round(QUIZ_PASS_THRESHOLD * 100)}% trở lên mới qua bài.
+          </p>
+          <button onClick={retryQuiz} className="mt-4 w-full rounded-xl bg-brand-700 py-2.5 font-semibold text-white">
+            Làm lại
+          </button>
+          <Link to="/bai-hoc" className="mt-2 block rounded-xl bg-gray-100 py-2.5 text-sm font-semibold text-gray-700">
+            📚 Danh sách bài
+          </Link>
         </div>
       )}
     </div>

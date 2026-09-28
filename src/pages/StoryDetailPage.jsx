@@ -5,8 +5,9 @@ import { getStory } from '../data/stories'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { useSequencePlayer } from '../lib/useSequencePlayer'
-import { playCelebrate } from '../lib/sfx'
+import { playCelebrate, playWrong } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
+import { QUIZ_PASS_THRESHOLD, quizPassed } from '../lib/quizResult'
 import { CheckIcon, VolumeIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
 import CelebrationBadge from '../components/CelebrationBadge'
@@ -27,6 +28,8 @@ function StoryDetailPageInner() {
   const [phase, setPhase] = useState('reading') // reading | quiz | done
   const [chapterIndex, setChapterIndex] = useState(0)
   const [result, setResult] = useState({ correct: 0, total: 0 })
+  const [passed, setPassed] = useState(true)
+  const [quizAttempt, setQuizAttempt] = useState(0)
 
   const chapter = story?.chapters?.[chapterIndex]
   const isLastChapter = story ? chapterIndex === story.chapters.length - 1 : false
@@ -71,14 +74,25 @@ function StoryDetailPageInner() {
 
   function handleQuizDone(correct, total) {
     setResult({ correct, total })
-    // Chi cong XP cho lan hoan thanh DAU TIEN. markStoryComplete chay lai khong
-    // sao (no chi ghi de), nhung addXp thi CONG DON - nen truoc day cu bam "Doc
-    // lai" roi lam lai bai doc hieu la lai kiem duoc XP mai khong gioi han, va
-    // bang xep hang (co that, moi nguoi xem duoc) mat het y nghia.
-    awardXp(XP_REWARDS.storyComplete)
-    markStoryComplete(story.key)
-    playCelebrate()
+    const didPass = quizPassed(correct, total)
+    setPassed(didPass)
+    if (didPass) {
+      // Chi cong XP cho lan hoan thanh DAU TIEN. markStoryComplete chay lai khong
+      // sao (no chi ghi de), nhung addXp thi CONG DON - nen truoc day cu bam "Doc
+      // lai" roi lam lai bai doc hieu la lai kiem duoc XP mai khong gioi han, va
+      // bang xep hang (co that, moi nguoi xem duoc) mat het y nghia.
+      awardXp(XP_REWARDS.storyComplete)
+      markStoryComplete(story.key)
+      playCelebrate()
+    } else {
+      playWrong()
+    }
     setPhase('done')
+  }
+
+  function retryQuiz() {
+    setQuizAttempt((a) => a + 1)
+    setPhase('quiz')
   }
 
   function restart() {
@@ -194,11 +208,17 @@ function StoryDetailPageInner() {
       {phase === 'quiz' && (
         <>
           <p className="mb-2 text-sm text-gray-500">Đọc hiểu:</p>
-          <MiniQuiz items={story.quiz} onDone={handleQuizDone} xpPerCorrect={XP_REWARDS.storyQuizCorrect} addXp={awardXp} />
+          <MiniQuiz
+            key={quizAttempt}
+            items={story.quiz}
+            onDone={handleQuizDone}
+            xpPerCorrect={XP_REWARDS.storyQuizCorrect}
+            addXp={awardXp}
+          />
         </>
       )}
 
-      {phase === 'done' && (
+      {phase === 'done' && passed && (
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
           <CelebrationBadge />
           <p className="text-xl">🎉 Hoàn thành truyện!</p>
@@ -215,6 +235,21 @@ function StoryDetailPageInner() {
           </div>
           <Link to="/hoc-hom-nay" className="mt-3 block text-center text-xs text-white/80 underline">
             Về Học hôm nay
+          </Link>
+        </div>
+      )}
+
+      {phase === 'done' && !passed && (
+        <div className="rounded-2xl bg-white p-6 text-center shadow-sm">
+          <p className="text-xl">😅 Chưa đạt</p>
+          <p className="mt-1 text-gray-600">
+            Đọc hiểu đúng {result.correct}/{result.total} câu - cần đúng từ {Math.round(QUIZ_PASS_THRESHOLD * 100)}% trở lên mới qua bài.
+          </p>
+          <button onClick={retryQuiz} className="mt-4 w-full rounded-xl bg-brand-700 py-2.5 font-semibold text-white">
+            Làm lại bài đọc hiểu
+          </button>
+          <Link to="/truyen" className="mt-2 block rounded-xl bg-gray-100 py-2.5 text-sm font-semibold text-gray-700">
+            Truyện khác
           </Link>
         </div>
       )}

@@ -4,13 +4,14 @@ import BackButton from '../components/BackButton'
 import { getGrammarPoint } from '../data/grammar'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
-import { playCelebrate } from '../lib/sfx'
+import { playCelebrate, playWrong } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
 import { VolumeIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
 import CelebrationBadge from '../components/CelebrationBadge'
 import MarkdownLite from '../components/MarkdownLite'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
+import { QUIZ_PASS_THRESHOLD, quizPassed } from '../lib/quizResult'
 
 function GrammarAskAi({ point }) {
   const navigate = useNavigate()
@@ -100,6 +101,8 @@ function GrammarDetailPageInner() {
   const { addXp, markGrammarComplete, completedGrammar } = useProgress()
   const [phase, setPhase] = useState('learn') // learn | quiz | done
   const [result, setResult] = useState({ correct: 0, total: 0 })
+  const [passed, setPassed] = useState(true)
+  const [quizAttempt, setQuizAttempt] = useState(0)
 
   // Xem ghi chu o TopicDetailPage: bai da hoan thanh thi khong cong XP nua.
   const awardXp = point && completedGrammar.includes(point.key) ? () => {} : addXp
@@ -117,11 +120,22 @@ function GrammarDetailPageInner() {
 
   function handleQuizDone(correct, total) {
     setResult({ correct, total })
-    // Chi cong XP cho lan hoan thanh DAU TIEN - xem ghi chu o TopicDetailPage.
-    awardXp(XP_REWARDS.grammarComplete)
-    markGrammarComplete(point.key)
-    playCelebrate()
+    const didPass = quizPassed(correct, total)
+    setPassed(didPass)
+    if (didPass) {
+      // Chi cong XP cho lan hoan thanh DAU TIEN - xem ghi chu o TopicDetailPage.
+      awardXp(XP_REWARDS.grammarComplete)
+      markGrammarComplete(point.key)
+      playCelebrate()
+    } else {
+      playWrong()
+    }
     setPhase('done')
+  }
+
+  function retryQuiz() {
+    setQuizAttempt((a) => a + 1)
+    setPhase('quiz')
   }
 
   return (
@@ -173,10 +187,16 @@ function GrammarDetailPageInner() {
       )}
 
       {phase === 'quiz' && (
-        <MiniQuiz items={point.quiz} onDone={handleQuizDone} xpPerCorrect={XP_REWARDS.grammarQuizCorrect} addXp={awardXp} />
+        <MiniQuiz
+          key={quizAttempt}
+          items={point.quiz}
+          onDone={handleQuizDone}
+          xpPerCorrect={XP_REWARDS.grammarQuizCorrect}
+          addXp={awardXp}
+        />
       )}
 
-      {phase === 'done' && (
+      {phase === 'done' && passed && (
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
           <CelebrationBadge />
           <p className="text-xl">🎉 Hoàn thành!</p>
@@ -194,6 +214,21 @@ function GrammarDetailPageInner() {
               Điểm khác
             </Link>
           </div>
+        </div>
+      )}
+
+      {phase === 'done' && !passed && (
+        <div className="rounded-2xl bg-white p-6 text-center shadow-sm">
+          <p className="text-xl">😅 Chưa đạt</p>
+          <p className="mt-1 text-gray-600">
+            Đúng {result.correct}/{result.total} câu - cần đúng từ {Math.round(QUIZ_PASS_THRESHOLD * 100)}% trở lên mới qua bài.
+          </p>
+          <button onClick={retryQuiz} className="mt-4 w-full rounded-xl bg-brand-700 py-2.5 font-semibold text-white">
+            Làm lại
+          </button>
+          <Link to="/ngu-phap" className="mt-2 block rounded-xl bg-gray-100 py-2.5 text-sm font-semibold text-gray-700">
+            Điểm khác
+          </Link>
         </div>
       )}
     </div>
