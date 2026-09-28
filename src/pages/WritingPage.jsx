@@ -141,12 +141,14 @@ export default function WritingPage() {
         </div>
       ) : (
         <>
-          <img src={writingPanda} alt="Gấu trúc luyện viết chữ" className="mx-auto mb-2 w-36 max-w-full" />
-          <div className="mb-4 flex items-center justify-between">
-            <h1 className="text-2xl text-brand-800">Viết chữ Hán</h1>
-            <span className="text-sm text-gray-500">
-              Đã luyện {practicedCount}/{chars.length}
-            </span>
+          <div className="mb-4 flex items-center gap-3">
+            <img src={writingPanda} alt="" className="h-14 w-14 shrink-0" />
+            <div className="min-w-0 flex-1">
+              <h1 className="text-2xl text-brand-800">Viết chữ Hán</h1>
+              <span className="text-sm text-gray-500">
+                Đã luyện {practicedCount}/{chars.length}
+              </span>
+            </div>
           </div>
         </>
       )}
@@ -273,8 +275,8 @@ export default function WritingPage() {
             </div>
           </div>
 
-          <p className="mb-2 mt-6 text-sm text-gray-500">Chọn chữ khác:</p>
-          <div className="grid grid-cols-8 gap-2">
+          <p className="mb-2 mt-6 text-sm text-gray-500">Chọn chữ khác ({chars.length}):</p>
+          <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
             {chars.map(({ char }, i) => {
               const done = writingStats.practiced.includes(char)
               const accent = accentFor(i)
@@ -282,7 +284,7 @@ export default function WritingPage() {
                 <button
                   key={char}
                   onClick={() => setSelected(chars.find((c) => c.char === char))}
-                  className={`relative rounded-lg py-2 text-lg ${
+                  className={`relative shrink-0 rounded-lg px-3 py-2 text-lg ${
                     selected.char === char ? 'bg-brand-700 text-white' : `${accent.bg} ${accent.text}`
                   }`}
                 >
