@@ -70,7 +70,17 @@ export default function WritingPage() {
       outlineColor: '#e9d5ff',
       highlightColor: '#ec4899',
       strokeAnimationSpeed: 1,
-      delayBetweenStrokes: 200
+      delayBetweenStrokes: 200,
+      // Lay du lieu net chu tu chinh server cua app (public/hanzi-data/, tao
+      // boi scripts/extract-hanzi-data.mjs) thay vi mac dinh cua hanzi-writer
+      // la goi ra CDN ben ngoai (cdn.jsdelivr.net) moi lan hien 1 chu - cach
+      // do gay hien chu cham/khong on dinh tuy mang.
+      charDataLoader: (char, onLoad, onError) => {
+        fetch(`${import.meta.env.BASE_URL}hanzi-data/${encodeURIComponent(char)}.json`)
+          .then((res) => (res.ok ? res.json() : Promise.reject(new Error('missing char data'))))
+          .then(onLoad)
+          .catch((e) => onError?.(e))
+      }
     })
     return () => {
       writerRef.current = null
