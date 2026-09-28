@@ -24,9 +24,23 @@ export async function pullFromFirestore(uid) {
   return remote.updatedAt
 }
 
+// Chi tinh la "co du lieu that su" khi ban tren dam may THUC SU chua tien do
+// (khop dinh nghia voi isLocalProgressEmpty o FirebaseSyncContext) - tranh
+// truong hop ban dam may cung rong (vd. tu truoc khi co chot an toan chong
+// day-len-du-lieu-rong) khien phia goi (reconciliation luc dang nhap) cu
+// tuong la "co ban sao that" roi keo ve + tu tai lai trang, ma tai lai xong
+// van rong nen lai kich hoat y het - tao thanh vong lap tu tai lai vo han.
+function hasMeaningfulProgress(data) {
+  if (!data) return false
+  const hasXp = (data.xp ?? 0) > 0
+  const hasUnits = Array.isArray(data.completedUnits) && data.completedUnits.length > 0
+  const hasSrs = data.srsState && Object.keys(data.srsState).length > 0
+  return hasXp || hasUnits || hasSrs
+}
+
 export async function checkRemote(uid) {
   const snap = await getDoc(progressDocRef(uid))
   if (!snap.exists()) return { hasRemoteData: false, remoteUpdatedAt: null }
   const remote = snap.data()
-  return { hasRemoteData: !!remote?.data, remoteUpdatedAt: remote?.updatedAt ?? null }
+  return { hasRemoteData: hasMeaningfulProgress(remote?.data), remoteUpdatedAt: remote?.updatedAt ?? null }
 }
