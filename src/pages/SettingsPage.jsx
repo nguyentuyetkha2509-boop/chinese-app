@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { getDailyNewWordLimit, setDailyNewWordLimit, NEW_WORD_LIMIT_OPTIONS } from '../lib/curriculum'
-import { useFirebaseSync } from '../store/FirebaseSyncContext'
+import { useFirebaseAuth, useFirebaseSync } from '../store/FirebaseSyncContext'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { ArrowLeftIcon, ShieldIcon, BellIcon } from '../components/Icons'
@@ -230,7 +230,7 @@ function FirebaseSyncSection() {
 
 export default function SettingsPage() {
   const navigate = useNavigate()
-  const { isAdmin } = useFirebaseSync()
+  const { isAdmin } = useFirebaseAuth()
   const [newWordLimit, setNewWordLimit] = useState(() => getDailyNewWordLimit())
 
   function handleLimitChange(n) {

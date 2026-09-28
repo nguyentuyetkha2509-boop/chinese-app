@@ -195,7 +195,17 @@ export function FirebaseSyncProvider({ children }) {
     submitNickname
   }
 
-  const authValue = useMemo(() => ({ user, authReady }), [user, authReady])
+  const authValue = useMemo(
+    () => ({
+      user,
+      authReady,
+      connected: !!user,
+      needsNickname,
+      nickname,
+      isAdmin: user?.email === ADMIN_EMAIL
+    }),
+    [user, authReady, needsNickname, nickname]
+  )
 
   return (
     <FirebaseAuthContext.Provider value={authValue}>

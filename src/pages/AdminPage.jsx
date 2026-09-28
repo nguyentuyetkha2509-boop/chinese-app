@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchAllLeaderboard } from '../lib/leaderboard'
-import { useFirebaseSync } from '../store/FirebaseSyncContext'
+import { useFirebaseAuth } from '../store/FirebaseSyncContext'
 import { ArrowLeftIcon } from '../components/Icons'
 
 function formatTime(ts) {
@@ -11,7 +11,7 @@ function formatTime(ts) {
 
 export default function AdminPage() {
   const navigate = useNavigate()
-  const { user, authReady, isAdmin } = useFirebaseSync()
+  const { user, authReady, isAdmin } = useFirebaseAuth()
   const [entries, setEntries] = useState(null)
   const [error, setError] = useState(null)
 

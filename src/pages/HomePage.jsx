@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { LEVELS, ALL_WORDS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
-import { useFirebaseSync } from '../store/FirebaseSyncContext'
+import { useFirebaseAuth } from '../store/FirebaseSyncContext'
 import { getCardStats } from '../lib/srs'
 import {
   FireIcon,
@@ -125,7 +125,7 @@ export default function HomePage() {
   useScrollRestoration('home')
   const { srsState, completedUnits, streak, toneStats, xp, dailyXp, writingPerfectCount, completedGrammar, writingStats, dailyCombo } =
     useProgress()
-  const { nickname } = useFirebaseSync()
+  const { nickname } = useFirebaseAuth()
   const allIds = ALL_WORDS.map((w) => w.id)
   const stats = getCardStats(allIds, srsState)
   const dueCount = stats.due
