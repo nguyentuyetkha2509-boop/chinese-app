@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth'
 import { auth, googleProvider } from '../lib/firebase'
 import { useProgress } from './ProgressContext'
@@ -7,6 +7,13 @@ import { getMyEntry, setNickname as saveNickname, updateMyStats } from '../lib/l
 import { getLevelInfo } from '../lib/gamification'
 
 const FirebaseSyncContext = createContext(null)
+// Context rieng, chi chua { user, authReady } - it doi hon nhieu so voi
+// status/lastSyncedAt (doi lien tuc moi lan tu dong day len dam may). Tach
+// rieng de App.jsx (bao ca cay component) chi re-render khi THAT SU dang
+// nhap/dang xuat, khong bi keo theo moi lan status "syncing" <-> "synced"
+// nhay - truoc day gay giat lien tuc moi thao tac SAU KHI da dang nhap
+// Google (vi luc do auto-push chay 4s/lan lam status doi suot).
+const FirebaseAuthContext = createContext(null)
 
 const AUTO_PUSH_DELAY_MS = 4000
 export const ADMIN_EMAIL = 'nguyentuyetkha2509@gmail.com'
@@ -188,11 +195,25 @@ export function FirebaseSyncProvider({ children }) {
     submitNickname
   }
 
-  return <FirebaseSyncContext.Provider value={value}>{children}</FirebaseSyncContext.Provider>
+  const authValue = useMemo(() => ({ user, authReady }), [user, authReady])
+
+  return (
+    <FirebaseAuthContext.Provider value={authValue}>
+      <FirebaseSyncContext.Provider value={value}>{children}</FirebaseSyncContext.Provider>
+    </FirebaseAuthContext.Provider>
+  )
 }
 
 export function useFirebaseSync() {
   const ctx = useContext(FirebaseSyncContext)
   if (!ctx) throw new Error('useFirebaseSync phai dung ben trong FirebaseSyncProvider')
+  return ctx
+}
+
+// Ban rut gon, on dinh cua useFirebaseSync() - dung o nhung noi chi can biet
+// da dang nhap hay chua (vd. App.jsx) de tranh re-render dư thua noi tren.
+export function useFirebaseAuth() {
+  const ctx = useContext(FirebaseAuthContext)
+  if (!ctx) throw new Error('useFirebaseAuth phai dung ben trong FirebaseSyncProvider')
   return ctx
 }

@@ -7,7 +7,7 @@ import WelcomeScreen, { hasSeenWelcome } from './components/WelcomeScreen'
 import OnboardingGuide, { hasSeenOnboarding } from './components/OnboardingGuide'
 import NicknamePrompt from './components/NicknamePrompt'
 import DailyReminder from './components/DailyReminder'
-import { useFirebaseSync } from './store/FirebaseSyncContext'
+import { useFirebaseAuth } from './store/FirebaseSyncContext'
 import HomePage from './pages/HomePage'
 import TodayPlanPage from './pages/TodayPlanPage'
 import RoadmapPage from './pages/RoadmapPage'
@@ -32,7 +32,7 @@ import DictationPage from './pages/DictationPage'
 import SettingsPage from './pages/SettingsPage'
 
 export default function App() {
-  const { authReady, user } = useFirebaseSync()
+  const { authReady, user } = useFirebaseAuth()
   const [welcomeDone, setWelcomeDone] = useState(() => hasSeenWelcome())
   const [onboardingDone, setOnboardingDone] = useState(() => hasSeenOnboarding())
 
