@@ -416,19 +416,18 @@ function RecordCompare({ words, levelId }) {
   return (
     <div>
       <p className="mb-3 text-sm text-gray-500">
-        Nghe mẫu, ghi âm giọng bạn rồi nghe lại để so sánh. Từ {index + 1}/{round.length}
+        Bấm vào ô chữ để nghe mẫu, ghi âm giọng bạn rồi nghe lại để so sánh. Từ {index + 1}/
+        {round.length}
       </p>
-      <div className="rounded-3xl bg-gradient-to-br from-sky-500 via-teal-500 to-brand-500 p-6 text-center text-white shadow-lg">
-        <p className="text-5xl">{word.hanzi}</p>
-        <p className="mt-1 text-white/90">{word.pinyin}</p>
-        <p className="text-sm text-white/80">{word.meaning}</p>
-        <button
-          onClick={() => speakChinese(word.hanzi)}
-          className="mx-auto mt-3 flex items-center gap-1 rounded-full bg-white/20 px-4 py-1.5"
-        >
-          <VolumeIcon width={24} height={24} /> Nghe mẫu
-        </button>
-      </div>
+      {/* Ca o chu la nut nghe doc, khong con nut "Nghe mau" rieng ben duoi. */}
+      <button
+        onClick={() => speakChinese(word.hanzi)}
+        className="block w-full rounded-3xl bg-gradient-to-br from-sky-500 via-teal-500 to-brand-500 p-6 text-center text-white shadow-lg"
+      >
+        <span className="block text-5xl">{word.hanzi}</span>
+        <span className="mt-1 block text-white/90">{word.pinyin}</span>
+        <span className="block text-sm text-white/80">{word.meaning}</span>
+      </button>
 
       <div className="mt-5 flex flex-col items-center gap-3">
         {status === 'recording' ? (
@@ -497,7 +496,7 @@ function RecordCompare({ words, levelId }) {
         <button
           ref={nextButtonRef}
           onClick={nextWord}
-          className="text-sm text-gray-500 underline"
+          className="w-full rounded-2xl bg-brand-700 py-3 text-center font-semibold text-white"
         >
           {index + 1 < round.length ? 'Từ tiếp theo' : 'Hoàn thành'}
         </button>
