@@ -1,7 +1,9 @@
 // Truyen dai chia nhieu chuong, tu soan va kiem tra pinyin/thanh dieu thu cong
 // (giong cach lam voi hoi thoai), dung tu vung co ban HSK1-2 de nguoi moi hoc
 // van doc hieu duoc. Moi truyen co cau hoi doc hieu cuoi truyen.
-export const STORIES = [
+import { STORIES_HSK6 } from './stories6'
+
+const BASE_STORIES = [
   {
     key: 'meo-con-tim-ban',
     icon: '🐱',
@@ -376,6 +378,9 @@ export const STORIES = [
     ]
   }
 ]
+
+// Truyen HSK6 nam o file rieng cho de quan ly (xem stories6.js).
+export const STORIES = [...BASE_STORIES, ...STORIES_HSK6]
 
 export function getStory(key) {
   return STORIES.find((s) => s.key === key)
