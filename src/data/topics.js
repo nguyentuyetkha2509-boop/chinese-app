@@ -109,7 +109,6 @@ export function getTopicLevel(key) {
 
 // Nhom hien thi de loc danh sach chu de.
 export const TOPIC_GROUPS = [
-  { id: 'all', label: 'Tất cả' },
   { id: 'basic', label: 'Cơ bản' },
   { id: 'job', label: 'Ngành nghề' },
   { id: 'life', label: 'Đời sống' },

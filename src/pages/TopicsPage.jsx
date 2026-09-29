@@ -10,7 +10,7 @@ import { useScrollRestoration } from '../lib/useScrollRestoration'
 export default function TopicsPage() {
   useScrollRestoration('topics')
   const { completedTopics } = useProgress()
-  const [group, setGroup] = useState('all')
+  const [group, setGroup] = useState('basic')
   // Sap xep tu de den kho (theo do kho tu vung thuc te) thay vi thu tu tuy
   // tien - kem so thu tu va danh dau "Tiep theo" giong trang Bai hoc, de biet
   // dang luyen den dau, khong con cam giac roi rac.
@@ -23,7 +23,7 @@ export default function TopicsPage() {
   // Loc theo nhom nhung giu nguyen so thu tu va danh dau "Tiep theo" cua ca danh sach.
   const visible = sortedTopics
     .map((topic, i) => ({ topic, i }))
-    .filter(({ topic }) => group === 'all' || getTopicGroup(topic) === group)
+    .filter(({ topic }) => getTopicGroup(topic) === group)
 
   return (
     <div className="px-4 pt-6">
