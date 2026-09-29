@@ -283,6 +283,13 @@ for (const [cp, value] of readUnihanFields('Unihan_Variants.txt', 'kTraditionalV
 // ---------------------------------------------------------------------------
 // 1. src/data/radicalsKangxi.js
 // ---------------------------------------------------------------------------
+// So net lay tu hanzi-writer-data - CUNG bo du lieu ma trang Viet chu dung de ve
+// net. Co y KHONG lay so net chuan cua bang Khang Hy (suy ra duoc tu chinh so
+// thu tu bo), vi hai he dem lech nhau o dung 6 bo: 54 廴, 98 瓦, 188 骨, 194 鬼,
+// 206 鼎, 213 龜 (bang Khang Hy dem nhieu hon 1 net o 5 bo dau, 龜 thi nguoc lai).
+// Lay so Khang Hy thi trang Bo thu ghi 鬼 10 net trong khi trang Viet chu ve 鬼
+// dung 9 net - mau thuan ngay trong app. Doi lai, thu tu # va so net khong tang
+// thuan nhau o 6 cho nay, nen dung noi voi nguoi hoc rang bang nay xep theo so net.
 const strokeCount = (ch) => JSON.parse(readFileSync(join(rootDir, 'node_modules/hanzi-writer-data', `${ch}.json`), 'utf8')).strokes.length
 
 const radicals = RADICAL_TABLE.split('\n').map((line, i) => {

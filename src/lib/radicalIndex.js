@@ -47,3 +47,23 @@ export function groupWordsByRadical(words, limit = 8) {
   }
   return byRadical
 }
+
+// Dem so chu RIENG BIET cua tung bo, khong cat bot: Map<so bo, so chu>.
+//
+// Phai tach khoi groupWordsByRadical vi ham do cat o `limit` de hien thi - lay
+// do dai cua danh sach da cat thi moi bo deu toi da `limit` (mac dinh 8), khong
+// con phan biet duoc bo nao dung nhieu (bo 手 co 67 chu nhung se hien la 8).
+export function countWordsByRadical(words) {
+  const seenByRadical = new Map()
+  for (const w of words) {
+    if ([...w.hanzi].length !== 1) continue
+    const n = radicalOf(w.hanzi)
+    if (!n) continue
+    let seen = seenByRadical.get(n)
+    if (!seen) seenByRadical.set(n, (seen = new Set()))
+    seen.add(w.hanzi)
+  }
+  const counts = new Map()
+  for (const [n, seen] of seenByRadical) counts.set(n, seen.size)
+  return counts
+}
