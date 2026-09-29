@@ -148,7 +148,7 @@ export default function FlashcardsPage() {
           <img
             src={flashcardPanda}
             alt="Gấu trúc mời ôn tập từ vựng"
-            className="mx-auto mb-4 w-48 max-w-full"
+            className="mx-auto mb-4 w-56 max-w-full rounded-3xl shadow-lg"
           />
         )}
 
