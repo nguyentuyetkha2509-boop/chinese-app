@@ -152,10 +152,13 @@ export default function SpeedGamePage() {
             {question.options.map((opt, i) => {
               const accent = accentFor(i)
               const isFlashed = flash?.optionId === opt.id
+              // Dap an sai thi lac luon: iPhone khong cho trang web rung may, nen
+              // day la tin hieu "sai" thay the cho rung, va cung giup nhan ra ngay
+              // ca khi dang o noi on ao khong nghe thay tieng.
               const cls = isFlashed
                 ? flash.correct
                   ? 'border-teal-500 bg-teal-50'
-                  : 'border-red-400 bg-red-50'
+                  : 'animate-shake border-red-400 bg-red-50'
                 : `${accent.border} bg-white`
               return (
                 <button

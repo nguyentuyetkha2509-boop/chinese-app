@@ -12,6 +12,7 @@
 // giong do khong dung duoc, huy va doi sang ung vien ke tiep, cu the cho den khi
 // co tieng. Giong doc duoc nho lai (localStorage) de lan sau thu thang no truoc.
 import { loadJSON, saveJSON } from './storage'
+import { enablePlaybackAudio } from './audioSession'
 
 const VOICE_KEY = 'ttsVoice'
 // Cho toi da bao lau de mot ung vien bat dau doc. Rong rai mot chut vi lan dau
@@ -132,6 +133,9 @@ export function speakChinese(text, { rate = 0.85, onError, onEnd } = {}) {
     onError?.('unsupported')
     return false
   }
+  // Tren iPhone: neu khong xin Safari doi xu am thanh nhu nhac/phim thi cong tac
+  // Im lang tat luon tieng doc, bam loa khong nghe gi.
+  enablePlaybackAudio()
   const synth = window.speechSynthesis
   if (!cachedVoices) loadVoices()
   const candidates = cachedVoices

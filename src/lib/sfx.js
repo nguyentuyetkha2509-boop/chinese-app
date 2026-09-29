@@ -2,12 +2,17 @@
 // khong lo ban quyen) - tao cam giac vui ve, hung thu khi lam bai/on tap.
 // Dang tong hop nen hoat dong on dinh hon nhieu so voi giong doc TTS (khong
 // phu thuoc giong noi co san tren may).
+import { enablePlaybackAudio } from './audioSession'
+
 let ctx = null
 
 function getCtx() {
   if (typeof window === 'undefined') return null
   const AudioContextClass = window.AudioContext || window.webkitAudioContext
   if (!AudioContextClass) return null
+  // Tren iPhone: xin Safari doi xu am thanh nay nhu nhac/phim, neu khong thi
+  // cong tac Im lang se tat het tieng game.
+  enablePlaybackAudio()
   if (!ctx) ctx = new AudioContextClass()
   return ctx
 }
@@ -47,10 +52,33 @@ export function playCorrect() {
   })
 }
 
+// Rung may khi bao sai. Chi dien thoai Android moi ho tro (Safari tren iPhone
+// khong co API nay), nen rung chi la them chu khong thay duoc am thanh: goi vao
+// may khong ho tro thi lang le bo qua, khong bao loi.
+// Kieu rung [rung, nghi, rung] nhip 2 lan cho khop voi 2 not nhac di xuong.
+function vibrate(pattern) {
+  if (typeof navigator === 'undefined' || typeof navigator.vibrate !== 'function') return
+  try {
+    navigator.vibrate(pattern)
+  } catch {
+    // Vai trinh duyet chan API nay khi trang khong phai do nguoi dung tu mo -
+    // khong co gi phai xu ly, am thanh van bao sai binh thuong.
+  }
+}
+
 export function playWrong() {
+  vibrate([45, 60, 90])
   playScheduled((audioCtx, now) => {
-    tone(audioCtx, 330, now, 0.16, { type: 'triangle', gain: 0.14 })
-    tone(audioCtx, 220, now + 0.11, 0.22, { type: 'triangle', gain: 0.14 })
+    // Am bao SAI phai nghe ro tren loa dien thoai/laptop. Ban cu dung 330 roi
+    // 220 Hz, song tam giac: do la vung tram ma loa nho phat rat kem, va song
+    // tam giac gan nhu khong co hai am bac cao nen tieng bi "chim" han - do
+    // duoc bien do khong nho hon am dung bao nhieu ma nguoi dung van thay nhu
+    // khong co tieng.
+    // Nay dung song vuong (rat nhieu hai am bac cao, loa nho phat ro) va ha
+    // xuong o dai 622 -> 466 Hz, la vung loa nho lam viec tot nhat. Di XUONG
+    // de phan biet voi am dung (di len) va khong lan voi tieng giong doc.
+    tone(audioCtx, 622.25, now, 0.13, { type: 'square', gain: 0.1 })
+    tone(audioCtx, 466.16, now + 0.11, 0.24, { type: 'square', gain: 0.1 })
   })
 }
 
