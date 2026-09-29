@@ -1654,7 +1654,7 @@ export const CHAR_PINYIN = {
   '留': 'liú',
   '畜': 'chù',
   '略': 'lüè',
-  '番': 'pān',
+  '番': 'fān',
   '畴': 'chóu',
   '疆': 'jiāng',
   '疏': 'shū',

@@ -527,7 +527,7 @@ export const HSK6_WORDS = [
   { id: 7525, hanzi: '发扬', pinyin: 'fāyáng', meaning: 'phát huy', tones: [1, 2] },
   { id: 7526, hanzi: '发育', pinyin: 'fāyù', meaning: 'phát triển, phát dục (cơ thể)', tones: [1, 4] },
   { id: 7527, hanzi: '法人', pinyin: 'fǎrén', meaning: 'pháp nhân', tones: [3, 2] },
-  { id: 7528, hanzi: '番', pinyin: 'pān', meaning: 'lần, phen (lượng từ); (họ Phan)', tones: [1] },
+  { id: 7528, hanzi: '番', pinyin: 'fān', meaning: 'lần, phen (lượng từ); (họ Phan, đọc là Pān)', tones: [1] },
   { id: 7529, hanzi: '繁华', pinyin: 'fánhuá', meaning: 'phồn hoa, sầm uất, náo nhiệt', tones: [2, 2] },
   { id: 7530, hanzi: '繁忙', pinyin: 'fánmáng', meaning: 'bận rộn, tấp nập', tones: [2, 2] },
   { id: 7531, hanzi: '繁体字', pinyin: 'fántǐzì', meaning: 'chữ Hán phồn thể', tones: [2, 3, 4] },
