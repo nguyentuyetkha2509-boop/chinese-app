@@ -34,7 +34,11 @@ function PandaFrame({ hanzi, pinyin, meaning, pinyinClass = '', small = false, o
   )
 }
 
-const SESSION_SIZE = 20
+// The den han thi on HET trong mot luot (truoc day cat o 20 the nen 200 the den
+// han phai bam "On them" 10 lan). Muc "Tu kho" van gioi han vi no cho mo lai
+// the chua den han, khong gioi han thi se on lai ca danh sach dai.
+const SESSION_SIZE = Infinity
+const LEECH_SESSION_SIZE = 20
 
 const RATINGS = [
   { value: 0, label: 'Quên rồi', hint: 'gặp lại ngay', className: 'bg-red-500' },
@@ -103,7 +107,7 @@ export default function FlashcardsPage() {
   function buildQueueForScope(nextScope, { keepSummary = false } = {}) {
     const ids = nextScope === 'leech' ? leechIds : wordIdsForScope(nextScope, srsState)
     const nextQueue =
-      nextScope === 'leech' ? ids.slice(0, SESSION_SIZE) : getDueWordIds(ids, srsState, SESSION_SIZE)
+      nextScope === 'leech' ? ids.slice(0, LEECH_SESSION_SIZE) : getDueWordIds(ids, srsState, SESSION_SIZE)
     if (!keepSummary || nextQueue.length > 0) {
       setRatingCounts({ 0: 0, 1: 0, 2: 0, 3: 0 })
       setSessionXp(0)
