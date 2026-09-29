@@ -1,6 +1,7 @@
 // Truyen dai chia nhieu chuong, tu soan va kiem tra pinyin/thanh dieu thu cong
 // (giong cach lam voi hoi thoai), dung tu vung co ban HSK1-2 de nguoi moi hoc
 // van doc hieu duoc. Moi truyen co cau hoi doc hieu cuoi truyen.
+import { STORIES_MORE } from './storiesMore'
 import { STORIES_HSK6 } from './stories6'
 
 const BASE_STORIES = [
@@ -379,8 +380,8 @@ const BASE_STORIES = [
   }
 ]
 
-// Truyen HSK6 nam o file rieng cho de quan ly (xem stories6.js).
-export const STORIES = [...BASE_STORIES, ...STORIES_HSK6]
+// Truyen bo sung HSK1-5 (storiesMore.js) va HSK6 (stories6.js) nam o file rieng cho de quan ly.
+export const STORIES = [...BASE_STORIES, ...STORIES_MORE, ...STORIES_HSK6]
 
 export function getStory(key) {
   return STORIES.find((s) => s.key === key)
