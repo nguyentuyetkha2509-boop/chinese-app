@@ -13,10 +13,10 @@ export default function LettersPage() {
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
         <BackButton />
-        <h1 className="text-2xl text-brand-800">Thư dài</h1>
+        <h1 className="text-2xl text-brand-800">Thư gửi chính mình</h1>
       </div>
       <p className="mb-4 text-sm text-gray-500">
-        Đọc thư tiếng Trung, tự dịch ra tiếng Việt rồi mới xem phiên âm và nghĩa để đối chiếu. Đã xong {doneCount}/
+        Đọc lá thư tiếng Trung bạn “gửi” cho chính mình, tự dịch ra tiếng Việt rồi mới xem phiên âm và nghĩa để đối chiếu. Đã xong {doneCount}/
         {LETTERS.length}.
       </p>
 
