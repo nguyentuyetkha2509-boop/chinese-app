@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import BackButton from '../components/BackButton'
-import { getTopic, getTopicWords } from '../data/topics'
-import { ALL_WORDS } from '../data/levels'
+import { getTopic, getTopicWords, TOPIC_QUIZ_POOL } from '../data/topics'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
@@ -11,10 +10,12 @@ import { VolumeIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
-import { buildQuiz } from '../lib/quiz'
+import { buildQuiz, shuffle } from '../lib/quiz'
 import { QUIZ_PASS_THRESHOLD, quizPassed } from '../lib/quizResult'
 import QuizQuestion from '../components/QuizQuestion'
 import CelebrationBadge from '../components/CelebrationBadge'
+
+const QUIZ_MAX_QUESTIONS = 20
 
 // Xem ghi chu tuong tu trong LessonDetailPage.jsx: dat key theo topicKey de
 // remount lai tu dau khi chuyen thang sang chu de khac.
@@ -29,7 +30,9 @@ function TopicDetailPageInner() {
   const topic = getTopic(topicKey)
   const words = useMemo(() => getTopicWords(topicKey), [topicKey])
   const [phase, setPhase] = useState('study') // study | quiz | done
-  const quiz = useMemo(() => buildQuiz(words, ALL_WORDS), [words])
+  // Chu de co the co rat nhieu tu, nen bai kiem tra chi lay ngau nhien toi da
+  // QUIZ_MAX_QUESTIONS tu de khong qua dai; moi lan lam la mot bo cau khac.
+  const quiz = useMemo(() => buildQuiz(shuffle(words).slice(0, QUIZ_MAX_QUESTIONS), TOPIC_QUIZ_POOL), [words])
   const [quizIndex, setQuizIndex] = useState(0)
   const [correctCount, setCorrectCount] = useState(0)
   const [selected, setSelected] = useState(null)

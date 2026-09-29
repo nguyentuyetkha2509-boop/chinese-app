@@ -1,8 +1,9 @@
-// Nhom lai tu vung DA CO (HSK1-4) theo chu de - khong them tu moi, chi giup
-// hoc/on tap theo mach chu de thay vi chi theo thu tu HSK tuan tu.
+// Nhom tu vung theo chu de (HSK1-6 va tu bo sung trong topicWords.js) de hoc/on tap
+// theo mach chu de thay vi chi theo thu tu HSK tuan tu.
 import { ALL_WORDS } from './levels'
 import { estimateLevelFromWords } from '../lib/contentLevel'
 import { TOPICS_MORE } from './topicsMore'
+import { EXTRA_WORDS } from './topicWords'
 
 const BASE_TOPICS = [
   {
@@ -64,12 +65,22 @@ const BASE_TOPICS = [
 // Chu de bo sung (nganh nghe, doi song, khoa hoc...) nam o topicsMore.js.
 export const TOPICS = [...BASE_TOPICS, ...TOPICS_MORE]
 
+// Tra tu theo chu Han: uu tien tu vung HSK, chua co thi lay tu bo sung
+// (topicWords.js, chi dung cho phan chu de). Lap map 1 lan thay vi find() moi tu.
+const WORD_BY_HANZI = new Map()
+for (const w of ALL_WORDS) if (!WORD_BY_HANZI.has(w.hanzi)) WORD_BY_HANZI.set(w.hanzi, w)
+for (const w of EXTRA_WORDS) if (!WORD_BY_HANZI.has(w.hanzi)) WORD_BY_HANZI.set(w.hanzi, w)
+
+// Kho tu de tao dap an nhieu cho bai kiem tra cua chu de: gom ca tu bo sung, de
+// chu de nhieu tu ngoai HSK (vd bat dong san) van du lua chon khac nhau.
+export const TOPIC_QUIZ_POOL = [...ALL_WORDS, ...EXTRA_WORDS]
+
 function dedupeWords(hanziList) {
   const seen = new Set()
   const result = []
   for (const h of hanziList) {
     if (seen.has(h)) continue
-    const word = ALL_WORDS.find((w) => w.hanzi === h)
+    const word = WORD_BY_HANZI.get(h)
     if (word) {
       seen.add(h)
       result.push(word)
@@ -90,5 +101,21 @@ export function getTopicWords(key) {
 // Cap do (1-6) cua 1 chu de, tinh tu tu kho nhat trong do - dung de sap xep
 // danh sach chu de tu de den kho thay vi thu tu tuy tien nhu truoc.
 export function getTopicLevel(key) {
+  const topic = getTopic(key)
+  // Chu de gom nhieu tu ngoai HSK (vd bat dong san) khai bao san level de xep thu tu.
+  if (topic?.level) return topic.level
   return estimateLevelFromWords(getTopicWords(key))
+}
+
+// Nhom hien thi de loc danh sach chu de.
+export const TOPIC_GROUPS = [
+  { id: 'all', label: 'Tất cả' },
+  { id: 'basic', label: 'Cơ bản' },
+  { id: 'job', label: 'Ngành nghề' },
+  { id: 'life', label: 'Đời sống' },
+  { id: 'realestate', label: 'Bất động sản' }
+]
+
+export function getTopicGroup(topic) {
+  return topic.group || 'basic'
 }
