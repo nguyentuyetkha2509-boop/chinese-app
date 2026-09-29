@@ -28,6 +28,8 @@ import DialoguesPage from './pages/DialoguesPage'
 import DialogueDetailPage from './pages/DialogueDetailPage'
 import StoriesPage from './pages/StoriesPage'
 import StoryDetailPage from './pages/StoryDetailPage'
+import LettersPage from './pages/LettersPage'
+import LetterDetailPage from './pages/LetterDetailPage'
 import GrammarPage from './pages/GrammarPage'
 import GrammarDetailPage from './pages/GrammarDetailPage'
 import SentenceBuilderPage from './pages/SentenceBuilderPage'
@@ -97,6 +99,8 @@ export default function App() {
         <Route path="/hoi-thoai/:dialogueKey" element={<DialogueDetailPage />} />
         <Route path="/truyen" element={<StoriesPage />} />
         <Route path="/truyen/:storyKey" element={<StoryDetailPage />} />
+        <Route path="/thu" element={<LettersPage />} />
+        <Route path="/thu/:letterKey" element={<LetterDetailPage />} />
         <Route path="/ngu-phap" element={<GrammarPage />} />
         <Route path="/ngu-phap/:pointKey" element={<GrammarDetailPage />} />
         <Route path="/sap-xep-cau" element={<SentenceBuilderPage />} />

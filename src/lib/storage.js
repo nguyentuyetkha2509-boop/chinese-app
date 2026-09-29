@@ -32,6 +32,7 @@ export const SYNCED_KEYS = [
   'completedGrammar',
   'completedDialogues',
   'completedStories',
+  'completedLetters',
   'completedTopics',
   'xp',
   'dailyXp',

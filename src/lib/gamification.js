@@ -22,6 +22,7 @@ export const XP_REWARDS = {
   writingDone: 5,
   storyQuizCorrect: 5,
   storyComplete: 15,
+  letterComplete: 15,
   grammarQuizCorrect: 5,
   grammarComplete: 10,
   dictationCorrect: 5,

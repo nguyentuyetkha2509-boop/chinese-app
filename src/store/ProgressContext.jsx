@@ -24,6 +24,7 @@ export function ProgressProvider({ children }) {
   const [completedGrammar, setCompletedGrammar] = useState(() => loadJSON('completedGrammar', []))
   const [completedDialogues, setCompletedDialogues] = useState(() => loadJSON('completedDialogues', []))
   const [completedStories, setCompletedStories] = useState(() => loadJSON('completedStories', []))
+  const [completedLetters, setCompletedLetters] = useState(() => loadJSON('completedLetters', []))
   const [completedTopics, setCompletedTopics] = useState(() => loadJSON('completedTopics', []))
   const [xp, setXp] = useState(() => loadJSON('xp', 0))
   const [dailyXp, setDailyXp] = useState(() => loadJSON('dailyXp', { date: todayKey(), amount: 0 }))
@@ -40,6 +41,7 @@ export function ProgressProvider({ children }) {
   useEffect(() => saveJSON('completedGrammar', completedGrammar), [completedGrammar])
   useEffect(() => saveJSON('completedDialogues', completedDialogues), [completedDialogues])
   useEffect(() => saveJSON('completedStories', completedStories), [completedStories])
+  useEffect(() => saveJSON('completedLetters', completedLetters), [completedLetters])
   useEffect(() => saveJSON('completedTopics', completedTopics), [completedTopics])
   useEffect(() => saveJSON('xp', xp), [xp])
   useEffect(() => saveJSON('dailyXp', dailyXp), [dailyXp])
@@ -128,6 +130,11 @@ export function ProgressProvider({ children }) {
     setCompletedStories((prev) => (prev.includes(key) ? prev : [...prev, key]))
   }
 
+  function markLetterComplete(key) {
+    touchStreak()
+    setCompletedLetters((prev) => (prev.includes(key) ? prev : [...prev, key]))
+  }
+
   function markTopicComplete(key) {
     touchStreak()
     setCompletedTopics((prev) => (prev.includes(key) ? prev : [...prev, key]))
@@ -175,6 +182,7 @@ export function ProgressProvider({ children }) {
       completedGrammar,
       completedDialogues,
       completedStories,
+      completedLetters,
       completedTopics,
       xp,
       dailyXp,
@@ -187,6 +195,7 @@ export function ProgressProvider({ children }) {
       markGrammarComplete,
       markDialogueComplete,
       markStoryComplete,
+      markLetterComplete,
       markTopicComplete,
       lockDailyCombo,
       addXp
@@ -208,6 +217,7 @@ export function ProgressProvider({ children }) {
       completedGrammar,
       completedDialogues,
       completedStories,
+      completedLetters,
       completedTopics,
       xp,
       dailyXp,

@@ -123,6 +123,12 @@ const EXTRA_CARDS = [
     className: 'col-span-2 bg-gradient-to-br from-brand-600 to-sky-500'
   },
   {
+    to: '/thu',
+    icon: PencilIcon,
+    title: 'Thư dài',
+    className: 'col-span-2 bg-gradient-to-br from-candy-500 to-brand-600'
+  },
+  {
     to: '/nghe-chep-chinh-ta',
     icon: EarIcon,
     title: 'Nghe chép chính tả',
@@ -207,6 +213,7 @@ export default function HomePage() {
     if (to === '/chu-de') return 'Ngành nghề, bất động sản, đời sống'
     if (to === '/bo-thu') return '214 bộ dựng nên chữ Hán'
     if (to === '/hoi-thoai') return 'Xem tiếng Trung dùng thật'
+    if (to === '/thu') return 'Tự dịch thư rồi đối chiếu đáp án'
     if (to === '/tro-choi') return 'Trả lời nhanh trong 60 giây!'
     if (to === '/ghep-cap') return 'Lật thẻ ghép chữ với nghĩa'
     if (to === '/tro-chuyen-ai') return 'Luyện nói với AI, sửa lỗi ngay'
