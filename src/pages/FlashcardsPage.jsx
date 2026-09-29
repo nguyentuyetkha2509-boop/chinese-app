@@ -138,19 +138,12 @@ export default function FlashcardsPage() {
     return (
       <div className="px-4 pt-6">
         {inSession && <SessionBar steps={steps} currentKey="review" />}
+        <img src={flashcardPanda} alt="Gấu trúc mời ôn tập từ vựng" className="mx-auto mb-2 w-40 max-w-full" />
         <h1 className="mb-4 text-2xl text-brand-800">Ôn tập</h1>
 
         <div className="mb-4">
           <ScopeChips chips={SCOPE_CHIPS} scope={scope} onChange={handleScopeChange} />
         </div>
-
-        {totalRated === 0 && (
-          <img
-            src={flashcardPanda}
-            alt="Gấu trúc mời ôn tập từ vựng"
-            className="mx-auto mb-4 w-56 max-w-full"
-          />
-        )}
 
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
           {totalRated > 0 && <CelebrationBadge />}
@@ -226,6 +219,7 @@ export default function FlashcardsPage() {
   return (
     <div className="px-4 pt-6">
       {inSession && <SessionBar steps={steps} currentKey="review" />}
+      <img src={flashcardPanda} alt="Gấu trúc mời ôn tập từ vựng" className="mx-auto mb-2 w-40 max-w-full" />
       <div className="mb-1 flex items-center justify-between">
         <h1 className="text-2xl text-brand-800">Ôn tập</h1>
         <span className="text-sm text-gray-500">
