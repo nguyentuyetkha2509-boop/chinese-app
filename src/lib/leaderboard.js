@@ -2,7 +2,18 @@
 // users/{uid}/progress, du lieu o day (leaderboard/{uid}) ai dang nhap cung
 // doc duoc (theo Firestore Rules), nhung chi chinh chu uid moi ghi duoc, va
 // chi gom bi danh + so lieu tong quan (khong co chi tiet tung tu da hoc).
-import { collection, doc, getDoc, getDocs, query, orderBy, limit as fsLimit, setDoc } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getCountFromServer,
+  query,
+  where,
+  orderBy,
+  limit as fsLimit,
+  setDoc
+} from 'firebase/firestore'
 import { db } from './firebase'
 
 const COLLECTION = 'leaderboard'
@@ -26,6 +37,31 @@ export async function fetchTopLeaderboard(count = 50) {
   const q = query(collection(db, COLLECTION), orderBy('xp', 'desc'), fsLimit(count))
   const snap = await getDocs(q)
   return snap.docs.map((d) => ({ uid: d.id, ...d.data() }))
+}
+
+// Bang xep hang rieng cua tro "Dua toc do": xep theo diem cao nhat tung dat
+// (truong speedGameBest), khac bang chinh la xep theo XP.
+//
+// Nguoi chua tung choi khong co truong speedGameBest nen KHONG xuat hien o day -
+// Firestore tu bo qua nhung ban ghi thieu truong dung de sap xep. Do dung la y
+// muon: bang nay chi gom nguoi da choi.
+export async function fetchSpeedGameLeaderboard(count = 3) {
+  const q = query(collection(db, COLLECTION), orderBy('speedGameBest', 'desc'), fsLimit(count))
+  const snap = await getDocs(q)
+  return snap.docs.map((d) => ({ uid: d.id, ...d.data() }))
+}
+
+// Thu hang cua chinh minh, kem tong so nguoi choi.
+//
+// Phai DEM bang may chu (getCountFromServer) chu khong tai het bang ve roi dem:
+// dem thi khong ton tien doc theo so nguoi, con tai ve thi cang dong nguoi choi
+// cang nang. Bam "choi lai" lien tuc ma moi lan lai tai ca bang thi rat phi.
+export async function fetchSpeedGameStanding(score) {
+  const [caoHon, tatCa] = await Promise.all([
+    getCountFromServer(query(collection(db, COLLECTION), where('speedGameBest', '>', score))),
+    getCountFromServer(query(collection(db, COLLECTION), where('speedGameBest', '>=', 0)))
+  ])
+  return { rank: caoHon.data().count + 1, total: tatCa.data().count }
 }
 
 // Danh cho trang quan tri: lay nhieu nhat MAX_ADMIN_ROWS nguoi dung hoat dong

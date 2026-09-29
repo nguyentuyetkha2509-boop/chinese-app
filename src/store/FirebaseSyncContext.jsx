@@ -152,6 +152,19 @@ export function FirebaseSyncProvider({ children }) {
     })
   }
 
+  // Day ky luc tro "Dua toc do" len bang xep hang.
+  //
+  // Phai DOC ban dang luu tren may chu roi moi ghi: ky luc la thu chi duoc TANG.
+  // Nguoi dung choi tren may khac (hoac xoa du lieu trinh duyet) co the dang co
+  // diem thap hon ban da luu tren dam may - ghi thang len la tu lam tut hang cua
+  // chinh minh.
+  async function publishSpeedGameBest(score) {
+    if (!user || !Number.isFinite(score)) return
+    const entry = await getMyEntry(user.uid)
+    if ((entry?.speedGameBest ?? 0) >= score) return
+    await updateMyStats(user.uid, { speedGameBest: score })
+  }
+
   async function signIn() {
     setStatus('syncing')
     setError(null)
@@ -262,7 +275,8 @@ export function FirebaseSyncProvider({ children }) {
     signOut: signOutUser,
     pushNow,
     pullNow,
-    submitNickname
+    submitNickname,
+    publishSpeedGameBest
   }
 
   const authValue = useMemo(
