@@ -200,6 +200,81 @@ export const LETTERS = [
         meaning: 'Người luôn ở bên bạn, chính bạn'
       }
     ]
+  },
+  {
+    key: 'gui-minh-nhung-ngay-sau',
+    icon: '🌿',
+    title: 'Gửi mình của những ngày sau này',
+    level: 'HSK4-5',
+    // Thu do chu du an viet bang tieng Viet, phan tieng Trung do Claude dich lai;
+    // nghia tieng Viet giu nguyen loi cua chu du an.
+    paragraphs: [
+      {
+        hanzi: '给以后的我：不知道你读到这些文字的时候，还记不记得今天的我。',
+        pinyin: 'Gěi yǐhòu de wǒ: bù zhīdào nǐ dú dào zhèxiē wénzì de shíhou, hái jì bu jìde jīntiān de wǒ.',
+        meaning: 'Gửi mình của những ngày sau này, không biết đến lúc đọc lại những dòng này, cậu còn nhớ mình của hôm nay không.'
+      },
+      {
+        hanzi: '一个曾经爱得很深的人，曾经把很多希望放在一个人身上，曾经以为只要自己足够真诚，爱情就会有一个值得的结局。但是，爱情也许并不总是这样。',
+        pinyin: 'Yí ge céngjīng ài de hěn shēn de rén, céngjīng bǎ hěn duō xīwàng fàng zài yí ge rén shēnshang, céngjīng yǐwéi zhǐyào zìjǐ zúgòu zhēnchéng, àiqíng jiù huì yǒu yí ge zhídé de jiéjú. Dànshì, àiqíng yěxǔ bìng bù zǒngshì zhèyàng.',
+        meaning: 'Một người đã từng yêu rất nhiều, từng đặt rất nhiều hy vọng vào một người, từng nghĩ rằng chỉ cần mình đủ chân thành thì tình yêu rồi sẽ có một cái kết xứng đáng. Nhưng có lẽ tình yêu không phải lúc nào cũng như vậy.'
+      },
+      {
+        hanzi: '有些人走进我的生命是为了留下来。也有些人只陪我走一段路，离开的时候，却留给我很多东西：美好的回忆、伤痛、没有答案的问题，还有另一个版本的自己。',
+        pinyin: "Yǒuxiē rén zǒujìn wǒ de shēngmìng shì wèile liú xiàlái. Yě yǒuxiē rén zhǐ péi wǒ zǒu yí duàn lù, líkāi de shíhou, què liúgěi wǒ hěn duō dōngxi: měihǎo de huíyì, shāngtòng, méiyǒu dá'àn de wèntí, hái yǒu lìng yí ge bǎnběn de zìjǐ.",
+        meaning: 'Có những người bước vào cuộc đời mình để ở lại. Cũng có những người chỉ đi cùng mình một đoạn đường, để rồi khi rời đi, họ để lại trong mình rất nhiều điều: những kỷ niệm đẹp, những tổn thương, những câu hỏi không có lời giải, và cả một phiên bản khác của chính mình.'
+      },
+      {
+        hanzi: '我不知道以后你会爱上谁，也不知道那个人是不是我今天想到的人。但是我希望你不要忘记今天的感觉。不要因为受过伤，就觉得爱情很可怕。不要因为曾经爱错了人，就觉得自己不值得被好好爱。',
+        pinyin: 'Wǒ bù zhīdào yǐhòu nǐ huì àishang shéi, yě bù zhīdào nàge rén shì bu shì wǒ jīntiān xiǎngdào de rén. Dànshì wǒ xīwàng nǐ búyào wàngjì jīntiān de gǎnjué. Búyào yīnwèi shòu guo shāng, jiù juéde àiqíng hěn kěpà. Búyào yīnwèi céngjīng ài cuò le rén, jiù juéde zìjǐ bù zhídé bèi hǎohāo ài.',
+        meaning: 'Mình không biết sau này cậu sẽ yêu ai, cũng không biết người ấy có phải là người mà hôm nay mình đang nghĩ đến hay không. Nhưng mình mong cậu đừng quên cảm giác của ngày hôm nay. Đừng vì từng bị tổn thương mà nghĩ rằng tình yêu là điều đáng sợ. Đừng vì từng yêu sai người mà nghĩ rằng mình không xứng đáng được yêu đúng cách.'
+      },
+      {
+        hanzi: '如果以后你又爱上了谁，请去爱，但是不要弄丢自己。该说的话要说出来，要珍惜真心对待你的人。但是，当一段感情只剩下让你拼命努力才能被爱的时候，也要懂得离开。',
+        pinyin: 'Rúguǒ yǐhòu nǐ yòu àishang le shéi, qǐng qù ài, dànshì búyào nòngdiū zìjǐ. Gāi shuō de huà yào shuō chūlái, yào zhēnxī zhēnxīn duìdài nǐ de rén. Dànshì, dāng yí duàn gǎnqíng zhǐ shèngxià ràng nǐ pīnmìng nǔlì cái néng bèi ài de shíhou, yě yào dǒngde líkāi.',
+        meaning: 'Nếu sau này cậu lại yêu, hãy yêu nhưng đừng đánh mất mình. Hãy nói ra những điều cần nói. Hãy trân trọng những người thật lòng với mình. Nhưng cũng hãy biết rời đi khi một tình yêu chỉ còn khiến mình phải cố gắng để được yêu.'
+      },
+      {
+        hanzi: '我曾经以为，爱一个人就要不惜一切代价留住对方。后来才明白，有时候爱也是懂得放手。不是因为不爱了，而是因为我知道，有些人就算很爱，也不能陪我走到路的尽头。',
+        pinyin: 'Wǒ céngjīng yǐwéi, ài yí ge rén jiù yào bùxī yíqiè dàijià liúzhù duìfāng. Hòulái cái míngbai, yǒu shíhou ài yě shì dǒngde fàngshǒu. Bú shì yīnwèi bú ài le, ér shì yīnwèi wǒ zhīdào, yǒuxiē rén jiùsuàn hěn ài, yě bù néng péi wǒ zǒudào lù de jìntóu.',
+        meaning: 'Mình từng nghĩ yêu một người là phải giữ họ bằng mọi giá. Sau này mới hiểu, đôi khi yêu cũng là biết buông tay. Không phải vì hết yêu, mà vì mình hiểu rằng có những người dù rất thương cũng không thể cùng mình đi đến cuối con đường.'
+      },
+      {
+        hanzi: '如果有一天你还是会想起一个曾经让你心动的人，也没有关系。不是所有我爱过的人，都要成为永远留在我身边的人。有些人只要曾经出现过，就已经成为青春的一部分了。',
+        pinyin: 'Rúguǒ yǒu yì tiān nǐ háishi huì xiǎngqǐ yí ge céngjīng ràng nǐ xīndòng de rén, yě méiyǒu guānxi. Bú shì suǒyǒu wǒ ài guo de rén, dōu yào chéngwéi yǒngyuǎn liú zài wǒ shēnbiān de rén. Yǒuxiē rén zhǐyào céngjīng chūxiàn guo, jiù yǐjīng chéngwéi qīngchūn de yí bùfen le.',
+        meaning: 'Và nếu một ngày nào đó cậu vẫn còn nhớ về một người từng khiến trái tim mình rung động rất nhiều, thì cũng không sao cả. Không phải mọi người mình từng yêu đều phải trở thành người ở bên cạnh mình mãi mãi. Có những người chỉ cần từng xuất hiện thôi cũng đã đủ để trở thành một phần của tuổi trẻ.'
+      },
+      {
+        hanzi: '我希望经历了这一切以后，你还相信爱情。一份不会让你去猜自己重不重要的爱情。一份不会让你不停地问“我是不是做错了什么”的爱情。一份两个人都想留下来、都在努力、都选择彼此的爱情，不只在开心的日子，在困难的日子也一样。',
+        pinyin: 'Wǒ xīwàng jīnglì le zhè yíqiè yǐhòu, nǐ hái xiāngxìn àiqíng. Yí fèn bú huì ràng nǐ qù cāi zìjǐ zhòng bu zhòngyào de àiqíng. Yí fèn bú huì ràng nǐ bù tíng de wèn “wǒ shì bu shì zuò cuò le shénme” de àiqíng. Yí fèn liǎng ge rén dōu xiǎng liú xiàlái, dōu zài nǔlì, dōu xuǎnzé bǐcǐ de àiqíng, bù zhǐ zài kāixīn de rìzi, zài kùnnan de rìzi yě yíyàng.',
+        meaning: 'Mình mong sau tất cả, cậu vẫn còn tin vào tình yêu. Một tình yêu không khiến cậu phải đoán xem mình có quan trọng hay không. Một tình yêu không khiến cậu phải liên tục tự hỏi: “Mình đã làm gì sai?” Một tình yêu mà ở đó, cả hai đều muốn ở lại, đều cố gắng, đều lựa chọn nhau — không phải chỉ trong những ngày vui, mà cả những ngày khó khăn.'
+      },
+      {
+        hanzi: '如果读到这封信的时候，你还是一个人，也没关系。宁可一个人平静地生活，也不要在一个人身边却总是觉得孤单。请记住，我不需要完美的爱情，我只需要一份足够真心的爱情。',
+        pinyin: 'Rúguǒ dú dào zhè fēng xìn de shíhou, nǐ háishi yí ge rén, yě méi guānxi. Nìngkě yí ge rén píngjìng de shēnghuó, yě búyào zài yí ge rén shēnbiān què zǒngshì juéde gūdān. Qǐng jìzhù, wǒ bù xūyào wánměi de àiqíng, wǒ zhǐ xūyào yí fèn zúgòu zhēnxīn de àiqíng.',
+        meaning: 'Và nếu đến lúc đọc lá thư này, cậu vẫn đang một mình, cũng chẳng sao. Thà một mình và bình yên, còn hơn ở cạnh một người nhưng lúc nào cũng cảm thấy cô đơn. Hãy nhớ nhé, mình không cần một tình yêu hoàn hảo. Mình chỉ cần một tình yêu đủ thật lòng.'
+      },
+      {
+        hanzi: '如果你已经遇到了那个人，请好好爱对方。不要因为已经得到了，就忘记珍惜。不要让那些小事，让你忘了当初为什么选择彼此。如果那份爱情还没有来，也请好好生活。',
+        pinyin: 'Rúguǒ nǐ yǐjīng yùdào le nàge rén, qǐng hǎohāo ài duìfāng. Búyào yīnwèi yǐjīng dédào le, jiù wàngjì zhēnxī. Búyào ràng nàxiē xiǎoshì, ràng nǐ wàng le dāngchū wèishénme xuǎnzé bǐcǐ. Rúguǒ nà fèn àiqíng hái méiyǒu lái, yě qǐng hǎohāo shēnghuó.',
+        meaning: 'Còn nếu cậu đã gặp được người ấy rồi, hãy yêu họ thật tử tế. Đừng vì đã có được mà quên trân trọng. Đừng để những điều nhỏ nhặt làm mình quên mất lý do ban đầu đã chọn nhau. Và nếu tình yêu ấy vẫn chưa đến, hãy cứ sống thật tốt.'
+      },
+      {
+        hanzi: '总有一天，你也许会遇到一个人，让你明白以前受过的伤，并不是为了证明爱情不存在。它们只是一段一段的路，把你带到了你真正需要去的地方。',
+        pinyin: 'Zǒng yǒu yì tiān, nǐ yěxǔ huì yùdào yí ge rén, ràng nǐ míngbai yǐqián shòu guo de shāng, bìng bú shì wèile zhèngmíng àiqíng bù cúnzài. Tāmen zhǐshì yí duàn yí duàn de lù, bǎ nǐ dàidào le nǐ zhēnzhèng xūyào qù de dìfang.',
+        meaning: 'Rồi một ngày, có thể cậu sẽ gặp một người khiến cậu hiểu rằng những lần tổn thương trước đây không phải để chứng minh rằng tình yêu không tồn tại. Chúng chỉ là những đoạn đường đã đưa cậu đến đúng nơi mình cần đến.'
+      },
+      {
+        hanzi: '希望无论你爱谁、和谁在一起，还是一个人，你都永远记得，先爱自己。',
+        pinyin: 'Xīwàng wúlùn nǐ ài shéi, hé shéi zài yìqǐ, háishi yí ge rén, nǐ dōu yǒngyuǎn jìde, xiān ài zìjǐ.',
+        meaning: 'Mong rằng dù yêu ai, ở bên ai hay một mình, cậu vẫn luôn nhớ yêu thương chính mình trước.'
+      },
+      {
+        hanzi: '疼爱你的，今天的我',
+        pinyin: "Téng'ài nǐ de, jīntiān de wǒ",
+        meaning: 'Thương cậu, mình của ngày hôm nay.'
+      }
+    ]
   }
 ]
 
