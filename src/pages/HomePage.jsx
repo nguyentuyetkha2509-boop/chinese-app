@@ -318,26 +318,6 @@ export default function HomePage() {
           />
         </div>
         <p className="mt-1 text-right text-xs text-gray-500">{unitsDone}/{totalUnits} bài hoàn thành</p>
-
-        <div className="mt-3 space-y-2 border-t border-gray-100 pt-3">
-          {LEVELS.map((level) => {
-            const levelIds = level.words.map((w) => w.id)
-            const levelStats = getCardStats(levelIds, srsState)
-            const levelUnitsDone = level.units.filter((u) => completedUnits.includes(`${level.id}:${u.id}`)).length
-            return (
-              <Link
-                key={level.id}
-                to="/bai-hoc"
-                className="flex items-center justify-between text-sm text-gray-600"
-              >
-                <span className="font-semibold text-gray-700">{level.label}</span>
-                <span>
-                  {levelStats.learned}/{levelStats.total} từ · {levelUnitsDone}/{level.units.length} bài
-                </span>
-              </Link>
-            )
-          })}
-        </div>
       </section>
 
       <section className="mb-5 rounded-2xl bg-white p-4 shadow-sm">
