@@ -48,8 +48,13 @@ export default function App() {
     return <OnboardingGuide onDone={() => setOnboardingDone(true)} />
   }
 
+  // pb phai bang CHIEU CAO THAT cua thanh dieu huong duoi (BottomNav): 72px noi
+  // dung + vung an toan duoi man hinh. Truoc day chi de pb-20 (80px) trong khi
+  // tren may co home indicator thanh nay cao 72 + 34 = 106px, nen 26px cuoi
+  // trang bi che vinh vien - cuon het muc cung khong len duoc. Chinh
+  // viewport-fit=cover trong index.html lam env(safe-area-inset-bottom) khac 0.
   return (
-    <div className="mx-auto min-h-screen max-w-md bg-canvas pb-20 pt-[max(env(safe-area-inset-top),20px)]">
+    <div className="mx-auto min-h-screen max-w-md bg-canvas pb-[calc(80px_+_env(safe-area-inset-bottom))] pt-[max(env(safe-area-inset-top),20px)]">
       <TopBar />
       <TtsWarning />
       <NicknamePrompt />

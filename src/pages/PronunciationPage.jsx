@@ -45,6 +45,16 @@ function ToneQuiz({ words, levelId }) {
   const [correctCount, setCorrectCount] = useState(0)
   const [feedback, setFeedback] = useState(null)
   const [phase, setPhase] = useState('quiz') // quiz | done
+  const nextButtonRef = useRef(null)
+
+  // Tra loi xong thi hop phan hoi hien ra, day nut "Cau tiep theo" xuong duoi
+  // man hinh (nhat la tren may co thanh dieu huong day). Cuon san cho nguoi
+  // dung, khong bat ho tu cuon roi moi bam duoc.
+  useEffect(() => {
+    if (feedback && nextButtonRef.current) {
+      nextButtonRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [feedback])
 
   if (!singleToneWords.length) {
     return <p className="text-sm text-gray-500">Cấp độ này chưa có từ đơn âm để luyện thanh điệu.</p>
@@ -169,6 +179,7 @@ function ToneQuiz({ words, levelId }) {
 
       {feedback && (
         <button
+          ref={nextButtonRef}
           onClick={nextQuestion}
           className="mt-4 w-full rounded-2xl bg-brand-700 py-3 text-center font-semibold text-white"
         >
@@ -242,6 +253,16 @@ function RecordCompare({ words, levelId }) {
   const streamRef = useRef(null)
   const chunksRef = useRef([])
   const recognitionRef = useRef(null)
+  const nextButtonRef = useRef(null)
+
+  // Ghi am xong thi trinh phat lai va ket qua AI hien ra o duoi cung, day nut
+  // "Tu tiep theo" ra khoi man hinh. Cuon san cho nguoi dung, giong tab Luyen
+  // thanh dieu.
+  useEffect(() => {
+    if ((audioUrl || aiResult) && nextButtonRef.current) {
+      nextButtonRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [audioUrl, aiResult])
 
   // Doi tab/roi trang trong luc dang ghi se bo quen microphone dang mo - don
   // dep khi component unmount de tranh giu micro vinh vien.
@@ -473,7 +494,11 @@ function RecordCompare({ words, levelId }) {
             <audio className="flex-1" controls src={audioUrl} />
           </div>
         )}
-        <button onClick={nextWord} className="text-sm text-gray-500 underline">
+        <button
+          ref={nextButtonRef}
+          onClick={nextWord}
+          className="text-sm text-gray-500 underline"
+        >
           {index + 1 < round.length ? 'Từ tiếp theo' : 'Hoàn thành'}
         </button>
       </div>
