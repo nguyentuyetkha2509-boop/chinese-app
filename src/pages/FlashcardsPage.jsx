@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ALL_WORDS, LEVELS, getWordById } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
@@ -15,81 +15,23 @@ import flashcardPanda from '../assets/panda/flashcard_panda.webp'
 
 // Khung the gau truc: vung trang nam o 33%-79% ngang, 18%-82% doc. Gau truc de
 // len goc duoi ben trai o vung trang, nen ca chu Han, phien am va nghia xep
-// thanh mot cot can giua o nua tren (ben tren dau gau).
-// Co chu tinh theo be rong khung (cqw) de khung co nho lai cho vua man hinh thi
-// chu nho theo, khong bi tran ra ngoai o trang.
-// fit: khung tu chon canh vuong lon nhat lot vua o cha (cha phai co chieu cao
-// xac dinh) - dung cho man hinh on the de ca trang khong phai cuon.
-function PandaFrame({ hanzi, pinyin, meaning, pinyinClass = '', small = false, fit = false, onClick }) {
+// thanh mot cot can giua o nua tren (ben tren dau gau). Anh co le trong suot
+// o tren/duoi nen dung margin am de keo khung sat len (chip nam tren de van bam duoc).
+function PandaFrame({ hanzi, pinyin, meaning, pinyinClass = '', small = false, onClick }) {
   const Tag = onClick ? 'button' : 'div'
-  const frame = (
+  return (
     <Tag
       onClick={onClick}
-      style={{
-        containerType: 'inline-size',
-        ...(fit ? { width: 'min(100cqw, 100cqh)', height: 'min(100cqw, 100cqh)' } : {})
-      }}
-      className={`relative mx-auto block w-full text-center ${small ? 'max-w-[15rem]' : 'max-w-md'}`}
+      className={`relative mx-auto block w-full text-center ${small ? 'max-w-[15rem]' : '-mb-4 -mt-5 max-w-md'}`}
     >
-      <img src={flashcardPanda} alt="Gấu trúc cầm thẻ từ vựng" className="h-full w-full select-none" draggable="false" />
+      <img src={flashcardPanda} alt="Gấu trúc cầm thẻ từ vựng" className="w-full select-none" draggable="false" />
       <div className="absolute left-[33.5%] right-[21%] top-[18.5%] flex h-[35%] flex-col items-center justify-center overflow-hidden">
-        <p className="leading-tight text-gray-800" style={{ fontSize: '10cqw' }}>{hanzi}</p>
-        {pinyin && (
-          <p className={`mt-[1cqw] leading-tight ${pinyinClass}`} style={{ fontSize: '5cqw' }}>
-            {pinyin}
-          </p>
-        )}
-        {meaning && (
-          <p className="mt-[1cqw] leading-snug text-gray-700" style={{ fontSize: '3.9cqw' }}>
-            {meaning}
-          </p>
-        )}
+        <p className={`leading-tight text-gray-800 ${small ? 'text-2xl' : 'text-4xl'}`}>{hanzi}</p>
+        {pinyin && <p className={`mt-1 leading-tight ${small ? 'text-xs' : 'text-lg'} ${pinyinClass}`}>{pinyin}</p>}
+        {meaning && <p className={`mt-1 leading-snug text-gray-700 ${small ? 'text-[10px]' : 'text-sm'}`}>{meaning}</p>}
       </div>
     </Tag>
   )
-  if (!fit) return frame
-  return (
-    <div className="min-h-0 flex-1" style={{ containerType: 'size' }}>
-      {frame}
-    </div>
-  )
-}
-
-// Ep trang vua khit man hinh (tru thanh dieu huong duoi) de khong phai cuon.
-// Phan tren trang (TopBar, canh bao giong doc...) co chieu cao thay doi nen do
-// lai moi khi cua so doi kich thuoc hoac cac khoi phia tren doi kich thuoc.
-function useFitViewportHeight(ref, active) {
-  useLayoutEffect(() => {
-    const el = ref.current
-    if (!active || !el) return undefined
-    const parent = el.parentElement
-    const fit = () => {
-      const top = el.getBoundingClientRect().top + window.scrollY
-      // Thanh dieu huong duoi co the cao hon padding du tinh (nhan tab xuong dong
-      // tren font/may khac), nen lay theo chieu cao that neu lon hon.
-      const navHeight = document.querySelector('nav.fixed')?.offsetHeight || 0
-      const bottomPad = Math.max(parseFloat(getComputedStyle(parent).paddingBottom) || 0, navHeight)
-      el.style.height = `${Math.max(window.innerHeight - top - bottomPad, 420)}px`
-    }
-    fit()
-    window.addEventListener('resize', fit)
-    // Canh bao giong doc hien sau khi trang da dung (bat dong bo), nen phai
-    // theo doi ca viec them/bot khoi phia tren chu khong chi luc mount.
-    const ro = new ResizeObserver(fit)
-    const watchSiblings = () => {
-      ro.disconnect()
-      for (let n = el.previousElementSibling; n; n = n.previousElementSibling) ro.observe(n)
-      fit()
-    }
-    watchSiblings()
-    const mo = new MutationObserver(watchSiblings)
-    mo.observe(parent, { childList: true })
-    return () => {
-      window.removeEventListener('resize', fit)
-      ro.disconnect()
-      mo.disconnect()
-    }
-  }, [ref, active])
 }
 
 // The den han thi on HET trong mot luot (truoc day cat o 20 the nen 200 the den
@@ -155,8 +97,6 @@ export default function FlashcardsPage() {
   const currentId = queue[0]
   const currentWord = currentId ? getWordById(currentId) : null
   const reviewed = sessionTotal - queue.length
-  const pageRef = useRef(null)
-  useFitViewportHeight(pageRef, !!currentWord)
   const accent = accentFor(reviewed)
 
   // keepSummary: dung khi bam "On them" - neu khong con the nao thi GIU NGUYEN
@@ -304,7 +244,7 @@ export default function FlashcardsPage() {
   }
 
   return (
-    <div ref={pageRef} className="flex flex-col overflow-hidden px-4 pt-3">
+    <div className="px-4 pt-6">
       {inSession && <SessionBar steps={steps} currentKey="review" />}
       <div className="mb-1 flex items-center justify-between">
         <h1 className="text-2xl text-brand-800">Ôn tập</h1>
@@ -314,13 +254,12 @@ export default function FlashcardsPage() {
       </div>
 
       {!inSession && (
-        <div className="relative z-10 mb-1">
+        <div className="relative z-10 mb-3">
           <ScopeChips chips={SCOPE_CHIPS} scope={scope} onChange={handleScopeChange} />
         </div>
       )}
 
       <PandaFrame
-        fit
         onClick={handleFlip}
         hanzi={currentWord.hanzi}
         pinyin={flipped ? currentWord.pinyin : null}
@@ -328,31 +267,35 @@ export default function FlashcardsPage() {
         pinyinClass={accent.text}
       />
 
-      {/* Phan duoi luon chiem cho (invisible khi chua lat) de khung khong nhay
-          to nho moi lan lat the */}
-      <div className={`shrink-0 ${flipped ? '' : 'invisible'}`} aria-hidden={!flipped}>
-        {currentWord.example && (
-          <div className={`mb-2 w-full rounded-xl ${accent.bg} px-3 py-2 text-center`}>
-            <p className="text-base leading-tight text-gray-800">{currentWord.example.hanzi}</p>
-            <p className={`text-xs ${accent.text}`}>{currentWord.example.pinyin}</p>
-            <p className="text-xs text-gray-600">{currentWord.example.meaning}</p>
-          </div>
-        )}
-        <p className="text-center text-xs text-gray-500">Bạn nhớ từ này đến mức nào?</p>
-        <div className="mt-1 grid grid-cols-4 gap-2">
-          {RATINGS.map((r) => (
-            <button
-              key={r.value}
-              onClick={() => handleRate(r.value)}
-              disabled={!flipped}
-              className={`rounded-xl py-2.5 text-center text-white ${r.className}`}
-            >
-              <p className="text-xs font-semibold leading-tight">{r.label}</p>
-              <p className="mt-0.5 text-[10px] leading-tight text-white/80">{r.hint}</p>
-            </button>
-          ))}
+      {flipped && (
+        <div className="mt-2 flex flex-col gap-3">
+          {currentWord.example && (
+            <div className={`w-full rounded-xl ${accent.bg} p-3 text-center`}>
+              <p className="text-base text-gray-800">{currentWord.example.hanzi}</p>
+              <p className={`text-xs ${accent.text}`}>{currentWord.example.pinyin}</p>
+              <p className="text-xs text-gray-600">{currentWord.example.meaning}</p>
+            </div>
+          )}
         </div>
-      </div>
+      )}
+
+      {flipped && (
+        <>
+          <p className="mt-5 text-center text-xs text-gray-500">Bạn nhớ từ này đến mức nào?</p>
+          <div className="mt-2 grid grid-cols-4 gap-2">
+            {RATINGS.map((r) => (
+              <button
+                key={r.value}
+                onClick={() => handleRate(r.value)}
+                className={`rounded-xl py-2.5 text-center text-white ${r.className}`}
+              >
+                <p className="text-xs font-semibold leading-tight">{r.label}</p>
+                <p className="mt-0.5 text-[10px] leading-tight text-white/80">{r.hint}</p>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }
