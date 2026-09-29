@@ -77,8 +77,27 @@ const CORE_CARDS = [
 ]
 
 // Noi dung phu / mo rong - luyen them khi da xong vong hoc chinh, dat cuoi trang.
-// 12 the xep thanh 7 hang: 2 vuong, 2 vuong, 1 dai, 2 vuong, 1 dai, 2 vuong, 2 vuong.
+// 12 the xep thanh 7 hang: 2 vuong, 1 dai, 2 vuong, 2 vuong, 1 dai, 2 vuong, 2 vuong.
+// Noi dung hoc (Bo thu, Hoi thoai, Chu de) len dau, roi den AI va tro choi.
 const EXTRA_CARDS = [
+  {
+    to: '/bo-thu',
+    icon: RadicalIcon,
+    title: 'Bộ thủ',
+    className: 'bg-gradient-to-br from-teal-500 to-brand-600'
+  },
+  {
+    to: '/hoi-thoai',
+    icon: ChatIcon,
+    title: 'Hội thoại',
+    className: 'bg-gradient-to-br from-sky-500 to-brand-600'
+  },
+  {
+    to: '/chu-de',
+    icon: TopicIcon,
+    title: 'Học theo chủ đề',
+    className: 'col-span-2 bg-gradient-to-br from-sky-500 to-emerald-500'
+  },
   {
     to: '/tro-chuyen-ai',
     icon: ChatIcon,
@@ -102,24 +121,6 @@ const EXTRA_CARDS = [
     icon: TrophyIcon,
     title: 'Bảng xếp hạng',
     className: 'bg-gradient-to-br from-gold-500 to-sun-500'
-  },
-  {
-    to: '/chu-de',
-    icon: TopicIcon,
-    title: 'Học theo chủ đề',
-    className: 'col-span-2 bg-gradient-to-br from-sky-500 to-emerald-500'
-  },
-  {
-    to: '/bo-thu',
-    icon: RadicalIcon,
-    title: 'Bộ thủ',
-    className: 'bg-gradient-to-br from-teal-500 to-brand-600'
-  },
-  {
-    to: '/hoi-thoai',
-    icon: ChatIcon,
-    title: 'Hội thoại',
-    className: 'bg-gradient-to-br from-emerald-500 to-sky-600'
   },
   {
     to: '/truyen',
