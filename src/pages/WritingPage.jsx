@@ -383,7 +383,7 @@ function WritingPageInner() {
                 can nhin hon. Bam vao bat ky dau trong dong cung nghe doc. */}
             <button
               onClick={() => speakChinese(selected.char)}
-              className="mt-2 flex items-center gap-1.5 text-sm"
+              className="mt-2 flex min-h-11 items-center gap-1.5 px-1 text-sm"
             >
               <VolumeIcon width={20} height={20} className="text-brand-600" />
               {selected.pinyin && <span className="font-semibold text-brand-700">{selected.pinyin}</span>}

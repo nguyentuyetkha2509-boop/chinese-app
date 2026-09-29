@@ -11,6 +11,20 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Icon duoc ve bang the <img>. Mac dinh <img> la keo duoc: nguoi dung bam nut
+   ma tay lech vai pixel la Chrome bat dau keo anh va KHONG ban ra su kien click,
+   nen nut (vi du nut loa) im lang khong chay. Chan ca hai duong: cam keo anh, va
+   cho su kien bam xuyen qua icon de roi vao dung the nut. */
+img {
+  -webkit-user-drag: none;
+}
+
+button img,
+a img,
+[role='button'] img {
+  pointer-events: none;
+}
+
 .hanzi-target {
   border: 2px dashed theme('colors.brand.200');
   border-radius: 0.75rem;

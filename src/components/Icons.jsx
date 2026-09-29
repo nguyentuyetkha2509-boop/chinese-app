@@ -29,6 +29,7 @@ export function HomeIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Trang chủ"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -42,6 +43,7 @@ export function BookIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Bài học"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -55,6 +57,7 @@ export function CardsIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Ôn tập"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -68,6 +71,7 @@ export function MicIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Phát âm"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -81,6 +85,7 @@ export function PencilIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Viết chữ"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -94,6 +99,7 @@ export function CheckIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Hoàn thành"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -107,6 +113,7 @@ export function BellIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Thông báo"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -120,6 +127,7 @@ export function FireIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Năng lượng"
       style={{ display: 'inline-block' }}
+      draggable={false}
       {...props}
     />
   )
@@ -133,6 +141,7 @@ export function VolumeIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Âm lượng"
       style={{ display: 'inline-block' }}
+      draggable={false}
       {...props}
     />
   )
@@ -146,6 +155,7 @@ export function ArrowLeftIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Quay lại"
       style={{ display: 'inline-block' }}
+      draggable={false}
       {...props}
     />
   )
@@ -159,6 +169,7 @@ export function ArrowRightIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Tiếp theo"
       style={{ display: 'inline-block' }}
+      draggable={false}
       {...props}
     />
   )
@@ -172,6 +183,7 @@ export function ZapIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Kiên trì"
       style={{ display: 'inline-block' }}
+      draggable={false}
       {...props}
     />
   )
@@ -185,6 +197,7 @@ export function ChatIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Hội thoại"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -198,6 +211,7 @@ export function TopicIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Học theo chủ đề"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -211,6 +225,7 @@ export function StoryIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Truyện dài"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -224,6 +239,7 @@ export function ShuffleIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Sắp xếp câu"
       style={{ display: 'inline-block' }}
+      draggable={false}
       {...props}
     />
   )
@@ -237,6 +253,7 @@ export function SettingsIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Cài đặt"
       style={{ display: 'inline-block' }}
+      draggable={false}
       {...props}
     />
   )
@@ -250,6 +267,7 @@ export function EarIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Nghe"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -263,6 +281,7 @@ export function GrammarIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Ngữ pháp"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -276,6 +295,7 @@ export function TrophyIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Thành tích"
       style={{ display: 'inline-block' }}
+      draggable={false}
       {...props}
     />
   )
@@ -289,6 +309,7 @@ export function ShieldIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Bảo vệ"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
@@ -302,6 +323,7 @@ export function SpeedIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Đua tốc độ"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
       {...props}
     />
   )
