@@ -73,30 +73,30 @@ const CORE_CARDS = [
     icon: PencilIcon,
     title: 'Viết chữ Hán',
     className: 'bg-gradient-to-br from-emerald-500 to-teal-600'
-  }
-]
-
-// Noi dung phu / mo rong - luyen them khi da xong vong hoc chinh, dat cuoi trang.
-// 12 the xep thanh 7 hang: 2 vuong, 1 dai, 2 vuong, 2 vuong, 1 dai, 2 vuong, 2 vuong.
-// Noi dung hoc (Bo thu, Hoi thoai, Chu de) len dau, roi den AI va tro choi.
-const EXTRA_CARDS = [
+  },
   {
     to: '/bo-thu',
     icon: RadicalIcon,
     title: 'Bộ thủ',
-    className: 'bg-gradient-to-br from-teal-500 to-brand-600'
+    className: 'col-span-2 bg-gradient-to-br from-sky-600 to-brand-600'
+  }
+]
+
+// Noi dung phu / mo rong - luyen them khi da xong vong hoc chinh, dat cuoi trang.
+// 11 the xep thanh 7 hang: 1 dai, 2 vuong, 2 vuong, 2 vuong, 1 dai, 2 vuong, 1 dai
+// (tuc 3 the dai + 8 the vuong). Noi dung hoc (Chu de, Hoi thoai) len dau, roi AI va tro choi.
+const EXTRA_CARDS = [
+  {
+    to: '/chu-de',
+    icon: TopicIcon,
+    title: 'Học theo chủ đề',
+    className: 'col-span-2 bg-gradient-to-br from-sky-500 to-emerald-500'
   },
   {
     to: '/hoi-thoai',
     icon: ChatIcon,
     title: 'Hội thoại',
     className: 'bg-gradient-to-br from-sky-500 to-brand-600'
-  },
-  {
-    to: '/chu-de',
-    icon: TopicIcon,
-    title: 'Học theo chủ đề',
-    className: 'col-span-2 bg-gradient-to-br from-sky-500 to-emerald-500'
   },
   {
     to: '/tro-chuyen-ai',
@@ -123,6 +123,12 @@ const EXTRA_CARDS = [
     className: 'bg-gradient-to-br from-gold-500 to-sun-500'
   },
   {
+    to: '/ghep-cap',
+    icon: CardsIcon,
+    title: 'Ghép cặp',
+    className: 'bg-gradient-to-br from-candy-500 to-sky-500'
+  },
+  {
     to: '/truyen',
     icon: StoryIcon,
     title: 'Truyện dài',
@@ -141,16 +147,10 @@ const EXTRA_CARDS = [
     className: 'bg-gradient-to-br from-teal-500 to-sky-600'
   },
   {
-    to: '/ghep-cap',
-    icon: CardsIcon,
-    title: 'Ghép cặp',
-    className: 'bg-gradient-to-br from-candy-500 to-sky-500'
-  },
-  {
     to: '/tro-choi',
     icon: SpeedIcon,
     title: 'Đua tốc độ',
-    className: 'bg-gradient-to-br from-sun-500 to-candy-500'
+    className: 'col-span-2 bg-gradient-to-br from-sun-500 to-candy-500'
   }
 ]
 
