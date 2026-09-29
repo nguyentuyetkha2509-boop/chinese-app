@@ -21,6 +21,8 @@ import WritingPage from './pages/WritingPage'
 import SpeedGamePage from './pages/SpeedGamePage'
 import TopicsPage from './pages/TopicsPage'
 import TopicDetailPage from './pages/TopicDetailPage'
+import RadicalsPage from './pages/RadicalsPage'
+import RadicalGamePage from './pages/RadicalGamePage'
 import DialoguesPage from './pages/DialoguesPage'
 import DialogueDetailPage from './pages/DialogueDetailPage'
 import StoriesPage from './pages/StoriesPage'
@@ -66,6 +68,8 @@ export default function App() {
         <Route path="/viet-chu" element={<WritingPage />} />
         <Route path="/viet-chu/:levelId/:unitId" element={<WritingPage />} />
         <Route path="/tro-choi" element={<SpeedGamePage />} />
+        <Route path="/bo-thu" element={<RadicalsPage />} />
+        <Route path="/bo-thu/tro-choi" element={<RadicalGamePage />} />
         <Route path="/chu-de" element={<TopicsPage />} />
         <Route path="/chu-de/:topicKey" element={<TopicDetailPage />} />
         <Route path="/hoi-thoai" element={<DialoguesPage />} />

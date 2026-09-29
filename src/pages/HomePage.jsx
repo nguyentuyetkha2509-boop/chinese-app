@@ -12,6 +12,7 @@ import {
   ArrowRightIcon,
   SpeedIcon,
   TopicIcon,
+  RadicalIcon,
   ChatIcon,
   StoryIcon,
   GrammarIcon,
@@ -104,6 +105,12 @@ const EXTRA_CARDS = [
     className: 'bg-gradient-to-br from-candy-500 to-sun-500'
   },
   {
+    to: '/bo-thu',
+    icon: RadicalIcon,
+    title: 'Bộ thủ',
+    className: 'bg-gradient-to-br from-teal-500 to-brand-600'
+  },
+  {
     to: '/hoi-thoai',
     icon: ChatIcon,
     title: 'Hội thoại',
@@ -188,6 +195,7 @@ export default function HomePage() {
     if (to === '/phat-am') return toneAccuracy === null ? 'Chưa luyện' : `Độ chính xác ${toneAccuracy}%`
     if (to === '/viet-chu') return 'Luyện nét theo thứ tự chuẩn'
     if (to === '/chu-de') return 'Gia đình, đồ ăn, màu sắc...'
+    if (to === '/bo-thu') return '214 bộ dựng nên chữ Hán'
     if (to === '/hoi-thoai') return 'Xem tiếng Trung dùng thật'
     if (to === '/tro-choi') return 'Trả lời nhanh trong 60 giây!'
     if (to === '/tro-chuyen-ai') return 'Luyện nói với AI, sửa lỗi ngay'

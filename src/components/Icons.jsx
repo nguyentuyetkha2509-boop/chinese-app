@@ -306,3 +306,24 @@ export function SpeedIcon({ width = 38, height = 38, ...props }) {
     />
   )
 }
+
+// Bo thu chua co anh icon rieng trong bo icon cua app, nen ve bang chinh chu bo:
+// dat trong the mau dam thi chu trang noi len ro, lai dung tinh than tinh nang.
+export function RadicalIcon({ width = 38, height = 38, ...props }) {
+  return (
+    <span
+      aria-hidden="true"
+      style={{
+        display: 'inline-block',
+        width,
+        height,
+        fontSize: width * 0.95,
+        lineHeight: `${height}px`,
+        textAlign: 'center'
+      }}
+      {...props}
+    >
+      氵
+    </span>
+  )
+}
