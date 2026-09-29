@@ -10,7 +10,7 @@ import { VolumeIcon, MicIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import CelebrationBadge from '../components/CelebrationBadge'
-import pronunciationPanda from '../assets/panda/pronunciation_panda.png'
+import pronunciationPanda from '../assets/panda/pronunciation_panda.webp'
 
 const TONE_LABELS = {
   1: { mark: 'ˉ', name: 'Thanh 1 (ngang)', idleClass: 'border-sky-200 bg-sky-100 text-sky-700' },
