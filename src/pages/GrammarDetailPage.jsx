@@ -12,6 +12,9 @@ import CelebrationBadge from '../components/CelebrationBadge'
 import MarkdownLite from '../components/MarkdownLite'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 import { QUIZ_PASS_THRESHOLD, quizPassed } from '../lib/quizResult'
+import SessionBar from '../components/SessionBar'
+import SessionNextButton from '../components/SessionNextButton'
+import { getNextStep, stepLink, useSessionSteps } from '../lib/sessionPlan'
 
 function GrammarAskAi({ point }) {
   const navigate = useNavigate()
@@ -99,6 +102,12 @@ function GrammarDetailPageInner() {
   const { pointKey } = useParams()
   const point = getGrammarPoint(pointKey)
   const { addXp, markGrammarComplete, completedGrammar } = useProgress()
+  // Chi tinh la "dang trong phien" khi diem ngu phap nay DUNG LA diem cua bai
+  // hom nay - nguoi dung tu mo mot diem khac tu danh muc thi khong hien thanh
+  // tien trinh cua phien.
+  const { active, steps, combo } = useSessionSteps()
+  const inSession = active && combo?.grammar?.key === pointKey
+  const nextStep = getNextStep(steps, 'grammar')
   const [phase, setPhase] = useState('learn') // learn | quiz | done
   const [result, setResult] = useState({ correct: 0, total: 0 })
   const [passed, setPassed] = useState(true)
@@ -140,6 +149,7 @@ function GrammarDetailPageInner() {
 
   return (
     <div className="px-4 pt-6">
+      {inSession && <SessionBar steps={steps} currentKey="grammar" />}
       <div className="mb-4 flex items-center gap-2">
         <BackButton />
         <div>
@@ -203,17 +213,31 @@ function GrammarDetailPageInner() {
           <p className="mt-1 text-white/90">
             Đúng {result.correct}/{result.total} câu
           </p>
-          <div className="mt-4 flex gap-2">
-            <button
-              onClick={() => setPhase('learn')}
-              className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
-            >
-              Xem lại
-            </button>
-            <Link to="/ngu-phap" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
-              Điểm khác
-            </Link>
-          </div>
+          {inSession ? (
+            <>
+              <SessionNextButton steps={steps} currentKey="grammar" variant="onGradient" />
+              <div className="mt-3 flex justify-center gap-4 text-xs text-white/80">
+                <button onClick={() => setPhase('learn')} className="underline">
+                  Xem lại
+                </button>
+                <Link to="/ngu-phap" className="underline">
+                  Điểm khác
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setPhase('learn')}
+                className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
+              >
+                Xem lại
+              </button>
+              <Link to="/ngu-phap" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
+                Điểm khác
+              </Link>
+            </div>
+          )}
         </div>
       )}
 
@@ -229,6 +253,14 @@ function GrammarDetailPageInner() {
           <Link to="/ngu-phap" className="mt-2 block rounded-xl bg-gray-100 py-2.5 text-sm font-semibold text-gray-700">
             Điểm khác
           </Link>
+          {/* Loi thoat khi lam bai khong dat. nextStep co the la mot buoc NAM
+              TRUOC (nguoi hoc vao giua phien), nen loi o day co y khong noi
+              "buoc sau". */}
+          {inSession && nextStep && (
+            <Link to={stepLink(nextStep)} className="mt-3 block text-xs text-gray-500 underline">
+              Bỏ qua bước này →
+            </Link>
+          )}
         </div>
       )}
     </div>

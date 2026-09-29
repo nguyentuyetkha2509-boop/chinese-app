@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useProgress } from '../store/ProgressContext'
 import { ALL_WORDS, LEVELS } from '../data/levels'
 import { getCardStats } from '../lib/srs'
-import { getCurrentCombo, getComboByUnitKey } from '../lib/curriculum'
+import { getNextVocabCombo, getComboByUnitKey } from '../lib/curriculum'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { todayKey } from '../lib/date'
 
@@ -54,7 +54,10 @@ export default function DailyReminder() {
       const dueCount = getCardStats(allIds, srsState).due
       const reviewDone = dueCount === 0
 
-      const freshCombo = getCurrentCombo(LEVELS, completedUnits, completedGrammar, writingStats)
+      // getNextVocabCombo chu khong phai ban cu getCurrentCombo - xem ghi chu o
+      // lib/curriculum.js: bai cu chi con sot phan viet chu khong duoc lay lam
+      // bai cua hom nay.
+      const freshCombo = getNextVocabCombo(LEVELS, completedUnits, completedGrammar, writingStats)
       const freshUnitKey = freshCombo ? `${freshCombo.levelId}:${freshCombo.unit.id}` : null
       const lockedUnitKey = dailyCombo.date === today ? dailyCombo.unitKey : freshUnitKey
       const combo = getComboByUnitKey(LEVELS, lockedUnitKey, completedUnits, completedGrammar, writingStats)

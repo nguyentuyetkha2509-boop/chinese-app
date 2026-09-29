@@ -143,7 +143,7 @@ export function ProgressProvider({ children }) {
 
   // "Khoa" combo muc tieu cua 1 ngay - chi doi khi sang ngay moi, de combo dang
   // hien thi khong tu nhien nhay sang bai khac ngay khi vua lam xong bai hom
-  // nay (xem ghi chu o getCurrentCombo trong lib/curriculum.js).
+  // nay (xem ghi chu o getNextVocabCombo trong lib/curriculum.js).
   function lockDailyCombo(unitKey) {
     setDailyCombo((prev) => {
       const today = todayKey()

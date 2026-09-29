@@ -11,6 +11,9 @@ import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/P
 import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radicals'
 import { XP_REWARDS } from '../lib/gamification'
 import CelebrationBadge from '../components/CelebrationBadge'
+import SessionBar from '../components/SessionBar'
+import SessionNextButton from '../components/SessionNextButton'
+import { useSessionSteps } from '../lib/sessionPlan'
 import flashcardPanda from '../assets/panda/flashcard_panda.webp'
 
 const SESSION_SIZE = 20
@@ -56,6 +59,9 @@ function ScopeChips({ chips, scope, onChange }) {
 
 export default function FlashcardsPage() {
   const { srsState, rateCard, addXp } = useProgress()
+  // Trang nay khong co cap do/bai tren URL, nen bai muc tieu cua phien duoc
+  // giai tu &bai= tren link "Tiep theo" hoac tu bai da khoa cho hom nay.
+  const { active: inSession, steps } = useSessionSteps()
   const allIds = useMemo(() => ALL_WORDS.map((w) => w.id), [])
   const leechIds = useMemo(() => getLeechWordIds(allIds, srsState), [allIds, srsState])
 
@@ -131,6 +137,7 @@ export default function FlashcardsPage() {
     const totalRated = ratingCounts[0] + ratingCounts[1] + ratingCounts[2] + ratingCounts[3]
     return (
       <div className="px-4 pt-6">
+        {inSession && <SessionBar steps={steps} currentKey="review" />}
         <h1 className="mb-4 text-2xl text-brand-800">Ôn tập</h1>
 
         <div className="mb-4">
@@ -175,21 +182,42 @@ export default function FlashcardsPage() {
               Truyện thì chưa có thẻ nào để ôn ở đây.
             </p>
           )}
-          <div className="mt-4 flex gap-2">
-            {/* Chi hien "On them" khi vua on xong mot phien - luc trang con
-                trong thi khong con the nao de on, bam vao cung khong co gi. */}
-            {totalRated > 0 && (
-              <button
-                onClick={() => buildQueueForScope(scope, { keepSummary: true })}
-                className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
-              >
-                Ôn thêm
-              </button>
-            )}
-            <Link to="/bai-hoc" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
-              Học bài mới
-            </Link>
-          </div>
+          {inSession ? (
+            // Trong phien: mot nut chinh dan sang buoc sau, cac loi tat cu ha
+            // xuong thanh chu nho ben duoi - khong con phai doan buoc ke tiep.
+            <>
+              <SessionNextButton steps={steps} currentKey="review" variant="onGradient" />
+              <div className="mt-3 flex justify-center gap-4 text-xs text-white/80">
+                {totalRated > 0 && (
+                  <button
+                    onClick={() => buildQueueForScope(scope, { keepSummary: true })}
+                    className="underline"
+                  >
+                    Ôn thêm
+                  </button>
+                )}
+                <Link to="/bai-hoc" className="underline">
+                  Danh sách bài
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div className="mt-4 flex gap-2">
+              {/* Chi hien "On them" khi vua on xong mot phien - luc trang con
+                  trong thi khong con the nao de on, bam vao cung khong co gi. */}
+              {totalRated > 0 && (
+                <button
+                  onClick={() => buildQueueForScope(scope, { keepSummary: true })}
+                  className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
+                >
+                  Ôn thêm
+                </button>
+              )}
+              <Link to="/bai-hoc" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
+                Học bài mới
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -197,6 +225,7 @@ export default function FlashcardsPage() {
 
   return (
     <div className="px-4 pt-6">
+      {inSession && <SessionBar steps={steps} currentKey="review" />}
       <div className="mb-1 flex items-center justify-between">
         <h1 className="text-2xl text-brand-800">Ôn tập</h1>
         <span className="text-sm text-gray-500">

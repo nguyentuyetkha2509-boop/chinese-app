@@ -1,34 +1,26 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import BackButton from '../components/BackButton'
-import { ALL_WORDS, LEVELS } from '../data/levels'
+import { LEVELS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
-import { getCardStats } from '../lib/srs'
 import { todayKey } from '../lib/date'
-import { getDailyNewWordLimit, getCurrentCombo, getComboByUnitKey } from '../lib/curriculum'
-import { ArrowRightIcon, CardsIcon, BookIcon, GrammarIcon, PencilIcon, CheckIcon } from '../components/Icons'
-
-// Chi dung cac sac da co san trong tailwind.config.js (vd "gold" khong co
-// shade -50/-700) de tranh class bi lang le khong render.
-const STEP_STYLE = {
-  brand: { dot: 'bg-brand-600', card: 'bg-brand-50', button: 'bg-brand-700' },
-  sky: { dot: 'bg-sky-600', card: 'bg-sky-100', button: 'bg-sky-600' },
-  gold: { dot: 'bg-gold-600', card: 'bg-gold-100', button: 'bg-gold-600' },
-  candy: { dot: 'bg-candy-600', card: 'bg-candy-100', button: 'bg-candy-600' }
-}
+import { getLeftoverWriting, getNextVocabCombo, getComboByUnitKey } from '../lib/curriculum'
+import {
+  SESSION_STEP_META,
+  SESSION_STEP_STYLE,
+  buildSessionSteps,
+  getCurrentStep,
+  stepLink
+} from '../lib/sessionPlan'
+import { ArrowRightIcon, CheckIcon } from '../components/Icons'
 
 export default function TodayPlanPage() {
   const { srsState, completedUnits, writingStats, completedGrammar, newWordsToday, dailyCombo, lockDailyCombo } =
     useProgress()
-  const allIds = ALL_WORDS.map((w) => w.id)
-  const dueCount = getCardStats(allIds, srsState).due
-  const dailyLimit = getDailyNewWordLimit()
-  const learnedToday = newWordsToday.count
-  const reviewDone = dueCount === 0
 
-  // Combo "song" (luon lay bai som nhat con thieu, khong bi khoa) - dung de
-  // biet co con gi de "hoc vuot" hay khong sau khi da xong combo hom nay.
-  const freshCombo = getCurrentCombo(LEVELS, completedUnits, completedGrammar, writingStats)
+  // Bai "song" (khong bi khoa theo ngay): bai som nhat con TU VUNG CHUA HOC -
+  // dung de biet con gi de "hoc vuot" hay khong sau khi da xong bai hom nay.
+  const freshCombo = getNextVocabCombo(LEVELS, completedUnits, completedGrammar, writingStats)
   const freshUnitKey = freshCombo ? `${freshCombo.levelId}:${freshCombo.unit.id}` : null
 
   // Khoa muc tieu cua ngay hom nay 1 lan duy nhat luc vao trang - de combo
@@ -42,62 +34,18 @@ export default function TodayPlanPage() {
   const lockedUnitKey = dailyCombo.date === todayKey() ? dailyCombo.unitKey : freshUnitKey
   const combo = getComboByUnitKey(LEVELS, lockedUnitKey, completedUnits, completedGrammar, writingStats)
 
-  const steps = [
-    {
-      key: 'review',
-      icon: CardsIcon,
-      color: 'brand',
-      label: 'Ôn tập',
-      done: reviewDone,
-      summary: reviewDone ? 'Không còn thẻ đến hạn' : `${dueCount} thẻ cần ôn lại`,
-      title: reviewDone ? 'Đã ôn xong, không còn thẻ đến hạn 🎉' : `${dueCount} thẻ cần ôn lại hôm nay`,
-      actionLabel: 'Ôn tập ngay',
-      actionTo: '/on-tap'
-    }
-  ]
+  // Phan viet chu con sot cua cac bai DA HOC TU TRUOC nhung chua luyen het chu.
+  // KHONG phai mot buoc cua phien va KHONG duoc tinh vao viec chot phien: neu
+  // tinh vao thi mot ngay chi toan luyen not chu cu cung duoc coi la "xong phien
+  // hoc hom nay" - dung cai loi ma getNextVocabCombo vua sua. Nen cho nay chi la
+  // mot dong nhac nho, khong chan gi ca.
+  const leftover = getLeftoverWriting(LEVELS, lockedUnitKey, completedUnits, writingStats)
 
-  if (combo) {
-    steps.push({
-      key: 'vocab',
-      icon: BookIcon,
-      color: 'sky',
-      label: 'Bài học',
-      done: combo.vocabDone,
-      summary: combo.unit.title,
-      title: `${combo.levelLabel} · ${combo.unit.title}`,
-      subtitle: !combo.vocabDone ? `Đã học ${learnedToday}/${dailyLimit} từ mới hôm nay` : null,
-      actionLabel: 'Học ngay',
-      actionTo: `/bai-hoc/${combo.levelId}/${combo.unit.id}`
-    })
-
-    if (combo.grammar) {
-      steps.push({
-        key: 'grammar',
-        icon: GrammarIcon,
-        color: 'gold',
-        label: 'Ngữ pháp',
-        done: combo.grammarDone,
-        summary: combo.grammar.title,
-        title: combo.grammar.title,
-        actionLabel: 'Học ngay',
-        actionTo: `/ngu-phap/${combo.grammar.key}`
-      })
-    }
-
-    steps.push({
-      key: 'writing',
-      icon: PencilIcon,
-      color: 'candy',
-      label: 'Viết chữ',
-      done: combo.writingDone,
-      summary: combo.writingDone ? 'Đã luyện xong' : `${combo.writingChars.length} chữ cần luyện`,
-      title: `Luyện viết ${combo.writingChars.length} chữ của ${combo.unit.title}`,
-      actionLabel: 'Luyện ngay',
-      actionTo: `/viet-chu/${combo.levelId}/${combo.unit.id}`
-    })
-  }
-
-  const currentIndex = steps.findIndex((s) => !s.done)
+  // Danh sach buoc nam o lib/sessionPlan.js - dung CHUNG voi thanh tien trinh va
+  // man hinh hoan thanh cua tung buoc, de bon noi khong lech nhau ve thu tu.
+  const steps = buildSessionSteps({ srsState, newWordsToday, combo })
+  const currentStep = getCurrentStep(steps)
+  const currentIndex = currentStep ? steps.findIndex((s) => s.key === currentStep.key) : -1
   const allDone = currentIndex === -1
   // Combo hom nay da xong nhung van con bai khac trong giao trinh - goi y "hoc
   // vuot" (hoan toan tuy chon), khong bat buoc de duoc tinh la hoan thanh.
@@ -109,15 +57,20 @@ export default function TodayPlanPage() {
         <BackButton />
         <h1 className="text-xl text-brand-800">Học hôm nay</h1>
       </div>
-      <p className="mb-6 text-sm text-gray-500">Ôn trước rồi mới học mới - giúp nhớ lâu nhất.</p>
+      <p className="mb-4 text-sm text-gray-500">Ôn trước rồi mới học mới - giúp nhớ lâu nhất.</p>
+
+      {/* KHONG con nut rieng o tren dau trang: nut hanh dong nam ngay trong o cua
+          buoc dang can hoc ben duoi - bam vao dung cai o minh dang nhin, khong
+          phai noi mot cho bam mot neo. */}
 
       <div className="relative pl-2">
         <div className="absolute bottom-3 left-[19px] top-3 w-0.5 bg-gray-200" />
 
         {steps.map((step, i) => {
           const status = step.done ? 'done' : i === currentIndex ? 'current' : 'upcoming'
-          const style = STEP_STYLE[step.color]
-          const Icon = step.icon
+          const meta = SESSION_STEP_META[step.key]
+          const style = SESSION_STEP_STYLE[meta.color]
+          const Icon = meta.icon
 
           if (status === 'current') {
             return (
@@ -128,17 +81,20 @@ export default function TodayPlanPage() {
                   <Icon width={24} height={24} />
                 </span>
                 <div className={`flex-1 rounded-2xl p-4 shadow-sm ${style.card}`}>
-                  <p className="text-xs font-semibold text-gray-500">{step.label}</p>
+                  <p className="text-xs font-semibold text-gray-500">{meta.full}</p>
                   <p className="mt-0.5 text-base text-gray-800">{step.title}</p>
                   {step.subtitle && <p className="mt-0.5 text-xs text-gray-500">{step.subtitle}</p>}
-                  {step.actionTo && (
-                    <Link
-                      to={step.actionTo}
-                      className={`mt-3 flex items-center justify-center gap-1 rounded-xl py-2.5 text-center text-sm font-semibold text-white ${style.button}`}
-                    >
-                      {step.actionLabel} <ArrowRightIcon width={20} height={20} />
-                    </Link>
-                  )}
+                  {/* Nut nam ngay trong o cua buoc dang can hoc, va la cho bam
+                      DUY NHAT tren trang de vao buoc do. Nhan dat rieng cho tung
+                      buoc (On ngay / Hoc ngay / Luyen ngay) chu khong dung mot
+                      chu chung - nhin la biet minh sap lam gi. */}
+                  <Link
+                    to={stepLink(step)}
+                    className={`mt-3 flex items-center justify-center gap-1 rounded-xl py-2.5 text-center text-sm font-semibold text-white shadow-sm ${style.button}`}
+                  >
+                    {step.actionLabel}
+                    <ArrowRightIcon width={20} height={20} />
+                  </Link>
                 </div>
               </div>
             )
@@ -153,8 +109,8 @@ export default function TodayPlanPage() {
               >
                 {status === 'done' ? <CheckIcon width={16} height={16} /> : <Icon width={14} height={14} />}
               </span>
-              <p className={`text-sm ${status === 'done' ? 'text-gray-500' : 'text-gray-500'}`}>
-                <span className="font-medium">{step.label}</span> · {step.summary}
+              <p className="text-sm text-gray-500">
+                <span className="font-medium">{meta.full}</span> · {step.summary}
                 {status === 'done' && ' ✓'}
               </p>
             </div>
@@ -175,6 +131,23 @@ export default function TodayPlanPage() {
           </div>
         )}
       </div>
+
+      {leftover.count > 0 && (
+        // Mot dong nho, khong co nut to, khong nam trong duong thoi gian o tren -
+        // de nhin la biet viec nay nam ngoai phien hom nay. Hien ca khi da xong
+        // phien (luc do no la loi nhac huu ich nhat) lan khi chua xong (luc do no
+        // chi la thong tin them, khong keo nguoi hoc ra khoi buoc dang lam).
+        <Link
+          to={`/viet-chu/${leftover.levelId}/${leftover.unitId}`}
+          className="mt-1 flex items-center justify-between gap-2 rounded-xl bg-white px-3.5 py-2.5 shadow-sm"
+        >
+          <span className="text-xs text-gray-500">
+            ✍️ Còn <span className="font-semibold text-gray-700">{leftover.count} chữ</span> của bài trước chưa
+            luyện
+          </span>
+          <span className="shrink-0 text-xs font-semibold text-candy-600">Luyện nốt →</span>
+        </Link>
+      )}
 
       {showAhead && (
         <div className="mt-4 rounded-2xl border border-dashed border-brand-200 bg-white p-4">

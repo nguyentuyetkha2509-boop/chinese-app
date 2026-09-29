@@ -26,7 +26,7 @@ import PandaHero from '../components/PandaHero'
 import trophyPanda from '../assets/panda/trophy_panda.webp'
 import headerPanda from '../assets/icons-gemini/header_panda.png'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
-import { getCurrentCombo, getComboByUnitKey } from '../lib/curriculum'
+import { getNextVocabCombo, getComboByUnitKey } from '../lib/curriculum'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
 import { todayKey } from '../lib/date'
 import { useScrollRestoration } from '../lib/useScrollRestoration'
@@ -157,7 +157,11 @@ export default function HomePage() {
   // Cung logic combo voi TodayPlanPage: neu hom nay da khoa 1 bai muc tieu thi
   // doc lai dung bai do, chua khoa thi xem truoc bai se duoc khoa (xem ghi chu
   // chi tiet trong TodayPlanPage.jsx va lib/curriculum.js).
-  const freshCombo = getCurrentCombo(LEVELS, completedUnits, completedGrammar, writingStats)
+  //
+  // getNextVocabCombo chu khong phai ban cu getCurrentCombo: bai cu chi con sot
+  // phan viet chu KHONG duoc lay lam bai cua hom nay, neu khong the xem truoc
+  // o day se chi vao mot bai da hoc tu hom qua.
+  const freshCombo = getNextVocabCombo(LEVELS, completedUnits, completedGrammar, writingStats)
   const freshUnitKey = freshCombo ? `${freshCombo.levelId}:${freshCombo.unit.id}` : null
   const lockedUnitKey = dailyCombo.date === todayKey() ? dailyCombo.unitKey : freshUnitKey
   const todayCombo = getComboByUnitKey(LEVELS, lockedUnitKey, completedUnits, completedGrammar, writingStats)
@@ -232,7 +236,7 @@ export default function HomePage() {
       >
         <div>
           <p className="text-xs text-white/80">
-            {unitsDone > 0 ? 'Học hôm nay' : 'Bắt đầu học ngay'}
+            {unitsDone > 0 ? 'Phiên học hôm nay' : 'Bắt đầu phiên học'}
           </p>
           <p className="text-lg font-semibold">{todayPlanSubtitle}</p>
         </div>

@@ -13,6 +13,9 @@ import { getRadicalHint, getRadicalSymbol, hasRadicalHint } from '../lib/radical
 import { playCelebrate, playCorrect } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
 import CelebrationBadge from '../components/CelebrationBadge'
+import SessionBar from '../components/SessionBar'
+import SessionNextButton from '../components/SessionNextButton'
+import { useSessionSteps } from '../lib/sessionPlan'
 import writingPanda from '../assets/panda/writing_panda.webp'
 
 function extractChars(words) {
@@ -41,6 +44,11 @@ export default function WritingPage() {
 function WritingPageInner() {
   const params = useParams()
   const { writingStats, completedUnits, recordWritingPractice, addXp } = useProgress()
+  // Buoc cuoi cua phien. Duong dan da co cap do/bai thi dung luon, khong thi de
+  // trang tu giai bai muc tieu (xem lib/sessionPlan.js).
+  const { active: sessionActive, steps } = useSessionSteps(
+    params.unitId ? `${params.levelId}:${params.unitId}` : null
+  )
   const [levelId, setLevelId] = useState(params.levelId || 'hsk1')
   // "Tat ca": luyen chung tat ca chu da hoc trong ca cap do (nhu truoc gio).
   // "Theo bai": chon dung 1 bai da hoc xong de luyen rieng, KHONG can lam lai
@@ -170,6 +178,14 @@ function WritingPageInner() {
 
   const practicedCount = chars.filter((c) => writingStats.practiced.includes(c.char)).length
   const showPracticeArea = !!scopedUnit || viewMode === 'all'
+  const inSession = sessionActive && !!scopedUnit
+  // Trong phien, the chuc mung con hien ca khi vao trang ma da luyen het chu
+  // truoc do - neu khong thi nguoi hoc ket thuc buoc Truoc do bang cach khac se
+  // lac o day, khong co loi ra. "Luyen them" phai tat duoc the nay, neu khong
+  // dieu kien "da luyen het" van dung nen the hien lai ngay lap tuc.
+  const unitWritingDone = !!scopedUnit && chars.length > 0 && practicedCount === chars.length
+  const [dismissedDone, setDismissedDone] = useState(false)
+  const showDoneCard = !!scopedUnit && (justCompletedUnit || (inSession && unitWritingDone && !dismissedDone))
 
   // Dat sau TAT CA cac hook (useState/useMemo/useRef/useEffect o tren) de khong
   // pha vo thu tu goi hook giua cac lan render.
@@ -200,6 +216,7 @@ function WritingPageInner() {
 
   return (
     <div className="px-4 pt-6">
+      {inSession && <SessionBar steps={steps} currentKey="writing" />}
       {scopedUnit ? (
         <div className="mb-4 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
@@ -283,24 +300,43 @@ function WritingPageInner() {
 
       {showPracticeArea && (
         <>
-          {justCompletedUnit && scopedUnit && (
+          {showDoneCard && scopedUnit && (
             <div className="mb-4 rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
               <CelebrationBadge />
               <p className="text-xl">🎉 Hoàn thành viết chữ bài này!</p>
               <p className="mt-1 text-white/90">
                 Đã luyện đủ {chars.length}/{chars.length} chữ của {scopedUnit.title}
               </p>
-              <div className="mt-4 flex gap-2">
-                <button
-                  onClick={() => setJustCompletedUnit(false)}
-                  className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
-                >
-                  Luyện thêm
-                </button>
-                <Link to="/" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
-                  Về Học hôm nay
-                </Link>
-              </div>
+              {inSession ? (
+                // Trong phien: Viet chu la buoc CUOI, nen nut chinh o day luon la
+                // ket thuc phien (khong con buoc nao phia truoc).
+                <>
+                  <SessionNextButton steps={steps} currentKey="writing" variant="onGradient" />
+                  <button
+                    onClick={() => {
+                      setJustCompletedUnit(false)
+                      setDismissedDone(true)
+                    }}
+                    className="mt-3 text-xs text-white/80 underline"
+                  >
+                    Luyện thêm
+                  </button>
+                </>
+              ) : (
+                <div className="mt-4 flex gap-2">
+                  <button
+                    onClick={() => setJustCompletedUnit(false)}
+                    className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white"
+                  >
+                    Luyện thêm
+                  </button>
+                  {/* Truoc day nut nay ghi "Ve Hoc hom nay" nhung tro ve "/" (trang
+                      chu) chu khong phai trang ke hoach - nhan sai duong. */}
+                  <Link to="/hoc-hom-nay" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
+                    Về Học hôm nay
+                  </Link>
+                </div>
+              )}
             </div>
           )}
 

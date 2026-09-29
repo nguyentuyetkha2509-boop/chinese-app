@@ -16,6 +16,9 @@ import { QUIZ_PASS_THRESHOLD, quizPassed } from '../lib/quizResult'
 import QuizQuestion from '../components/QuizQuestion'
 import CelebrationBadge from '../components/CelebrationBadge'
 import { GrammarIcon } from '../components/Icons'
+import SessionBar from '../components/SessionBar'
+import SessionNextButton from '../components/SessionNextButton'
+import { getNextStep, sessionTo, stepLink, useSessionSteps } from '../lib/sessionPlan'
 
 // React Router giu nguyen 1 instance component khi chi doi params (levelId/
 // unitId) tren cung 1 route, khong tu remount - neu khong lam gi them, dieu
@@ -34,6 +37,10 @@ function LessonDetailPageInner() {
   const unit = level?.units.find((u) => u.id === Number(unitId))
   const nextUnit = level?.units.find((u) => u.id === Number(unitId) + 1)
   const { markUnitComplete, addXp } = useProgress()
+  // Bai nay tuong ung buoc "Tu vung" cua phien. Duong dan da co san cap do/bai
+  // nen khong phu thuoc vao bai khoa hom nay.
+  const { active: inSession, steps } = useSessionSteps(`${levelId}:${unitId}`)
+  const nextStep = getNextStep(steps, 'vocab')
   const [phase, setPhase] = useState('study') // study | quiz | done
   const quiz = useMemo(
     () => (unit ? buildQuiz(unit.words, level.words.length > 4 ? level.words : ALL_WORDS) : []),
@@ -99,6 +106,7 @@ function LessonDetailPageInner() {
 
   return (
     <div className="px-4 pt-6">
+      {inSession && <SessionBar steps={steps} currentKey="vocab" />}
       <div className="mb-4 flex items-center gap-2">
         <BackButton />
         <h1 className="text-xl text-brand-800">
@@ -112,20 +120,6 @@ function LessonDetailPageInner() {
             <div className="mb-4 rounded-2xl bg-brand-50 p-3.5">
               <p className="text-sm text-gray-700">{unit.intro}</p>
             </div>
-          )}
-          {relatedGrammar && (
-            <Link
-              to={`/ngu-phap/${relatedGrammar.key}`}
-              className="mb-4 flex items-center gap-3 rounded-2xl bg-gold-100 p-3.5"
-            >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-gold-600">
-                <GrammarIcon width={22} height={22} />
-              </span>
-              <div className="flex-1">
-                <p className="text-xs text-gold-600">Ngữ pháp liên quan</p>
-                <p className="text-sm font-semibold text-gray-800">{relatedGrammar.title}</p>
-              </div>
-            </Link>
           )}
           <div className="space-y-2">
             {unit.words.map((word, i) => {
@@ -183,6 +177,33 @@ function LessonDetailPageInner() {
           >
             Làm bài kiểm tra
           </button>
+
+          {relatedGrammar && (
+            // The ngu phap lien quan dat SAU danh sach tu va SAU nut lam bai kiem
+            // tra, khong con nam tren cung. Truoc day no o dau bai, va vi la mot
+            // <Link> sang buoc ke tiep cua phien nen nguoi hoc rat de bam vao
+            // ngay tu dau - hoc xong ngu phap la bi day tiep sang Viet chu trong
+            // khi bai hoc con nguyen do. Dat duoi cung thi no doc nhu "hoc xong
+            // bai nay thi toi day", dung vai tro cua no.
+            //
+            // Van giu co ?phien=1&bai=... khi dang trong phien: bam vao ma mat
+            // thanh tien trinh thi lai roi vao canh "chuyen tab roi lac duong"
+            // ma phien sinh ra de tranh. Va neu bam vao giua luc bai hoc chua
+            // xong thi nut o trang ngu phap se dua nguoc ve lam not bai hoc
+            // (xem getNextStep trong lib/sessionPlan.js).
+            <Link
+              to={inSession ? sessionTo(`/ngu-phap/${relatedGrammar.key}`, `${levelId}:${unitId}`) : `/ngu-phap/${relatedGrammar.key}`}
+              className="mt-4 flex items-center gap-3 rounded-2xl bg-gold-100 p-3.5"
+            >
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-gold-600">
+                <GrammarIcon width={22} height={22} />
+              </span>
+              <div className="flex-1">
+                <p className="text-xs text-gold-600">Học tiếp theo · Ngữ pháp liên quan</p>
+                <p className="text-sm font-semibold text-gray-800">{relatedGrammar.title}</p>
+              </div>
+            </Link>
+          )}
         </>
       )}
 
@@ -205,36 +226,65 @@ function LessonDetailPageInner() {
             Đúng {correctCount}/{quiz.length} câu
           </p>
 
-          {nextUnit && (
-            <Link
-              to={`/bai-hoc/${levelId}/${nextUnit.id}`}
-              className="mt-4 block rounded-xl bg-white py-2.5 font-semibold text-brand-700"
-            >
-              Học tiếp {nextUnit.title} →
-            </Link>
-          )}
+          {inSession ? (
+            // Trong phien: mot nut chinh sang buoc sau (thuong la Ngu phap, nhung
+            // bai nao khong co diem ngu phap lien quan thi nhay thang toi Viet
+            // chu), cac loi tat cu gom lai thanh chu nho.
+            <>
+              <SessionNextButton steps={steps} currentKey="vocab" variant="onGradient" />
+              <div className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-white/80">
+                {nextUnit && (
+                  <Link to={`/bai-hoc/${levelId}/${nextUnit.id}`} className="underline">
+                    Bài tiếp theo
+                  </Link>
+                )}
+                <Link to={`/phat-am/${levelId}/${unit.id}`} className="underline">
+                  Phát âm
+                </Link>
+                {/* KHONG co loi tat "Viet chu" o day nua: viet chu la mot buoc cua
+                    phien, ma thanh tien trinh ngay tren dau trang da co cham
+                    "Viet" bam duoc roi - de ca hai thi thanh hai cho bam cho cung
+                    mot viec. Ba loi tat con lai khong phai buoc cua phien nen
+                    khong trung voi thanh. */}
+                <Link to="/bai-hoc" className="underline">
+                  Danh sách bài
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              {nextUnit && (
+                <Link
+                  to={`/bai-hoc/${levelId}/${nextUnit.id}`}
+                  className="mt-4 block rounded-xl bg-white py-2.5 font-semibold text-brand-700"
+                >
+                  Học tiếp {nextUnit.title} →
+                </Link>
+              )}
 
-          <p className="mt-4 text-xs text-white/80">Củng cố bài này thêm với:</p>
-          <div className="mt-2 grid grid-cols-2 gap-2">
-            <Link to="/on-tap" className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white">
-              🗂️ Ôn tập flashcard
-            </Link>
-            <Link
-              to={`/phat-am/${levelId}/${unit.id}`}
-              className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white"
-            >
-              🎧 Phát âm bài này
-            </Link>
-            <Link
-              to={`/viet-chu/${levelId}/${unit.id}`}
-              className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white"
-            >
-              ✍️ Viết chữ bài này
-            </Link>
-            <Link to="/bai-hoc" className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white">
-              📚 Danh sách bài
-            </Link>
-          </div>
+              <p className="mt-4 text-xs text-white/80">Củng cố bài này thêm với:</p>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <Link to="/on-tap" className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white">
+                  🗂️ Ôn tập flashcard
+                </Link>
+                <Link
+                  to={`/phat-am/${levelId}/${unit.id}`}
+                  className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white"
+                >
+                  🎧 Phát âm bài này
+                </Link>
+                <Link
+                  to={`/viet-chu/${levelId}/${unit.id}`}
+                  className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white"
+                >
+                  ✍️ Viết chữ bài này
+                </Link>
+                <Link to="/bai-hoc" className="rounded-xl bg-white/20 py-2.5 text-sm font-semibold text-white">
+                  📚 Danh sách bài
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       )}
 
@@ -250,6 +300,16 @@ function LessonDetailPageInner() {
           <Link to="/bai-hoc" className="mt-2 block rounded-xl bg-gray-100 py-2.5 text-sm font-semibold text-gray-700">
             📚 Danh sách bài
           </Link>
+          {/* Lam bai khong dat thi KHONG tu dong cong nhan da hoc xong buoc nay
+              (markUnitComplete chi chay khi qua bai), nhung cung khong chan
+              cung ca phien - de mot loi duong thoat sang buoc sau. Chu y:
+              nextStep co the la mot buoc NAM TRUOC (nguoi hoc vao giua phien),
+              nen loi o day co y khong noi "buoc sau". */}
+          {inSession && nextStep && (
+            <Link to={stepLink(nextStep)} className="mt-3 block text-xs text-gray-500 underline">
+              Bỏ qua bước này →
+            </Link>
+          )}
         </div>
       )}
     </div>
