@@ -10,11 +10,45 @@ let currentUtterance = null
 // phai huy luon hen gio do - khong thi tieng van bat len sau khi da sang trang khac.
 let pendingSpeakTimer = null
 
+// macOS cai san mot bo giong "vui nhon" (Eddy, Grandpa...) dung chung cho moi
+// ngon ngu, trong do co tieng Trung. Trong danh sach cua trinh duyet chung lai
+// dung truoc cac giong that, nen neu chi lay giong zh-CN dau tien thi rat de
+// vinh phai giong nam/robot nay - do la ly do cung mot app ma may nay doc giong
+// nam, may khac (dien thoai) doc giong nu.
+const NOVELTY_VOICES = ['eddy', 'flo', 'grandma', 'grandpa', 'reed', 'rocko', 'sandy', 'shelley']
+
+// Giong nu chuan, tu nhien, co tren cac nen tang pho bien (macOS, Windows,
+// Android, Chrome). Uu tien tieng Quan thoai dai luc (HSK la tieng pho thong),
+// sau do moi den giong Dai Loan/Hong Kong. Duyet theo thu tu nay truoc khi
+// chiu dung bat ky giong tieng Trung nao khac.
+const PREFERRED_VOICES = [
+  'tingting', 'ting-ting', '婷婷',        // macOS zh-CN
+  'huihui', 'yaoyao', 'xiaoxiao', 'lili', 'google 普通话', // Windows / Chrome / Android
+  'yu-shu', '语舒',                        // macOS zh-CN
+  'meijia', '美佳',                        // macOS zh-TW
+  'sinji', '善怡'                          // macOS zh-HK
+]
+
+const isNoveltyVoice = (v) => {
+  const name = (v.name || '').toLowerCase()
+  return NOVELTY_VOICES.some((n) => name.includes(n))
+}
+
 function loadVoices() {
   const voices = window.speechSynthesis?.getVoices?.() || []
+  const chinese = voices.filter((v) => v.lang?.startsWith('zh'))
+  // Bo cac giong "vui nhon" truoc khi chon, de buoc du phong ben duoi cung
+  // khong roi vao chung.
+  const natural = chinese.filter((v) => !isNoveltyVoice(v))
+
   cachedVoice =
-    voices.find((v) => v.lang === 'zh-CN') ||
-    voices.find((v) => v.lang?.startsWith('zh')) ||
+    PREFERRED_VOICES.reduce((found, want) => {
+      if (found) return found
+      return natural.find((v) => (v.name || '').toLowerCase().includes(want)) || null
+    }, null) ||
+    natural.find((v) => v.lang === 'zh-CN') ||
+    natural[0] ||
+    chinese[0] ||
     null
   return cachedVoice
 }
