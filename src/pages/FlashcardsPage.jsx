@@ -16,6 +16,29 @@ import SessionNextButton from '../components/SessionNextButton'
 import { useSessionSteps } from '../lib/sessionPlan'
 import flashcardPanda from '../assets/panda/flashcard_panda.webp'
 
+// Khung the gau truc: vung trang nam o 33%-79% ngang, 18%-82% doc. Gau truc de
+// len goc duoi ben trai o vung trang, nen chu Han + phien am dat o nua tren
+// (ben tren dau gau), nghia dat o goc duoi ben phai (ben phai gau).
+function PandaFrame({ hanzi, pinyin, meaning, hint, pinyinClass = '', small = false, onClick }) {
+  const Tag = onClick ? 'button' : 'div'
+  return (
+    <Tag
+      onClick={onClick}
+      className={`relative mx-auto block w-full text-center ${small ? 'max-w-[15rem]' : 'max-w-md'}`}
+    >
+      <img src={flashcardPanda} alt="Gấu trúc cầm thẻ từ vựng" className="w-full select-none" draggable="false" />
+      <div className="absolute left-[33.5%] right-[21%] top-[18.5%] flex h-[34%] flex-col items-center justify-center overflow-hidden">
+        <p className={`leading-tight text-gray-800 ${small ? 'text-2xl' : 'text-4xl'}`}>{hanzi}</p>
+        {pinyin && <p className={`mt-1 leading-tight ${small ? 'text-xs' : 'text-lg'} ${pinyinClass}`}>{pinyin}</p>}
+      </div>
+      <div className="absolute bottom-[19%] left-[46%] right-[21%] flex h-[24%] items-center justify-center overflow-hidden">
+        {meaning && <p className={`leading-snug text-gray-700 ${small ? 'text-[10px]' : 'text-sm'}`}>{meaning}</p>}
+        {hint && <p className={`leading-snug text-gray-400 ${small ? 'text-[10px]' : 'text-xs'}`}>{hint}</p>}
+      </div>
+    </Tag>
+  )
+}
+
 const SESSION_SIZE = 20
 
 const RATINGS = [
@@ -138,11 +161,14 @@ export default function FlashcardsPage() {
     return (
       <div className="px-4 pt-6">
         {inSession && <SessionBar steps={steps} currentKey="review" />}
-        <img src={flashcardPanda} alt="Gấu trúc mời ôn tập từ vựng" className="mx-auto mb-2 w-40 max-w-full" />
-        <h1 className="mb-4 text-2xl text-brand-800">Ôn tập</h1>
+        <h1 className="mb-2 text-2xl text-brand-800">Ôn tập</h1>
 
         <div className="mb-4">
           <ScopeChips chips={SCOPE_CHIPS} scope={scope} onChange={handleScopeChange} />
+        </div>
+
+        <div className="mb-4">
+          <PandaFrame small hanzi="复习" pinyin="fùxí" meaning="ôn tập" pinyinClass="text-brand-600" />
         </div>
 
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
@@ -219,7 +245,6 @@ export default function FlashcardsPage() {
   return (
     <div className="px-4 pt-6">
       {inSession && <SessionBar steps={steps} currentKey="review" />}
-      <img src={flashcardPanda} alt="Gấu trúc mời ôn tập từ vựng" className="mx-auto mb-2 w-40 max-w-full" />
       <div className="mb-1 flex items-center justify-between">
         <h1 className="text-2xl text-brand-800">Ôn tập</h1>
         <span className="text-sm text-gray-500">
@@ -235,41 +260,40 @@ export default function FlashcardsPage() {
         Đoán nghĩa trong đầu, chạm vào thẻ để xem đáp án, rồi chọn mức độ bạn nhớ được.
       </p>
 
-      <button
+      <PandaFrame
         onClick={handleFlip}
-        className={`flex min-h-[16rem] w-full flex-col items-center justify-center rounded-3xl border-t-4 bg-white p-6 text-center shadow-sm ${accent.topBorder}`}
-      >
-        <p className="text-5xl text-gray-800">{currentWord.hanzi}</p>
-        {flipped ? (
-          <>
-            <p className={`mt-3 text-xl ${accent.text}`}>{currentWord.pinyin}</p>
-            <p className="mt-1 text-gray-600">{currentWord.meaning}</p>
-            {hasPictograph(currentWord.hanzi) && (
-              <div className="mt-3 flex w-full items-center gap-2 rounded-xl bg-sun-100 p-2.5">
-                <PictographIcon char={currentWord.hanzi} className="h-9 w-9 shrink-0 text-sun-700" />
-                <p className="text-left text-xs text-gray-700">💡 {PICTOGRAPH_HINTS[currentWord.hanzi]}</p>
-              </div>
-            )}
-            {!hasPictograph(currentWord.hanzi) && hasRadicalHint(currentWord.hanzi) && (
-              <div className="mt-3 flex w-full items-center gap-2 rounded-xl bg-teal-100 p-2.5">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-lg text-teal-700">
-                  {getRadicalSymbol(currentWord.hanzi)}
-                </span>
-                <p className="text-left text-xs text-gray-700">🧩 {getRadicalHint(currentWord.hanzi)}</p>
-              </div>
-            )}
-            {currentWord.example && (
-              <div className={`mt-4 w-full rounded-xl ${accent.bg} p-3`}>
-                <p className="text-base text-gray-800">{currentWord.example.hanzi}</p>
-                <p className={`text-xs ${accent.text}`}>{currentWord.example.pinyin}</p>
-                <p className="text-xs text-gray-600">{currentWord.example.meaning}</p>
-              </div>
-            )}
-          </>
-        ) : (
-          <p className="mt-4 text-sm text-gray-500">Chạm để xem đáp án</p>
-        )}
-      </button>
+        hanzi={currentWord.hanzi}
+        pinyin={flipped ? currentWord.pinyin : null}
+        meaning={flipped ? currentWord.meaning : null}
+        hint={flipped ? null : 'Chạm để xem đáp án'}
+        pinyinClass={accent.text}
+      />
+
+      {flipped && (
+        <div className="mt-2 flex flex-col gap-3">
+          {hasPictograph(currentWord.hanzi) && (
+            <div className="flex w-full items-center gap-2 rounded-xl bg-sun-100 p-2.5">
+              <PictographIcon char={currentWord.hanzi} className="h-9 w-9 shrink-0 text-sun-700" />
+              <p className="text-left text-xs text-gray-700">💡 {PICTOGRAPH_HINTS[currentWord.hanzi]}</p>
+            </div>
+          )}
+          {!hasPictograph(currentWord.hanzi) && hasRadicalHint(currentWord.hanzi) && (
+            <div className="flex w-full items-center gap-2 rounded-xl bg-teal-100 p-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-lg text-teal-700">
+                {getRadicalSymbol(currentWord.hanzi)}
+              </span>
+              <p className="text-left text-xs text-gray-700">🧩 {getRadicalHint(currentWord.hanzi)}</p>
+            </div>
+          )}
+          {currentWord.example && (
+            <div className={`w-full rounded-xl ${accent.bg} p-3 text-center`}>
+              <p className="text-base text-gray-800">{currentWord.example.hanzi}</p>
+              <p className={`text-xs ${accent.text}`}>{currentWord.example.pinyin}</p>
+              <p className="text-xs text-gray-600">{currentWord.example.meaning}</p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Chi con icon loa, khong kem chu "Nghe phat am": the da hien san phien am
           va nghia o mat sau, nen chu do chi lap lai dieu nguoi hoc da biet. Giu
