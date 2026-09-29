@@ -19,6 +19,7 @@ import FlashcardsPage from './pages/FlashcardsPage'
 import PronunciationPage from './pages/PronunciationPage'
 import WritingPage from './pages/WritingPage'
 import SpeedGamePage from './pages/SpeedGamePage'
+import MemoryMatchPage from './pages/MemoryMatchPage'
 import TopicsPage from './pages/TopicsPage'
 import TopicDetailPage from './pages/TopicDetailPage'
 import RadicalsPage from './pages/RadicalsPage'
@@ -73,6 +74,7 @@ export default function App() {
         <Route path="/viet-chu" element={<WritingPage />} />
         <Route path="/viet-chu/:levelId/:unitId" element={<WritingPage />} />
         <Route path="/tro-choi" element={<SpeedGamePage />} />
+        <Route path="/ghep-cap" element={<MemoryMatchPage />} />
         <Route path="/bo-thu" element={<RadicalsPage />} />
         <Route path="/bo-thu/tro-choi" element={<RadicalGamePage />} />
         <Route path="/chu-de" element={<TopicsPage />} />

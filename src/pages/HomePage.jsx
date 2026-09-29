@@ -129,6 +129,12 @@ const EXTRA_CARDS = [
     className: 'col-span-2 bg-gradient-to-br from-sky-600 to-brand-500'
   },
   {
+    to: '/ghep-cap',
+    icon: CardsIcon,
+    title: 'Ghép cặp',
+    className: 'bg-gradient-to-br from-candy-500 to-sky-500'
+  },
+  {
     to: '/tro-choi',
     icon: SpeedIcon,
     title: 'Đua tốc độ',
@@ -202,6 +208,7 @@ export default function HomePage() {
     if (to === '/bo-thu') return '214 bộ dựng nên chữ Hán'
     if (to === '/hoi-thoai') return 'Xem tiếng Trung dùng thật'
     if (to === '/tro-choi') return 'Trả lời nhanh trong 60 giây!'
+    if (to === '/ghep-cap') return 'Lật thẻ ghép chữ với nghĩa'
     if (to === '/tro-chuyen-ai') return 'Luyện nói với AI, sửa lỗi ngay'
     if (to === '/cham-bai-viet') return 'AI chấm và sửa câu văn bạn viết'
     return null
