@@ -17,9 +17,9 @@ import { useSessionSteps } from '../lib/sessionPlan'
 import flashcardPanda from '../assets/panda/flashcard_panda.webp'
 
 // Khung the gau truc: vung trang nam o 33%-79% ngang, 18%-82% doc. Gau truc de
-// len goc duoi ben trai o vung trang, nen chu Han + phien am dat o nua tren
-// (ben tren dau gau), nghia dat o goc duoi ben phai (ben phai gau).
-function PandaFrame({ hanzi, pinyin, meaning, hint, pinyinClass = '', small = false, onClick }) {
+// len goc duoi ben trai o vung trang, nen ca chu Han, phien am va nghia xep
+// thanh mot cot can giua o nua tren (ben tren dau gau).
+function PandaFrame({ hanzi, pinyin, meaning, pinyinClass = '', small = false, onClick }) {
   const Tag = onClick ? 'button' : 'div'
   return (
     <Tag
@@ -27,13 +27,10 @@ function PandaFrame({ hanzi, pinyin, meaning, hint, pinyinClass = '', small = fa
       className={`relative mx-auto block w-full text-center ${small ? 'max-w-[15rem]' : 'max-w-md'}`}
     >
       <img src={flashcardPanda} alt="Gấu trúc cầm thẻ từ vựng" className="w-full select-none" draggable="false" />
-      <div className="absolute left-[33.5%] right-[21%] top-[18.5%] flex h-[34%] flex-col items-center justify-center overflow-hidden">
+      <div className="absolute left-[33.5%] right-[21%] top-[18.5%] flex h-[35%] flex-col items-center justify-center overflow-hidden">
         <p className={`leading-tight text-gray-800 ${small ? 'text-2xl' : 'text-4xl'}`}>{hanzi}</p>
         {pinyin && <p className={`mt-1 leading-tight ${small ? 'text-xs' : 'text-lg'} ${pinyinClass}`}>{pinyin}</p>}
-      </div>
-      <div className="absolute bottom-[19%] left-[46%] right-[21%] flex h-[24%] items-center justify-center overflow-hidden">
-        {meaning && <p className={`leading-snug text-gray-700 ${small ? 'text-[10px]' : 'text-sm'}`}>{meaning}</p>}
-        {hint && <p className={`leading-snug text-gray-400 ${small ? 'text-[10px]' : 'text-xs'}`}>{hint}</p>}
+        {meaning && <p className={`mt-1 leading-snug text-gray-700 ${small ? 'text-[10px]' : 'text-sm'}`}>{meaning}</p>}
       </div>
     </Tag>
   )
@@ -265,7 +262,6 @@ export default function FlashcardsPage() {
         hanzi={currentWord.hanzi}
         pinyin={flipped ? currentWord.pinyin : null}
         meaning={flipped ? currentWord.meaning : null}
-        hint={flipped ? null : 'Chạm để xem đáp án'}
         pinyinClass={accent.text}
       />
 
