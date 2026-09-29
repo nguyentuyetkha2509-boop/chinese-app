@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { useLayoutEffect, useState } from 'react'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import BottomNav from './components/BottomNav'
 import TopBar from './components/TopBar'
 import TtsWarning from './components/TtsWarning'
@@ -36,6 +36,19 @@ import SettingsPage from './pages/SettingsPage'
 import AiChatPage from './pages/AiChatPage'
 import WritingCheckPage from './pages/WritingCheckPage'
 
+// Doi trang la doi component chu khong tai lai trang, nen trinh duyet giu nguyen
+// vi tri cuon cu - vao trang moi tu giua trang cu thi bi nhay vao giua. Cuon ve
+// dau moi khi doi duong dan. Phai dat TRUOC <Routes> (dong cap): useLayoutEffect
+// cua anh em chay theo thu tu, nen lan nay chay truoc useScrollRestoration cua
+// trang con, cac trang danh sach van tra ve duoc vi tri da luu.
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
 export default function App() {
   const { authReady, user } = useFirebaseAuth()
   const [welcomeDone, setWelcomeDone] = useState(() => hasSeenWelcome())
@@ -60,6 +73,7 @@ export default function App() {
       <TtsWarning />
       <NicknamePrompt />
       <DailyReminder />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/hoc-hom-nay" element={<TodayPlanPage />} />
