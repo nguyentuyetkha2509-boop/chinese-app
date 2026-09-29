@@ -159,9 +159,12 @@ export default function FlashcardsPage() {
         {inSession && <SessionBar steps={steps} currentKey="review" />}
         <h1 className="mb-2 text-2xl text-brand-800">Ôn tập</h1>
 
-        <div className="mb-4">
-          <ScopeChips chips={SCOPE_CHIPS} scope={scope} onChange={handleScopeChange} />
-        </div>
+        {/* Trong phien hoc hom nay chi on het the den han, khong can loc theo cap do */}
+        {!inSession && (
+          <div className="mb-4">
+            <ScopeChips chips={SCOPE_CHIPS} scope={scope} onChange={handleScopeChange} />
+          </div>
+        )}
 
         <div className="mb-4">
           <PandaFrame small hanzi="复习" pinyin="fùxí" meaning="ôn tập" pinyinClass="text-brand-600" />
@@ -248,9 +251,11 @@ export default function FlashcardsPage() {
         </span>
       </div>
 
-      <div className="mb-3">
-        <ScopeChips chips={SCOPE_CHIPS} scope={scope} onChange={handleScopeChange} />
-      </div>
+      {!inSession && (
+        <div className="mb-3">
+          <ScopeChips chips={SCOPE_CHIPS} scope={scope} onChange={handleScopeChange} />
+        </div>
+      )}
 
       <p className="mb-4 text-xs text-gray-500">
         Đoán nghĩa trong đầu, chạm vào thẻ để xem đáp án, rồi chọn mức độ bạn nhớ được.
