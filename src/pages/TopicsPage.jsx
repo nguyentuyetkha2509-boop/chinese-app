@@ -63,15 +63,12 @@ export default function TopicsPage() {
                 isNext ? 'border-2 border-brand-500' : accent.border
               }`}
             >
-              <span className="absolute left-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-gray-100 text-[10px] font-semibold text-gray-500">
-                {i + 1}
-              </span>
               {done && (
                 <span className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-teal-500 text-white">
                   <CheckIcon width={16} height={16} />
                 </span>
               )}
-              <span className="mt-4 block text-3xl">{topic.icon}</span>
+              <span className="mt-1 block text-3xl">{topic.icon}</span>
               <p className="mt-2 text-base text-gray-800">{topic.title}</p>
               <div className="flex items-center justify-between">
                 <p className={`text-xs ${accent.text}`}>{count} từ · {topic.tag || `HSK${getTopicLevel(topic.key)}`}</p>
