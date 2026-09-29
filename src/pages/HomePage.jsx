@@ -40,15 +40,17 @@ const STAT_STYLES = [
 
 // Vong lap hoc chinh moi ngay - hien ngay sau nut "tiep tuc hoc", khong can cuon.
 // Moi the la mot cap mau chuyen sac. Bang mau gom 5 tong: tim, hong, xanh duong,
-// xanh la (emerald/teal) va cam - xep sao cho hai the ke nhau khong trung tong,
-// va xanh la xuat hien deu o ca hai khoi. "col-span-2" = the dai (ca hang), khong
-// co = the vuong; moi hang deu du 2 cot nen khong the nao bi le.
+// xanh la (emerald/teal) va cam - xep sao cho hai the ke nhau (ngang va doc)
+// khong trung tong. "col-span-2" = the dai (ca hang), khong co = the vuong; moi
+// hang deu du 2 cot nen khong the nao bi le.
+//
+// Lo trinh chinh: 6 the vuong, 3 hang.
 const CORE_CARDS = [
   {
     to: '/on-tap',
     icon: CardsIcon,
     title: 'Ôn tập ngay',
-    className: 'col-span-2 bg-gradient-to-br from-brand-500 to-candy-500'
+    className: 'bg-gradient-to-br from-brand-500 to-candy-500'
   },
   {
     to: '/bai-hoc',
@@ -78,25 +80,26 @@ const CORE_CARDS = [
     to: '/bo-thu',
     icon: RadicalIcon,
     title: 'Bộ thủ',
-    className: 'col-span-2 bg-gradient-to-br from-sky-600 to-brand-600'
+    className: 'bg-gradient-to-br from-sky-600 to-brand-600'
   }
 ]
 
 // Noi dung phu / mo rong - luyen them khi da xong vong hoc chinh, dat cuoi trang.
-// 11 the xep thanh 7 hang: 1 dai, 2 vuong, 2 vuong, 2 vuong, 1 dai, 2 vuong, 1 dai
-// (tuc 3 the dai + 8 the vuong). Noi dung hoc (Chu de, Hoi thoai) len dau, roi AI va tro choi.
+// 11 the xep thanh 7 hang: 2 vuong (hoc), 2 vuong (AI), 1 dai (truyen), 2 vuong
+// (thu, nghe chep), 2 vuong (tro choi), roi 2 thanh dai lien nhau o cuoi (dua
+// toc do, bang xep hang).
 const EXTRA_CARDS = [
   {
     to: '/chu-de',
     icon: TopicIcon,
     title: 'Học theo chủ đề',
-    className: 'col-span-2 bg-gradient-to-br from-sky-500 to-emerald-500'
+    className: 'bg-gradient-to-br from-candy-500 to-sun-500'
   },
   {
     to: '/hoi-thoai',
     icon: ChatIcon,
     title: 'Hội thoại',
-    className: 'bg-gradient-to-br from-sky-500 to-brand-600'
+    className: 'bg-gradient-to-br from-emerald-500 to-sky-600'
   },
   {
     to: '/tro-chuyen-ai',
@@ -108,25 +111,7 @@ const EXTRA_CARDS = [
     to: '/cham-bai-viet',
     icon: ZapIcon,
     title: 'Chấm bài viết AI',
-    className: 'bg-gradient-to-br from-emerald-500 to-teal-600'
-  },
-  {
-    to: '/sap-xep-cau',
-    icon: ShuffleIcon,
-    title: 'Sắp xếp câu',
-    className: 'bg-gradient-to-br from-candy-500 to-sun-500'
-  },
-  {
-    to: '/bang-xep-hang',
-    icon: TrophyIcon,
-    title: 'Bảng xếp hạng',
-    className: 'bg-gradient-to-br from-gold-500 to-sun-500'
-  },
-  {
-    to: '/ghep-cap',
-    icon: CardsIcon,
-    title: 'Ghép cặp',
-    className: 'bg-gradient-to-br from-candy-500 to-sky-500'
+    className: 'bg-gradient-to-br from-sun-500 to-candy-600'
   },
   {
     to: '/truyen',
@@ -147,10 +132,28 @@ const EXTRA_CARDS = [
     className: 'bg-gradient-to-br from-teal-500 to-sky-600'
   },
   {
+    to: '/sap-xep-cau',
+    icon: ShuffleIcon,
+    title: 'Sắp xếp câu',
+    className: 'bg-gradient-to-br from-emerald-500 to-teal-600'
+  },
+  {
+    to: '/ghep-cap',
+    icon: CardsIcon,
+    title: 'Ghép cặp',
+    className: 'bg-gradient-to-br from-candy-500 to-sky-500'
+  },
+  {
     to: '/tro-choi',
     icon: SpeedIcon,
     title: 'Đua tốc độ',
-    className: 'col-span-2 bg-gradient-to-br from-sun-500 to-candy-500'
+    className: 'col-span-2 bg-gradient-to-br from-candy-500 via-brand-500 to-sky-500'
+  },
+  {
+    to: '/bang-xep-hang',
+    icon: TrophyIcon,
+    title: 'Bảng xếp hạng',
+    className: 'col-span-2 bg-gradient-to-br from-gold-500 to-sun-500'
   }
 ]
 
