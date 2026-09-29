@@ -5,7 +5,6 @@ import { useProgress } from '../store/ProgressContext'
 import { getDueWordIds, getLeechWordIds, isDue } from '../lib/srs'
 import { speakChinese } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate, playFlip } from '../lib/sfx'
-import { VolumeIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { XP_REWARDS } from '../lib/gamification'
@@ -139,10 +138,9 @@ export default function FlashcardsPage() {
   }
 
   function handleFlip() {
-    if (!flipped) {
-      playFlip()
-      speakChinese(currentWord.hanzi)
-    }
+    if (!flipped) playFlip()
+    // Moi lan cham khung deu doc lai, vi khong con nut loa rieng
+    speakChinese(currentWord.hanzi)
     setFlipped((f) => !f)
   }
 
@@ -286,22 +284,6 @@ export default function FlashcardsPage() {
           )}
         </div>
       )}
-
-      {/* Chi con icon loa, khong kem chu "Nghe phat am": the da hien san phien am
-          va nghia o mat sau, nen chu do chi lap lai dieu nguoi hoc da biet. Giu
-          aria-label de van doc duoc cong dung nut nay.
-          Bo chu di thi nut chi con 24px - nho hon ngo n tay, bam rat de truot.
-          min-h/min-w 44px (11 = 2,75rem) la co ngo n tay toi thieu tren dien thoai. */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation()
-          speakChinese(currentWord.hanzi)
-        }}
-        aria-label="Nghe phát âm"
-        className={`mx-auto mt-3 flex min-h-11 min-w-11 items-center justify-center ${accent.text}`}
-      >
-        <VolumeIcon width={24} height={24} />
-      </button>
 
       {flipped && (
         <>
