@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth'
 import { auth, googleProvider } from '../lib/firebase'
 import { useProgress } from './ProgressContext'
@@ -152,18 +152,30 @@ export function FirebaseSyncProvider({ children }) {
     })
   }
 
-  // Day ky luc tro "Dua toc do" len bang xep hang.
+  // Day ky luc tro "Dua toc do" len bang xep hang, tra ve diem TOT NHAT dang
+  // duoc ghi nhan tren bang (khong phai diem cua may nay).
   //
   // Phai DOC ban dang luu tren may chu roi moi ghi: ky luc la thu chi duoc TANG.
   // Nguoi dung choi tren may khac (hoac xoa du lieu trinh duyet) co the dang co
   // diem thap hon ban da luu tren dam may - ghi thang len la tu lam tut hang cua
-  // chinh minh.
-  async function publishSpeedGameBest(score) {
-    if (!user || !Number.isFinite(score)) return
-    const entry = await getMyEntry(user.uid)
-    if ((entry?.speedGameBest ?? 0) >= score) return
-    await updateMyStats(user.uid, { speedGameBest: score })
-  }
+  // chinh minh. Tra ve diem tren bang de cho goi biet dung diem ma tinh thu hang:
+  // may nay chua choi bao gio nhung da choi o may khac thi diem cua may nay la 0,
+  // lay no ma tinh thu hang thi bao sai.
+  //
+  // useCallback de ham nay khong doi moi lan provider re-render (provider re-render
+  // lien tuc theo trang thai dong bo). Neu doi, moi noi goi trong useEffect se
+  // chay lai va goi lai Firebase lien tuc.
+  const publishSpeedGameBest = useCallback(
+    async (score) => {
+      if (!user || !Number.isFinite(score)) return 0
+      const entry = await getMyEntry(user.uid)
+      const dangLuu = entry?.speedGameBest ?? 0
+      if (dangLuu >= score) return dangLuu
+      await updateMyStats(user.uid, { speedGameBest: score })
+      return score
+    },
+    [user]
+  )
 
   async function signIn() {
     setStatus('syncing')

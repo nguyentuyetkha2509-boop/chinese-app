@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import BackButton from '../components/BackButton'
+import SpeedGameBoard from '../components/SpeedGameBoard'
 import { ALL_WORDS } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { useFirebaseSync } from '../store/FirebaseSyncContext'
@@ -13,7 +14,6 @@ import { ZapIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 
 const GAME_SECONDS = 60
-const MEDAL = ['🥇', '🥈', '🥉']
 
 function shuffle(arr) {
   const a = [...arr]
@@ -79,40 +79,45 @@ export default function SpeedGamePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft, phase])
 
-  // Het gio: day ky luc len bang xep hang roi lay top 3 + thu hang cua minh ve.
+  // Day ky luc len bang xep hang roi lay top 3 + thu hang cua minh ve.
+  //
+  // Chay o CA HAI man hinh: luc vua mo trang (chua choi) va luc van ket thuc. Vao
+  // trang la thay ngay minh dang xep thu may, khong phai choi xong mot van moi
+  // biet - do la y nguoi dung. Rieng luc dang choi thi khong hoi cho nao ca: diem
+  // con dang doi lien tuc nen hoi cung khong kip, ma nguoi choi cung khong nhin.
   //
   // Day la ky luc CA NHAN (so voi ky luc cua chinh may nay), con viec so voi ban
   // tren dam may de khong lam tut hang thi nam trong publishSpeedGameBest.
   useEffect(() => {
-    if (phase !== 'over') return
+    if (phase === 'playing') return
     if (!user) {
       setTop(null)
       setStanding(null)
       return
     }
     let cancelled = false
-    const best = Math.max(score, recordBeforeRef.current)
     setBoardError(null)
     ;(async () => {
       try {
-        // Phai day xong roi moi hoi thu hang, neu khong thi thu hang tra ve la
-        // thu hang CU (chua tinh diem vua dat).
-        await publishSpeedGameBest(best)
+        // Ham nay tra ve diem TOT NHAT dang ghi tren bang, khong phai diem cua
+        // may nay - choi o may khac thi diem o may nay la 0, lay no ma tinh thu
+        // hang thi bao sai. Va phai day xong moi hoi thu hang, neu khong thi thu
+        // hang tra ve la thu hang CU (chua tinh diem vua dat).
+        const best = await publishSpeedGameBest(Math.max(score, highScore))
         const [rows, st] = await Promise.all([fetchSpeedGameLeaderboard(3), fetchSpeedGameStanding(best)])
         if (cancelled) return
         setTop(rows)
         setStanding(st)
       } catch (e) {
-        // Mat mang thi chi khong hien duoc bang - man hinh ket qua van phai hien
-        // binh thuong, khong duoc de loi mang lam hong ket qua vua choi.
+        // Mat mang thi chi khong hien duoc bang - phan choi van phai chay binh
+        // thuong, khong duoc de loi mang lam hong van vua choi.
         if (!cancelled) setBoardError(friendlyError(e))
       }
     })()
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, user])
+  }, [phase, user, score, highScore, publishSpeedGameBest])
 
   function startGame() {
     recordBeforeRef.current = highScore
@@ -155,17 +160,23 @@ export default function SpeedGamePage() {
       </div>
 
       {phase === 'idle' && (
-        <div className="rounded-3xl bg-gradient-to-br from-candy-500 via-brand-500 to-sky-500 p-6 text-center text-white shadow-lg">
-          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/25">
-            <ZapIcon width={38} height={38} />
-          </span>
-          <p className="mt-3 text-xl font-semibold">Trả lời càng nhiều càng tốt trong {GAME_SECONDS} giây!</p>
-          <p className="mt-1 text-sm text-white/90">Đúng liên tiếp để nhân điểm combo 🔥</p>
-          <p className="mt-4 text-sm text-white/80">Kỷ lục hiện tại: {highScore} điểm</p>
-          <button onClick={startGame} className="mt-4 w-full rounded-xl bg-white py-3 font-semibold text-brand-700">
-            Bắt đầu
-          </button>
-        </div>
+        <>
+          <div className="rounded-3xl bg-gradient-to-br from-candy-500 via-brand-500 to-sky-500 p-6 text-center text-white shadow-lg">
+            <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/25">
+              <ZapIcon width={38} height={38} />
+            </span>
+            <p className="mt-3 text-xl font-semibold">Trả lời càng nhiều càng tốt trong {GAME_SECONDS} giây!</p>
+            <p className="mt-1 text-sm text-white/90">Đúng liên tiếp để nhân điểm combo 🔥</p>
+            <p className="mt-4 text-sm text-white/80">Kỷ lục hiện tại: {highScore} điểm</p>
+            <button onClick={startGame} className="mt-4 w-full rounded-xl bg-white py-3 font-semibold text-brand-700">
+              Bắt đầu
+            </button>
+          </div>
+
+          {/* Bang xep hang hien ngay khi vua vao trang, khong phai choi xong mot
+              van moi thay - nguoi dung vao la biet ngay minh dang dung o dau. */}
+          <SpeedGameBoard className="mt-4" user={user} top={top} standing={standing} error={boardError} />
+        </>
       )}
 
       {phase === 'playing' && (
@@ -221,74 +232,24 @@ export default function SpeedGamePage() {
       )}
 
       {phase === 'over' && (
-        <div className="rounded-3xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
-          <p className="text-xl">{isNewRecord ? '🎉 Kỷ lục mới!' : 'Hết giờ!'}</p>
-          <p className="mt-2 text-4xl font-bold">{score} điểm</p>
-          <p className="mt-1 text-sm text-white/80">Kỷ lục cao nhất: {highScore} điểm</p>
+        <>
+          <div className="rounded-3xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
+            <p className="text-xl">{isNewRecord ? '🎉 Kỷ lục mới!' : 'Hết giờ!'}</p>
+            <p className="mt-2 text-4xl font-bold">{score} điểm</p>
+            <p className="mt-1 text-sm text-white/80">Kỷ lục cao nhất: {highScore} điểm</p>
 
-          <div className="mt-4 rounded-2xl bg-white/15 p-3 text-left">
-            <p className="text-sm font-semibold">⚡ Bảng xếp hạng Đua tốc độ</p>
-
-            {/* Bang xep hang nam tren Firebase va chi nguoi da dang nhap moi
-                doc duoc (xem firestore.rules), nen chua dang nhap thi noi ro
-                thay vi de trong tron hoac hien loi ky thuat. */}
-            {!user && (
-              <p className="mt-1 text-xs text-white/90">
-                Đăng nhập để điểm của bạn được tính vào bảng xếp hạng của mọi người.{' '}
-                <Link to="/cai-dat" className="underline">
-                  Vào Cài đặt
-                </Link>
-              </p>
-            )}
-
-            {user && boardError && <p className="mt-1 text-xs text-white/90">{boardError}</p>}
-            {user && !boardError && !top && <p className="mt-1 text-xs text-white/80">Đang tải bảng xếp hạng...</p>}
-
-            {user && top && top.length === 0 && (
-              <p className="mt-1 text-xs text-white/80">Chưa ai có điểm. Bạn là người đầu tiên!</p>
-            )}
-
-            {user && top && top.length > 0 && (
-              <>
-                <div className="mt-2 space-y-1.5">
-                  {top.map((e, i) => {
-                    const isMe = e.uid === user.uid
-                    return (
-                      <div
-                        key={e.uid}
-                        className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm ${
-                          isMe ? 'bg-white/30 font-semibold' : 'bg-white/10'
-                        }`}
-                      >
-                        <span className="w-6 shrink-0 text-center">{MEDAL[i] || i + 1}</span>
-                        <span className="flex-1 truncate">
-                          {e.nickname || 'Ẩn danh'}
-                          {isMe && ' (bạn)'}
-                        </span>
-                        <span className="shrink-0 font-semibold">{e.speedGameBest ?? 0}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-                {standing && (
-                  <p className="mt-2 text-xs text-white/90">
-                    Bạn đứng thứ <span className="font-semibold">{standing.rank}</span> trong{' '}
-                    {standing.total} người chơi.
-                  </p>
-                )}
-              </>
-            )}
+            <div className="mt-4 flex gap-2">
+              <button onClick={startGame} className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
+                Chơi lại
+              </button>
+              <Link to="/" className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white">
+                Về trang chủ
+              </Link>
+            </div>
           </div>
 
-          <div className="mt-4 flex gap-2">
-            <button onClick={startGame} className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
-              Chơi lại
-            </button>
-            <Link to="/" className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white">
-              Về trang chủ
-            </Link>
-          </div>
-        </div>
+          <SpeedGameBoard className="mt-4" user={user} top={top} standing={standing} error={boardError} />
+        </>
       )}
     </div>
   )
