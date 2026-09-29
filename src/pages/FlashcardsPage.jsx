@@ -6,7 +6,6 @@ import { getDueWordIds, getLeechWordIds, isDue } from '../lib/srs'
 import { speakChinese } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate, playFlip } from '../lib/sfx'
 import { accentFor } from '../lib/colors'
-import PictographIcon, { PICTOGRAPH_HINTS, hasPictograph } from '../components/PictographIcon'
 import { XP_REWARDS } from '../lib/gamification'
 import CelebrationBadge from '../components/CelebrationBadge'
 import SessionBar from '../components/SessionBar'
@@ -273,12 +272,6 @@ export default function FlashcardsPage() {
 
       {flipped && (
         <div className="mt-2 flex flex-col gap-3">
-          {hasPictograph(currentWord.hanzi) && (
-            <div className="flex w-full items-center gap-2 rounded-xl bg-sun-100 p-2.5">
-              <PictographIcon char={currentWord.hanzi} className="h-9 w-9 shrink-0 text-sun-700" />
-              <p className="text-left text-xs text-gray-700">💡 {PICTOGRAPH_HINTS[currentWord.hanzi]}</p>
-            </div>
-          )}
           {currentWord.example && (
             <div className={`w-full rounded-xl ${accent.bg} p-3 text-center`}>
               <p className="text-base text-gray-800">{currentWord.example.hanzi}</p>
