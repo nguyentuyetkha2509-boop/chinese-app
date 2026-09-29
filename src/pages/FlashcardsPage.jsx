@@ -15,13 +15,14 @@ import flashcardPanda from '../assets/panda/flashcard_panda.webp'
 
 // Khung the gau truc: vung trang nam o 33%-79% ngang, 18%-82% doc. Gau truc de
 // len goc duoi ben trai o vung trang, nen ca chu Han, phien am va nghia xep
-// thanh mot cot can giua o nua tren (ben tren dau gau).
+// thanh mot cot can giua o nua tren (ben tren dau gau). Anh co le trong suot
+// o tren/duoi nen dung margin am de keo khung sat len (chip nam tren de van bam duoc).
 function PandaFrame({ hanzi, pinyin, meaning, pinyinClass = '', small = false, onClick }) {
   const Tag = onClick ? 'button' : 'div'
   return (
     <Tag
       onClick={onClick}
-      className={`relative mx-auto block w-full text-center ${small ? 'max-w-[15rem]' : 'max-w-md'}`}
+      className={`relative mx-auto block w-full text-center ${small ? 'max-w-[15rem]' : '-mb-4 -mt-5 max-w-md'}`}
     >
       <img src={flashcardPanda} alt="Gấu trúc cầm thẻ từ vựng" className="w-full select-none" draggable="false" />
       <div className="absolute left-[33.5%] right-[21%] top-[18.5%] flex h-[35%] flex-col items-center justify-center overflow-hidden">
@@ -253,7 +254,7 @@ export default function FlashcardsPage() {
       </div>
 
       {!inSession && (
-        <div className="mb-3">
+        <div className="relative z-10 mb-3">
           <ScopeChips chips={SCOPE_CHIPS} scope={scope} onChange={handleScopeChange} />
         </div>
       )}
