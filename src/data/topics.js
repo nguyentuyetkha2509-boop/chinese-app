@@ -2,8 +2,9 @@
 // hoc/on tap theo mach chu de thay vi chi theo thu tu HSK tuan tu.
 import { ALL_WORDS } from './levels'
 import { estimateLevelFromWords } from '../lib/contentLevel'
+import { TOPICS_MORE } from './topicsMore'
 
-export const TOPICS = [
+const BASE_TOPICS = [
   {
     key: 'family',
     icon: '👪',
@@ -59,6 +60,9 @@ export const TOPICS = [
     hanzi: ['衣服', '裤子', '帽子', '手机', '电脑', '电视', '电影', '书', '杯子', '桌子', '椅子', '钱', '礼物', '手表', '冰箱', '空调', '沙发', '窗户', '门']
   }
 ]
+
+// Chu de bo sung (nganh nghe, doi song, khoa hoc...) nam o topicsMore.js.
+export const TOPICS = [...BASE_TOPICS, ...TOPICS_MORE]
 
 function dedupeWords(hanziList) {
   const seen = new Set()
