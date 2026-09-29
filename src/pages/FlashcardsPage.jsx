@@ -258,10 +258,6 @@ export default function FlashcardsPage() {
         </div>
       )}
 
-      <p className="mb-4 text-xs text-gray-500">
-        Đoán nghĩa trong đầu, chạm vào thẻ để xem đáp án, rồi chọn mức độ bạn nhớ được.
-      </p>
-
       <PandaFrame
         onClick={handleFlip}
         hanzi={currentWord.hanzi}
