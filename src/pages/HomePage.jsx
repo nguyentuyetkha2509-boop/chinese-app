@@ -31,11 +31,12 @@ import { BADGES, getEarnedBadgeIds } from '../lib/badges'
 import { todayKey } from '../lib/date'
 import { useScrollRestoration } from '../lib/useScrollRestoration'
 
+// Bon so lieu nam chung mot the (4 cot) thay cho 4 o pastel bon mau khac nhau.
 const STAT_STYLES = [
-  { key: 'total', label: 'Tổng từ', className: 'bg-sky-100 text-sky-700' },
-  { key: 'learned', label: 'Đã học', className: 'bg-sun-100 text-sun-700' },
-  { key: 'percent', label: 'Tiến độ', className: 'bg-gold-100 text-gold-600' },
-  { key: 'due', label: 'Cần ôn', className: 'bg-brand-100 text-brand-700' }
+  { key: 'total', label: 'Tổng từ' },
+  { key: 'learned', label: 'Đã học' },
+  { key: 'percent', label: 'Tiến độ' },
+  { key: 'due', label: 'Cần ôn' }
 ]
 
 // Vong lap hoc chinh moi ngay - hien ngay sau nut "tiep tuc hoc", khong can cuon.
@@ -44,107 +45,100 @@ const CORE_CARDS = [
     to: '/on-tap',
     icon: CardsIcon,
     title: 'Ôn tập ngay',
-    className: 'bg-gradient-to-br from-brand-500 to-candy-500'
+    className: 'bg-gradient-to-br from-brand-500 to-brand-700'
   },
   {
     to: '/bai-hoc',
     icon: BookIcon,
     title: 'Bài học',
-    className: 'bg-gradient-to-br from-sky-500 to-teal-500'
+    className: 'bg-gradient-to-br from-sky-500 to-sky-700'
   },
   {
     to: '/ngu-phap',
     icon: GrammarIcon,
     title: 'Ngữ pháp',
-    className: 'bg-gradient-to-br from-gold-500 to-brand-600'
+    className: 'bg-gradient-to-br from-candy-500 to-candy-700'
   },
   {
     to: '/phat-am',
     icon: MicIcon,
     title: 'Phát âm & thanh điệu',
-    className: 'bg-gradient-to-br from-sun-500 to-candy-500'
+    className: 'bg-gradient-to-br from-brand-400 to-candy-600'
   },
   {
+    // The thu 5 chiem ca hang de luoi 2 cot khong bi le mot o.
     to: '/viet-chu',
     icon: PencilIcon,
     title: 'Viết chữ Hán',
-    className: 'bg-gradient-to-br from-gold-500 to-teal-600'
+    className: 'col-span-2 bg-gradient-to-br from-sky-500 to-brand-600'
   }
 ]
 
 // Noi dung phu / mo rong - luyen them khi da xong vong hoc chinh, dat cuoi trang.
+const EXTRA_ACCENTS = ['border-brand-400', 'border-candy-400', 'border-sky-400']
+// 12 the (so chan) chia deu 2 cot, khong the nao chiem ca hang. Nen trang, chi
+// vach mau phia tren doi theo vong tim/hong/xanh (EXTRA_ACCENTS) de do roi mat
+// hon 12 dai mau chuyen sac khac nhau nhu truoc.
 const EXTRA_CARDS = [
   {
     to: '/tro-chuyen-ai',
     icon: ChatIcon,
-    title: 'Trò chuyện AI',
-    className: 'bg-gradient-to-br from-brand-700 to-candy-600'
+    title: 'Trò chuyện AI'
   },
   {
     to: '/cham-bai-viet',
     icon: ZapIcon,
-    title: 'Chấm bài viết AI',
-    className: 'bg-gradient-to-br from-sun-600 to-candy-600'
+    title: 'Chấm bài viết AI'
   },
   {
     to: '/sap-xep-cau',
     icon: ShuffleIcon,
-    title: 'Sắp xếp câu',
-    className: 'bg-gradient-to-br from-candy-600 to-teal-500'
+    title: 'Sắp xếp câu'
   },
   {
     to: '/bang-xep-hang',
     icon: TrophyIcon,
-    title: 'Bảng xếp hạng',
-    className: 'bg-gradient-to-br from-gold-500 to-sun-500'
+    title: 'Bảng xếp hạng'
   },
   {
     to: '/chu-de',
     icon: TopicIcon,
-    title: 'Học theo chủ đề',
-    className: 'bg-gradient-to-br from-candy-500 to-sun-500'
+    title: 'Học theo chủ đề'
   },
   {
     to: '/bo-thu',
     icon: RadicalIcon,
-    title: 'Bộ thủ',
-    className: 'bg-gradient-to-br from-teal-500 to-brand-600'
+    title: 'Bộ thủ'
   },
   {
     to: '/hoi-thoai',
     icon: ChatIcon,
-    title: 'Hội thoại',
-    className: 'bg-gradient-to-br from-teal-500 to-sky-600'
+    title: 'Hội thoại'
   },
   {
     to: '/truyen',
     icon: StoryIcon,
-    title: 'Truyện dài',
-    className: 'col-span-2 bg-gradient-to-br from-brand-600 to-sky-500'
+    title: 'Truyện dài'
   },
   {
     to: '/thu',
     icon: PencilIcon,
-    title: 'Thư gửi chính mình',
-    className: 'col-span-2 bg-gradient-to-br from-candy-500 to-brand-600'
+    title: 'Thư gửi chính mình'
   },
   {
     to: '/nghe-chep-chinh-ta',
     icon: EarIcon,
-    title: 'Nghe chép chính tả',
-    className: 'col-span-2 bg-gradient-to-br from-sky-600 to-brand-500'
+    title: 'Nghe chép chính tả'
   },
   {
     to: '/ghep-cap',
     icon: CardsIcon,
-    title: 'Ghép cặp',
-    className: 'bg-gradient-to-br from-candy-500 to-sky-500'
+    title: 'Ghép cặp'
   },
   {
     to: '/tro-choi',
     icon: SpeedIcon,
-    title: 'Đua tốc độ',
-    className: 'col-span-2 bg-gradient-to-br from-candy-500 via-brand-500 to-sky-500'
+    title: 'Đua tốc độ'
   }
 ]
 
@@ -223,16 +217,16 @@ export default function HomePage() {
 
   return (
     <div className="px-4 pt-6">
-      <header className="mb-4 flex items-center justify-between">
+      <header className="mb-4 flex items-center justify-between gap-2">
         <div>
           <p className="text-base italic text-candy-600">Chào {nickname || 'bạn'} 👋</p>
-          <h1 className="flex items-center gap-1.5 text-2xl text-brand-800">
+          <h1 className="flex items-center gap-1.5 text-xl text-brand-800">
             <img src={headerPanda} alt="" width={34} height={34} className="inline-block" />
             PandaChinese
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 rounded-full bg-sun-100 px-3 py-1.5 text-sun-600">
+          <div className="flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-sun-100 px-3 py-1.5 text-sun-600">
             <FireIcon width={22} height={22} />
             <span className="text-sm">{streak.count} ngày</span>
           </div>
@@ -261,10 +255,10 @@ export default function HomePage() {
       <p className="mb-2 text-xs text-gray-500">Lối tắt vào từng phần của "Học hôm nay" - làm theo thẻ ở trên là đủ.</p>
       <section className="mb-6 grid grid-cols-2 gap-3">
         {CORE_CARDS.map(({ to, icon: Icon, title, className }) => (
-          <Link key={to} to={to} className={`rounded-2xl p-4 text-white shadow-sm ${className}`}>
+          <Link key={to} to={to} className={`min-h-[7.5rem] rounded-2xl p-4 text-white shadow-md ${className}`}>
             <Icon width={28} height={28} />
-            <p className="mt-2 text-lg">{title}</p>
-            {cardSubtitle(to) && <p className="text-xs text-white/80">{cardSubtitle(to)}</p>}
+            <p className="mt-2 text-lg leading-snug">{title}</p>
+            {cardSubtitle(to) && <p className="text-xs text-white/85">{cardSubtitle(to)}</p>}
           </Link>
         ))}
       </section>
@@ -296,17 +290,17 @@ export default function HomePage() {
         </div>
         <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100">
           <div
-            className={`h-full rounded-full ${dailyGoalDone ? 'bg-teal-500' : 'bg-gradient-to-r from-sun-400 to-candy-500'}`}
+            className={`h-full rounded-full ${dailyGoalDone ? 'bg-teal-500' : 'bg-gradient-to-r from-brand-400 to-candy-500'}`}
             style={{ width: `${dailyGoalPercent}%` }}
           />
         </div>
       </div>
 
-      <section className="mb-5 grid grid-cols-2 gap-3">
+      <section className="mb-5 grid grid-cols-4 divide-x divide-brand-100 rounded-2xl bg-white py-3 shadow-sm">
         {STAT_STYLES.map((s) => (
-          <div key={s.key} className={`rounded-2xl p-3 text-center ${s.className}`}>
-            <p className="text-xl">{statValues[s.key]}</p>
-            <p className="text-xs opacity-80">{s.label}</p>
+          <div key={s.key} className="px-1 text-center">
+            <p className="text-xl text-brand-700">{statValues[s.key]}</p>
+            <p className="text-xs text-gray-500">{s.label}</p>
           </div>
         ))}
       </section>
@@ -342,7 +336,7 @@ export default function HomePage() {
                 key={b.id}
                 title={b.desc}
                 className={`flex flex-col items-center rounded-xl p-2 text-center ${
-                  earned ? 'animate-pop-in bg-gradient-to-br from-sun-100 to-candy-100' : 'bg-gray-100'
+                  earned ? 'animate-pop-in bg-gradient-to-br from-brand-100 to-candy-100' : 'bg-gray-100'
                 }`}
               >
                 <span className={`text-2xl ${earned ? '' : 'opacity-40 grayscale'}`}>{b.icon}</span>
@@ -361,11 +355,15 @@ export default function HomePage() {
       <p className="mb-0.5 text-sm font-semibold text-gray-500">Luyện thêm & giải trí</p>
       <p className="mb-2 text-xs text-gray-500">Không bắt buộc mỗi ngày - ghé qua khi đã xong nhiệm vụ hôm nay và muốn luyện thêm cho vui.</p>
       <section className="mb-5 grid grid-cols-2 gap-3">
-        {EXTRA_CARDS.map(({ to, icon: Icon, title, className }) => (
-          <Link key={to} to={to} className={`rounded-2xl p-4 text-white shadow-sm ${className}`}>
-            <Icon width={28} height={28} />
-            <p className="mt-2 text-lg">{title}</p>
-            {cardSubtitle(to) && <p className="text-xs text-white/80">{cardSubtitle(to)}</p>}
+        {EXTRA_CARDS.map(({ to, icon: Icon, title }, i) => (
+          <Link
+            key={to}
+            to={to}
+            className={`flex min-h-[7rem] flex-col rounded-2xl border-t-4 bg-white p-3.5 shadow-sm ${EXTRA_ACCENTS[i % EXTRA_ACCENTS.length]}`}
+          >
+            <Icon width={30} height={30} />
+            <p className="mt-2 text-base leading-snug text-gray-800">{title}</p>
+            {cardSubtitle(to) && <p className="mt-0.5 text-xs leading-snug text-gray-500">{cardSubtitle(to)}</p>}
           </Link>
         ))}
       </section>
