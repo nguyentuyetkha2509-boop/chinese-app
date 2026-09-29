@@ -17,6 +17,7 @@ import SessionBar from '../components/SessionBar'
 import SessionNextButton from '../components/SessionNextButton'
 import { useSessionSteps } from '../lib/sessionPlan'
 import writingPanda from '../assets/panda/writing_panda.webp'
+import { CHAR_PINYIN } from '../data/charPinyin'
 
 function extractChars(words) {
   const seen = new Set()
@@ -25,7 +26,10 @@ function extractChars(words) {
     for (const ch of w.hanzi) {
       if (/[一-鿿]/.test(ch) && !seen.has(ch)) {
         seen.add(ch)
-        list.push({ char: ch, meaning: w.meaning })
+        // Phien am lay theo TUNG CHU (src/data/charPinyin.js), khong phai pinyin
+        // cua ca tu: trang nay luyen tung chu mot, ma pinyin cua tu ghep khong
+        // tach roi ra duoc (tu 爸爸 co pinyin "bàba" chu khong phai "bà" + "ba").
+        list.push({ char: ch, meaning: w.meaning, pinyin: CHAR_PINYIN[ch] || '' })
       }
     }
   }
@@ -374,12 +378,17 @@ function WritingPageInner() {
               </div>
             )}
 
+            {/* Icon loa da noi ro day la nut nghe, khong can them chu "Nghe phat
+                am" nua - cho do de danh hien phien am cua chu, thu ma nguoi hoc
+                can nhin hon. Bam vao bat ky dau trong dong cung nghe doc. */}
             <button
               onClick={() => speakChinese(selected.char)}
-              className="mt-2 flex items-center gap-1 text-sm text-brand-600"
+              className="mt-2 flex items-center gap-1.5 text-sm"
             >
-              <VolumeIcon width={20} height={20} />
-              {selected.meaning} · Nghe phát âm
+              <VolumeIcon width={20} height={20} className="text-brand-600" />
+              {selected.pinyin && <span className="font-semibold text-brand-700">{selected.pinyin}</span>}
+              {selected.pinyin && <span className="text-gray-300">·</span>}
+              <span className="text-gray-500">{selected.meaning}</span>
             </button>
 
             {quizResult && (

@@ -277,15 +277,18 @@ export default function FlashcardsPage() {
         )}
       </button>
 
+      {/* Chi con icon loa, khong kem chu "Nghe phat am": the da hien san phien am
+          va nghia o mat sau, nen chu do chi lap lai dieu nguoi hoc da biet. Giu
+          aria-label de van doc duoc cong dung nut nay. */}
       <button
         onClick={(e) => {
           e.stopPropagation()
           speakChinese(currentWord.hanzi)
         }}
+        aria-label="Nghe phát âm"
         className={`mx-auto mt-3 flex items-center gap-1 ${accent.text}`}
       >
         <VolumeIcon width={24} height={24} />
-        Nghe phát âm
       </button>
 
       {flipped && (

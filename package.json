@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint src --ext .js,.jsx",
     "extract-hanzi-data": "node scripts/extract-hanzi-data.mjs",
-    "build-radicals": "node scripts/build-radicals.mjs"
+    "build-radicals": "node scripts/build-radicals.mjs",
+    "build-pinyin": "node scripts/build-pinyin.mjs"
   },
   "dependencies": {
     "firebase": "^12.19.0",
