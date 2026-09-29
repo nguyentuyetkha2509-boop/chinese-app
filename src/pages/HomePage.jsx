@@ -232,7 +232,6 @@ export default function HomePage() {
   function cardSubtitle(to) {
     // So the can on da nam o dai "Phien hoc hom nay" ngay phia tren, khong lap lai o day
     if (to === '/on-tap') return 'Lật thẻ để nhớ lâu hơn'
-    if (to === '/bai-hoc') return LEVELS.map((l) => l.label).join(' · ')
     if (to === '/phat-am') return toneAccuracy === null ? 'Chưa luyện' : `Độ chính xác ${toneAccuracy}%`
     if (to === '/viet-chu') return 'Luyện nét theo thứ tự chuẩn'
     if (to === '/chu-de') return 'Ngành nghề, bất động sản, đời sống'
