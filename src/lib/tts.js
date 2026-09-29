@@ -183,6 +183,8 @@ export function speakChinese(text, { rate = 0.85, onError, onEnd } = {}) {
     const utter = new SpeechSynthesisUtterance(text)
     utter.lang = 'zh-CN'
     utter.rate = rate
+    // Dat ro am luong toi da, khong de trinh duyet tu chon
+    utter.volume = 1
     if (voice) utter.voice = voice
     currentUtterance = utter
     const fresh = () => gen === generation && id === attemptId && !finished
