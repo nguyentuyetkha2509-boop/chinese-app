@@ -285,8 +285,7 @@ export default function HomePage() {
         <ArrowRightIcon width={32} height={32} />
       </Link>
 
-      <p className="mb-0.5 mt-5 text-sm font-semibold text-gray-500">Lộ trình chính</p>
-      <p className="mb-2 text-xs text-gray-500">Lối tắt vào từng phần của "Học hôm nay" - làm theo thẻ ở trên là đủ.</p>
+      <p className="mb-2 mt-5 text-sm font-semibold text-gray-500">Lộ trình chính</p>
       <section className="mb-6 grid grid-cols-2 gap-3">
         {CORE_CARDS.map((card) => (
           <HomeCard key={card.to} {...card} subtitle={cardSubtitle(card.to)} />
@@ -382,8 +381,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <p className="mb-0.5 text-sm font-semibold text-gray-500">Luyện thêm & giải trí</p>
-      <p className="mb-2 text-xs text-gray-500">Không bắt buộc mỗi ngày - ghé qua khi đã xong nhiệm vụ hôm nay và muốn luyện thêm cho vui.</p>
+      <p className="mb-2 text-sm font-semibold text-gray-500">Luyện thêm & giải trí</p>
       <section className="mb-5 grid grid-cols-2 gap-3">
         {EXTRA_CARDS.map((card) => (
           <HomeCard key={card.to} {...card} subtitle={cardSubtitle(card.to)} />
