@@ -43,6 +43,7 @@ Không có bộ test tự động. Mỗi thay đổi nên chạy lint và build,
 
 ## Quy ước
 
+- **Chuẩn nội dung là HSK 3.0 (2021), cấp 1-6.** Từ nay mọi nội dung mới hoặc chỉnh sửa (từ vựng, bài học, ngữ pháp, nhãn cấp của truyện, hội thoại, thư, chủ đề) đều phải theo chuẩn mới này, không dùng lại số liệu hay cách xếp cấp của HSK 2.0 cũ (150/300/600/1200/2500/5000 từ). Khi cần xác định cấp của một từ hay điểm ngữ pháp thì tra theo HSK 3.0.
 - Phiên âm ghi có dấu thanh, viết liền theo từ. Thanh nhẹ để không dấu. Biến điệu 一 và 不 ghi theo cách đọc thực tế, ví dụ `yí gè`, `bú kèqi`.
 - Nghĩa tiếng Việt ngắn gọn, ghi Hán Việt khi có ích. Thuật ngữ bất động sản cần chính xác, nên nhờ người biết nghề đọc lại.
 - Bảng `src/data/charPinyin.js` là phiên âm mặc định của từng chữ, dùng để đối chiếu tự động. Chữ đa âm sẽ báo lệch giả, cần tự rà.
