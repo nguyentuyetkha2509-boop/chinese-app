@@ -24,6 +24,7 @@ import {
 import PandaHero from '../components/PandaHero'
 import trophyPanda from '../assets/panda/trophy_panda.webp'
 import headerPanda from '../assets/icons-gemini/header_panda.png'
+import goalPanda from '../assets/panda/goal_panda.png'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { getNextVocabCombo, getComboByUnitKey } from '../lib/curriculum'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
@@ -306,8 +307,15 @@ export default function HomePage() {
 
       <div className={`mb-5 rounded-2xl p-4 shadow-sm ${dailyGoalDone ? 'bg-teal-100' : 'bg-white'}`}>
         <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold text-gray-700">
-            {dailyGoalDone ? '🎉 Đã đạt mục tiêu hôm nay!' : '🎯 Mục tiêu hôm nay'}
+          <p className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+            {dailyGoalDone ? (
+              '🎉 Đã đạt mục tiêu hôm nay!'
+            ) : (
+              <>
+                <img src={goalPanda} alt="" width={36} height={36} />
+                Mục tiêu hôm nay
+              </>
+            )}
           </p>
           <span className="text-xs text-gray-500">{todayXp}/{DAILY_GOAL_XP} XP</span>
         </div>
