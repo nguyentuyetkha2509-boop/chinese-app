@@ -4,6 +4,7 @@ import { ALL_WORDS } from './levels'
 import { estimateLevelFromWords } from '../lib/contentLevel'
 import { TOPICS_MORE } from './topicsMore'
 import { EXTRA_WORDS } from './topicWords'
+import { LEGACY_WORDS } from './legacyWords'
 
 const BASE_TOPICS = [
   {
@@ -70,10 +71,12 @@ export const TOPICS = [...BASE_TOPICS, ...TOPICS_MORE]
 const WORD_BY_HANZI = new Map()
 for (const w of ALL_WORDS) if (!WORD_BY_HANZI.has(w.hanzi)) WORD_BY_HANZI.set(w.hanzi, w)
 for (const w of EXTRA_WORDS) if (!WORD_BY_HANZI.has(w.hanzi)) WORD_BY_HANZI.set(w.hanzi, w)
+// Tu HSK cu khong con trong HSK 3.0 van dung duoc cho chu de (xem legacyWords.js).
+for (const w of LEGACY_WORDS) if (!WORD_BY_HANZI.has(w.hanzi)) WORD_BY_HANZI.set(w.hanzi, w)
 
 // Kho tu de tao dap an nhieu cho bai kiem tra cua chu de: gom ca tu bo sung, de
 // chu de nhieu tu ngoai HSK (vd bat dong san) van du lua chon khac nhau.
-export const TOPIC_QUIZ_POOL = [...ALL_WORDS, ...EXTRA_WORDS]
+export const TOPIC_QUIZ_POOL = [...ALL_WORDS, ...LEGACY_WORDS, ...EXTRA_WORDS]
 
 function dedupeWords(hanziList) {
   const seen = new Set()

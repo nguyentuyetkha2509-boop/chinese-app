@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { loadSrsState, saveSrsState, nextSchedule } from '../lib/srs'
+import { COMPLETED_UNITS_KEY, loadCompletedUnits } from '../lib/unitProgress'
 import { todayKey } from '../lib/date'
 import { getLevelInfo } from '../lib/gamification'
 import { playCelebrate } from '../lib/sfx'
@@ -15,7 +16,7 @@ function loadStreak() {
 
 export function ProgressProvider({ children }) {
   const [srsState, setSrsState] = useState(() => loadSrsState())
-  const [completedUnits, setCompletedUnits] = useState(() => loadJSON('completedUnits', []))
+  const [completedUnits, setCompletedUnits] = useState(() => loadCompletedUnits(srsState))
   const [streak, setStreak] = useState(() => loadStreak())
   const [toneStats, setToneStats] = useState(() => loadJSON('toneStats', { correct: 0, total: 0 }))
   const [toneStatsByLevel, setToneStatsByLevel] = useState(() => loadJSON('toneStatsByLevel', {}))
@@ -32,7 +33,7 @@ export function ProgressProvider({ children }) {
   const [dailyCombo, setDailyCombo] = useState(() => loadJSON('dailyCombo', { date: null, unitKey: null }))
 
   useEffect(() => saveSrsState(srsState), [srsState])
-  useEffect(() => saveJSON('completedUnits', completedUnits), [completedUnits])
+  useEffect(() => saveJSON(COMPLETED_UNITS_KEY, completedUnits), [completedUnits])
   useEffect(() => saveJSON('streak', streak), [streak])
   useEffect(() => saveJSON('toneStats', toneStats), [toneStats])
   useEffect(() => saveJSON('toneStatsByLevel', toneStatsByLevel), [toneStatsByLevel])

@@ -2,6 +2,7 @@
 // thoai, Truyen) de sap xep tu de den kho va bao "Tiep theo" giong Bai hoc,
 // thay vi de danh sach roi rac khong theo thu tu nao.
 import { LEVELS } from '../data/levels'
+import { LEGACY_WORDS } from '../data/legacyWords'
 
 // Tra ve so hang THAP NHAT trong chuoi cap do (vd "HSK2-3" -> 2, "HSK1" -> 1)
 // de sap xep - dung cho Truyen dai (da co san truong `level` dang chuoi).
@@ -18,6 +19,11 @@ LEVELS.forEach((level, idx) => {
     if (!levelIndexByHanzi.has(w.hanzi)) levelIndexByHanzi.set(w.hanzi, idx + 1)
   }
 })
+// Tu HSK cu khong con trong HSK 3.0 van mang cap cu, de chu de/truyen gom nhieu tu nhu vay
+// khong bi tinh nham la HSK1.
+for (const w of LEGACY_WORDS) {
+  if (!levelIndexByHanzi.has(w.hanzi)) levelIndexByHanzi.set(w.hanzi, w.level)
+}
 
 // Cap do "dien hinh" cua 1 danh sach tu = TRUNG VI (median) cap do cac tu
 // trong do - lay max se bi 1-2 tu kho keo hau het chu de don len HSK3-4 het,

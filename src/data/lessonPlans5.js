@@ -1,701 +1,560 @@
-// Chia 1298 tu HSK5 thanh cac bai theo CHU DE (tuong tu HSK1-4, xem
-// lessonPlans4.js). Danh sach wordIds duoc doi chieu voi HSK5_WORDS
-// (id 5001-6298) bang script de dam bao dung 1298 tu, moi tu xuat hien
-// dung 1 lan, khong thieu khong trung.
+// Giao an HSK5 theo chuan HSK 3.0: 1059 tu chia thanh 111 bai. Tu da co trong giao an
+// cu giu nhom chu de cu (cung tieu de); tu moi/le chia theo loai tu (danh tu, dong tu...).
+// Moi tu xuat hien dung 1 lan (da kiem tra bang script khi tao).
 export const HSK5_LESSON_PLAN = [
-  {
-    title: 'Yêu thương, trân trọng & biết ơn',
-    intro: 'Bày tỏ tình cảm quý mến, sự trân trọng và lòng biết ơn dành cho người khác.',
-    wordIds: [5002, 5003, 5004, 5005, 5019, 5105, 5307, 5236, 5018, 5013, 5135]
-  },
-  {
-    title: 'Cảm xúc tiêu cực & bất an',
-    intro: 'Tâm trạng bi quan, lo lắng, hổ thẹn và những cảm giác khó chịu, vội vã.',
-    wordIds: [5025, 5056, 5063, 5080, 5082, 5248, 5250, 5282, 5198, 5156]
-  },
   {
     title: 'Tính cách con người',
     intro: 'Những nét tính cách thường gặp: phóng khoáng, chân thành, dứt khoát, nhát gan, liều lĩnh.',
-    wordIds: [5030, 5115, 5176, 5310, 5182, 5189, 5221, 5281, 5291, 5148, 5179]
-  },
-  {
-    title: 'Cá nhân, sự khác biệt & quan hệ đối phương',
-    intro: 'Cái tôi riêng biệt, sự độc lập, khác biệt giữa mọi người và các mối quan hệ đối phương, đối thủ.',
-    wordIds: [5322, 5323, 5324, 5325, 5230, 5231, 5184, 5089, 5034, 5237, 5238, 5239]
-  },
-  {
-    title: 'Giao tiếp & xã giao',
-    intro: 'Chào hỏi, từ biệt, dò hỏi, hứa hẹn và những tình huống giao tiếp thường ngày.',
-    wordIds: [5001, 5060, 5175, 5316, 5104, 5170, 5172, 5174, 5097, 5273, 5164, 5276]
-  },
-  {
-    title: 'Ngôn ngữ, tranh luận & phát biểu',
-    intro: 'Tranh luận, phát biểu ý kiến, thừa nhận hay phủ nhận một điều gì đó.',
-    wordIds: [5043, 5044, 5047, 5110, 5257, 5254, 5247, 5289, 5113, 5287]
-  },
-  {
-    title: 'Công việc văn phòng & thủ tục',
-    intro: 'Những việc thường gặp ở công sở: xử lý thủ tục, báo cáo, đăng ký, đóng gói tài liệu.',
-    wordIds: [5011, 5024, 5070, 5136, 5141, 5185, 5209, 5278, 5014]
-  },
-  {
-    title: 'Nghề nghiệp, trách nhiệm & thành tựu',
-    intro: 'Đảm nhận công việc, làm thuê, đãi ngộ và những thành quả đạt được trong sự nghiệp.',
-    wordIds: [5107, 5108, 5112, 5160, 5171, 5180, 5311, 5193, 5187, 5151]
-  },
-  {
-    title: 'Kinh doanh, sản xuất & thương mại',
-    intro: 'Sản phẩm, xuất khẩu, thành lập doanh nghiệp và sự phát triển, phồn vinh trong kinh doanh.',
-    wordIds: [5091, 5109, 5249, 5259, 5313, 5134, 5265, 5167, 5312, 5292]
-  },
-  {
-    title: 'Tiền bạc & tài chính',
-    intro: 'Bảo hiểm, vay vốn, hóa đơn, tiền phạt và các khoản chi phí trong đời sống.',
-    wordIds: [5023, 5071, 5181, 5253, 5255, 5275, 5285, 5295]
-  },
-  {
-    title: 'Pháp luật, chính trị & xã hội',
-    intro: 'Tòa án, cải cách, cách mạng, đạo đức và những vấn đề chung của xã hội.',
-    wordIds: [5256, 5298, 5319, 5199, 5205, 5296, 5214, 5077, 5079]
-  },
-  {
-    title: 'Giáo dục & học thuật',
-    intro: 'Trường lớp, kiểm tra, kiến thức phổ thông và các khái niệm học thuật cơ bản.',
-    wordIds: [5010, 5029, 5076, 5083, 5085, 5093, 5111, 5137, 5294, 5303, 5304, 5279]
-  },
-  {
-    title: 'Truyền thông, xuất bản & nghệ thuật',
-    intro: 'Biên tập, xuất bản, phát sóng và việc sao chép, truyền tải thông tin.',
-    wordIds: [5040, 5133, 5142, 5143, 5219, 5225, 5072, 5283, 5297, 5094]
-  },
-  {
-    title: 'Truyền thống, văn hóa & lễ tết',
-    intro: 'Triều đại, truyền thuyết, phong tục và những nét văn hóa, lễ hội truyền thống.',
-    wordIds: [5096, 5145, 5146, 5284, 5140, 5041, 5095, 5201]
-  },
-  {
-    title: 'Tư duy trừu tượng & suy luận',
-    intro: 'Bản chất, sự tất nhiên, tồn tại và những khái niệm trừu tượng cần suy luận, đối chiếu.',
-    wordIds: [5031, 5035, 5036, 5037, 5067, 5101, 5130, 5166, 5200, 5288, 5235]
-  },
-  {
-    title: 'Liên từ & phó từ 1',
-    intro: 'Các từ nối và phó từ thường dùng để phủ định, nhấn mạnh trong câu phức.',
-    wordIds: [5038, 5057, 5058, 5059, 5061, 5062, 5064, 5065, 5066]
-  },
-  {
-    title: 'Liên từ & phó từ 2',
-    intro: 'Những từ nối chỉ điều kiện, nguyên nhân và kết quả trong câu văn.',
-    wordIds: [5103, 5138, 5139, 5153, 5158, 5207, 5240, 5243]
-  },
-  {
-    title: 'Liên từ & phó từ 3',
-    intro: 'Các từ nối, phó từ chỉ sự tương phản, lặp lại và mức độ gấp gáp.',
-    wordIds: [5258, 5260, 5261, 5263, 5269, 5280, 5320, 5033, 5042, 5305, 5306]
-  },
-  {
-    title: 'Duy trì, tránh né & bổ sung',
-    intro: 'Giữ gìn, nắm chắc, tránh né và bổ sung thêm cho một điều gì đó.',
-    wordIds: [5020, 5022, 5039, 5055, 5121, 5267, 5008, 5165]
-  },
-  {
-    title: 'Thúc đẩy, dẫn đến & cải cách',
-    intro: 'Những động từ trừu tượng diễn tả sự thúc đẩy, dẫn đến kết quả và cải cách, cải thiện.',
-    wordIds: [5092, 5149, 5161, 5162, 5169, 5194, 5251, 5252, 5222, 5299, 5300, 5301]
-  },
-  {
-    title: 'Số lượng, tỷ lệ & đơn vị đo',
-    intro: 'Tỷ lệ, mức độ và các đơn vị đo lường thường gặp trong văn bản.',
-    wordIds: [5032, 5117, 5212, 5241, 5293, 5234, 5213, 5178, 5224, 5277]
+    wordIds: [5148, 2043, 5179, 5291, 5310]
   },
   {
     title: 'Thiên nhiên, địa lý & động vật',
     intro: 'Bờ biển, đảo, động đất và một số loài động vật quen thuộc trong tự nhiên.',
-    wordIds: [5007, 5074, 5120, 5195, 5202, 5203, 5206, 5227, 5123, 5128, 5177, 5318]
-  },
-  {
-    title: 'Đồ dùng trong nhà',
-    intro: 'Những vật dụng quen thuộc trong nhà như chăn, rèm, thảm, xà phòng.',
-    wordIds: [5028, 5052, 5129, 5147, 5204, 5272, 5122, 5068]
-  },
-  {
-    title: 'Nơi chốn & nhà cửa',
-    intro: 'Nhà vệ sinh, gara, hàng xóm và những địa điểm quen thuộc quanh nơi ở.',
-    wordIds: [5084, 5099, 5186, 5268, 5321, 5081, 5054, 5078]
-  },
-  {
-    title: 'Công nghệ & thiết bị',
-    intro: 'Lắp đặt, sạc pin, chương trình máy tính và các thiết bị điện tử thường dùng.',
-    wordIds: [5006, 5118, 5124, 5152, 5218, 5233, 5021, 5051]
-  },
-  {
-    title: 'Cơ thể, sức khỏe & biểu cảm',
-    intro: 'Các bộ phận cơ thể, triệu chứng bệnh và biểu cảm nét mặt.',
-    wordIds: [5053, 5144, 5173, 5216, 5262, 5274, 5317, 5048]
+    wordIds: [5007, 5120, 5177, 5206, 5227]
   },
   {
     title: 'Động tác tay chân 1',
     intro: 'Những động tác tay chân thường gặp: bày, cõng, giẫm, cắm, tháo dỡ.',
-    wordIds: [5009, 5026, 5075, 5088, 5090, 5127, 5150, 5192, 5215, 5290]
-  },
-  {
-    title: 'Động tác & hành vi khác',
-    intro: 'Các hành động khác trong đời sống: câu cá, trốn tránh, chờ đợi, ngồi xổm.',
-    wordIds: [5220, 5229, 5242, 5245, 5210, 5211, 5197, 5315]
-  },
-  {
-    title: 'Ẩm thực & nấu ăn',
-    intro: 'Món ăn, gia vị và các động tác nấu nướng quen thuộc.',
-    wordIds: [5016, 5163, 5190, 5217, 5228, 5226, 5098, 5087]
-  },
-  {
-    title: 'Thời gian, hành trình & di chuyển',
-    intro: 'Các mốc thời gian, chuyến đi và những từ vựng liên quan đến di chuyển.',
-    wordIds: [5012, 5086, 5159, 5232, 5191, 5157, 5188, 5100, 5196, 5208, 5314]
-  },
-  {
-    title: 'Họ người thường gặp & thiên can',
-    intro: 'Một số họ người Trung Quốc và tên gọi thiên can ít gặp trong đời sống hằng ngày.',
-    wordIds: [5017, 5050, 5116, 5131, 5223, 5264, 5271, 5302]
-  },
-  {
-    title: 'Tính chất, mức độ của sự vật',
-    intro: 'Miêu tả mức độ, tính chất của sự vật, sự việc: đầy đủ, thừa thãi, tồi tệ.',
-    wordIds: [5046, 5125, 5126, 5154, 5168, 5183, 5244, 5246, 5132]
-  },
-  {
-    title: 'Cảm nhận, chịu đựng & trạng thái tâm lý',
-    intro: 'Cảm nhận, chịu đựng, kích thích và những trạng thái tâm lý khác.',
-    wordIds: [5102, 5114, 5119, 5155, 5270, 5286, 5308, 5309]
-  },
-  {
-    title: 'Cấu trúc, quy trình & phương thức',
-    intro: 'Bối cảnh, thành phần, bước tiến hành và phương thức thực hiện một việc.',
-    wordIds: [5045, 5027, 5106, 5069, 5073, 5015, 5266, 5049]
-  },
-  {
-    title: 'Công nghiệp & sản xuất',
-    intro: 'Nhà máy, công nhân và máy móc trong hoạt động sản xuất công nghiệp.',
-    wordIds: [5329, 5330, 5331, 5332, 5441, 5619, 5517, 5551, 5647]
+    wordIds: [5088, 5090, 5192, 5215, 5290]
   },
   {
     title: 'Kinh doanh & thương mại',
     intro: 'Hợp tác, tuyển dụng, xuất nhập khẩu, đóng - mở cửa hàng và các hoạt động điều hành doanh nghiệp.',
-    wordIds: [5354, 5397, 5399, 5527, 5645, 5525, 5587, 5552, 5622, 5584, 5359, 5553]
-  },
-  {
-    title: 'Tài chính & tiền bạc',
-    intro: 'Cổ phiếu, tỷ giá, lợi nhuận và các khái niệm liên quan đến tiền bạc.',
-    wordIds: [5349, 5434, 5435, 5605, 5606, 5607, 5620, 5428, 5505, 5510]
-  },
-  {
-    title: 'Giáo dục & học thuật',
-    intro: 'Giáo trình, luận văn, lý thuyết và những từ vựng gắn với việc học tập nghiên cứu.',
-    wordIds: [5445, 5485, 5496, 5498, 5570, 5599, 5634, 5635, 5630]
-  },
-  {
-    title: 'Tư duy, quan điểm & nhận thức',
-    intro: 'Quan sát, ghi nhớ, kết luận, kiểm soát và cách con người nhìn nhận, xử lý sự việc.',
-    wordIds: [5361, 5362, 5363, 5448, 5451, 5508, 5568, 5600, 5594, 5574]
-  },
-  {
-    title: 'Khoa học, toán học & đơn vị đo lường',
-    intro: 'Thể rắn, hóa học, lập phương và các đơn vị đo lường, ký hiệu thứ tự thường gặp.',
-    wordIds: [5353, 5418, 5602, 5595, 5561, 5609, 5565, 5641, 5449, 5601, 5461]
-  },
-  {
-    title: 'Giao tiếp & lời nói',
-    intro: 'Trao đổi, giao tiếp, la hét và những cách nói chuyện tích cực lẫn tiêu cực.',
-    wordIds: [5342, 5420, 5488, 5489, 5480, 5576, 5637, 5409, 5585, 5392]
-  },
-  {
-    title: 'Trạng từ chỉ thời gian & trình tự',
-    intro: 'Ngay lập tức, vội vàng, lần lượt, rảnh rỗi - diễn tả tốc độ và thời điểm hành động.',
-    wordIds: [5603, 5604, 5610, 5629, 5633, 5446, 5616, 5503, 5572]
-  },
-  {
-    title: 'Trạng từ & từ ngữ diễn đạt ý kiến, mức độ',
-    intro: 'Những từ đưa ra nhận định, mức độ hay thái độ khi nói chuyện.',
-    wordIds: [5358, 5400, 5401, 5535, 5558, 5562, 5542, 5328, 5519, 5548, 5477, 5443]
-  },
-  {
-    title: 'Thành tích, kỷ lục & sự nỗ lực',
-    intro: 'Vô địch, chung kết, lễ khai mạc, kỷ lục và tinh thần quyết tâm vượt khó.',
-    wordIds: [5385, 5406, 5450, 5452, 5454, 5365, 5546, 5547, 5566, 5515, 5554]
-  },
-  {
-    title: 'Giải trí, thể thao & nghệ thuật',
-    intro: 'Phim ảnh, ghi âm, mỹ thuật, vai diễn, bình luận viên và một số môn thể thao quen thuộc.',
-    wordIds: [5611, 5624, 5631, 5638, 5648, 5526, 5625, 5417, 5419, 5497, 5494, 5512]
-  },
-  {
-    title: 'Du lịch, giao thông & xuất xứ',
-    intro: 'Hải quan, lái xe, hạ cánh và những tình huống thường gặp khi di chuyển.',
-    wordIds: [5390, 5465, 5486, 5650, 5357, 5580, 5383, 5581]
-  },
-  {
-    title: 'Sức khỏe, khám bệnh & cấp cứu',
-    intro: 'Đăng ký khám bệnh, dị ứng, hồi phục, khẩn cấp và các tình huống cấp cứu y tế.',
-    wordIds: [5355, 5387, 5407, 5432, 5513, 5532, 5533, 5528, 5521, 5422]
-  },
-  {
-    title: 'Bộ phận cơ thể & động tác tay chân',
-    intro: 'Cơ bắp, vai, lông mày và những động tác giơ, vẫy bằng tay.',
-    wordIds: [5442, 5470, 5646, 5411, 5350, 5504, 5433, 5537]
-  },
-  {
-    title: 'Khái niệm trừu tượng: cốt lõi, phạm vi & giá trị',
-    intro: 'Gốc rễ, cốt lõi, lĩnh vực, phạm vi rộng lớn và giá trị - những khái niệm trừu tượng thường gặp.',
-    wordIds: [5571, 5623, 5499, 5403, 5493, 5326, 5327, 5464, 5540, 5374, 5375]
-  },
-  {
-    title: 'Quy tắc, tiêu chuẩn & sự ổn định',
-    intro: 'Quy củ, quy luật, kỷ luật và tính ổn định, cố định của sự vật.',
-    wordIds: [5376, 5377, 5378, 5379, 5453, 5550, 5352, 5539]
-  },
-  {
-    title: 'Xây dựng, cấu trúc & phát triển',
-    intro: 'Thành lập, xây dựng, cấu trúc và sự tiến bộ hay tụt hậu.',
-    wordIds: [5478, 5479, 5481, 5524, 5636, 5343, 5506, 5507]
-  },
-  {
-    title: 'Địa điểm & không gian đô thị',
-    intro: 'Chung cư, quảng trường, ngõ hẻm và các địa điểm quen thuộc trong thành phố.',
-    wordIds: [5336, 5569, 5410, 5490, 5373, 5482, 5531, 5541, 5380]
-  },
-  {
-    title: 'Chính trị, pháp luật & quân sự',
-    intro: 'Công bố, hợp pháp, hòa bình và những vấn đề chính trị - quân sự.',
-    wordIds: [5333, 5334, 5335, 5395, 5402, 5549, 5559, 5612]
-  },
-  {
-    title: 'Lịch sử & thời đại',
-    intro: 'Thời cổ đại, cận đại và những mốc thời gian, ngày lễ quan trọng.',
-    wordIds: [5337, 5346, 5347, 5348, 5523, 5511, 5384, 5598]
-  },
-  {
-    title: 'Danh xưng & tầng lớp người',
-    intro: 'Công chúa, hoàng đế, khách mời, tập thể - những danh xưng chỉ vai vế, địa vị.',
-    wordIds: [5345, 5338, 5425, 5426, 5416, 5460, 5586, 5364, 5447]
-  },
-  {
-    title: 'Gia đình & hôn nhân',
-    intro: 'Cô, cậu, bà ngoại, lễ cưới, nhẫn cưới và những từ vựng về gia đình, hôn nhân.',
-    wordIds: [5344, 5436, 5437, 5457, 5458, 5459, 5534, 5590, 5596, 5466, 5514]
-  },
-  {
-    title: 'Tính cách & phẩm chất tích cực',
-    intro: 'Kiên quyết, thận trọng, đáng tin cậy - những phẩm chất đáng quý ở con người.',
-    wordIds: [5468, 5469, 5522, 5563, 5567, 5588, 5591, 5617, 5438]
-  },
-  {
-    title: 'Cảm xúc tích cực & sức hút',
-    intro: 'Vui vẻ, vinh quang, thỏa mãn và sức hút giữa người với người.',
-    wordIds: [5555, 5530, 5372, 5351, 5640, 5370, 5613, 5649]
-  },
-  {
-    title: 'Cảm xúc tiêu cực & lo âu',
-    intro: 'Hận thù, nản lòng, cô đơn và những trạng thái tâm lý nặng nề.',
-    wordIds: [5404, 5431, 5455, 5424, 5564, 5573, 5643, 5421]
-  },
-  {
-    title: 'Tính cách & thái độ chưa tốt',
-    intro: 'Lú lẫn, xảo quyệt, coi thường - những nét tính cách và thái độ tiêu cực.',
-    wordIds: [5414, 5495, 5557, 5642, 5408, 5386, 5484, 5356]
-  },
-  {
-    title: 'Thiên nhiên, động vật & thời tiết',
-    intro: 'Bươm bướm, chó sói, sấm chớp và cảnh sắc thiên nhiên.',
-    wordIds: [5413, 5583, 5589, 5626, 5593, 5628, 5632, 5430, 5529]
-  },
-  {
-    title: 'Thực phẩm & món ăn',
-    intro: 'Hải sản, vịt quay, dưa chuột và những món ăn quen thuộc.',
-    wordIds: [5391, 5415, 5427, 5487, 5536, 5560, 5579, 5597, 5639]
-  },
-  {
-    title: 'Nấu ăn, dụng cụ bếp & ăn uống',
-    intro: 'Nồi, ấm, nước khoáng và các từ vựng về nấu nướng, ăn uống.',
-    wordIds: [5577, 5575, 5615, 5621, 5473, 5382, 5412, 5367]
+    wordIds: [5584, 5645, 8453, 8580, 8651]
   },
   {
     title: 'Đồ vật & dụng cụ sinh hoạt',
     intro: 'Kéo, kẹp giấy, keo dán và những vật dụng nhỏ trong sinh hoạt hằng ngày.',
-    wordIds: [5366, 5439, 5456, 5475, 5492, 5578, 5618, 5371, 5483]
-  },
-  {
-    title: 'Nỗ lực, khó khăn & cống hiến',
-    intro: 'Công phu, cống hiến, cố gắng hết sức và những gian nan cần vượt qua.',
-    wordIds: [5339, 5340, 5341, 5476, 5518, 5608, 5644, 5471, 5472]
-  },
-  {
-    title: 'Tính từ mô tả trạng thái vật lý',
-    intro: 'Trơn láng, nằm ngang, rò rỉ - mô tả bề mặt và trạng thái vật lý của sự vật.',
-    wordIds: [5368, 5381, 5405, 5429, 5582, 5627, 5509, 5520]
-  },
-  {
-    title: 'Tính từ mô tả mức độ, chất lượng',
-    intro: 'Sang trọng, kịch liệt, tuyệt vời - những tính từ diễn tả mức độ và chất lượng.',
-    wordIds: [5393, 5394, 5444, 5467, 5592, 5614, 5396, 5538]
-  },
-  {
-    title: 'Gặp gỡ, tiếp đón & giao lưu xã hội',
-    intro: 'Quan tâm, tiếp đón, chụp ảnh chung và những hoạt động gặp gỡ, giao lưu.',
-    wordIds: [5360, 5369, 5398, 5440, 5500, 5501, 5502, 5543]
-  },
-  {
-    title: 'Hành động vặt & tình huống trừu tượng',
-    intro: 'Nhặt, tưới cây, quyên góp cùng những tình huống, lý do trừu tượng trong đời sống.',
-    wordIds: [5474, 5491, 5544, 5545, 5556, 5388, 5423, 5462, 5463, 5516, 5389]
-  },
-  {
-    title: 'Nghề nghiệp & kỹ năng làm việc',
-    intro: 'Tên gọi nghề nghiệp, nhân sự và các kỹ năng chuyên môn như thủ công, nhiếp ảnh, thành thạo.',
-    wordIds: [5653, 5793, 5797, 5799, 5871, 5970, 5853, 5881, 5836, 5893]
-  },
-  {
-    title: 'Tính cách & phẩm chất đáng quý',
-    intro: 'Những đức tính tốt đẹp: khiêm tốn, cần cù, lương thiện, ân cần và biết khâm phục người khác.',
-    wordIds: [5689, 5746, 5763, 5764, 5823, 5925, 5942, 5946, 5760, 5934, 5708, 5706]
-  },
-  {
-    title: 'Cảm xúc tích cực & vinh dự',
-    intro: 'Sự yêu mến, nhiệt tình, chúc mừng và niềm vinh hạnh, vinh dự trong cuộc sống.',
-    wordIds: [5790, 5791, 5792, 5759, 5773, 5806, 5807, 5956]
-  },
-  {
-    title: 'Cảm xúc tiêu cực & áp lực tâm lý',
-    intro: 'Sự mệt mỏi, đau khổ, mất ngủ, trốn tránh và những mất mát, thiệt hại gây áp lực tinh thần.',
-    wordIds: [5716, 5955, 5851, 5732, 5800, 5914, 5852, 5768, 5928]
-  },
-  {
-    title: 'Từ nghi vấn, so sánh & liên từ trừu tượng',
-    intro: 'Các từ dùng để hỏi, so sánh, giả định và diễn đạt sự không chắc chắn trong câu.',
-    wordIds: [5809, 5878, 5873, 5872, 5683, 5694, 5902, 5918, 5917, 5905, 5678, 5684]
-  },
-  {
-    title: 'Mức độ rõ ràng, sâu sắc & toàn diện',
-    intro: 'Miêu tả điều gì đó rõ ràng, mơ hồ, phiến diện, toàn diện hay minh bạch.',
-    wordIds: [5667, 5668, 5675, 5958, 5719, 5780, 5959, 5840]
-  },
-  {
-    title: 'Tư duy, nhận thức & đánh giá',
-    intro: 'Suy nghĩ, trải nghiệm, thể hiện và việc xác định, đánh giá sự việc.',
-    wordIds: [5907, 5908, 5940, 5944, 5943, 5742, 5730, 5785, 5786]
-  },
-  {
-    title: 'Ngôn ngữ, văn viết & học thuật',
-    intro: 'Miêu tả, thơ ca, thanh điệu và những từ vựng liên quan đến viết lách, thi cử.',
-    wordIds: [5661, 5846, 5847, 5854, 5849, 5877, 5937, 5939, 5938]
-  },
-  {
-    title: 'Giao tiếp, thuyết phục & yêu cầu',
-    intro: 'Yêu cầu, khuyên nhủ, thuyết phục người khác và những ý đồ trong giao tiếp.',
-    wordIds: [5772, 5783, 5903, 5936, 5709, 5788, 5827, 5740]
-  },
-  {
-    title: 'Chính trị, pháp luật & quan hệ quốc tế',
-    intro: 'Dân chủ, bình đẳng, quyền lực, ngoại giao và các khái niệm chính trị - xã hội quan trọng.',
-    wordIds: [5663, 5725, 5781, 5782, 5713, 5762, 5953, 5954, 5972, 5924, 5850, 5900]
-  },
-  {
-    title: 'Kinh doanh, thương mại & tài chính',
-    intro: 'Doanh nghiệp, hàng hóa, đầu tư, thuế và các khái niệm kinh tế - thương mại.',
-    wordIds: [5741, 5825, 5826, 5733, 5707, 5957, 5901, 5880, 5879, 5775]
-  },
-  {
-    title: 'Nông nghiệp, tài nguyên & năng lượng',
-    intro: 'Nông dân, đất đai, rau củ và các nguồn năng lượng, tài nguyên thiên nhiên.',
-    wordIds: [5696, 5697, 5690, 5744, 5787, 5960, 5961, 5892]
-  },
-  {
-    title: 'Thiên nhiên, cảnh quan & danh lam',
-    intro: 'Sa mạc, bầu trời, cánh đồng và những địa danh, công trình nổi tiếng.',
-    wordIds: [5816, 5817, 5945, 5947, 5821, 5808, 5698, 5666, 5920, 5910]
-  },
-  {
-    title: 'Động vật, thực vật & vật liệu tự nhiên',
-    intro: 'Con ong, con rắn, thỏ, gỗ, đồng, lụa và một số loài, vật liệu quen thuộc.',
-    wordIds: [5655, 5830, 5963, 5656, 5929, 5679, 5952, 5904]
-  },
-  {
-    title: 'Cơ thể, sức khỏe & ăn uống',
-    intro: 'Các bộ phận cơ thể, vấn đề sức khỏe và khẩu vị, món ăn hàng ngày.',
-    wordIds: [5686, 5814, 5829, 5885, 5882, 5887, 5687, 5886, 5868, 5769]
+    wordIds: [5439, 5475, 5483, 5492, 5618]
   },
   {
     title: 'Đồ dùng cá nhân & vật dụng hàng ngày',
     intro: 'Giày dép, quần áo, các vật dụng nhỏ và phương tiện đi lại quen thuộc.',
-    wordIds: [5715, 5695, 5883, 5889, 5828, 5822, 5710, 5919, 5805, 5676]
-  },
-  {
-    title: 'Công nghệ, máy tính & truyền thông',
-    intro: 'Phần mềm, dữ liệu, kỹ thuật số và các thiết bị, kênh thông tin hiện đại.',
-    wordIds: [5811, 5895, 5896, 5897, 5820, 5891, 5721, 5950]
-  },
-  {
-    title: 'Thời gian, lịch trình & tần suất',
-    intro: 'Hàng ngày, lịch trình, ngày tháng và các từ chỉ thời điểm, tần suất xảy ra.',
-    wordIds: [5801, 5802, 5803, 5804, 5912, 5737, 5662, 5951, 5876]
-  },
-  {
-    title: 'Tuổi tác, thời đại & giai đoạn cuộc đời',
-    intro: 'Tuổi trẻ, thanh thiếu niên, thời đại và các mốc thời gian trong đời người.',
-    wordIds: [5691, 5856, 5859, 5857, 5810, 5682, 5692, 5766, 5767]
-  },
-  {
-    title: 'Thời trang, ngoại hình & thương hiệu',
-    intro: 'Thon thả, hợp mốt, thương hiệu nổi tiếng và vẻ ngoài của một người.',
-    wordIds: [5858, 5860, 5660, 5926, 5838, 5685, 5664, 5670]
-  },
-  {
-    title: 'Bí ẩn, số phận & tương lai',
-    intro: 'Bí mật, thần bí, số phận và những điều kỳ diệu, khó lý giải trong cuộc sống.',
-    wordIds: [5651, 5652, 5672, 5739, 5843, 5841, 5906, 5748]
-  },
-  {
-    title: 'Con người, nhân loại & các mốc đời người',
-    intro: 'Dân số, loài người, các mối quan hệ thân thiết và những sự kiện quan trọng như kết hôn, qua đời.',
-    wordIds: [5794, 5795, 5796, 5798, 5654, 5711, 5761, 5700, 5699, 5923, 5777, 5778]
-  },
-  {
-    title: 'Kỹ năng, sự khéo léo & đặc trưng riêng',
-    intro: 'Bắt chước, khéo léo, cố gắng hết sức và những đặc điểm, đặc trưng riêng biệt.',
-    wordIds: [5674, 5824, 5757, 5869, 5870, 5931, 5932, 5933]
-  },
-  {
-    title: 'Tính chất bình thường, giản dị & vật lý',
-    intro: 'Bình thường, yên tĩnh, giản dị và những tính từ miêu tả trạng thái vật lý nhẹ nhàng.',
-    wordIds: [5723, 5724, 5728, 5949, 5735, 5812, 5688, 5722]
-  },
-  {
-    title: 'Đo lường, số liệu & lượng từ',
-    intro: 'Diện tích, bình phương, thể tích và các lượng từ chỉ số lượng, đơn vị.',
-    wordIds: [5658, 5726, 5729, 5941, 5727, 5712, 5717, 5718, 5930, 5964, 5844]
+    wordIds: [5695, 5710, 5715, 5822, 5919]
   },
   {
     title: 'Động từ: động tác tay chân & né tránh, rút lui',
     intro: 'Sờ, vỗ, khoác, dắt, cắt, vòng qua và những hành động chạy trốn, rút lui thường gặp.',
-    wordIds: [5673, 5701, 5714, 5745, 5758, 5813, 5837, 5899, 5909, 5789, 5927, 5968]
+    wordIds: [5714, 5789, 5813, 5837, 5927]
   },
   {
     title: 'Đối mặt khó khăn, thách thức & xung đột',
     intro: 'Đối mặt, thách thức, phá hoại, va chạm và những tình huống thiếu thốn, xung đột căng thẳng.',
-    wordIds: [5751, 5835, 5815, 5734, 5948, 5657, 5659, 5784, 5754]
-  },
-  {
-    title: 'Hành chính, thiết bị & sản xuất',
-    intro: 'Danh thiếp, mệnh lệnh, thủ tục và các thiết bị, cơ sở vật chất phục vụ sản xuất.',
-    wordIds: [5665, 5669, 5747, 5884, 5671, 5776, 5832, 5833, 5834, 5845]
-  },
-  {
-    title: 'Thực tế, thực hành & hiện thực',
-    intro: 'Thực tiễn, thực tập, thực hiện và những gì thuộc về sự thật, hiện thực.',
-    wordIds: [5861, 5862, 5863, 5864, 5865, 5866, 5867, 5874, 5875]
+    wordIds: [5751, 5754, 5784, 5815, 5835]
   },
   {
     title: 'Trạng thái, thái độ & cảm nhận khi giao tiếp',
     intro: 'Xa lạ, thân phận, ngốc nghếch và những cảm nhận, thái độ khi tiếp xúc với người khác.',
-    wordIds: [5677, 5839, 5818, 5771, 5770, 5755, 5756, 5831, 5765, 5743]
-  },
-  {
-    title: 'Thể thao, sở thích & không gian sống',
-    intro: 'Bóng chuyền, thái cực quyền, ký túc xá và những gì gắn với đời sống sinh hoạt, giải trí.',
-    wordIds: [5702, 5703, 5774, 5922, 5911, 5921, 5888, 5779, 5890, 5819]
-  },
-  {
-    title: 'Cải tiến, đề xuất & thay đổi mức độ',
-    intro: 'Giới thiệu, quảng bá, nhấn mạnh và những từ diễn tả sự hoàn thiện, thu nhỏ, sa sút.',
-    wordIds: [5966, 5967, 5965, 5752, 5753, 5974, 5975, 5915, 5916, 5969]
-  },
-  {
-    title: 'Vật thể, hình dạng & động tác vặt',
-    intro: 'Sợi dây, hòn đá, méo lệch, vỡ vụn và một số động tác, hình dạng khó xếp nhóm khác.',
-    wordIds: [5848, 5855, 5913, 5971, 5973, 5898, 5962, 5720, 5749, 5935]
-  },
-  {
-    title: 'Mục tiêu, kỳ vọng & khái niệm trừu tượng khác',
-    intro: 'Mục tiêu, mong mỏi, kỳ vọng và một số khái niệm trừu tượng khó xếp vào nhóm khác.',
-    wordIds: [5680, 5681, 5704, 5705, 5736, 5738, 5693, 5731, 5894, 5842, 5750]
-  },
-  {
-    title: 'Chính trị & nhà nước',
-    intro: 'Chính phủ, chính sách, bầu cử và các chức danh lãnh đạo quốc gia.',
-    wordIds: [6216, 6217, 6218, 6285, 6283, 6247, 6091, 6229, 6228, 6089]
-  },
-  {
-    title: 'Pháp luật & trật tự xã hội',
-    intro: 'Vi phạm, tội phạm, giấy tờ và việc tuân thủ pháp luật, trật tự chung.',
-    wordIds: [5986, 6292, 6215, 6214, 6222, 6221, 6295, 6126, 6287, 6232]
-  },
-  {
-    title: 'Chiến tranh, vũ khí & hiểm họa',
-    intro: 'Xung đột, đe dọa, nguy hại và những con người vĩ đại giữa hiểm nguy.',
-    wordIds: [6188, 6012, 5982, 5981, 6137, 5989, 6175, 6050]
-  },
-  {
-    title: 'Tôn giáo, triết học & giá trị tinh thần',
-    intro: 'Niềm tin, chân lý, trí tuệ và lòng tôn kính đối với cội nguồn.',
-    wordIds: [6279, 6196, 6200, 6233, 6294, 6199, 6289, 6290]
-  },
-  {
-    title: 'Doanh nghiệp, kinh doanh & thương mại',
-    intro: 'Bán hàng, tiêu dùng, ưu thế cạnh tranh và những người làm kinh doanh.',
-    wordIds: [6281, 6254, 6140, 6052, 6048, 6150, 6059, 6234, 6265, 6263]
-  },
-  {
-    title: 'Tiền bạc, tài chính & ngân hàng',
-    intro: 'Tiền mặt, séc, tài khoản và các từ vựng xoay quanh chuyện tiền nong.',
-    wordIds: [6031, 6142, 6220, 6192, 6266, 6132, 6209, 6190, 6148]
-  },
-  {
-    title: 'Công việc, quản lý & tổ chức',
-    intro: 'Chỉ đạo, chủ trì, nắm vững công việc và các thao tác quản lý thường gặp.',
-    wordIds: [6251, 6224, 6225, 6244, 6248, 6191, 6253, 6255, 6134, 6133]
-  },
-  {
-    title: 'Công nghệ & thiết bị điện tử',
-    intro: 'Hệ thống, phần cứng, tín hiệu và những từ vựng công nghệ hiện đại.',
-    wordIds: [6021, 6143, 6024, 6135, 6067, 6068, 6029, 6205, 6272]
-  },
-  {
-    title: 'Giấy tờ, tài liệu & văn phòng phẩm',
-    intro: 'Văn kiện, tư liệu và những vật dụng quen thuộc nơi công sở, học đường.',
-    wordIds: [6000, 6267, 6022, 6066, 6001, 6047, 6184, 6270]
-  },
-  {
-    title: 'Giao tiếp & hỏi thăm',
-    intro: 'Thăm hỏi, dặn dò, thuật lại và cách trao đổi thông tin với người khác.',
-    wordIds: [6007, 6096, 6250, 6257, 6088, 6161, 6090, 6198, 6208]
-  },
-  {
-    title: 'Tranh luận, khen chê & thái độ phản hồi',
-    intro: 'Bàn luận, tranh cãi, khen ngợi hay trách móc trước một vấn đề.',
-    wordIds: [6206, 6127, 6182, 6178, 6177, 6245, 6169]
-  },
-  {
-    title: 'Cảm xúc, tình cảm & may mắn',
-    intro: 'Niềm vui, nụ cười, sự tiếc nuối và cả những khoảnh khắc may rủi trong đời.',
-    wordIds: [5991, 6010, 6121, 6079, 6080, 6172, 5983, 6005, 6144, 6040, 6065, 6039]
-  },
-  {
-    title: 'Tư duy & khái niệm trừu tượng',
-    intro: 'Hiện thực, hiện tượng, tưởng tượng và những khái niệm trừu tượng khó nắm bắt.',
-    wordIds: [6032, 6033, 6046, 6081, 6129, 6063, 6041, 6122]
-  },
-  {
-    title: 'Sức khỏe, cơ thể & bệnh tật',
-    intro: 'Các bộ phận cơ thể, triệu chứng bệnh và việc chẩn đoán, điều trị.',
-    wordIds: [5997, 6064, 6083, 6105, 6103, 6171, 6197, 6202, 6231, 6017, 6049, 6139]
-  },
-  {
-    title: 'Tính cách & phẩm chất tốt',
-    intro: 'Những nét tính cách đáng quý như tự tin, hiếu thảo, khiêm tốn, dịu dàng, ấm áp.',
-    wordIds: [6273, 6274, 6276, 6277, 6278, 6058, 6087, 5999, 5998]
-  },
-  {
-    title: 'Ý chí, khát vọng & tính cách trái chiều',
-    intro: 'Dũng khí, khát khao theo đuổi mục tiêu, bên cạnh vài nét tính cách chưa hay.',
-    wordIds: [6146, 6207, 6262, 6170, 6152, 6056, 6275]
-  },
-  {
-    title: 'Nhà cửa, phòng ốc & trang phục',
-    intro: 'Không gian sống trong nhà và cách ăn mặc, trang trí quen thuộc.',
-    wordIds: [5984, 6020, 6203, 6008, 6009, 5993, 6102, 6258, 6259]
-  },
-  {
-    title: 'Giải trí & thư giãn',
-    intro: 'Đồ chơi, trò chơi, du ngoạn và những cách thư giãn sau giờ làm việc.',
-    wordIds: [5977, 6045, 6085, 6158, 6155, 6060, 6018, 6111]
-  },
-  {
-    title: 'Ẩm thực & tiệc tùng',
-    intro: 'Món ăn, nguyên liệu nấu nướng và không khí của những bữa tiệc.',
-    wordIds: [6053, 6154, 6162, 6055, 6249, 6293, 6167, 6101, 6183]
-  },
-  {
-    title: 'Sự kiện, hội họp & tiếp đón',
-    intro: 'Tổ chức hội nghị, triển lãm và cách tiếp đón khách chu đáo.',
-    wordIds: [6194, 6186, 6185, 6193, 6138, 6252, 6100, 6241]
-  },
-  {
-    title: 'Hình thức, hình dạng & hành vi',
-    intro: 'Các từ ghép với "hình" và "hành" mô tả dáng vẻ, cách hình thành và hành động.',
-    wordIds: [6073, 6074, 6075, 6076, 6077, 6078, 6069, 6070, 6071, 6072]
-  },
-  {
-    title: 'Thiên nhiên, khoa học tự nhiên & vũ trụ',
-    intro: 'Sương mù, vũ trụ, vật chất và những hiện tượng tự nhiên xung quanh ta.',
-    wordIds: [6016, 6163, 6165, 6084, 6242, 6160, 6014, 6015, 6113, 5990]
-  },
-  {
-    title: 'Vị trí, địa điểm & di chuyển',
-    intro: 'Xác định vị trí, khoảng cách, các địa điểm quen thuộc và việc di chuyển.',
-    wordIds: [5996, 6119, 6116, 5980, 6030, 6235, 6099, 6120, 6157, 6153]
+    wordIds: [5755, 5756, 5765, 5818, 5831]
   },
   {
     title: 'Thời gian & tần suất',
-    intro: 'Các mốc thời gian, sự lặp lại và tốc độ diễn ra của sự việc.',
-    wordIds: [6236, 6226, 6291, 6284, 6176, 6097, 6195, 6114, 6112, 6166, 6092]
+    intro: 'Những từ diễn tả thời điểm, khoảng thời gian và mức độ thường xuyên của sự việc.',
+    wordIds: [8320, 8381, 8549, 8645, 8647, 8648, 6114, 6166, 6284]
   },
   {
-    title: 'Liên từ & cấu trúc câu điều kiện',
-    intro: 'Những liên từ dùng để diễn đạt giả thiết, điều kiện trong câu.',
-    wordIds: [5978, 5994, 6109, 6108, 6115, 6124, 6130]
+    title: 'Công việc & chức vụ',
+    intro: 'Chức năng, chức vụ, tuyển dụng và việc quản lý, tổ chức, phân công công việc.',
+    wordIds: [9359, 9360, 9361, 9418, 9419, 9420, 9426, 9427]
   },
   {
-    title: 'Trạng từ & liên từ chuyển ý',
-    intro: 'Cách chuyển ý, tóm lược và liên kết các phần trong câu, đoạn văn.',
-    wordIds: [6125, 6271, 6159, 6227, 6286, 6118, 6297]
+    title: 'Danh từ (1/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [3590, 101470, 8091, 3149, 5365, 9158, 101422, 5798, 101326, 101215, 8991]
   },
   {
-    title: 'Tổng thể, mức độ & sự tương đồng',
-    intro: 'Diễn tả cái toàn thể, mức độ tương đối và sự giống nhau, liên quan giữa các sự vật.',
-    wordIds: [6211, 6212, 6280, 6282, 6288, 6011, 6117, 6035, 6036, 6038, 6037, 6034]
+    title: 'Danh từ (2/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [5541, 5481, 8499, 101533, 7868, 5451, 7869, 8593, 101482, 3313, 5914]
   },
   {
-    title: 'Hình dáng, màu sắc & vẻ ngoài',
-    intro: 'Sắc màu, kiểu dáng và những nét miêu tả vẻ bề ngoài của người, vật.',
-    wordIds: [6026, 6269, 6104, 6149, 6136, 6264, 6062, 6141, 6023, 6043]
+    title: 'Danh từ (3/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101293, 9388, 101527, 3304, 101331, 8536, 7887, 101478, 9314, 5051]
   },
   {
-    title: 'Họ người, địa danh & thiên can đặc biệt',
-    intro: 'Một số họ người, tên riêng và ký hiệu thiên can ít gặp trong đời sống.',
-    wordIds: [6004, 6042, 6106, 6123, 6219, 6223, 6237, 6213, 6268]
+    title: 'Danh từ (4/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101359, 5671, 5842, 101445, 101496, 8393, 6015, 101396, 3026, 5199]
   },
   {
-    title: 'Học thuật, văn chương & rèn luyện',
-    intro: 'Việc học hành chuyên sâu, sáng tác, chỉnh sửa văn chương và rèn luyện kỹ năng.',
-    wordIds: [6003, 6093, 6094, 6296, 6298, 6002, 6019, 6098, 6013, 6086]
+    title: 'Danh từ (5/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [5040, 5906, 101316, 8289, 5052, 101502, 5181, 2048, 101390, 101551]
   },
   {
-    title: 'Con người & vai vế trong xã hội',
-    intro: 'Một số cách gọi người theo vai trò, quan hệ hoặc thân phận.',
-    wordIds: [5979, 6082, 6054, 6246, 6057]
+    title: 'Danh từ (6/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [8318, 101306, 8962, 101415, 5721, 6110, 5461, 101419, 7381, 101378]
   },
   {
-    title: 'Tính từ trừu tượng mô tả sự vật, sự việc',
-    intro: 'Rõ ràng, chân thực, ổn định và những tính chất trừu tượng khác.',
-    wordIds: [6027, 6028, 6201, 6006, 5987, 5976, 6151, 6156]
+    title: 'Danh từ (7/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [5997, 2040, 101512, 7823, 5078, 7851, 101424, 101249, 101628, 101338]
   },
   {
-    title: 'Quản lý dự án, quy tắc & vận dụng',
-    intro: 'Bảo vệ, ủy thác, phối hợp, tìm kiếm giải pháp và những nguyên tắc trong công việc, dự án.',
-    wordIds: [5988, 5992, 6061, 5985, 6044, 6110, 6147, 6168, 6181, 6243, 6095]
+    title: 'Danh từ (8/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [8877, 2154, 9377, 5830, 2067, 101341, 3507, 101270, 2017, 9458]
   },
   {
-    title: 'Tương lai, biến đổi & tình trạng',
-    intro: 'Sự thay đổi, biến mất và những yếu tố tạo nên tình trạng, hoàn cảnh.',
-    wordIds: [5995, 6256, 6260, 6261, 6180, 6128, 6131, 6051]
+    title: 'Danh từ (9/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101271, 8040, 5811, 5442, 101463, 101217, 9368, 101490, 7723, 5605]
   },
   {
-    title: 'Sản xuất, vận chuyển & đo lường',
-    intro: 'Chế tạo, vận chuyển hàng hóa và cách đo lường trọng lượng, số lượng.',
-    wordIds: [6230, 6173, 6174, 6189, 6238, 6239, 6240, 6164]
+    title: 'Danh từ (10/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [3521, 6259, 5382, 101272, 8720, 7742, 101225, 8523, 5218, 7229]
   },
   {
-    title: 'Tình huống khó chịu & bất ngờ',
-    intro: 'Những phản ứng và tình huống bất ngờ, khó chịu gặp phải trong đời sống.',
-    wordIds: [6145, 6179, 6187, 6204, 6025, 6107, 6210]
+    title: 'Danh từ (11/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [3314, 8491, 5911, 101541, 5892, 9469, 5054, 8227, 6281, 9194]
   },
+  {
+    title: 'Danh từ (12/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [9340, 8162, 101349, 3165, 7239, 8304, 7895, 7461, 8489, 8781]
+  },
+  {
+    title: 'Danh từ (13/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101429, 7192, 8049, 8236, 9138, 6008, 7051, 101361, 8456, 7608]
+  },
+  {
+    title: 'Danh từ (14/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [8686, 7265, 7186, 9162, 9246, 101380, 101351, 3374, 101308, 5635]
+  },
+  {
+    title: 'Danh từ (15/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101401, 2025, 9096, 6046, 101443, 8670, 101555, 101467, 7423, 6018]
+  },
+  {
+    title: 'Danh từ (16/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [8045, 9014, 5089, 8291, 101236, 101366, 6200, 7433, 8535, 8961]
+  },
+  {
+    title: 'Danh từ (17/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [8581, 5961, 5569, 9171, 101370, 8845, 101532, 101447, 101278, 101540]
+  },
+  {
+    title: 'Danh từ (18/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [5816, 101263, 8271, 101469, 101226, 9063, 8742, 101244, 9394, 9365]
+  },
+  {
+    title: 'Danh từ (19/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101511, 101436, 7220, 101328, 3172, 5929, 7197, 101298, 101322, 101283]
+  },
+  {
+    title: 'Danh từ (20/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [5722, 7224, 9437, 9343, 3024, 2178, 101337, 101534, 7681, 101343]
+  },
+  {
+    title: 'Danh từ (21/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101352, 101466, 101563, 9391, 7467, 8705, 101397, 101558, 8455, 3052]
+  },
+  {
+    title: 'Danh từ (22/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101432, 9457, 8002, 9001, 101395, 101634, 9229, 101324, 101440, 101407]
+  },
+  {
+    title: 'Danh từ (23/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [8437, 101403, 101559, 101449, 9313, 101546, 101587, 101375, 8288, 7263]
+  },
+  {
+    title: 'Danh từ (24/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101239, 101441, 5597, 101311, 7591, 9348, 101475, 101448, 3328, 9409]
+  },
+  {
+    title: 'Danh từ (25/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101618, 101389, 101605, 101411, 9021, 101557, 101219, 101246, 8777, 8803]
+  },
+  {
+    title: 'Danh từ (26/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [9029, 101566, 101312, 101508, 101238, 101590, 101412, 7160, 8749, 9363]
+  },
+  {
+    title: 'Danh từ (27/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101526, 8092, 8252, 3404, 5147, 8630, 5554, 101404, 101414, 101384]
+  },
+  {
+    title: 'Danh từ (28/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [8783, 101633, 101493, 7268, 101348, 101319, 8605, 6143, 101574, 101549]
+  },
+  {
+    title: 'Danh từ (29/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101457, 7687, 101360, 101492, 101220, 7607, 101295, 8391, 3455, 5941]
+  },
+  {
+    title: 'Danh từ (30/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101580, 101284, 7590, 101327, 9078, 101554, 5309, 101267, 101543, 101237]
+  },
+  {
+    title: 'Danh từ (31/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [8270, 101417, 101299, 101517, 101314, 101531, 101376, 7079, 7156, 7315]
+  },
+  {
+    title: 'Danh từ (32/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101552, 6175, 101214, 8892, 7620, 7816, 101345, 101320, 101269, 101627]
+  },
+  {
+    title: 'Danh từ (33/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101334, 8693, 6242, 5383, 8976, 101548, 101369, 8567, 101542, 3525]
+  },
+  {
+    title: 'Danh từ (34/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [9077, 101530, 101346, 101421, 101486, 101506, 101391, 101307, 7678, 5895]
+  },
+  {
+    title: 'Danh từ (35/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [8786, 101268, 8649, 9227, 101591, 8423, 7104, 101257, 101273, 101402]
+  },
+  {
+    title: 'Danh từ (36/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101625, 101333, 5110, 101317, 5087, 5560, 101494, 101364, 101485, 7124]
+  },
+  {
+    title: 'Danh từ (37/37)',
+    intro: 'Danh từ thường gặp ở cấp này: người, vật, nơi chốn, khái niệm.',
+    wordIds: [101223, 101245, 101507, 101588, 101586, 9212, 101409, 101292, 101291, 101290]
+  },
+  {
+    title: 'Động từ (1/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101386, 5315, 5574, 9187, 101405, 3111, 3311, 5279, 6039, 101276]
+  },
+  {
+    title: 'Động từ (2/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [5432, 6221, 101304, 3422, 3238, 101305, 3233, 3142, 9160, 3086]
+  },
+  {
+    title: 'Động từ (3/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101529, 3495, 101355, 101425, 101585, 5404, 101464, 101589, 101514, 9279]
+  },
+  {
+    title: 'Động từ (4/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [6191, 101474, 6025, 5500, 3594, 3316, 3245, 5962, 101434, 3247]
+  },
+  {
+    title: 'Động từ (5/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [5381, 3181, 7366, 3396, 3582, 5750, 3034, 101579, 101437, 7234]
+  },
+  {
+    title: 'Động từ (6/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [6065, 101294, 101410, 6293, 3353, 9342, 3371, 101430, 5613, 3070]
+  },
+  {
+    title: 'Động từ (7/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [8674, 6107, 101330, 101398, 5637, 101340, 7361, 3144, 3174, 8816]
+  },
+  {
+    title: 'Động từ (8/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [7515, 101450, 101265, 7949, 101281, 8484, 7266, 101632, 101521, 101481]
+  },
+  {
+    title: 'Động từ (9/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101476, 5067, 8021, 101216, 5465, 5116, 5133, 6202, 101363, 7521]
+  },
+  {
+    title: 'Động từ (10/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101353, 8728, 6251, 7835, 9281, 8392, 5986, 5992, 101438, 101572]
+  },
+  {
+    title: 'Động từ (11/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [5836, 101451, 3038, 9428, 7296, 101594, 8775, 5898, 3389, 5342]
+  },
+  {
+    title: 'Động từ (12/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101571, 101428, 7071, 7466, 101385, 3448, 101297, 8089, 101399, 7044]
+  },
+  {
+    title: 'Động từ (13/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [3578, 9238, 8409, 6096, 7158, 101537, 101383, 5005, 3415, 7930]
+  },
+  {
+    title: 'Động từ (14/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [8342, 101356, 7523, 101498, 5511, 6144, 101358, 101253, 101285, 101408]
+  },
+  {
+    title: 'Động từ (15/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [5783, 101303, 6199, 8980, 101213, 101556, 101453, 101510, 5226, 5151]
+  },
+  {
+    title: 'Động từ (16/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [6295, 101365, 101371, 7180, 9324, 5707, 101300, 7382, 7751, 7012]
+  },
+  {
+    title: 'Động từ (17/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [3330, 6190, 7777, 5800, 8524, 101519, 7248, 8543, 5627, 101544]
+  },
+  {
+    title: 'Động từ (18/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [8833, 7978, 9214, 3058, 7640, 8173, 101603, 101525, 8542, 7899]
+  },
+  {
+    title: 'Động từ (19/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101611, 101596, 5298, 8637, 6294, 8461, 101599, 7837, 5674, 9370]
+  },
+  {
+    title: 'Động từ (20/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101256, 101495, 101394, 9196, 101362, 101539, 9048, 3059, 9037, 8023]
+  },
+  {
+    title: 'Động từ (21/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101504, 6278, 5143, 101630, 101480, 7059, 101623, 101501, 101427, 6183]
+  },
+  {
+    title: 'Động từ (22/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [6085, 5747, 9460, 7050, 5985, 7675, 8072, 7367, 101286, 101536]
+  },
+  {
+    title: 'Động từ (23/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101235, 101631, 7557, 3046, 101323, 5387, 8168, 101538, 8659, 6186]
+  },
+  {
+    title: 'Động từ (24/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101255, 101550, 101406, 101275, 101439, 101321, 101251, 7520, 7838, 101513]
+  },
+  {
+    title: 'Động từ (25/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101454, 9284, 9329, 7836, 101479, 101287, 9431, 101347, 7322, 5211]
+  },
+  {
+    title: 'Động từ (26/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [9395, 9482, 8971, 101522, 101301, 7778, 9234, 6148, 101503, 7363]
+  },
+  {
+    title: 'Động từ (27/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [7672, 101302, 101545, 8464, 101318, 9386, 7034, 3145, 7447, 7400]
+  },
+  {
+    title: 'Động từ (28/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101584, 8922, 7954, 8175, 5255, 101560, 7166, 101289, 6060, 9285]
+  },
+  {
+    title: 'Động từ (29/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [8981, 3049, 101313, 101224, 101240, 101505, 5036, 9358, 7613, 9082]
+  },
+  {
+    title: 'Động từ (30/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101357, 101231, 8591, 101329, 6209, 8681, 7642, 7364, 101471, 101575]
+  },
+  {
+    title: 'Động từ (31/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [7444, 7194, 9429, 101581, 101382, 5742, 101629, 101578, 7998, 8878]
+  },
+  {
+    title: 'Động từ (32/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101460, 101489, 9350, 7573, 101393, 101243, 101288, 8293, 101465, 8355]
+  },
+  {
+    title: 'Động từ (33/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [8401, 101354, 5360, 9268, 8201, 9038, 101524, 9177, 101622, 101604]
+  },
+  {
+    title: 'Động từ (34/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [7272, 101315, 101442, 101601, 101381, 7497, 101274, 8263, 7060, 9442]
+  },
+  {
+    title: 'Động từ (35/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [7468, 101602, 101487, 7448, 9378, 8213, 7331, 7686, 101472, 7819]
+  },
+  {
+    title: 'Động từ (36/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101582, 7102, 101248, 6205, 7775, 5936, 7065, 101462, 8879]
+  },
+  {
+    title: 'Động từ (37/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101613, 8078, 7495, 101518, 7588, 8520, 8885, 7125, 9375]
+  },
+  {
+    title: 'Động từ (38/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [101607, 101608, 9002, 101455, 7243, 101609, 8223, 7555, 8136]
+  },
+  {
+    title: 'Động từ (39/39)',
+    intro: 'Động từ thường gặp ở cấp này, học kèm cách dùng trong câu.',
+    wordIds: [7702, 8969, 101484, 101435, 101377, 101222, 101553, 101620, 7165]
+  },
+  {
+    title: 'Tính từ (1/10)',
+    intro: 'Tính từ và từ chỉ đặc điểm giúp miêu tả người, vật, sự việc.',
+    wordIds: [5987, 5013, 5286, 3271, 3585, 5913, 5582, 3263, 3469, 3510]
+  },
+  {
+    title: 'Tính từ (2/10)',
+    intro: 'Tính từ và từ chỉ đặc điểm giúp miêu tả người, vật, sự việc.',
+    wordIds: [2200, 101232, 5643, 3462, 5132, 8603, 3357, 8278, 7922, 6179]
+  },
+  {
+    title: 'Tính từ (3/10)',
+    intro: 'Tính từ và từ chỉ đặc điểm giúp miêu tả người, vật, sự việc.',
+    wordIds: [6100, 8982, 101218, 8741, 5131, 3298, 7294, 7689, 101423, 101250]
+  },
+  {
+    title: 'Tính từ (4/10)',
+    intro: 'Tính từ và từ chỉ đặc điểm giúp miêu tả người, vật, sự việc.',
+    wordIds: [101325, 101228, 101577, 8054, 8261, 101229, 101610, 101266, 9137, 6273]
+  },
+  {
+    title: 'Tính từ (5/10)',
+    intro: 'Tính từ và từ chỉ đặc điểm giúp miêu tả người, vật, sự việc.',
+    wordIds: [7914, 3515, 9230, 9128, 5372, 101387, 6152, 8310, 8642, 9311]
+  },
+  {
+    title: 'Tính từ (6/10)',
+    intro: 'Tính từ và từ chỉ đặc điểm giúp miêu tả người, vật, sự việc.',
+    wordIds: [101597, 5348, 5700, 5675, 8770, 9087, 8237, 7123, 6269, 5375]
+  },
+  {
+    title: 'Tính từ (7/10)',
+    intro: 'Tính từ và từ chỉ đặc điểm giúp miêu tả người, vật, sự việc.',
+    wordIds: [3266, 101342, 8317, 7293, 5472, 8530, 8887, 7939, 6062, 101576]
+  },
+  {
+    title: 'Tính từ (8/10)',
+    intro: 'Tính từ và từ chỉ đặc điểm giúp miêu tả người, vật, sự việc.',
+    wordIds: [8984, 3183, 5259, 7921, 9337, 101309, 101262, 7085, 101509, 6245]
+  },
+  {
+    title: 'Tính từ (9/10)',
+    intro: 'Tính từ và từ chỉ đặc điểm giúp miêu tả người, vật, sự việc.',
+    wordIds: [101413, 8413, 8357, 101277, 7052, 5763, 101279, 101606, 5063, 8114]
+  },
+  {
+    title: 'Tính từ (10/10)',
+    intro: 'Tính từ và từ chỉ đặc điểm giúp miêu tả người, vật, sự việc.',
+    wordIds: [6026, 8492, 7283, 101234, 8389, 6084, 6087, 7830, 101612]
+  },
+  {
+    title: 'Phó từ & từ nối (1/7)',
+    intro: 'Phó từ, liên từ, giới từ, trợ từ nối các ý và sắc thái câu.',
+    wordIds: [101367, 3248, 101621, 101592, 3191, 3222, 5535, 6115, 101477, 101418]
+  },
+  {
+    title: 'Phó từ & từ nối (2/7)',
+    intro: 'Phó từ, liên từ, giới từ, trợ từ nối các ý và sắc thái câu.',
+    wordIds: [101392, 101523, 3538, 5731, 101310, 3516, 101350, 5038, 101619, 101221]
+  },
+  {
+    title: 'Phó từ & từ nối (3/7)',
+    intro: 'Phó từ, liên từ, giới từ, trợ từ nối các ý và sắc thái câu.',
+    wordIds: [101461, 101344, 101431, 101332, 3411, 101444, 101488, 5139, 101500, 3308]
+  },
+  {
+    title: 'Phó từ & từ nối (4/7)',
+    intro: 'Phó từ, liên từ, giới từ, trợ từ nối các ý và sắc thái câu.',
+    wordIds: [101233, 8285, 101528, 8428, 7758, 5158, 101282, 3363, 101373, 101516]
+  },
+  {
+    title: 'Phó từ & từ nối (5/7)',
+    intro: 'Phó từ, liên từ, giới từ, trợ từ nối các ý và sắc thái câu.',
+    wordIds: [9133, 101561, 101515, 101379, 101374, 9149, 101595, 7393, 101261, 101368]
+  },
+  {
+    title: 'Phó từ & từ nối (6/7)',
+    intro: 'Phó từ, liên từ, giới từ, trợ từ nối các ý và sắc thái câu.',
+    wordIds: [7994, 101335, 101593, 101573, 9231, 101446, 101227, 7378, 7172, 101569]
+  },
+  {
+    title: 'Phó từ & từ nối (7/7)',
+    intro: 'Phó từ, liên từ, giới từ, trợ từ nối các ý và sắc thái câu.',
+    wordIds: [6010, 6130, 101568, 101535, 101230, 101565, 7968, 101241, 5062, 101242]
+  },
+  {
+    title: 'Thời gian & phương vị (1/3)',
+    intro: 'Từ chỉ thời gian, nơi chốn và phương hướng.',
+    wordIds: [5662, 101617, 101615, 101616, 101426, 101280, 101614, 101372, 101388, 8750, 9151]
+  },
+  {
+    title: 'Thời gian & phương vị (2/3)',
+    intro: 'Từ chỉ thời gian, nơi chốn và phương hướng.',
+    wordIds: [101459, 7396, 101598, 101468, 101497, 5321, 101247, 7113, 101562, 8481, 101258]
+  },
+  {
+    title: 'Thời gian & phương vị (3/3)',
+    intro: 'Từ chỉ thời gian, nơi chốn và phương hướng.',
+    wordIds: [101583, 8948, 5490, 5191, 101254, 101416, 5140, 7671, 101420, 101212, 101624]
+  },
+  {
+    title: 'Số lượng (1/2)',
+    intro: 'Số từ và lượng từ dùng để đếm và nói số lượng.',
+    wordIds: [101473, 5561, 5293, 6116, 5234, 5515, 101458, 5717]
+  },
+  {
+    title: 'Số lượng (2/2)',
+    intro: 'Số từ và lượng từ dùng để đếm và nói số lượng.',
+    wordIds: [5241, 101567, 101264, 101626, 3095, 6123, 5083, 101400]
+  },
+  {
+    title: 'Đại từ',
+    intro: 'Đại từ chỉ người, vật và nghi vấn.',
+    wordIds: [101452, 101433, 5034, 7091, 101260, 101259, 7373]
+  },
+  {
+    title: 'Từ vựng khác',
+    intro: 'Các từ còn lại của cấp này.',
+    wordIds: [101564, 101600, 101483, 101491, 101339, 101252, 101547, 101336, 101296, 101456, 101520, 101570, 5058, 101499]
+  }
 ]

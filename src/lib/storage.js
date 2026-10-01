@@ -23,7 +23,7 @@ export function saveJSON(key, value) {
 // se am tham ghi de cai dat cua may dang dung bang cai dat cua may kia.
 export const SYNCED_KEYS = [
   'srs',
-  'completedUnits',
+  'completedUnitsV3',
   'streak',
   'toneStats',
   'toneStatsByLevel',
