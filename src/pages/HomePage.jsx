@@ -22,7 +22,7 @@ import {
   ZapIcon
 } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
-import trophyPanda from '../assets/panda/trophy_panda.webp'
+import achievementPanda from '../assets/panda/achievement_panda.png'
 import headerPanda from '../assets/icons-gemini/header_panda.png'
 import goalPanda from '../assets/panda/goal_panda.png'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
@@ -358,7 +358,7 @@ export default function HomePage() {
 
       <section className="mb-5 rounded-2xl bg-white p-4 shadow-sm">
         <div className="mb-3 flex items-center gap-2">
-          <img src={trophyPanda} alt="" className="h-9 w-9 rounded-full object-cover" />
+          <img src={achievementPanda} alt="" className="h-11 w-11 rounded-full object-cover" />
           <p className="text-sm text-gray-500">
             Thành tích ({earnedBadgeIds.size}/{BADGES.length})
           </p>
