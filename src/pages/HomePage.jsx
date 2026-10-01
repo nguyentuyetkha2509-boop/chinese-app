@@ -43,20 +43,20 @@ const STAT_STYLES = [
 // khong trung tong. "col-span-2" = the dai (ca hang), khong co = the vuong; moi
 // hang deu du 2 cot nen khong the nao bi le.
 //
-// Lo trinh chinh: the Bai hoc dai (gom 3 tag HSK 1-6, So va tien, Bo thu) roi 4 the
-// vuong, 3 hang deu du 2 cot. Bo thu khong con the rieng vi da nam trong Bai hoc.
+// Lo trinh chinh: 5 the vuong. Bo thu da nam trong Bai hoc nen con 1 o trong o cuoi
+// hang 3, de danh cho tinh nang moi sau nay (them the vuong vao day la du hang).
 const CORE_CARDS = [
-  {
-    to: '/bai-hoc',
-    icon: BookIcon,
-    title: 'Bài học',
-    className: 'col-span-2 bg-gradient-to-br from-sky-500 to-emerald-500'
-  },
   {
     to: '/on-tap',
     icon: CardsIcon,
     title: 'Ôn tập ngay',
     className: 'bg-gradient-to-br from-brand-500 to-candy-500'
+  },
+  {
+    to: '/bai-hoc',
+    icon: BookIcon,
+    title: 'Bài học',
+    className: 'bg-gradient-to-br from-sky-500 to-emerald-500'
   },
   {
     to: '/ngu-phap',
