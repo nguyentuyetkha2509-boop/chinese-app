@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import { getTopic, getTopicWords, TOPIC_QUIZ_POOL } from '../data/topics'
+import { getNumberLesson, getNumberLessonWords, NUMBER_QUIZ_POOL } from '../data/numberLessons'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
@@ -17,22 +18,47 @@ import CelebrationBadge from '../components/CelebrationBadge'
 
 const QUIZ_MAX_QUESTIONS = 20
 
-// Xem ghi chu tuong tu trong LessonDetailPage.jsx: dat key theo topicKey de
-// remount lai tu dau khi chuyen thang sang chu de khac.
-export default function TopicDetailPage() {
-  const { topicKey } = useParams()
-  return <TopicDetailPageInner key={topicKey} />
+// Bai "So va tien" co cung cach hoc (xem tu -> kiem tra) va cung luu tien do vao
+// completedTopics, nen dung chung trang nay thay vi chep lai; chi khac nguon du lieu
+// va noi quay lai. Khoa bai so/tien khong trung khoa chu de nen khong lan tien do.
+const SOURCES = {
+  topic: {
+    get: getTopic,
+    getWords: getTopicWords,
+    pool: TOPIC_QUIZ_POOL,
+    listPath: '/chu-de',
+    listLabel: 'Chủ đề khác',
+    notFound: 'Không tìm thấy chủ đề.',
+    notFoundBack: 'Quay lại danh sách chủ đề'
+  },
+  number: {
+    get: getNumberLesson,
+    getWords: getNumberLessonWords,
+    pool: NUMBER_QUIZ_POOL,
+    listPath: '/bai-hoc?muc=so-tien',
+    listLabel: 'Bài khác',
+    notFound: 'Không tìm thấy bài học.',
+    notFoundBack: 'Quay lại danh sách bài học'
+  }
 }
 
-function TopicDetailPageInner() {
+// Xem ghi chu tuong tu trong LessonDetailPage.jsx: dat key theo topicKey de
+// remount lai tu dau khi chuyen thang sang chu de khac.
+export default function TopicDetailPage({ kind = 'topic' }) {
   const { topicKey } = useParams()
+  return <TopicDetailPageInner key={`${kind}:${topicKey}`} kind={kind} />
+}
+
+function TopicDetailPageInner({ kind }) {
+  const { topicKey } = useParams()
+  const source = SOURCES[kind]
   const { addXp, markTopicComplete, completedTopics } = useProgress()
-  const topic = getTopic(topicKey)
-  const words = useMemo(() => getTopicWords(topicKey), [topicKey])
+  const topic = source.get(topicKey)
+  const words = useMemo(() => source.getWords(topicKey), [source, topicKey])
   const [phase, setPhase] = useState('study') // study | quiz | done
   // Chu de co the co rat nhieu tu, nen bai kiem tra chi lay ngau nhien toi da
   // QUIZ_MAX_QUESTIONS tu de khong qua dai; moi lan lam la mot bo cau khac.
-  const quiz = useMemo(() => buildQuiz(shuffle(words).slice(0, QUIZ_MAX_QUESTIONS), TOPIC_QUIZ_POOL), [words])
+  const quiz = useMemo(() => buildQuiz(shuffle(words).slice(0, QUIZ_MAX_QUESTIONS), source.pool), [words, source])
   const [quizIndex, setQuizIndex] = useState(0)
   const [correctCount, setCorrectCount] = useState(0)
   const [selected, setSelected] = useState(null)
@@ -47,9 +73,9 @@ function TopicDetailPageInner() {
   if (!topic) {
     return (
       <div className="px-4 pt-6">
-        <p>Không tìm thấy chủ đề.</p>
-        <Link to="/chu-de" className="text-brand-600">
-          Quay lại danh sách chủ đề
+        <p>{source.notFound}</p>
+        <Link to={source.listPath} className="text-brand-600">
+          {source.notFoundBack}
         </Link>
       </div>
     )
@@ -172,8 +198,8 @@ function TopicDetailPageInner() {
             Đúng {correctCount}/{quiz.length} câu
           </p>
           <div className="mt-4 flex gap-2">
-            <Link to="/chu-de" className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white">
-              Chủ đề khác
+            <Link to={source.listPath} className="flex-1 rounded-xl bg-white/20 py-2.5 font-semibold text-white">
+              {source.listLabel}
             </Link>
             <Link to="/on-tap" className="flex-1 rounded-xl bg-white py-2.5 font-semibold text-brand-700">
               Ôn tập flashcard
@@ -194,8 +220,8 @@ function TopicDetailPageInner() {
           <button onClick={retryQuiz} className="mt-4 w-full rounded-xl bg-brand-700 py-2.5 font-semibold text-white">
             Làm lại
           </button>
-          <Link to="/chu-de" className="mt-2 block rounded-xl bg-gray-100 py-2.5 text-sm font-semibold text-gray-700">
-            Chủ đề khác
+          <Link to={source.listPath} className="mt-2 block rounded-xl bg-gray-100 py-2.5 text-sm font-semibold text-gray-700">
+            {source.listLabel}
           </Link>
         </div>
       )}

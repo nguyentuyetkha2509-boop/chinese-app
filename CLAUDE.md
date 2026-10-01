@@ -24,6 +24,7 @@ Không có bộ test tự động. Mỗi thay đổi nên chạy lint và build,
 ## Cấu trúc chính
 
 - `src/App.jsx` khai báo toàn bộ đường dẫn tiếng Việt như `/chu-de`, `/truyen`, `/ghep-cap`.
+- Trang Bài học (`/bai-hoc`) có 3 tag lưu trong địa chỉ `?muc=`: HSK 1-6 (mặc định), `so-tien`, `bo-thu`. Bộ thủ không còn ô riêng ở trang chủ.
 - `src/pages/` mỗi trang một file. `src/components/` là thành phần dùng chung.
 - `src/lib/` là logic dùng chung: `quiz.js`, `sfx.js`, `tts.js`, `storage.js`, `gamification.js`, `srs.js`.
 - `src/store/ProgressContext.jsx` giữ tiến độ học và hàm `addXp`.
@@ -34,6 +35,7 @@ Không có bộ test tự động. Mỗi thay đổi nên chạy lint và build,
 - **Từ vựng HSK1-6:** `hsk1.js` đến `hsk6.js`, gom lại trong `levels.js` thành `ALL_WORDS`. Bài học dựng từ `lessonPlans*.js` theo mã từ. Đừng thêm từ vào đây nếu chỉ cần từ cho chủ đề.
 - **Truyện dài:** `stories.js` gộp `storiesMore.js` (HSK1-5) và `stories6.js` (HSK6). Mỗi câu gồm chữ Hán, pinyin, nghĩa tiếng Việt. Bài đọc hiểu cuối truyện có đúng 3 đáp án, đáp án đầu tiên trong danh sách là đáp án đúng và sẽ được xáo khi hiển thị.
 - **Chủ đề:** `topics.js` gộp danh sách gốc với `topicsMore.js`. Chủ đề chỉ liệt kê chữ Hán. Từ có trong HSK thì dùng lại, từ chưa có thì lấy từ `topicWords.js` (mã bắt đầu từ 900001, không thuộc HSK nên không ảnh hưởng bài học hay flashcard). Mỗi chủ đề có số từ tùy ý, bài kiểm tra lấy ngẫu nhiên tối đa 20 từ. Trường tùy chọn: `group` (job, life, realestate), `level`, `tag`. Trang danh sách lọc theo nhóm, không có nút "Tất cả" và không đánh số thứ tự.
+- **Số và tiền:** `numberLessons.js` gồm 8 bài (số 0-10, 11-99, trăm/nghìn/vạn/triệu/tỷ, tiền tệ, diện tích, giá nhà, điện thoại/ngày giờ, thứ tự/phần trăm). Mã từ bắt đầu từ 910001, không thuộc HSK. Trang học dùng chung `TopicDetailPage.jsx` với prop `kind="number"`, đường dẫn `/so-va-tien/:topicKey`, tiến độ lưu chung `completedTopics`. Lưu ý 1 tỷ = 十亿 (亿 là 100 triệu). Thuật ngữ bất động sản trong bài 5 và 6 cần người biết nghề đọc lại.
 - **Bất động sản:** 7 chủ đề có khóa bắt đầu bằng `realestate-`, nhãn hiển thị là "BĐS", nằm ở nhóm Bất động sản.
 
 ## Quy ước

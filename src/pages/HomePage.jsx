@@ -12,7 +12,6 @@ import {
   ArrowRightIcon,
   SpeedIcon,
   TopicIcon,
-  RadicalIcon,
   ChatIcon,
   StoryIcon,
   GrammarIcon,
@@ -44,19 +43,20 @@ const STAT_STYLES = [
 // khong trung tong. "col-span-2" = the dai (ca hang), khong co = the vuong; moi
 // hang deu du 2 cot nen khong the nao bi le.
 //
-// Lo trinh chinh: 6 the vuong, 3 hang.
+// Lo trinh chinh: the Bai hoc dai (gom 3 tag HSK 1-6, So va tien, Bo thu) roi 4 the
+// vuong, 3 hang deu du 2 cot. Bo thu khong con the rieng vi da nam trong Bai hoc.
 const CORE_CARDS = [
+  {
+    to: '/bai-hoc',
+    icon: BookIcon,
+    title: 'Bài học',
+    className: 'col-span-2 bg-gradient-to-br from-sky-500 to-emerald-500'
+  },
   {
     to: '/on-tap',
     icon: CardsIcon,
     title: 'Ôn tập ngay',
     className: 'bg-gradient-to-br from-brand-500 to-candy-500'
-  },
-  {
-    to: '/bai-hoc',
-    icon: BookIcon,
-    title: 'Bài học',
-    className: 'bg-gradient-to-br from-sky-500 to-emerald-500'
   },
   {
     to: '/ngu-phap',
@@ -75,12 +75,6 @@ const CORE_CARDS = [
     icon: PencilIcon,
     title: 'Viết chữ Hán',
     className: 'bg-gradient-to-br from-emerald-500 to-teal-600'
-  },
-  {
-    to: '/bo-thu',
-    icon: RadicalIcon,
-    title: 'Bộ thủ',
-    className: 'bg-gradient-to-br from-sky-600 to-brand-600'
   }
 ]
 
@@ -239,7 +233,7 @@ export default function HomePage() {
     if (to === '/phat-am') return toneAccuracy === null ? 'Chưa luyện' : `Độ chính xác ${toneAccuracy}%`
     if (to === '/viet-chu') return 'Luyện nét theo thứ tự chuẩn'
     if (to === '/chu-de') return 'Ngành nghề, bất động sản, đời sống'
-    if (to === '/bo-thu') return '214 bộ dựng nên chữ Hán'
+    if (to === '/bai-hoc') return 'HSK 1-6 · Số và tiền · Bộ thủ'
     if (to === '/hoi-thoai') return 'Xem tiếng Trung dùng thật'
     if (to === '/thu') return 'Tự dịch rồi đối chiếu đáp án'
     if (to === '/tro-choi') return 'Trả lời nhanh trong 60 giây!'

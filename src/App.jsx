@@ -95,6 +95,7 @@ export default function App() {
         <Route path="/bo-thu/tro-choi" element={<RadicalGamePage />} />
         <Route path="/chu-de" element={<TopicsPage />} />
         <Route path="/chu-de/:topicKey" element={<TopicDetailPage />} />
+        <Route path="/so-va-tien/:topicKey" element={<TopicDetailPage kind="number" />} />
         <Route path="/hoi-thoai" element={<DialoguesPage />} />
         <Route path="/hoi-thoai/:dialogueKey" element={<DialogueDetailPage />} />
         <Route path="/truyen" element={<StoriesPage />} />
