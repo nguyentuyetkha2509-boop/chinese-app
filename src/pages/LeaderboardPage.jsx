@@ -5,8 +5,8 @@ import { fetchTopLeaderboard } from '../lib/leaderboard'
 import { friendlyError } from '../lib/friendlyError'
 import { useFirebaseAuth } from '../store/FirebaseSyncContext'
 import { TrophyIcon } from '../components/Icons'
+import RankMedal from '../components/RankMedal'
 
-const MEDAL = ['🥇', '🥈', '🥉']
 
 export default function LeaderboardPage() {
   const { user, authReady } = useFirebaseAuth()
@@ -86,7 +86,7 @@ export default function LeaderboardPage() {
                 isMe ? 'bg-brand-700 text-white' : 'bg-white'
               }`}
             >
-              <span className="w-7 shrink-0 text-center text-lg">{MEDAL[i] || i + 1}</span>
+              <span className="w-10 shrink-0 text-center text-lg"><RankMedal index={i} size={40} /></span>
               <div className="flex-1">
                 <p className={`text-sm font-semibold ${isMe ? 'text-white' : 'text-gray-800'}`}>
                   {e.nickname || 'Ẩn danh'} {isMe && '(bạn)'}

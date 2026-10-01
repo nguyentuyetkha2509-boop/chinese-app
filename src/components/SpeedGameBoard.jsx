@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
+import RankMedal from './RankMedal'
 
-const MEDAL = ['🥇', '🥈', '🥉']
 
 // Bang xep hang cua tro "Dua toc do".
 //
@@ -50,7 +50,7 @@ export default function SpeedGameBoard({ user, top, standing, error, className =
                     isMe ? 'bg-brand-50 font-semibold text-brand-800' : 'bg-gray-50 text-gray-700'
                   }`}
                 >
-                  <span className="w-6 shrink-0 text-center">{MEDAL[i] || i + 1}</span>
+                  <span className="w-8 shrink-0 text-center"><RankMedal index={i} size={32} /></span>
                   <span className="flex-1 truncate">
                     {e.nickname || 'Ẩn danh'}
                     {isMe && ' (bạn)'}
