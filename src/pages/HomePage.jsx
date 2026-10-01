@@ -255,11 +255,11 @@ export default function HomePage() {
         </div>
         <div className="flex items-center gap-2">
           <div className="flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-sun-100 px-3 py-1.5 text-sun-600">
-            <FireIcon width={22} height={22} />
+            <FireIcon width={34} height={34} />
             <span className="text-sm">{streak.count} ngày</span>
           </div>
-          <Link to="/cai-dat" className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-500">
-            <SettingsIcon width={22} height={22} />
+          <Link to="/cai-dat" className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-gray-500">
+            <SettingsIcon width={36} height={36} />
           </Link>
         </div>
       </header>
