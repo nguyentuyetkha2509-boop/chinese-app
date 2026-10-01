@@ -44,9 +44,3 @@ Không có bộ test tự động. Mỗi thay đổi nên chạy lint và build,
 - Bình luận trong mã viết tiếng Việt không dấu, giải thích lý do chứ không mô tả lại mã.
 - Commit viết tiếng Việt có dấu, nêu rõ thay đổi và lý do.
 - Thêm trò chơi hay tính năng mới thì làm theo mẫu có sẵn: `RadicalGamePage.jsx` và `MemoryMatchPage.jsx` cho trò chơi, gắn XP qua `XP_REWARDS` trong `gamification.js`, đăng ký đường dẫn trong `App.jsx`, thêm thẻ vào `HomePage.jsx`.
-
-## Việc có thể làm tiếp
-
-- Thêm câu tiếng Trung mẫu dùng trong môi giới (chào khách, giới thiệu căn hộ, thương lượng giá) dưới dạng hội thoại trong `src/data/dialogues.js`.
-- Thêm trò chơi mới, ví dụ nối chữ với pinyin hoặc đoán chữ từ âm thanh.
-- README còn ghi số từ và tính năng cũ, cần cập nhật.
