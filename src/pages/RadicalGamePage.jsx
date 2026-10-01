@@ -9,6 +9,7 @@ import { useProgress } from '../store/ProgressContext'
 import { XP_REWARDS } from '../lib/gamification'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { shuffle } from '../lib/quiz'
+import CelebrationBadge from '../components/CelebrationBadge'
 
 const QUESTIONS_PER_ROUND = 10
 const HIGH_SCORE_KEY = 'radicalGameHighScore'
@@ -132,9 +133,11 @@ export default function RadicalGamePage() {
 
       {phase === 'over' && result && (
         <div className="rounded-3xl bg-gradient-to-br from-teal-500 to-brand-600 p-6 text-center text-white shadow-lg">
-          <p className="text-4xl">
-            {result.correct === result.total ? '🏆' : result.correct >= result.total / 2 ? '🎉' : '💪'}
-          </p>
+          {result.correct === result.total || result.correct < result.total / 2 ? (
+            <p className="text-4xl">{result.correct === result.total ? '🏆' : '💪'}</p>
+          ) : (
+            <CelebrationBadge className="mx-auto" />
+          )}
           <p className="mt-2 text-3xl">
             {result.correct}/{result.total}
           </p>

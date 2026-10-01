@@ -1,11 +1,14 @@
-import happyPanda from '../assets/panda/happy_panda.webp'
+import celebratePanda from '../assets/panda/celebrate_panda.png'
 
-export default function CelebrationBadge() {
+// size tinh bang px; mac dinh dung cho the hoan thanh, ban nho cho chat hep
+export default function CelebrationBadge({ size = 96, className = 'mx-auto mb-3' }) {
   return (
     <img
-      src={happyPanda}
+      src={celebratePanda}
       alt="Gấu trúc ăn mừng"
-      className="mx-auto mb-3 h-20 w-20 rounded-full object-cover shadow-md"
+      width={size}
+      height={size}
+      className={`${className} rounded-full object-cover shadow-md`}
     />
   )
 }

@@ -12,6 +12,7 @@ import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { ZapIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
+import CelebrationBadge from '../components/CelebrationBadge'
 
 const GAME_SECONDS = 60
 
@@ -234,7 +235,8 @@ export default function SpeedGamePage() {
       {phase === 'over' && (
         <>
           <div className="rounded-3xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
-            <p className="text-xl">{isNewRecord ? '🎉 Kỷ lục mới!' : 'Hết giờ!'}</p>
+            {isNewRecord && <CelebrationBadge />}
+            <p className="text-xl">{isNewRecord ? 'Kỷ lục mới!' : 'Hết giờ!'}</p>
             <p className="mt-2 text-4xl font-bold">{score} điểm</p>
             <p className="mt-1 text-sm text-white/80">Kỷ lục cao nhất: {highScore} điểm</p>
 

@@ -13,6 +13,7 @@ import {
   stepLink
 } from '../lib/sessionPlan'
 import { ArrowRightIcon, CheckIcon } from '../components/Icons'
+import CelebrationBadge from '../components/CelebrationBadge'
 
 export default function TodayPlanPage() {
   const { srsState, completedUnits, writingStats, completedGrammar, newWordsToday, dailyCombo, lockDailyCombo } =
@@ -123,8 +124,9 @@ export default function TodayPlanPage() {
               <CheckIcon width={24} height={24} />
             </span>
             <div className="flex-1 rounded-2xl bg-teal-50 p-4 shadow-sm">
-              <p className="text-base font-semibold text-teal-700">
-                {combo ? '🎉 Xong nhiệm vụ hôm nay!' : '🎉 Bạn đã học hết toàn bộ giáo trình!'}
+              <p className="flex items-center gap-2 text-base font-semibold text-teal-700">
+                <CelebrationBadge size={44} className="shrink-0" />
+                {combo ? 'Xong nhiệm vụ hôm nay!' : 'Bạn đã học hết toàn bộ giáo trình!'}
               </p>
               <p className="mt-0.5 text-xs text-gray-500">Quay lại vào ngày mai để tiếp tục nhé.</p>
             </div>

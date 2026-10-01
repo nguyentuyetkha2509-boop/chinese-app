@@ -30,6 +30,7 @@ import { getNextVocabCombo, getComboByUnitKey } from '../lib/curriculum'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'
 import { todayKey } from '../lib/date'
 import { useScrollRestoration } from '../lib/useScrollRestoration'
+import CelebrationBadge from '../components/CelebrationBadge'
 
 const STAT_STYLES = [
   { key: 'total', label: 'Tổng từ', className: 'bg-sky-100 text-sky-700' },
@@ -309,7 +310,10 @@ export default function HomePage() {
         <div className="flex items-center justify-between">
           <p className="flex items-center gap-2 text-sm font-semibold text-gray-700">
             {dailyGoalDone ? (
-              '🎉 Đã đạt mục tiêu hôm nay!'
+              <>
+                <CelebrationBadge size={44} className="shrink-0" />
+                Đã đạt mục tiêu hôm nay!
+              </>
             ) : (
               <>
                 <img src={goalPanda} alt="" width={44} height={44} className="shrink-0" />

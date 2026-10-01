@@ -175,7 +175,7 @@ export default function FlashcardsPage() {
         <div className="rounded-2xl bg-gradient-to-br from-brand-500 via-candy-500 to-sky-500 p-6 text-center text-white shadow-lg">
           {totalRated > 0 && <CelebrationBadge />}
           <p className="text-lg">
-            {totalRated > 0 ? `🎉 Đã ôn xong ${totalRated} thẻ!` : 'Không có thẻ nào cần ôn ở mục này.'}
+            {totalRated > 0 ? `Đã ôn xong ${totalRated} thẻ!` : 'Không có thẻ nào cần ôn ở mục này.'}
           </p>
           {totalRated > 0 ? (
             <>
