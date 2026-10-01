@@ -1,12 +1,14 @@
 # 🐼 PandaChinese
 
-App học tiếng Trung (HSK1-4) - chạy như mobile web app (PWA). Repo hoàn toàn độc lập, không liên quan đến app bán hàng nào khác.
+App học tiếng Trung theo chuẩn HSK 3.0 (cấp 1-6) - chạy như mobile web app (PWA). Repo hoàn toàn độc lập, không liên quan đến app bán hàng nào khác.
 
 Live: https://nguyentuyetkha2509-boop.github.io/chinese-app/
 
 ## Tính năng
 
-- **Bài học theo HSK1, HSK2, HSK3**: 595 từ vựng chuẩn, chia thành các bài 10 từ, mỗi bài kèm quiz trắc nghiệm cuối bài.
+- **Bài học theo HSK 3.0 cấp 1-6**: 5.363 từ vựng (506 / 750 / 953 / 972 / 1.059 / 1.123 từ), chia thành khoảng 575 bài theo chủ đề, mỗi bài kèm quiz trắc nghiệm cuối bài. Trang Bài học còn có tag **Số và tiền** (đọc số, tiền tệ, diện tích, giá nhà) và **Bộ thủ**.
+- **Ngữ pháp theo HSK 3.0**: 132 điểm xếp đúng cấp 1-6, mỗi điểm có giải thích, ví dụ và bài tập.
+- **Học theo chủ đề, hội thoại, truyện dài, thư gửi chính mình, trò chơi** (ghép cặp, đua tốc độ, sắp xếp câu, nghe chép chính tả) và bảng xếp hạng.
 - **Flashcard + Spaced Repetition (SRS)**: ôn từ theo thuật toán lặp lại ngắt quãng kiểu SM-2, tự tính lịch ôn dựa trên mức độ nhớ bạn tự đánh giá (Lại / Khó / Ổn / Dễ).
 - **Phát âm & thanh điệu**: nghe phát âm chuẩn (Web Speech API - giọng zh-CN), luyện phân biệt 4 thanh điệu, ghi âm giọng mình để tự so sánh.
 - **Viết chữ Hán**: xem hoạt hình thứ tự nét (dùng thư viện `hanzi-writer`) và tự viết thử để kiểm tra.

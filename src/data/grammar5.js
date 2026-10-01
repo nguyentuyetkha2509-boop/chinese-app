@@ -1,37 +1,258 @@
-// Diem ngu phap HSK5 - nang cao, tiep noi grammar.js/grammar2/3/4.js.
+// Ngu phap HSK5 theo chuan HSK 3.0 (21 diem). Xem ghi chu dau grammar.js.
 export const HSK5_GRAMMAR = [
   {
-    key: 'shuobuding',
+    key: 'bude',
     level: 'HSK5',
-    title: '说不定 - Biết đâu, có khi (khả năng chưa chắc chắn)',
-    pattern: '说不定 + mệnh đề (khả năng có thể xảy ra)',
-    explanation: 'Dùng để phỏng đoán một khả năng chưa chắc chắn, tương đương "biết đâu", "có khi", "có thể".',
+    title: 'V + 不得 - Không được, không thể',
+    pattern: 'Động từ + 不得',
+    explanation: 'V + 不得 diễn tả không nên hoặc không thể làm vì lý do hoàn cảnh, quy định hay hậu quả. Hay đi với 马虎不得 (không được cẩu thả), 吃不得 (không ăn được), 动不得 (không được động vào), 笑不得 (không cười nổi). Khác V不+kết quả ở chỗ nhấn mạnh sự cấm kỵ hoặc điều kiện không cho phép.',
     examples: [
-      { hanzi: '他说不定已经到了。', pinyin: 'Tā shuōbudìng yǐjīng dào le.', meaning: 'Biết đâu anh ấy đã đến rồi.' },
-      { hanzi: '明天说不定会下雨，你带把伞吧。', pinyin: 'Míngtiān shuōbudìng huì xiàyǔ, nǐ dài bǎ sǎn ba.', meaning: 'Ngày mai biết đâu sẽ mưa, bạn mang theo ô đi.' },
-      { hanzi: '这件事说不定对你有好处。', pinyin: 'Zhè jiàn shì shuōbudìng duì nǐ yǒu hǎochù.', meaning: 'Chuyện này biết đâu lại có lợi cho bạn.' }
+      { hanzi: '这种药吃不得。', pinyin: 'Zhè zhǒng yào chī bude.', meaning: 'Loại thuốc này không được uống.' },
+      { hanzi: '这件事马虎不得。', pinyin: 'Zhè jiàn shì mǎhu bude.', meaning: 'Việc này không được cẩu thả.' },
+      { hanzi: '他的话信不得。', pinyin: 'Tā de huà xìn bude.', meaning: 'Lời anh ta không tin được.' }
     ],
     quiz: [
-      { question: '说不定 dùng để diễn tả điều gì?', options: ['Một khả năng chưa chắc chắn, kiểu phỏng đoán "biết đâu"', 'Một sự thật hiển nhiên, chắc chắn', 'Một mệnh lệnh yêu cầu'] },
-      { question: '"Biết đâu anh ấy đã quên mất rồi" dịch đúng là:', options: ['他说不定已经忘了。', '他已经说不定忘了。', '说不定他忘了已经。'] },
-      { question: '"Có khi ngày mai cô ấy sẽ đến" dịch đúng là:', options: ['明天说不定她会来。', '明天她说不定会来以便。', '说不定明天来她会。'] }
+      { question: '"Việc này không được cẩu thả" dịch đúng là:', options: ['这件事马虎不得。', '这件事不得马虎。', '这件事马虎得不。'] },
+      { question: 'V + 不得 diễn tả:', options: ['Không nên, không thể (do hoàn cảnh, quy định)', 'Có thể làm được', 'Đã làm xong'] },
+      { question: '"Lời anh ta không tin được" dịch đúng là:', options: ['他的话信不得。', '他的话不得信。', '他的话信得不。'] }
     ]
   },
   {
-    key: 'wulun-dou',
+    key: 'qushi-shijian',
     level: 'HSK5',
-    title: '无论...都... - Bất luận...đều...',
-    pattern: '无论 + từ nghi vấn (什么/谁/怎么样...) hoặc lựa chọn, 都 + kết quả không đổi',
-    explanation: 'Giống 不管...都... nhưng trang trọng hơn, thường xuất hiện trong văn viết hoặc lời nói nghiêm túc.',
+    title: 'Bổ ngữ xu hướng chỉ thời gian - 起来 / 下去',
+    pattern: 'Động từ + 起来 (bắt đầu) / 下去 (tiếp tục)',
+    explanation: '起来 sau động từ nói hành động bắt đầu và tiếp diễn: 笑起来 (bật cười), 唱起来 (hát lên). 下去 nói hành động tiếp tục: 说下去 (nói tiếp), 学下去 (học tiếp).',
     examples: [
-      { hanzi: '无论多忙，她都会锻炼身体。', pinyin: 'Wúlùn duō máng, tā dōu huì duànliàn shēntǐ.', meaning: 'Bất luận bận đến đâu, cô ấy đều tập thể dục.' },
-      { hanzi: '无论遇到什么困难，我们都不能放弃。', pinyin: 'Wúlùn yùdào shénme kùnnan, wǒmen dōu bù néng fàngqì.', meaning: 'Bất luận gặp khó khăn gì, chúng ta đều không được bỏ cuộc.' },
-      { hanzi: '无论是谁，都要遵守规则。', pinyin: 'Wúlùn shì shéi, dōu yào zūnshǒu guīzé.', meaning: 'Bất luận là ai, đều phải tuân thủ quy tắc.' }
+      { hanzi: '听到这个消息，大家都笑起来了。', pinyin: 'Tīngdào zhège xiāoxi, dàjiā dōu xiào qǐlai le.', meaning: 'Nghe tin này mọi người đều bật cười.' },
+      { hanzi: '你说下去，我在听。', pinyin: 'Nǐ shuō xiàqu, wǒ zài tīng.', meaning: 'Bạn nói tiếp đi, tôi đang nghe.' },
+      { hanzi: '天气慢慢冷起来了。', pinyin: 'Tiānqì mànmàn lěng qǐlai le.', meaning: 'Trời dần dần lạnh lên.' }
     ],
     quiz: [
-      { question: '"Bất luận trời nóng hay lạnh, anh ấy đều chạy bộ" dịch đúng là:', options: ['无论天气冷还是热，他都跑步。', '天气无论冷还是热，跑步他都。', '他都跑步，无论天气冷还是热都。'] },
-      { question: 'Sau 无论 thường xuất hiện loại từ gì?', options: ['Từ nghi vấn hoặc cấu trúc lựa chọn (什么/谁/A还是B...)', 'Chỉ có danh từ đơn giản', 'Chỉ có động từ mệnh lệnh'] },
-      { question: '"Bất luận bạn nói gì, tôi đều không tin" dịch đúng là:', options: ['无论你说什么，我都不相信。', '你说什么无论，我都不相信。', '我都不相信，无论什么你说。'] }
+      { question: '下去 sau động từ có nghĩa là:', options: ['Tiếp tục hành động', 'Bắt đầu hành động', 'Kết thúc hành động'] },
+      { question: '"Mưa bắt đầu rơi" nói là:', options: ['下起雨来了。', '下下去雨了。', '雨下起来了下。'] },
+      { question: '"Hãy học tiếp, đừng bỏ cuộc" dịch đúng là:', options: ['继续学下去，不要放弃。', '继续学起来，不要放弃。', '继续下去学，不要放弃。'] }
+    ]
+  },
+  {
+    key: 'chengdu-buyu2',
+    level: 'HSK5',
+    title: 'Bổ ngữ mức độ nâng cao - 得不得了 / 得厉害 / 坏了',
+    pattern: 'Tính từ + 得不得了 / 得厉害 ; V / adj + 坏了 / 透了',
+    explanation: 'Diễn tả mức độ rất cao. 得不得了 là "không chịu nổi", 得厉害 là "dữ dội", 坏了 và 透了 là "hỏng bét, thấu xương". Thường dùng khi bày tỏ cảm xúc hoặc thể trạng mạnh.',
+    examples: [
+      { hanzi: '今天热得不得了。', pinyin: 'Jīntiān rè de bùdéliǎo.', meaning: 'Hôm nay nóng không chịu nổi.' },
+      { hanzi: '他头疼得厉害。', pinyin: 'Tā tóu téng de lìhai.', meaning: 'Anh ấy đau đầu dữ dội.' },
+      { hanzi: '我今天累坏了。', pinyin: 'Wǒ jīntiān lèihuài le.', meaning: 'Hôm nay tôi mệt rã rời.' }
+    ],
+    quiz: [
+      { question: '"Mệt rã rời" nói là:', options: ['累坏了', '坏累了', '累了坏'] },
+      { question: '得不得了 diễn tả:', options: ['Mức độ rất cao', 'Mức độ thấp', 'Nguyên nhân'] },
+      { question: '"Tôi vui không chịu nổi" dịch đúng là:', options: ['我高兴得不得了。', '我不得了高兴得。', '我高兴不得了得。'] }
+    ]
+  },
+  {
+    key: 'zhuangtai-buyu2',
+    level: 'HSK5',
+    title: 'Bổ ngữ trạng thái nâng cao - V / adj + 得 + cụm từ',
+    pattern: 'Động từ + 得 + cụm động từ / cụm chủ vị',
+    explanation: 'Sau 得 không chỉ là một tính từ mà có thể là cả một cụm từ để miêu tả kết quả hoặc trạng thái chi tiết hơn: 笑得肚子疼 (cười đau cả bụng), 高兴得说不出话来 (vui đến không nói nên lời).',
+    examples: [
+      { hanzi: '他笑得肚子都疼了。', pinyin: 'Tā xiào de dùzi dōu téng le.', meaning: 'Anh ấy cười đến đau cả bụng.' },
+      { hanzi: '她高兴得说不出话来。', pinyin: 'Tā gāoxìng de shuō bu chū huà lái.', meaning: 'Cô ấy vui đến mức không nói nên lời.' },
+      { hanzi: '他跑得满头大汗。', pinyin: 'Tā pǎo de mǎntóu-dàhàn.', meaning: 'Anh ấy chạy đến mướt mồ hôi.' }
+    ],
+    quiz: [
+      { question: 'Sau 得 trong cấu trúc này có thể là:', options: ['Cụm từ miêu tả kết quả', 'Chỉ có số từ', 'Chỉ có danh từ'] },
+      { question: '"Cô ấy khóc đến mắt đỏ hoe" dịch đúng là:', options: ['她哭得眼睛都红了。', '她哭眼睛得都红了。', '她得哭眼睛都红了。'] },
+      { question: '得 trong cấu trúc này đứng:', options: ['Ngay sau động từ hoặc tính từ', 'Đầu câu', 'Cuối câu'] }
+    ]
+  },
+  {
+    key: 'youzhe',
+    level: 'HSK5',
+    title: '有着 / V有 - Có, mang',
+    pattern: 'S + 有着 + O ; S + V + 有 + O',
+    explanation: '有着 là cách nói trang trọng của 有, thường dùng với danh từ trừu tượng (历史, 影响, 关系): có lịch sử lâu đời. V + 有 diễn tả vật gì được ghi, viết, gắn trên đó: 上面写有 (trên đó có viết).',
+    examples: [
+      { hanzi: '这座城市有着悠久的历史。', pinyin: 'Zhè zuò chéngshì yǒuzhe yōujiǔ de lìshǐ.', meaning: 'Thành phố này có lịch sử lâu đời.' },
+      { hanzi: '墙上挂有一张地图。', pinyin: 'Qiáng shàng guà yǒu yì zhāng dìtú.', meaning: 'Trên tường có treo một tấm bản đồ.' },
+      { hanzi: '这件事有着重要的意义。', pinyin: 'Zhè jiàn shì yǒuzhe zhòngyào de yìyì.', meaning: 'Việc này có ý nghĩa quan trọng.' }
+    ],
+    quiz: [
+      { question: '有着 thường đi với:', options: ['Danh từ trừu tượng, mang sắc thái trang trọng', 'Số từ nhỏ', 'Từ chỉ giờ giấc'] },
+      { question: '"Hai nước có quan hệ chặt chẽ" dịch đúng là:', options: ['两国有着密切的关系。', '两国着有密切的关系。', '两国有密切着关系。'] },
+      { question: '有着 so với 有 mang sắc thái:', options: ['Trang trọng hơn', 'Thân mật hơn', 'Phủ định'] }
+    ]
+  },
+  {
+    key: 'yinian-beidong',
+    level: 'HSK5',
+    title: 'Câu bị động ý niệm - Vật làm chủ ngữ, không cần 被',
+    pattern: 'Chủ ngữ (vật) + V + bổ ngữ / đã + V',
+    explanation: 'Trong tiếng Trung, nhiều câu có chủ ngữ là vật mà nghĩa là bị động nhưng không dùng 被: 饭做好了 (cơm nấu xong rồi), 信寄出去了 (thư đã gửi đi). Câu chủ yếu tả kết quả, trạng thái.',
+    examples: [
+      { hanzi: '饭做好了。', pinyin: 'Fàn zuòhǎo le.', meaning: 'Cơm đã nấu xong.' },
+      { hanzi: '信已经寄出去了。', pinyin: 'Xìn yǐjīng jì chūqu le.', meaning: 'Thư đã gửi đi rồi.' },
+      { hanzi: '问题解决了。', pinyin: 'Wèntí jiějué le.', meaning: 'Vấn đề đã được giải quyết.' }
+    ],
+    quiz: [
+      { question: '"Bài tập làm xong rồi" dịch đúng là:', options: ['作业做完了。', '作业被做完了。', '作业把做完了。'] },
+      { question: 'Câu bị động ý niệm có đặc điểm:', options: ['Chủ ngữ là vật chịu tác động, không dùng 被', 'Luôn dùng 被', 'Luôn có 把'] },
+      { question: '"Cửa đã mở rồi" dịch đúng là:', options: ['门开了。', '门被开了的。', '门把开了。'] }
+    ]
+  },
+  {
+    key: 'shi-ling',
+    level: 'HSK5',
+    title: '使 / 令 / 让 - Khiến cho (nghĩa sai khiến)',
+    pattern: 'A + 使 / 令 / 让 + người + V / adj',
+    explanation: 'Dùng chủ ngữ là sự việc để nói nó làm cho ai đó có cảm giác hay trạng thái gì. 使 và 令 hơi trang trọng; 让 thường gặp trong khẩu ngữ. Theo sau là động từ tâm lý hoặc tính từ.',
+    examples: [
+      { hanzi: '这个消息使大家很高兴。', pinyin: 'Zhège xiāoxi shǐ dàjiā hěn gāoxìng.', meaning: 'Tin này khiến mọi người rất vui.' },
+      { hanzi: '他的话令我很感动。', pinyin: 'Tā de huà lìng wǒ hěn gǎndòng.', meaning: 'Lời anh ấy làm tôi rất cảm động.' },
+      { hanzi: '这件事让我很生气。', pinyin: 'Zhè jiàn shì ràng wǒ hěn shēngqì.', meaning: 'Việc này làm tôi rất tức giận.' }
+    ],
+    quiz: [
+      { question: '"Điều này làm tôi rất lo" dịch đúng là:', options: ['这件事让我很担心。', '这件事我让很担心。', '让这件事我很担心。'] },
+      { question: 'Trong loại câu này, chủ ngữ thường là:', options: ['Sự việc hoặc lời nói', 'Một số từ', 'Địa điểm'] },
+      { question: 'Từ nào mang sắc thái trang trọng, văn viết?', options: ['令', '叫', '给'] }
+    ]
+  },
+  {
+    key: 'genxiangbi',
+    level: 'HSK5',
+    title: '跟...相比 / 比 + số lượng - So với..., hơn bao nhiêu',
+    pattern: '跟 + B + 相比，A ... ; A + tính từ + B + số lượng',
+    explanation: '跟...相比 là cách nêu sự so sánh một cách khách quan, tương tự "so với". Mệnh đề sau nói điểm khác biệt. Còn có mẫu A + tính từ + B + số lượng (A lớn hơn B bao nhiêu).',
+    examples: [
+      { hanzi: '跟去年相比，今年的房价上涨了。', pinyin: 'Gēn qùnián xiāngbǐ, jīnnián de fángjià shàngzhǎng le.', meaning: 'So với năm ngoái, giá nhà năm nay đã tăng.' },
+      { hanzi: '跟城市相比，农村比较安静。', pinyin: 'Gēn chéngshì xiāngbǐ, nóngcūn bǐjiào ānjìng.', meaning: 'So với thành phố, nông thôn yên tĩnh hơn.' },
+      { hanzi: '他高我五厘米。', pinyin: 'Tā gāo wǒ wǔ límǐ.', meaning: 'Anh ấy cao hơn tôi năm cen-ti-mét.' }
+    ],
+    quiz: [
+      { question: '跟...相比 nghĩa là:', options: ['So với...', 'Cùng với...', 'Đối với...'] },
+      { question: '"So với năm ngoái" nói là:', options: ['跟去年相比', '去年相比跟', '相比去年跟'] },
+      { question: '"Anh ấy lớn hơn tôi hai tuổi" nói là:', options: ['他大我两岁。', '他我大两岁。', '他两岁大我。'] }
+    ]
+  },
+  {
+    key: 'jinguan-haishi',
+    level: 'HSK5',
+    title: '尽管...还是... - Mặc dù...vẫn...',
+    pattern: '尽管 + mệnh đề 1, 还是 + mệnh đề 2',
+    explanation: 'Tương tự 虽然...但是... nhưng nhấn mạnh hơn: dù có điều kiện bất lợi vẫn giữ nguyên kết quả.',
+    examples: [
+      { hanzi: '尽管很累，他还是坚持工作。', pinyin: 'Jǐnguǎn hěn lèi, tā háishi jiānchí gōngzuò.', meaning: 'Mặc dù rất mệt, anh ấy vẫn kiên trì làm việc.' },
+      { hanzi: '尽管下雨，我们还是出发了。', pinyin: 'Jǐnguǎn xiàyǔ, wǒmen háishi chūfā le.', meaning: 'Mặc dù trời mưa, chúng tôi vẫn xuất phát.' },
+      { hanzi: '尽管价格贵，他还是买了。', pinyin: 'Jǐnguǎn jiàgé guì, tā háishi mǎi le.', meaning: 'Mặc dù giá đắt, anh ấy vẫn mua.' }
+    ],
+    quiz: [
+      { question: '"Mặc dù khó, tôi vẫn muốn học" dịch đúng là:', options: ['尽管难，我还是想学。', '还是难，尽管我想学。', '难尽管，还是我想学。'] },
+      { question: '尽管...还是... gần nghĩa nhất với cấu trúc nào đã học?', options: ['虽然...但是...', '因为...所以...', '只要...就...'] },
+      { question: '"Mặc dù trời lạnh, anh ấy vẫn đi bơi" dịch đúng là:', options: ['尽管天冷，他还是去游泳。', '还是天冷，尽管他去游泳。', '天冷尽管，还是他去游泳。'] }
+    ]
+  },
+  {
+    key: 'jishi-ye',
+    level: 'HSK5',
+    title: '即使...也... - Cho dù...cũng...',
+    pattern: '即使 + tình huống giả định, 也 + kết quả không đổi',
+    explanation: 'Diễn tả dù tình huống giả định (chưa chắc xảy ra) có xảy ra thì kết quả vẫn không đổi.',
+    examples: [
+      { hanzi: '即使下雨，我也要去。', pinyin: 'Jíshǐ xiàyǔ, wǒ yě yào qù.', meaning: 'Cho dù trời mưa, tôi cũng phải đi.' },
+      { hanzi: '即使很难，他也不放弃。', pinyin: 'Jíshǐ hěn nán, tā yě bú fàngqì.', meaning: 'Cho dù rất khó, anh ấy cũng không bỏ cuộc.' },
+      { hanzi: '即使没有钱，他也很开心。', pinyin: 'Jíshǐ méiyǒu qián, tā yě hěn kāixīn.', meaning: 'Cho dù không có tiền, anh ấy vẫn rất vui.' }
+    ],
+    quiz: [
+      { question: '"Cho dù bận, tôi cũng sẽ đến" dịch đúng là:', options: ['即使忙，我也会来。', '也忙，即使我会来。', '忙即使，我也会来。'] },
+      { question: '即使...也... khác 虽然...但是... ở điểm nào?', options: ['即使 dùng cho tình huống giả định, chưa chắc xảy ra', '即使 dùng cho việc đã xảy ra rồi', 'Hai cấu trúc giống hệt nhau'] },
+      { question: '"Cho dù thất bại, anh ấy cũng không hối hận" dịch đúng là:', options: ['即使失败，他也不后悔。', '也失败，即使他不后悔。', '失败即使，他也不后悔。'] }
+    ]
+  },
+  {
+    key: 'zai-ye',
+    level: 'HSK5',
+    title: '再...也... - Dù...đến mấy cũng...',
+    pattern: '再 + tính từ / động từ + 也 + kết quả',
+    explanation: 'Nhấn mạnh dù mức độ cao đến đâu thì kết quả vẫn không đổi. 再 đứng trước tính từ hoặc động từ, 也 đứng trước vế sau.',
+    examples: [
+      { hanzi: '再难，我也要学下去。', pinyin: 'Zài nán, wǒ yě yào xué xiàqu.', meaning: 'Khó đến mấy tôi cũng học tiếp.' },
+      { hanzi: '他再忙，也会回家吃饭。', pinyin: 'Tā zài máng, yě huì huíjiā chīfàn.', meaning: 'Anh ấy bận đến mấy cũng về nhà ăn cơm.' },
+      { hanzi: '价格再便宜，质量不好我也不买。', pinyin: 'Jiàgé zài piányi, zhìliàng bù hǎo wǒ yě bù mǎi.', meaning: 'Giá rẻ đến mấy mà chất lượng không tốt tôi cũng không mua.' }
+    ],
+    quiz: [
+      { question: '"Mệt đến mấy tôi cũng làm" dịch đúng là:', options: ['再累我也要做。', '再累我才要做。', '再累我就不做。'] },
+      { question: '再...也... diễn tả:', options: ['Dù mức độ cao nhưng kết quả không đổi', 'Hành động lặp lại', 'Điều kiện duy nhất'] },
+      { question: 'Từ dùng ở vế sau là:', options: ['也', '就', '才'] }
+    ]
+  },
+  {
+    key: 'zaiyebu',
+    level: 'HSK5',
+    title: '再也不 / 再也没 - Không bao giờ nữa',
+    pattern: '再也 + 不 / 没 + động từ',
+    explanation: 'Nhấn mạnh phủ định kéo dài từ nay về sau (再也不) hoặc từ một thời điểm đến nay (再也没). Thường đi kèm tâm trạng quyết tâm hay tiếc nuối.',
+    examples: [
+      { hanzi: '我再也不抽烟了。', pinyin: 'Wǒ zài yě bù chōuyān le.', meaning: 'Tôi sẽ không bao giờ hút thuốc nữa.' },
+      { hanzi: '他走了以后，再也没有回来。', pinyin: 'Tā zǒule yǐhòu, zài yě méiyǒu huílai.', meaning: 'Từ khi anh ấy đi, không bao giờ trở lại.' },
+      { hanzi: '我再也不会相信他了。', pinyin: 'Wǒ zài yě bú huì xiāngxìn tā le.', meaning: 'Tôi sẽ không bao giờ tin anh ta nữa.' }
+    ],
+    quiz: [
+      { question: '"Tôi sẽ không bao giờ đến đó nữa" dịch đúng là:', options: ['我再也不去那儿了。', '我再也去不那儿了。', '我不再也去那儿了。'] },
+      { question: '再也没 thường chỉ:', options: ['Việc chưa từng xảy ra lại từ một thời điểm', 'Việc sẽ làm', 'Điều kiện'] },
+      { question: 'Câu 再也不...了 thể hiện:', options: ['Quyết tâm không làm nữa', 'Dự định làm lần sau', 'Đề nghị'] }
+    ]
+  },
+  {
+    key: 'ke-qiangdiao',
+    level: 'HSK5',
+    title: '可 - Nhấn mạnh (cảnh báo, nhắc nhở)',
+    pattern: '可 + 要 / 别 / 不 / 是 ...',
+    explanation: 'Phó từ 可 đứng trước động từ để nhấn mạnh giọng điệu, thường để nhắc nhở hoặc bày tỏ cảm xúc. 可别... là "đừng có", 可要... là "nhớ phải". Dùng nhiều trong khẩu ngữ.',
+    examples: [
+      { hanzi: '你可别忘了带钥匙。', pinyin: 'Nǐ kě bié wàngle dài yàoshi.', meaning: 'Bạn đừng có quên mang chìa khóa đấy.' },
+      { hanzi: '这件事可不简单。', pinyin: 'Zhè jiàn shì kě bù jiǎndān.', meaning: 'Việc này đâu có đơn giản.' },
+      { hanzi: '你可要小心点儿。', pinyin: 'Nǐ kě yào xiǎoxīn diǎnr.', meaning: 'Bạn nhớ phải cẩn thận đấy.' }
+    ],
+    quiz: [
+      { question: '可别 + động từ có nghĩa:', options: ['Đừng có (nhắc nhở mạnh)', 'Có thể', 'Không cần'] },
+      { question: '"Đừng đến muộn đấy" dịch đúng là:', options: ['你可别迟到。', '你别可迟到。', '你迟到可别。'] },
+      { question: '可 trong những câu này dùng để:', options: ['Nhấn mạnh giọng điệu', 'Chỉ thời gian', 'Chỉ nơi chốn'] }
+    ]
+  },
+  {
+    key: 'chufei-cai',
+    level: 'HSK5',
+    title: '除非...才... - Trừ khi...mới...',
+    pattern: '除非 + điều kiện duy nhất, 才 + kết quả',
+    explanation: 'Diễn tả chỉ có MỘT điều kiện duy nhất mới dẫn đến kết quả, nếu không có điều kiện đó thì không có kết quả.',
+    examples: [
+      { hanzi: '除非你道歉，我才原谅你。', pinyin: 'Chúfēi nǐ dàoqiàn, wǒ cái yuánliàng nǐ.', meaning: 'Trừ khi bạn xin lỗi, tôi mới tha thứ cho bạn.' },
+      { hanzi: '除非下大雨，比赛才会取消。', pinyin: 'Chúfēi xià dà yǔ, bǐsài cái huì qǔxiāo.', meaning: 'Trừ khi mưa to, trận đấu mới bị hủy.' },
+      { hanzi: '除非有特殊情况，他才会请假。', pinyin: 'Chúfēi yǒu tèshū qíngkuàng, tā cái huì qǐngjià.', meaning: 'Trừ khi có tình huống đặc biệt, anh ấy mới xin nghỉ.' }
+    ],
+    quiz: [
+      { question: '除非...才... khác 只要...就... ở điểm nào?', options: ['除非 là điều kiện duy nhất, không có thì không được', 'Hai cấu trúc giống hệt nhau', '除非 chỉ dùng cho quá khứ'] },
+      { question: '"Trừ khi trời mưa, chúng tôi mới không đi" dịch đúng là:', options: ['除非下雨，我们才不去。', '才下雨，除非我们不去。', '下雨除非，我们才不去。'] },
+      { question: '"Trừ khi được phép, bạn mới có thể vào" dịch đúng là:', options: ['除非得到允许，你才能进去。', '才得到允许，除非你能进去。', '得到允许除非，你才能进去。'] }
+    ]
+  },
+  {
+    key: 'yidan-jiu',
+    level: 'HSK5',
+    title: '一旦...就... - Một khi...thì...',
+    pattern: '一旦 + điều kiện (thường khó đảo ngược), 就 + kết quả',
+    explanation: 'Diễn tả một khi điều gì đó xảy ra (thường bất ngờ hoặc khó thay đổi), thì kết quả sẽ theo sau một cách tất yếu.',
+    examples: [
+      { hanzi: '一旦养成习惯，就很难改变。', pinyin: 'Yídàn yǎngchéng xíguàn, jiù hěn nán gǎibiàn.', meaning: 'Một khi đã hình thành thói quen, thì rất khó thay đổi.' },
+      { hanzi: '一旦发现问题，请立刻报告。', pinyin: 'Yídàn fāxiàn wèntí, qǐng lìkè bàogào.', meaning: 'Một khi phát hiện vấn đề, xin hãy báo cáo ngay lập tức.' },
+      { hanzi: '信任一旦失去，就很难再找回来。', pinyin: 'Xìnrèn yídàn shīqù, jiù hěn nán zài zhǎo huílái.', meaning: 'Niềm tin một khi đã mất đi, thì rất khó tìm lại được.' }
+    ],
+    quiz: [
+      { question: '一旦...就... thường dùng cho loại tình huống nào?', options: ['Việc một khi xảy ra thì khó đảo ngược/kéo theo kết quả tất yếu', 'Việc chắc chắn không bao giờ xảy ra', 'Hai hành động xảy ra đồng thời'] },
+      { question: '"Một khi quyết định rồi, thì đừng hối hận" dịch đúng là:', options: ['一旦决定了，就别后悔。', '一旦决定了，反而别后悔。', '决定了一旦，就别后悔。'] },
+      { question: '"Sức khỏe một khi mất đi thì tiền bạc cũng vô nghĩa" dịch đúng là:', options: ['健康一旦失去，钱也没有意义了。', '健康何况失去，钱也没有意义了。', '一旦健康失去钱也没有意义了。'] }
     ]
   },
   {
@@ -52,108 +273,6 @@ export const HSK5_GRAMMAR = [
     ]
   },
   {
-    key: 'yimian',
-    level: 'HSK5',
-    title: '以免 - Để tránh, kẻo',
-    pattern: 'Mệnh đề A, 以免 + điều không mong muốn B',
-    explanation: 'Vế sau 以免 nêu một điều KHÔNG mong muốn cần tránh xảy ra - ngược nghĩa mục đích với 以便.',
-    examples: [
-      { hanzi: '出门带把伞，以免被雨淋湿。', pinyin: 'Chūmén dài bǎ sǎn, yǐmiǎn bèi yǔ lín shī.', meaning: 'Ra ngoài mang theo ô, kẻo bị mưa làm ướt.' },
-      { hanzi: '早点出发，以免迟到。', pinyin: 'Zǎodiǎn chūfā, yǐmiǎn chídào.', meaning: 'Xuất phát sớm một chút, kẻo trễ giờ.' },
-      { hanzi: '请小声说话，以免吵醒孩子。', pinyin: 'Qǐng xiǎo shēng shuōhuà, yǐmiǎn chǎo xǐng háizi.', meaning: 'Xin nói nhỏ tiếng, kẻo đánh thức đứa trẻ.' }
-    ],
-    quiz: [
-      { question: '以免 và 以便 khác nhau ở điểm nào?', options: ['以免 nêu điều cần TRÁNH, 以便 nêu mục đích thuận lợi', 'Hai từ hoàn toàn giống nhau', '以免 chỉ dùng ở đầu câu'] },
-      { question: '"Hãy cất tiền cẩn thận, kẻo bị mất" dịch đúng là:', options: ['把钱收好，以免丢了。', '把钱收好，以便丢了。', '以免把钱收好丢了。'] },
-      { question: '"Ăn chậm thôi, kẻo bị nghẹn" dịch đúng là:', options: ['慢点吃，以免噎着。', '慢点吃，以便噎着。', '以免慢点吃噎着。'] }
-    ]
-  },
-  {
-    key: 'wanyi',
-    level: 'HSK5',
-    title: '万一 - Lỡ như, nhỡ đâu',
-    pattern: '万一 + tình huống xấu ít khả năng xảy ra, (就) + cách xử lý',
-    explanation: 'Diễn tả một khả năng xấu RẤT ÍT xảy ra nhưng vẫn cần đề phòng, đặt trước điều kiện giả định đó.',
-    examples: [
-      { hanzi: '万一下雨，我们就取消野餐。', pinyin: 'Wànyī xiàyǔ, wǒmen jiù qǔxiāo yěcān.', meaning: 'Lỡ như trời mưa, chúng ta sẽ hủy buổi dã ngoại.' },
-      { hanzi: '你多带点钱，万一不够用呢。', pinyin: 'Nǐ duō dài diǎn qián, wànyī bú gòu yòng ne.', meaning: 'Bạn mang thêm ít tiền, lỡ đâu không đủ dùng.' },
-      { hanzi: '万一他不同意，我们该怎么办？', pinyin: 'Wànyī tā bù tóngyì, wǒmen gāi zěnme bàn?', meaning: 'Lỡ như anh ấy không đồng ý, chúng ta nên làm sao?' }
-    ],
-    quiz: [
-      { question: '万一 dùng để diễn tả loại tình huống nào?', options: ['Khả năng xấu, ít xảy ra nhưng cần đề phòng', 'Điều chắc chắn sẽ xảy ra', 'Việc đã xảy ra trong quá khứ'] },
-      { question: '"Mang theo áo mưa, lỡ đâu trời đổ mưa" dịch đúng là:', options: ['带上雨衣，万一下雨呢。', '带上雨衣，尽管下雨呢。', '万一带上雨衣下雨呢。'] },
-      { question: '"Lỡ như xe hỏng thì sao?" dịch đúng là:', options: ['万一车坏了怎么办？', '车万一坏了怎么办以便？', '怎么办万一车坏了？'] }
-    ]
-  },
-  {
-    key: 'xingkui',
-    level: 'HSK5',
-    title: '幸亏 - May mà',
-    pattern: '幸亏 + điều may mắn, (要不然/否则) + hậu quả xấu giả định',
-    explanation: 'Nhấn mạnh nhờ có một điều may mắn mà tránh được hậu quả xấu; thường kết hợp với 要不然/不然/否则 ở vế sau để nêu hậu quả nếu không có điều may mắn đó.',
-    examples: [
-      { hanzi: '幸亏你提醒我，要不然我就忘了。', pinyin: 'Xìngkuī nǐ tíxǐng wǒ, yàoburán wǒ jiù wàng le.', meaning: 'May mà bạn nhắc tôi, nếu không thì tôi đã quên mất.' },
-      { hanzi: '幸亏带了雨伞，不然全身都湿了。', pinyin: 'Xìngkuī dàile yǔsǎn, bùrán quánshēn dōu shī le.', meaning: 'May mà mang theo ô, không thì ướt hết cả người.' },
-      { hanzi: '幸亏医生来得及时，他才脱离危险。', pinyin: 'Xìngkuī yīshēng lái de jíshí, tā cái tuōlí wēixiǎn.', meaning: 'May mà bác sĩ đến kịp thời, anh ấy mới thoát khỏi nguy hiểm.' }
-    ],
-    quiz: [
-      { question: '幸亏 thường đi kèm ý nghĩa gì ở vế sau?', options: ['Hậu quả xấu giả định nếu không có điều may mắn đó', 'Một mục đích cần đạt được', 'Một điều kiện chưa chắc xảy ra'] },
-      { question: '"May mà tôi mang theo chìa khóa dự phòng" dịch đúng là:', options: ['幸亏我带了备用钥匙。', '万一我带了备用钥匙。', '我幸亏了带备用钥匙。'] },
-      { question: '"May mà phát hiện sớm, nếu không bệnh sẽ nặng hơn" dịch đúng là:', options: ['幸亏发现得早，要不然病情会更严重。', '万一发现得早，要不然病情会更严重。', '发现得早幸亏，病情会更严重要不然。'] }
-    ]
-  },
-  {
-    key: 'fan-er',
-    level: 'HSK5',
-    title: '反而 - Trái lại, ngược lại',
-    pattern: '(không những không...) A, 反而 + B (kết quả trái ngược mong đợi)',
-    explanation: 'Diễn tả kết quả B trái ngược hẳn với điều lẽ ra phải xảy ra hoặc điều được mong đợi từ A.',
-    examples: [
-      { hanzi: '吃了药，病反而更重了。', pinyin: 'Chīle yào, bìng fǎn\'ér gèng zhòng le.', meaning: 'Uống thuốc rồi, bệnh trái lại còn nặng hơn.' },
-      { hanzi: '他不但不生气，反而笑了。', pinyin: 'Tā búdàn bù shēngqì, fǎn\'ér xiào le.', meaning: 'Anh ấy không những không giận, trái lại còn cười.' },
-      { hanzi: '我帮了他，他反而怪我多管闲事。', pinyin: 'Wǒ bāngle tā, tā fǎn\'ér guài wǒ duō guǎn xiánshì.', meaning: 'Tôi đã giúp anh ấy, anh ấy ngược lại còn trách tôi nhiều chuyện.' }
-    ],
-    quiz: [
-      { question: '反而 diễn tả điều gì?', options: ['Kết quả trái ngược với điều mong đợi', 'Kết quả đúng như dự đoán', 'Nguyên nhân của sự việc'] },
-      { question: '"Càng giải thích, cô ấy càng hiểu lầm hơn" (dùng 反而) dịch đúng là:', options: ['解释了半天，她反而更误会了。', '解释了半天，她万一更误会了。', '她反而解释了半天更误会了。'] },
-      { question: '"Trời lạnh hơn, nhưng anh ấy trái lại mặc ít đồ hơn" dịch đúng là:', options: ['天更冷了，他反而穿得更少。', '天更冷了，他何况穿得更少。', '他反而天更冷了穿得更少。'] }
-    ]
-  },
-  {
-    key: 'hekuang',
-    level: 'HSK5',
-    title: '何况 - Huống chi, huống hồ',
-    pattern: 'A (điều đơn giản/hiển nhiên), 何况 + B (điều khó/lớn hơn)',
-    explanation: 'Dùng để bổ sung lý lẽ: nếu điều đơn giản A đã như vậy, thì điều khó hơn B càng đúng, không cần bàn cãi thêm.',
-    examples: [
-      { hanzi: '这道题大人都不会做，何况是孩子呢。', pinyin: 'Zhè dào tí dàrén dōu bú huì zuò, hékuàng shì háizi ne.', meaning: 'Bài này người lớn còn không làm được, huống chi là trẻ con.' },
-      { hanzi: '我连一公里都跑不动，何况十公里。', pinyin: 'Wǒ lián yì gōnglǐ dōu pǎo bu dòng, hékuàng shí gōnglǐ.', meaning: 'Tôi một cây số còn chạy không nổi, huống chi mười cây số.' },
-      { hanzi: '他普通话都说不好，何况英语。', pinyin: 'Tā pǔtōnghuà dōu shuō bu hǎo, hékuàng Yīngyǔ.', meaning: 'Anh ấy tiếng phổ thông còn nói không tốt, huống chi tiếng Anh.' }
-    ],
-    quiz: [
-      { question: '何况 dùng để làm gì?', options: ['Bổ sung lý lẽ cho điều đã nêu, nhấn mạnh điều sau còn đúng hơn', 'Nêu một mục đích', 'Diễn tả kết quả bất ngờ'] },
-      { question: '"Anh ấy 5 phút còn ngồi không yên, huống chi 5 tiếng" dịch đúng là:', options: ['他五分钟都坐不住，何况五个小时。', '他五分钟都坐不住，反而五个小时。', '何况他五分钟都坐不住五个小时。'] },
-      { question: '"Người khỏe mạnh còn thấy mệt, huống chi người mới ốm dậy" dịch đúng là:', options: ['身体好的人都觉得累，何况刚生病的人。', '身体好的人都觉得累，万一刚生病的人。', '何况身体好的人都觉得累刚生病的人。'] }
-    ]
-  },
-  {
-    key: 'shenzhi',
-    level: 'HSK5',
-    title: '甚至 - Thậm chí',
-    pattern: 'A, 甚至(连) + B + 都/也 + vị ngữ',
-    explanation: 'Nhấn mạnh một mức độ cao hơn, bất ngờ hơn so với những gì vừa được nêu ở vế trước.',
-    examples: [
-      { hanzi: '他很喜欢中国文化，甚至比中国人还了解。', pinyin: 'Tā hěn xǐhuan Zhōngguó wénhuà, shènzhì bǐ Zhōngguórén hái liǎojiě.', meaning: 'Anh ấy rất thích văn hóa Trung Quốc, thậm chí còn hiểu hơn cả người Trung Quốc.' },
-      { hanzi: '他忙得甚至连饭都忘了吃。', pinyin: 'Tā máng de shènzhì lián fàn dōu wàngle chī.', meaning: 'Anh ấy bận đến mức thậm chí quên cả ăn cơm.' },
-      { hanzi: '这里的冬天很冷，甚至会下雪。', pinyin: 'Zhèlǐ de dōngtiān hěn lěng, shènzhì huì xiàxuě.', meaning: 'Mùa đông ở đây rất lạnh, thậm chí có tuyết rơi.' }
-    ],
-    quiz: [
-      { question: '甚至 thường kết hợp với cấu trúc nào để nhấn mạnh?', options: ['连...都/也...', '不但...而且...', '因为...所以...'] },
-      { question: '"Cô ấy bận đến mức thậm chí quên cả sinh nhật mình" dịch đúng là:', options: ['她忙得甚至忘了自己的生日。', '她忙得反而忘了自己的生日。', '甚至她忙得忘了自己的生日。'] },
-      { question: '"Anh ấy thậm chí không nhớ nổi tên tôi" dịch đúng là:', options: ['他甚至想不起我的名字。', '他何况想不起我的名字。', '甚至他想不起我的名字。'] }
-    ]
-  },
-  {
     key: 'buran',
     level: 'HSK5',
     title: '不然 - Nếu không thì',
@@ -168,6 +287,74 @@ export const HSK5_GRAMMAR = [
       { question: '不然 đứng ở vị trí nào trong câu?', options: ['Đầu vế câu thứ hai, nêu hậu quả nếu không làm theo vế trước', 'Cuối câu, làm trợ từ nghi vấn', 'Giữa chủ ngữ và động từ'] },
       { question: '"Bạn nên đặt vé sớm, không thì hết chỗ" dịch đúng là:', options: ['你应该早点订票，不然没位子了。', '你应该早点订票，何况没位子了。', '不然你应该早点订票没位子了。'] },
       { question: '"Phải ôn bài, không thì thi trượt đấy" dịch đúng là:', options: ['得复习，不然考试会不及格的。', '得复习，甚至考试会不及格的。', '不然得复习考试会不及格的。'] }
+    ]
+  },
+  {
+    key: 'weideshi',
+    level: 'HSK5',
+    title: '为的是 / 以便 / 因而 - Chỉ mục đích, kết quả',
+    pattern: '...，为的是 / 以便 + mục đích ; ...，因而 + kết quả',
+    explanation: '为的是 và 以便 đứng ở vế sau để nêu mục đích của hành động ở vế trước. 因而 nêu kết quả suy ra từ vế trước và dùng trong văn viết.',
+    examples: [
+      { hanzi: '他每天早起，为的是锻炼身体。', pinyin: 'Tā měi tiān zǎoqǐ, wèideshì duànliàn shēntǐ.', meaning: 'Anh ấy ngày nào cũng dậy sớm để rèn luyện sức khỏe.' },
+      { hanzi: '请留下你的电话，以便我们联系你。', pinyin: 'Qǐng liúxià nǐ de diànhuà, yǐbiàn wǒmen liánxì nǐ.', meaning: 'Xin để lại số điện thoại để chúng tôi liên lạc với bạn.' },
+      { hanzi: '他很努力，因而取得了好成绩。', pinyin: "Tā hěn nǔlì, yīn'ér qǔdéle hǎo chéngjì.", meaning: 'Anh ấy rất chăm chỉ nên đạt kết quả tốt.' }
+    ],
+    quiz: [
+      { question: '"Để tiện liên lạc" nói là:', options: ['以便联系', '以后联系', '以为联系'] },
+      { question: '因而 thể hiện:', options: ['Kết quả', 'Điều kiện', 'Mục đích'] },
+      { question: '为的是 đứng ở:', options: ['Vế sau, nêu mục đích', 'Cuối câu hỏi', 'Trước chủ ngữ vế đầu'] }
+    ]
+  },
+  {
+    key: 'meiyou-jiu-meiyou',
+    level: 'HSK5',
+    title: '没有...就没有... - Không có...thì không có...',
+    pattern: '没有 + A，就没有 + B',
+    explanation: 'Nhấn mạnh A là điều kiện cần thiết để có B. Nghĩa là nếu thiếu A thì không thể có B. Hay dùng để bày tỏ lòng biết ơn hoặc nhấn mạnh tầm quan trọng.',
+    examples: [
+      { hanzi: '没有你的帮助，就没有我的今天。', pinyin: 'Méiyǒu nǐ de bāngzhù, jiù méiyǒu wǒ de jīntiān.', meaning: 'Không có sự giúp đỡ của bạn thì không có tôi ngày hôm nay.' },
+      { hanzi: '没有努力，就没有成功。', pinyin: 'Méiyǒu nǔlì, jiù méiyǒu chénggōng.', meaning: 'Không cố gắng thì không có thành công.' },
+      { hanzi: '没有水，就没有生命。', pinyin: 'Méiyǒu shuǐ, jiù méiyǒu shēngmìng.', meaning: 'Không có nước thì không có sự sống.' }
+    ],
+    quiz: [
+      { question: 'Cấu trúc này nhấn mạnh:', options: ['A là điều kiện cần để có B', 'A và B không liên quan', 'B xảy ra trước A'] },
+      { question: '"Không có thời gian thì không thể học" dịch đúng là:', options: ['没有时间，就没有学习。', '有时间，就没有学习。', '没有时间，才没有学习。'] },
+      { question: 'Vế sau của cấu trúc dùng:', options: ['就没有', '才有', '也有'] }
+    ]
+  },
+  {
+    key: 'conglaikan',
+    level: 'HSK5',
+    title: '从...来看 / 在...看来 / 拿...来说 - Nhìn từ...; theo...; lấy...mà nói',
+    pattern: '从 / 拿 + danh từ + 来看 / 来说 ; 在 + người + 看来',
+    explanation: 'Nêu góc nhìn, căn cứ hoặc lấy ví dụ để đánh giá. 从...来看: xét từ. 在...看来: theo quan điểm của ai. 拿...来说: lấy ... làm ví dụ.',
+    examples: [
+      { hanzi: '从价格来看，这个房子不贵。', pinyin: 'Cóng jiàgé lái kàn, zhège fángzi bú guì.', meaning: 'Xét về giá, căn nhà này không đắt.' },
+      { hanzi: '在我看来，这是个好办法。', pinyin: 'Zài wǒ kànlái, zhè shì gè hǎo bànfǎ.', meaning: 'Theo tôi, đây là cách hay.' },
+      { hanzi: '拿汉语来说，声调是最难的部分。', pinyin: 'Ná Hànyǔ lái shuō, shēngdiào shì zuì nán de bùfen.', meaning: 'Lấy tiếng Trung làm ví dụ, thanh điệu là phần khó nhất.' }
+    ],
+    quiz: [
+      { question: '"Theo tôi" nói là:', options: ['在我看来', '对我看来', '从我看来'] },
+      { question: '拿...来说 dùng để:', options: ['Lấy làm ví dụ', 'Xin phép', 'Hỏi giá'] },
+      { question: '"Xét về chất lượng" dịch đúng là:', options: ['从质量来看', '在质量来看', '对质量看来'] }
+    ]
+  },
+  {
+    key: 'daowei-zhi',
+    level: 'HSK5',
+    title: '到...为止 / 够...的 - Cho đến...; khá...lắm',
+    pattern: '到 + mốc + 为止 ; 够 + tính từ + 的',
+    explanation: '到...为止: cho đến mốc nào đó thì dừng (thời gian, số lượng). 够...的: dùng để nhận xét mức độ đủ cao, thường mang ý đánh giá hoặc cảm thán ("khá là", "quả là").',
+    examples: [
+      { hanzi: '到现在为止，我已经学了五百个汉字。', pinyin: 'Dào xiànzài wéizhǐ, wǒ yǐjīng xuéle wǔbǎi gè Hànzì.', meaning: 'Cho đến nay tôi đã học năm trăm chữ Hán.' },
+      { hanzi: '今天的活动到下午五点为止。', pinyin: 'Jīntiān de huódòng dào xiàwǔ wǔ diǎn wéizhǐ.', meaning: 'Hoạt động hôm nay đến năm giờ chiều là kết thúc.' },
+      { hanzi: '这个房间够大的。', pinyin: 'Zhège fángjiān gòu dà de.', meaning: 'Căn phòng này khá lớn đấy.' }
+    ],
+    quiz: [
+      { question: '到...为止 nghĩa là:', options: ['Cho đến mốc đó thì dừng', 'Bắt đầu từ mốc đó', 'Bất cứ lúc nào'] },
+      { question: '"Cho đến hôm nay" dịch đúng là:', options: ['到今天为止', '为止到今天', '到为止今天'] },
+      { question: '够...的 thường dùng để:', options: ['Nhận xét, đánh giá mức độ', 'Hỏi đường', 'Đếm số'] }
     ]
   }
 ]
