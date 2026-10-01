@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useFirebaseSync } from '../store/FirebaseSyncContext'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { playCorrect, playWrong } from '../lib/sfx'
+import PandaIcon from './PandaIcon'
 
 const SEEN_KEY = 'hasSeenWelcome'
 
@@ -53,7 +54,7 @@ export default function WelcomeScreen({ onDone }) {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-brand-600 via-candy-500 to-sky-500 px-6 text-center text-white">
-      <div className="text-7xl">🐼</div>
+      <PandaIcon size={104} />
       <h1 className="mt-4 text-3xl font-bold">PandaChinese</h1>
       <p className="mt-2 text-sm text-white/85">
         Học từ vựng, phát âm và chữ Hán theo chuẩn HSK 3.0 (cấp 1-6)

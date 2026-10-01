@@ -1,4 +1,4 @@
-# 🐼 PandaChinese
+# PandaChinese
 
 App học tiếng Trung theo chuẩn HSK 3.0 (cấp 1-6) - chạy như mobile web app (PWA). Repo hoàn toàn độc lập, không liên quan đến app bán hàng nào khác.
 

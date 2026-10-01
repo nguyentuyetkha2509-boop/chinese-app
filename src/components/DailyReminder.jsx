@@ -72,7 +72,7 @@ export default function DailyReminder() {
 
       const body = dueCount > 0 ? `Còn ${dueCount} thẻ cần ôn tập hôm nay.` : `Bài "${combo.unit.title}" hôm nay chưa xong đâu nhé.`
 
-      fireNotification('🐼 Đến giờ học tiếng Trung rồi!', {
+      fireNotification('Đến giờ học tiếng Trung rồi!', {
         body,
         icon: `${import.meta.env.BASE_URL}icon-192.png`,
         tag: 'panda-daily-reminder'

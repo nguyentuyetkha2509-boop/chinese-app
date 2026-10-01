@@ -7,6 +7,7 @@ import { accentFor } from '../lib/colors'
 import { parseLevelRank } from '../lib/contentLevel'
 import { ArrowRightIcon, CheckIcon } from '../components/Icons'
 import { useScrollRestoration } from '../lib/useScrollRestoration'
+import { StoryIcon } from '../components/PandaIcon'
 
 export default function StoriesPage() {
   useScrollRestoration('stories')
@@ -49,7 +50,7 @@ export default function StoriesPage() {
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold text-gray-500">
                 {i + 1}
               </span>
-              <span className="text-3xl">{s.icon}</span>
+              <StoryIcon icon={s.icon} size={30} />
               <div className="flex-1">
                 <p className="text-base text-gray-800">{s.title}</p>
                 <p className={`text-xs ${accent.text}`}>

@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import PandaIcon from './PandaIcon'
 
 // Luoi an toan cuoi cung cua ca app.
 //
@@ -31,7 +32,7 @@ export default class ErrorBoundary extends Component {
     return (
       <div className="flex min-h-screen items-center justify-center bg-canvas px-4">
         <div className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-sm">
-          <p className="text-4xl">🐼</p>
+          <PandaIcon size={64} />
           <p className="mt-3 text-lg font-semibold text-brand-800">Ứng dụng gặp trục trặc</p>
           <p className="mt-2 text-sm text-gray-600">
             Đây là lỗi khi hiển thị màn hình, không phải mất dữ liệu. Tiến độ học của bạn vẫn nằm

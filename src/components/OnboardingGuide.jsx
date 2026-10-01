@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { loadJSON, saveJSON } from '../lib/storage'
+import PandaIcon from './PandaIcon'
 
 const SEEN_KEY = 'hasSeenOnboarding'
 
@@ -43,7 +44,7 @@ export default function OnboardingGuide({ onDone }) {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-brand-600 via-candy-500 to-sky-500 px-6 text-center text-white">
-      <div className="text-6xl">🐼</div>
+      <PandaIcon size={88} />
       <h1 className="mt-3 text-2xl font-bold">Học thế nào cho hiệu quả?</h1>
       <p className="mt-1 text-sm text-white/85">3 bước đơn giản, làm theo thứ tự này nhé</p>
 

@@ -11,6 +11,7 @@ import { QUIZ_PASS_THRESHOLD, quizPassed } from '../lib/quizResult'
 import { CheckIcon, VolumeIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
 import CelebrationBadge from '../components/CelebrationBadge'
+import { StoryIcon } from '../components/PandaIcon'
 
 // Xem ghi chu tuong tu trong LessonDetailPage.jsx: dat key theo storyKey de
 // remount lai tu dau khi chuyen thang sang truyen khac, tranh giu nham
@@ -106,7 +107,7 @@ function StoryDetailPageInner() {
       <div className="mb-4 flex items-center gap-2">
         <BackButton />
         <h1 className="text-xl text-brand-800">
-          {story.icon} {story.title}
+          <StoryIcon icon={story.icon} size={26} /> {story.title}
         </h1>
         {done && (
           <span className="flex items-center gap-1 rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-700">
