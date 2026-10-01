@@ -312,7 +312,7 @@ export default function HomePage() {
               '🎉 Đã đạt mục tiêu hôm nay!'
             ) : (
               <>
-                <img src={goalPanda} alt="" width={36} height={36} />
+                <img src={goalPanda} alt="" width={44} height={44} className="shrink-0" />
                 Mục tiêu hôm nay
               </>
             )}
