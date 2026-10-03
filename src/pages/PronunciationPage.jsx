@@ -4,9 +4,10 @@ import BackButton from '../components/BackButton'
 import { getLevel } from '../data/levels'
 import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
-import { playCorrect, playWrong, playCelebrate, playFlip } from '../lib/sfx'
+import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
 import { VolumeIcon, RecordIcon, RobotIcon } from '../components/Icons'
+import { beginRecordAudio, endRecordAudio } from '../lib/audioSession'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import CelebrationBadge from '../components/CelebrationBadge'
@@ -218,6 +219,25 @@ function ListenBrowse({ words }) {
 
 // Safari/iOS khong ho tro audio/webm - phai hoi trinh duyet dinh dang nao no
 // thuc su dung roi gan dung vao Blob, neu khong audio ghi duoc se khong phat lai duoc.
+// Tra ve cau huong dan theo dung nguyen nhan loi micro, de nguoi dung biet can lam gi
+// thay vi mot cau chung chung.
+function describeMicError(e) {
+  switch (e?.name) {
+    case 'NotAllowedError':
+    case 'SecurityError':
+      return 'Chưa được phép dùng micro. Trên iPhone: vào Cài đặt → Safari → Micrô (hoặc Cài đặt → Safari → Cài đặt trang web) và chọn Cho phép, rồi đóng hẳn app và mở lại.'
+    case 'NotFoundError':
+      return 'Không tìm thấy micro trên thiết bị này.'
+    case 'NotReadableError':
+    case 'AbortError':
+      return 'Micro đang bị ứng dụng hoặc tab khác chiếm. Đóng các nơi đang dùng micro (cuộc gọi, ghi âm, tab khác) rồi thử lại.'
+    case 'Unsupported':
+      return 'Trình duyệt này chưa hỗ trợ ghi âm. Hãy mở app bằng Safari hoặc Chrome bản mới.'
+    default:
+      return `Không ghi âm được (${e?.name || 'lỗi không rõ'}). Hãy thử đóng hẳn app, mở lại và cấp quyền micro.`
+  }
+}
+
 const MIME_CANDIDATES = ['audio/webm', 'audio/mp4', 'audio/ogg']
 
 function pickSupportedMimeType() {
@@ -245,6 +265,7 @@ function RecordCompare({ words, levelId }) {
   const [phase, setPhase] = useState('practice') // practice | done
   const word = round[index]
   const [status, setStatus] = useState('idle') // idle | requesting | recording | recorded | error
+  const [micError, setMicError] = useState('')
   const [audioUrl, setAudioUrl] = useState(null)
   const [aiResult, setAiResult] = useState(null) // null | 'match' | 'mismatch' | 'no-speech'
   const [heardText, setHeardText] = useState('')
@@ -271,6 +292,7 @@ function RecordCompare({ words, levelId }) {
       if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop()
       streamRef.current?.getTracks().forEach((t) => t.stop())
       recognitionRef.current?.stop()
+      endRecordAudio()
     }
   }, [])
 
@@ -335,12 +357,17 @@ function RecordCompare({ words, levelId }) {
   async function startRecording() {
     if (status === 'requesting' || status === 'recording') return
     setStatus('requesting')
+    setMicError('')
     setAiResult(null)
     setHeardText('')
     // Dung TTS truoc khi mo mic - phat ("Nghe mau") roi ghi am ngay sau co the
     // khien thiet bi di dong phai chuyen doi phien am thanh phat->thu, gay cham.
     window.speechSynthesis?.cancel()
     try {
+      if (typeof MediaRecorder === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
+        throw Object.assign(new Error('unsupported'), { name: 'Unsupported' })
+      }
+      beginRecordAudio()
       const stream = await ensureStream()
       const mimeType = pickSupportedMimeType()
       const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined)
@@ -355,13 +382,16 @@ function RecordCompare({ words, levelId }) {
         // AI nhan dien giong noi co the chiem mic sach se, khong bi tranh chap.
         stream.getTracks().forEach((t) => t.stop())
         streamRef.current = null
+        endRecordAudio()
         playCorrect()
       }
       recorder.start()
       mediaRecorderRef.current = recorder
       setStatus('recording')
-      playFlip()
-    } catch {
+      // Khong phat tieng bao hieu luc bat dau thu: phat tieng khi dang thu lam hong ban ghi tren iPhone.
+    } catch (e) {
+      endRecordAudio()
+      setMicError(describeMicError(e))
       setStatus('error')
       playWrong()
     }
@@ -447,7 +477,7 @@ function RecordCompare({ words, levelId }) {
           </button>
         )}
         {status === 'error' && (
-          <p className="text-sm text-red-500">Không dùng được micro (cần cấp quyền hoặc HTTPS).</p>
+          <p className="text-center text-sm text-red-500">{micError}</p>
         )}
         {!SpeechRecognitionCtor && status !== 'error' && (
           <p className="text-center text-xs text-gray-500">
