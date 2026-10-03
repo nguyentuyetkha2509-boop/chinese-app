@@ -38,6 +38,14 @@ export default function WritingCheckPage() {
     }
   }
 
+  // Xoa ca bai viet lan ket qua de bat dau bai moi; chi hien khi da co ket qua nen
+  // khong bao gio xoa giua luc dang cho AI tra loi.
+  function handleClear() {
+    setText('')
+    setResult('')
+    setError('')
+  }
+
   return (
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
@@ -78,6 +86,15 @@ export default function WritingCheckPage() {
             <div className="mt-4 whitespace-pre-wrap rounded-2xl bg-white p-4 text-sm leading-relaxed text-gray-800 shadow-sm">
               <MarkdownLite text={result} />
             </div>
+          )}
+
+          {result && (
+            <button
+              onClick={handleClear}
+              className="mt-3 w-full rounded-2xl border border-gray-200 bg-white py-2.5 text-sm font-semibold text-gray-600"
+            >
+              🗑 Xóa bài và kết quả
+            </button>
           )}
         </>
       )}
