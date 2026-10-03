@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { VolumeIcon } from './Icons'
 import { hasChineseVoice, isTtsSupported, speakChinese, subscribeTtsFailure } from '../lib/tts'
 
 // Cac truong hop khong nghe duoc, kem cach xu ly cu the cho tung truong hop.
@@ -6,7 +7,7 @@ const MESSAGES = {
   unsupported:
     '⚠️ Trình duyệt này không hỗ trợ đọc giọng tiếng Trung. Hãy thử mở app bằng Chrome hoặc Safari.',
   'missing-voice':
-    '⚠️ Máy của bạn có thể chưa cài giọng đọc tiếng Trung nên nút 🔊 sẽ không phát ra tiếng. Vào Cài đặt máy → Ngôn ngữ & giọng nói (Text-to-speech) → thêm giọng "Chinese (Mandarin)" rồi quay lại thử.',
+    '⚠️ Máy của bạn có thể chưa cài giọng đọc tiếng Trung nên nút loa sẽ không phát ra tiếng. Vào Cài đặt máy → Ngôn ngữ & giọng nói (Text-to-speech) → thêm giọng "Chinese (Mandarin)" rồi quay lại thử.',
   // May CO giong trong danh sach nhung doc ra im (thuong la giong chua tai ve).
   // Truong hop nay truoc day app im lang hoan toan, nguoi hoc khong biet vi sao.
   silent:
@@ -47,9 +48,9 @@ export default function TtsWarning() {
       </div>
       <button
         onClick={() => speakChinese('你好', { onEnd: () => setStatus(hasChineseVoice() ? 'ok' : status) })}
-        className="mt-2 rounded-lg bg-amber-600 px-3 py-1 font-semibold text-white"
+        className="mt-2 inline-flex items-center gap-1 rounded-lg bg-amber-600 px-3 py-1 font-semibold text-white"
       >
-        🔊 Thử phát âm lại
+        <VolumeIcon width={22} height={22} alt="" /> Thử phát âm lại
       </button>
     </div>
   )

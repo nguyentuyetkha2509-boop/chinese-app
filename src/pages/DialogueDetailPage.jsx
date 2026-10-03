@@ -60,7 +60,7 @@ function DialogueDetailPageInner() {
         disabled={playingAll}
         className="mb-4 w-full rounded-xl bg-brand-700 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
       >
-        {playingAll ? '🔊 Đang phát...' : done ? '🔊 Nghe lại cả đoạn' : '🔊 Nghe cả đoạn hội thoại'}
+        <span className="inline-flex items-center justify-center gap-2"><VolumeIcon width={24} height={24} alt="" />{playingAll ? 'Đang phát...' : done ? 'Nghe lại cả đoạn' : 'Nghe cả đoạn hội thoại'}</span>
       </button>
 
       {failed && (

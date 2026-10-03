@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import MarkdownLite from '../components/MarkdownLite'
 import PandaIcon from '../components/PandaIcon'
+import { VolumeIcon } from '../components/Icons'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { speakChinese, stopSpeaking } from '../lib/tts'
@@ -237,9 +238,9 @@ export default function AiChatPage() {
                   {!isUser && (
                     <button
                       onClick={() => speak(m.content)}
-                      className="mt-2 block text-xs font-semibold text-brand-700"
+                      className="mt-2 flex items-center gap-1 text-xs font-semibold text-brand-700"
                     >
-                      🔊 Nghe lại
+                      <VolumeIcon width={24} height={24} alt="" /> Nghe lại
                     </button>
                   )}
                 </div>

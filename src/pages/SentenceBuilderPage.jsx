@@ -8,7 +8,7 @@ import { shuffle } from '../lib/quiz'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
 import CelebrationBadge from '../components/CelebrationBadge'
-import {  } from '../components/Icons'
+import { VolumeIcon } from '../components/Icons'
 
 const ROUND_SIZE = 10
 
@@ -160,9 +160,9 @@ export default function SentenceBuilderPage() {
           {checked ? '✅ Chính xác!' : `❌ Chưa đúng. Câu đúng là: ${current.chunks.join('')}`}
           <button
             onClick={() => speakChinese(current.chunks.join(''))}
-            className="ml-2 underline"
+            className="ml-2 inline-flex items-center gap-1 align-middle underline"
           >
-            🔊 Nghe
+            <VolumeIcon width={22} height={22} alt="" /> Nghe
           </button>
           <p className="mt-1 font-normal text-gray-600">{current.pinyin}</p>
         </div>
