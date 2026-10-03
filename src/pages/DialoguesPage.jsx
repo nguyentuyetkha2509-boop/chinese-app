@@ -51,7 +51,7 @@ export default function DialoguesPage() {
               <span className="mt-4 block text-3xl">{d.icon}</span>
               <p className="mt-2 text-base text-gray-800">{d.title}</p>
               <div className="flex items-center justify-between">
-                <p className={`text-xs ${accent.text}`}>{d.lines.length} câu</p>
+                <p className={`text-xs ${accent.text}`}>{d.level ? `${d.level} · ` : ''}{d.lines.length} câu</p>
                 {isNext && (
                   <span className="flex items-center gap-1 text-[10px] font-semibold text-brand-600">
                     <ArrowRightIcon width={18} height={18} /> Tiếp theo
