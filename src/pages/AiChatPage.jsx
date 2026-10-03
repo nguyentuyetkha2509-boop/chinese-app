@@ -12,6 +12,9 @@ import { playFlip } from '../lib/sfx'
 const HISTORY_KEY = 'aiChatHistory'
 const HISTORY_LIMIT = 40
 const HAN_RE = /[一-鿿]/
+// Thoi gian im lang truoc khi tu dung ghi am (ms).
+const NO_SPEECH_MS = 8000
+const AFTER_SPEECH_MS = 3000
 
 // Nhan dien giong noi co san cua trinh duyet (Chrome/Android tot, Safari/iOS han che).
 // Khong co thi trang tu chuyen sang o go chu de van dung duoc.
@@ -124,18 +127,31 @@ export default function AiChatPage() {
 
     const recognition = new SpeechRecognitionCtor()
     recognition.lang = lang
+    // Che do nghe lien tuc: neu de mac dinh (1 cau) thi engine tu ngat ngay khi nguoi
+    // hoc ngung lay hoi vai giay de nghi cau tiep, chua noi het da bi cat.
+    recognition.continuous = true
     recognition.interimResults = true
     recognition.maxAlternatives = 1
-    let finalText = ''
+    let heard = ''
+    let silenceTimer = null
+
+    // Tu dung khi nguoi hoc im lang du lau: cho lau hon luc chua noi gi (con ngap
+    // ngung, nghi cau), ngan hon sau khi da noi xong de AI tra loi nhanh.
+    const armSilence = (ms) => {
+      clearTimeout(silenceTimer)
+      silenceTimer = setTimeout(() => recognition.stop(), ms)
+    }
+    armSilence(NO_SPEECH_MS)
 
     recognition.onresult = (e) => {
-      let interimText = ''
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        const r = e.results[i]
-        if (r.isFinal) finalText += r[0].transcript
-        else interimText += r[0].transcript
-      }
-      setInterim(finalText + interimText)
+      // Ghep lai tu DAU moi lan thay vi cong don theo resultIndex: che do lien tuc co
+      // the dieu chinh lai ket qua cu, va phan chua chot (interim) van duoc gui di
+      // neu nguoi hoc bam dung truoc khi engine kip chot.
+      heard = Array.from(e.results)
+        .map((r) => r[0].transcript)
+        .join('')
+      setInterim(heard)
+      armSilence(AFTER_SPEECH_MS)
     }
     recognition.onerror = (e) => {
       const code = e?.error
@@ -143,14 +159,17 @@ export default function AiChatPage() {
         setError('Chưa cho phép dùng micro. Hãy cấp quyền micro cho trang web trong cài đặt trình duyệt rồi thử lại.')
       } else if (code === 'network') {
         setError('Nhận dạng giọng nói cần kết nối mạng. Kiểm tra mạng rồi thử lại.')
+      } else if (code === 'no-speech') {
+        setError('Chưa nghe thấy giọng bạn, thử nói lại gần micro hơn nhé.')
       } else if (code !== 'aborted') {
         setError('Chưa nghe rõ, bạn thử nói lại gần micro hơn nhé.')
       }
     }
     recognition.onend = () => {
+      clearTimeout(silenceTimer)
       recognitionRef.current = null
       setInterim('')
-      if (finalText.trim()) sendText(finalText)
+      if (heard.trim()) sendText(heard)
       else setPhase('idle')
     }
 
