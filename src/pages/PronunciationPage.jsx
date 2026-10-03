@@ -6,7 +6,7 @@ import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate, playFlip } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { VolumeIcon, MicIcon } from '../components/Icons'
+import { VolumeIcon, RecordIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import CelebrationBadge from '../components/CelebrationBadge'
@@ -432,7 +432,7 @@ function RecordCompare({ words, levelId }) {
       <div className="mt-5 flex flex-col items-center gap-3">
         {status === 'recording' ? (
           <button onClick={stopRecording} className="flex items-center gap-2 rounded-full bg-red-500 px-6 py-3 text-white">
-            <MicIcon width={24} height={24} /> Dừng ghi âm
+            <RecordIcon width={32} height={32} /> Dừng ghi âm
           </button>
         ) : (
           <button
@@ -442,7 +442,7 @@ function RecordCompare({ words, levelId }) {
               status === 'requesting' ? 'animate-pulse' : ''
             }`}
           >
-            <MicIcon width={24} height={24} />
+            <RecordIcon width={32} height={32} />
             {status === 'requesting' ? 'Đang mở micro...' : 'Bắt đầu ghi âm'}
           </button>
         )}
@@ -468,8 +468,8 @@ function RecordCompare({ words, levelId }) {
                 aiChecking ? 'animate-pulse' : ''
               }`}
             >
-              <MicIcon width={24} height={24} />
-              {aiChecking ? '🎤 Đang nghe...' : aiResult ? '🤖 Thử lại với AI' : '🤖 Chấm điểm bằng AI'}
+              <RecordIcon width={32} height={32} />
+              {aiChecking ? 'Đang nghe...' : aiResult ? '🤖 Thử lại với AI' : '🤖 Chấm điểm bằng AI'}
             </button>
           </>
         )}

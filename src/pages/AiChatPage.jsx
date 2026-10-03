@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import MarkdownLite from '../components/MarkdownLite'
 import PandaIcon from '../components/PandaIcon'
-import { VolumeIcon } from '../components/Icons'
+import { VolumeIcon, RecordIcon } from '../components/Icons'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { speakChinese, stopSpeaking } from '../lib/tts'
@@ -43,7 +43,7 @@ function extractSpokenLine(reply) {
 
 const STATUS_TEXT = {
   idle: 'Bấm vào mic và nói',
-  listening: 'Đang nghe bạn nói...',
+  listening: 'Đang nghe... nói xong bấm lần nữa',
   thinking: 'Gấu Trúc đang nghĩ...',
   speaking: 'Gấu Trúc đang nói...'
 }
@@ -275,11 +275,15 @@ export default function AiChatPage() {
                   onClick={handleMic}
                   disabled={busy}
                   aria-label={phase === 'listening' ? 'Dừng nói' : 'Bắt đầu nói'}
-                  className={`flex h-16 w-16 items-center justify-center rounded-full text-3xl text-white shadow-lg disabled:opacity-50 ${
-                    phase === 'listening' ? 'animate-pulse bg-red-500' : 'bg-brand-700'
+                  className={`flex h-20 w-20 items-center justify-center rounded-full text-3xl shadow-lg disabled:opacity-50 ${
+                    phase === 'listening'
+                      ? 'animate-pulse bg-red-100 ring-4 ring-red-400'
+                      : phase === 'speaking'
+                        ? 'bg-brand-700 text-white'
+                        : 'bg-white ring-2 ring-brand-200'
                   }`}
                 >
-                  {phase === 'speaking' ? '⏹' : phase === 'listening' ? '⏸' : '🎤'}
+                  {phase === 'speaking' ? '⏹' : <RecordIcon width={64} height={64} />}
                 </button>
                 <p className="text-xs text-gray-500">{STATUS_TEXT[phase]}</p>
               </div>

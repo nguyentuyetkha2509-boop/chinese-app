@@ -2,6 +2,7 @@ import homeIconImg from '../assets/icons-gemini/home.png'
 import bookIconImg from '../assets/icons-gemini/book.png'
 import cardsIconImg from '../assets/icons-gemini/cards.png'
 import micIconImg from '../assets/icons-gemini/mic.png'
+import recordIconImg from '../assets/icons-gemini/mic-panda.png'
 import pencilIconImg from '../assets/icons-gemini/pencil.png'
 import checkIconImg from '../assets/icons-gemini/check.png'
 import bellIconImg from '../assets/icons-gemini/bell.png'
@@ -57,6 +58,22 @@ export function CardsIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Ôn tập"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
+      {...props}
+    />
+  )
+}
+
+// Hinh dan gau cam mic (nen trong suot) cho cac nut ghi am/thu tieng. MicIcon o tren
+// la o vuong bo goc dung lam icon dieu huong (tab Phat am, the o trang chu).
+export function RecordIcon({ width = 38, height = 38, ...props }) {
+  return (
+    <img
+      src={recordIconImg}
+      width={width}
+      height={height}
+      alt=""
+      style={{ display: 'inline-block' }}
       draggable={false}
       {...props}
     />
