@@ -4,12 +4,14 @@ import { HSK3_WORDS } from './hsk3'
 import { HSK4_WORDS } from './hsk4'
 import { HSK5_WORDS } from './hsk5'
 import { HSK6_WORDS } from './hsk6'
+import { HSK7_WORDS } from './hsk7'
 import { HSK1_LESSON_PLAN } from './lessonPlans'
 import { HSK2_LESSON_PLAN } from './lessonPlans2'
 import { HSK3_LESSON_PLAN } from './lessonPlans3'
 import { HSK4_LESSON_PLAN } from './lessonPlans4'
 import { HSK5_LESSON_PLAN } from './lessonPlans5'
 import { HSK6_LESSON_PLAN } from './lessonPlans6'
+import { HSK7_LESSON_PLAN } from './lessonPlans7'
 
 // Moi HSK co giao an theo chu de (xem lessonPlans*.js) thay vi chi cat theo
 // thu tu bang chu cai, giup tu vung trong 1 bai lien quan den nhau, de nho hon.
@@ -29,7 +31,9 @@ export const LEVELS = [
   { id: 'hsk3', label: 'HSK3', words: HSK3_WORDS, units: buildThemedUnits(HSK3_WORDS, HSK3_LESSON_PLAN) },
   { id: 'hsk4', label: 'HSK4', words: HSK4_WORDS, units: buildThemedUnits(HSK4_WORDS, HSK4_LESSON_PLAN) },
   { id: 'hsk5', label: 'HSK5', words: HSK5_WORDS, units: buildThemedUnits(HSK5_WORDS, HSK5_LESSON_PLAN) },
-  { id: 'hsk6', label: 'HSK6', words: HSK6_WORDS, units: buildThemedUnits(HSK6_WORDS, HSK6_LESSON_PLAN) }
+  { id: 'hsk6', label: 'HSK6', words: HSK6_WORDS, units: buildThemedUnits(HSK6_WORDS, HSK6_LESSON_PLAN) },
+  // Chuan HSK 3.0 gop 7-9 thanh 1 bang tu vung, khong co danh sach rieng tung cap.
+  { id: 'hsk7', label: 'HSK7-9', words: HSK7_WORDS, units: buildThemedUnits(HSK7_WORDS, HSK7_LESSON_PLAN) }
 ]
 
 export const ALL_WORDS = LEVELS.flatMap((level) => level.words)

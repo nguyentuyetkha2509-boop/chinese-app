@@ -40,7 +40,7 @@ export default function RoadmapPage() {
       </div>
       <p className="mb-5 text-sm text-gray-500">
         {totalRemaining === 0
-          ? 'Bạn đã học hết toàn bộ từ vựng 6 cấp! 🎉'
+          ? 'Bạn đã học hết toàn bộ từ vựng HSK1-9! 🎉'
           : `Còn ${totalRemaining} từ chưa học. Với ${dailyLimit} từ mới/ngày, khoảng ${totalDays} ngày nữa xong hết.`}
       </p>
 

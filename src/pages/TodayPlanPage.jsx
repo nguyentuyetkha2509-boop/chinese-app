@@ -167,7 +167,7 @@ export default function TodayPlanPage() {
       )}
 
       <Link to="/lo-trinh" className="mt-5 block text-center text-sm text-brand-600 underline">
-        Xem lộ trình học toàn bộ 6 cấp
+        Xem lộ trình học toàn bộ các cấp
       </Link>
       <Link to="/cai-dat" className="mt-2 block text-center text-xs text-gray-500 underline">
         Đổi giới hạn từ mới mỗi ngày

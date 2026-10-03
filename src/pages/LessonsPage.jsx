@@ -12,7 +12,7 @@ import lessonPanda from '../assets/panda/lesson_panda.webp'
 // 3 tag cua trang Bai hoc. Luu trong dia chi (?muc=...) de bam Quay lai tu bai con
 // van ve dung tag dang xem, thay vi nhay ve HSK.
 const TABS = [
-  { id: 'hsk', label: 'HSK 1-6' },
+  { id: 'hsk', label: 'HSK 1-9' },
   { id: 'so-tien', label: 'Số và tiền' },
   { id: 'bo-thu', label: 'Bộ thủ' }
 ]

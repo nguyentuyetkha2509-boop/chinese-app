@@ -57,7 +57,7 @@ export default function WelcomeScreen({ onDone }) {
       <PandaIcon size={104} />
       <h1 className="mt-4 text-3xl font-bold">PandaChinese</h1>
       <p className="mt-2 text-sm text-white/85">
-        Học từ vựng, phát âm và chữ Hán theo chuẩn HSK 3.0 (cấp 1-6)
+        Học từ vựng, phát âm và chữ Hán theo chuẩn HSK 3.0 (cấp 1-9)
       </p>
 
       <button

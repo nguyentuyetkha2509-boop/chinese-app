@@ -236,7 +236,7 @@ export default function HomePage() {
     if (to === '/phat-am') return toneAccuracy === null ? 'Chưa luyện' : `Độ chính xác ${toneAccuracy}%`
     if (to === '/viet-chu') return 'Luyện nét theo thứ tự chuẩn'
     if (to === '/chu-de') return 'Ngành nghề, bất động sản, đời sống'
-    if (to === '/bai-hoc') return 'HSK 1-6 · Số và tiền · Bộ thủ'
+    if (to === '/bai-hoc') return 'HSK 1-9 · Số và tiền · Bộ thủ'
     if (to === '/hoi-thoai') return 'Xem tiếng Trung dùng thật'
     if (to === '/thu') return 'Tự dịch rồi đối chiếu đáp án'
     if (to === '/tro-choi') return 'Trả lời nhanh trong 60 giây!'

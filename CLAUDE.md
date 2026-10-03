@@ -32,8 +32,9 @@ Không có bộ test tự động. Mỗi thay đổi nên chạy lint và build,
 
 ## Dữ liệu nội dung
 
-- **Từ vựng HSK1-6:** theo chuẩn HSK 3.0 (2021), `hsk1.js` đến `hsk6.js` gom lại trong `levels.js` thành `ALL_WORDS` (5.363 từ). Danh sách từ lấy từ complete-hsk-vocabulary (MIT); từ trùng chữ Hán với bộ HSK 2.0 cũ giữ nguyên mã (id 1-9500), từ mới có mã từ 100001. Bài học dựng từ `lessonPlans*.js` theo mã từ. Đừng thêm từ vào đây nếu chỉ cần từ cho chủ đề.
-- **Từ HSK cũ không còn:** `legacyWords.js` giữ 2.056 từ của HSK 2.0 không có trong HSK 3.0, chỉ dùng để Học theo chủ đề tra nghĩa và ước lượng cấp độ, không phải bài học hay flashcard.
+- **Từ vựng HSK1-6:** theo chuẩn HSK 3.0 (2021), `hsk1.js` đến `hsk6.js` gom lại trong `levels.js` cùng `hsk7.js` thành `ALL_WORDS` (10.969 từ, trong đó HSK1-6 là 5.363). Danh sách từ lấy từ complete-hsk-vocabulary (MIT); từ trùng chữ Hán với bộ HSK 2.0 cũ giữ nguyên mã (id 1-9500), từ mới có mã từ 100001. Bài học dựng từ `lessonPlans*.js` theo mã từ. Đừng thêm từ vào đây nếu chỉ cần từ cho chủ đề.
+- **HSK7-9:** chuẩn HSK 3.0 gộp 7-9 thành một bảng từ vựng, app giữ một cấp `hsk7` nhãn "HSK7-9" (`hsk7.js`, `lessonPlans7.js`, 5.606 từ, 376 bài xếp theo loại từ, mã từ mới từ 110001). Từ trùng chữ Hán với HSK 2.0 cũ giữ mã cũ và đã bỏ khỏi `legacyWords.js`. Chưa có ngữ pháp và truyện cho cấp này. Nghĩa tiếng Việt do AI soạn từ nghĩa tiếng Anh nên cần rà dần.
+- **Từ HSK cũ không còn:** `legacyWords.js` giữ 501 từ của HSK 2.0 không có trong HSK 3.0, chỉ dùng để Học theo chủ đề tra nghĩa và ước lượng cấp độ, không phải bài học hay flashcard.
 - **Ngữ pháp:** `grammar.js` (HSK1 và gộp `GRAMMAR_POINTS`) cùng `grammar2.js` đến `grammar6.js`, 132 điểm xếp đúng cấp theo đại cương ngữ pháp HSK 3.0. Cuối HSK6 có các điểm đánh dấu "mở rộng" (chuẩn mới xếp vào HSK 7-9). Mỗi điểm có đúng 3 ví dụ và 3 câu hỏi, đáp án đầu tiên là đáp án đúng. Khoá (`key`) giữ ổn định vì tiến độ lưu theo khoá.
 - **Tiến độ bài học:** lưu ở khoá `completedUnitsV3` (xem `src/lib/unitProgress.js`), lần đầu được suy từ SRS: bài coi là đã học khi mọi từ của bài đã có trong SRS.
 - **Truyện dài:** `stories.js` gộp `storiesMore.js` (HSK1-5) và `stories6.js` (HSK6). Mỗi câu gồm chữ Hán, pinyin, nghĩa tiếng Việt. Bài đọc hiểu cuối truyện có đúng 3 đáp án, đáp án đầu tiên trong danh sách là đáp án đúng và sẽ được xáo khi hiển thị.
@@ -43,7 +44,7 @@ Không có bộ test tự động. Mỗi thay đổi nên chạy lint và build,
 
 ## Quy ước
 
-- **Chuẩn nội dung là HSK 3.0 (2021), cấp 1-6.** Từ nay mọi nội dung mới hoặc chỉnh sửa (từ vựng, bài học, ngữ pháp, nhãn cấp của truyện, hội thoại, thư, chủ đề) đều phải theo chuẩn mới này, không dùng lại số liệu hay cách xếp cấp của HSK 2.0 cũ (150/300/600/1200/2500/5000 từ). Khi cần xác định cấp của một từ hay điểm ngữ pháp thì tra theo HSK 3.0.
+- **Chuẩn nội dung là HSK 3.0 (2021), cấp 1-6 và bậc cao 7-9.** Từ nay mọi nội dung mới hoặc chỉnh sửa (từ vựng, bài học, ngữ pháp, nhãn cấp của truyện, hội thoại, thư, chủ đề) đều phải theo chuẩn mới này, không dùng lại số liệu hay cách xếp cấp của HSK 2.0 cũ (150/300/600/1200/2500/5000 từ). Khi cần xác định cấp của một từ hay điểm ngữ pháp thì tra theo HSK 3.0.
 - Phiên âm ghi có dấu thanh, viết liền theo từ. Thanh nhẹ để không dấu. Biến điệu 一 và 不 ghi theo cách đọc thực tế, ví dụ `yí gè`, `bú kèqi`.
 - Nghĩa tiếng Việt ngắn gọn, ghi Hán Việt khi có ích. Thuật ngữ bất động sản cần chính xác, nên nhờ người biết nghề đọc lại.
 - Bảng `src/data/charPinyin.js` là phiên âm mặc định của từng chữ, dùng để đối chiếu tự động. Chữ đa âm sẽ báo lệch giả, cần tự rà.
