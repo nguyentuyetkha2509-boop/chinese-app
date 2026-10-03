@@ -3,6 +3,7 @@
 // van doc hieu duoc. Moi truyen co cau hoi doc hieu cuoi truyen.
 import { STORIES_MORE } from './storiesMore'
 import { STORIES_HSK6 } from './stories6'
+import { STORIES_HSK7 } from './stories7'
 
 const BASE_STORIES = [
   {
@@ -380,8 +381,8 @@ const BASE_STORIES = [
   }
 ]
 
-// Truyen bo sung HSK1-5 (storiesMore.js) va HSK6 (stories6.js) nam o file rieng cho de quan ly.
-export const STORIES = [...BASE_STORIES, ...STORIES_MORE, ...STORIES_HSK6]
+// Truyen bo sung HSK1-5 (storiesMore.js) va HSK6 (stories6.js) va HSK7-9 (stories7.js) nam o file rieng cho de quan ly.
+export const STORIES = [...BASE_STORIES, ...STORIES_MORE, ...STORIES_HSK6, ...STORIES_HSK7]
 
 export function getStory(key) {
   return STORIES.find((s) => s.key === key)
