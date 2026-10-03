@@ -14,6 +14,9 @@ export default defineConfig({
       injectRegister: false,
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,webmanifest}'],
+        // Goi JS chinh chua toan bo du lieu tu vung/ngu phap/truyen nen da vuot 2 MiB mac dinh
+        // cua workbox, vuot thi build bao loi va file khong duoc precache (mat offline).
+        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         skipWaiting: true,
         clientsClaim: true,
         cleanupOutdatedCaches: true,
