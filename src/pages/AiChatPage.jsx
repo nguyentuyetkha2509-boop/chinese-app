@@ -19,19 +19,25 @@ const SpeechRecognitionCtor =
 
 const SYSTEM_PROMPT = `Bạn là một người bạn Trung Quốc thân thiện tên Gấu Trúc, đang trò chuyện bằng LỜI NÓI để giúp một người Việt Nam luyện hội thoại tiếng Trung (trình độ HSK1-HSK6). Tin nhắn của người dùng là văn bản do máy nhận dạng giọng nói chuyển ra, nên có thể sai chữ đồng âm hoặc thiếu dấu câu - hãy đoán ý theo ngữ cảnh, đừng bắt lỗi chính tả.
 Quy tắc trả lời, đúng định dạng 3 dòng:
-- Dòng 1: câu trả lời bằng tiếng Trung giản thể, tự nhiên, chỉ 1-2 câu ngắn (dòng này sẽ được đọc thành tiếng, không dùng ký hiệu markdown, emoji hay pinyin trong dòng này).
-- Dòng 2: pinyin của dòng 1.
-- Dòng 3: nghĩa tiếng Việt của dòng 1.
+- Dòng 1: toàn bộ câu trả lời bằng tiếng Trung giản thể, tự nhiên, tối đa 2 câu ngắn viết liền trên CÙNG một dòng (dòng này sẽ được đọc thành tiếng, không dùng ký hiệu markdown, emoji hay pinyin trong dòng này).
+- Dòng 2: pinyin của toàn bộ dòng 1.
+- Dòng 3: nghĩa tiếng Việt của toàn bộ dòng 1.
+- Chỉ viết đúng 3 dòng đó, không lặp lại khối khác.
 - Ưu tiên từ vựng thông dụng HSK1-HSK3 trừ khi người dùng chủ động dùng từ khó hơn.
 - Nếu người dùng nói sai ngữ pháp hoặc dùng từ không chính xác, thêm một dòng cuối bắt đầu bằng "💡" (tiếng Việt) chỉ ra chỗ sai và câu đúng, rồi vẫn tiếp tục hội thoại.
 - Nếu người dùng nói tiếng Việt, vẫn trả lời bằng tiếng Trung đơn giản để họ tập nói lại.
 - Giữ không khí vui vẻ, khích lệ, luôn kết thúc bằng một câu hỏi ngắn để người dùng nói tiếp.`
 
-// Chi doc dong tieng Trung dau tien (dong 1 theo SYSTEM_PROMPT), bo ky hieu markdown.
-// Khong doc ca pinyin va phan tieng Viet vi bo doc tieng Trung se doc rat te.
+// Chi doc cac dong tieng Trung, bo pinyin va nghia tieng Viet (khong co chu Han) vi bo
+// doc tieng Trung doc chung rat te. AI doi khi tra loi thanh nhieu khoi 3 dong thay vi
+// 1 khoi, nen phai gom MOI dong co chu Han chu khong chi dong dau. Dong nhac loi
+// bat dau bang "💡" la loi giai thich tieng Viet, khong doc.
 function extractSpokenLine(reply) {
-  const line = reply.split('\n').find((l) => HAN_RE.test(l)) || ''
-  return line.replace(/[*_#`>~-]/g, '').trim()
+  return reply
+    .split('\n')
+    .filter((l) => HAN_RE.test(l) && !l.trim().startsWith('💡'))
+    .map((l) => l.replace(/[*_#`>~-]/g, '').trim())
+    .join(' ')
 }
 
 const STATUS_TEXT = {
