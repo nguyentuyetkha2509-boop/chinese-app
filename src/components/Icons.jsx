@@ -215,7 +215,7 @@ export function AiChatIcon({ width = 38, height = 38, ...props }) {
       width={width}
       height={height}
       alt="Trò chuyện AI"
-      style={{ display: 'inline-block' }}
+      style={{ display: 'inline-block', borderRadius: '22%' }}
       draggable={false}
       {...props}
     />
@@ -271,7 +271,7 @@ export function ShuffleIcon({ width = 38, height = 38, ...props }) {
       width={width}
       height={height}
       alt="Sắp xếp câu"
-      style={{ display: 'inline-block' }}
+      style={{ display: 'inline-block', borderRadius: '22%' }}
       draggable={false}
       {...props}
     />
@@ -327,7 +327,7 @@ export function TrophyIcon({ width = 38, height = 38, ...props }) {
       width={width}
       height={height}
       alt="Thành tích"
-      style={{ display: 'inline-block' }}
+      style={{ display: 'inline-block', borderRadius: '22%' }}
       draggable={false}
       {...props}
     />
