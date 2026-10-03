@@ -316,6 +316,150 @@ export const LETTERS = [
         meaning: 'Thương cậu, mình của ngày hôm nay.'
       }
     ]
+  },
+  {
+    key: 'gui-minh-truoc-ngay-re-lon',
+    icon: '🧭',
+    title: 'Trước ngã rẽ lớn',
+    level: 'HSK7-9',
+    paragraphs: [
+      {
+        hanzi: '亲爱的自己：见字如面。写这封信的时候，你正站在人生的又一个路口，手里攥着那份尚未签字的聘书，心里却翻江倒海。',
+        pinyin: 'Qīn\'ài de zìjǐ: jiàn zì rú miàn. Xiě zhè fēng xìn de shíhou, nǐ zhèng zhàn zài rénshēng de yòu yí gè lùkǒu, shǒu li zuàn zhe nà fèn shàng wèi qiānzì de pìnshū, xīn li què fān jiāng dǎo hǎi.',
+        meaning: 'Thân gửi chính mình: đọc thư như gặp mặt. Khi viết lá thư này, bạn đang đứng trước thêm một ngã rẽ của cuộc đời, tay nắm chặt tờ thư mời làm việc chưa ký, trong lòng thì sóng cuộn trào dâng.'
+      },
+      {
+        hanzi: '我知道你在怕什么：怕离开熟悉的办公室，怕放弃多年积累的人脉，更怕自己一旦失败，就会成为别人口中的笑柄。',
+        pinyin: 'Wǒ zhīdào nǐ zài pà shénme: pà líkāi shúxī de bàngōngshì, pà fàngqì duō nián jīlěi de rénmài, gèng pà zìjǐ yídàn shībài, jiù huì chéngwéi biérén kǒu zhōng de xiàobǐng.',
+        meaning: 'Mình biết bạn đang sợ điều gì: sợ rời căn phòng làm việc quen thuộc, sợ bỏ đi những mối quan hệ tích lũy bao năm, và hơn hết là sợ rằng một khi thất bại sẽ thành trò cười trong miệng người khác.'
+      },
+      {
+        hanzi: '然而，与其在安稳中慢慢磨掉棱角，不如在风浪里看清自己的分量。所谓安全区，固然能让你免于风雨，但也同样挡住了远处的风景。',
+        pinyin: 'Rán’ér, yǔqí zài ānwěn zhōng mànmàn mó diào léngjiǎo, bùrú zài fēnglàng li kànqīng zìjǐ de fènliang. Suǒwèi ānquánqū, gùrán néng ràng nǐ miǎn yú fēngyǔ, dàn yě tóngyàng dǎng zhù le yuǎnchù de fēngjǐng.',
+        meaning: 'Thế nhưng, thay vì lặng lẽ mài mòn góc cạnh trong sự yên ổn, chi bằng ra giữa sóng gió để thấy rõ tầm vóc của mình. Cái gọi là vùng an toàn tuy giúp bạn tránh được mưa gió, nhưng cũng che khuất cảnh sắc phía xa.'
+      },
+      {
+        hanzi: '请你回想当初，那个背着行李独自来到这座城市的年轻人，何尝有过十足的把握？正是因为敢于迈出第一步，才有了今天的你。',
+        pinyin: 'Qǐng nǐ huíxiǎng dāngchū, nàge bēi zhe xíngli dúzì lái dào zhè zuò chéngshì de niánqīngrén, hécháng yǒu guo shízú de bǎwò? Zhèng shì yīnwèi gǎnyú mài chū dì yī bù, cái yǒu le jīntiān de nǐ.',
+        meaning: 'Hãy nhớ lại thuở ban đầu, chàng trai trẻ vác hành lý một mình đến thành phố này, đã bao giờ thật sự chắc chắn đâu? Chính vì dám bước bước đầu tiên nên mới có bạn của hôm nay.'
+      },
+      {
+        hanzi: '无论这次的选择最终通向哪里，你都不必苛求万无一失。真正的勇气，并不是毫无畏惧，而是明知前路未卜，依然愿意为自己的热爱押上一程。',
+        pinyin: 'Wúlùn zhè cì de xuǎnzé zuìzhōng tōngxiàng nǎlǐ, nǐ dōu búbì kēqiú wàn wú yì shī. Zhēnzhèng de yǒngqì, bìng bú shì háo wú wèijù, érshì míng zhī qiánlù wèi bǔ, yīrán yuànyì wèi zìjǐ de rè’ài yā shàng yì chéng.',
+        meaning: 'Dù lựa chọn lần này rốt cuộc dẫn tới đâu, bạn cũng không cần đòi hỏi mọi thứ phải vẹn toàn. Can đảm thật sự không phải là không biết sợ, mà là biết đường phía trước chưa rõ vẫn sẵn lòng đặt cược một chặng đời cho điều mình yêu.'
+      },
+      {
+        hanzi: '万一这条路走不通，也请别责怪今天的决定。毕竟，经历本身就是最好的积累，况且你永远可以转身，重新出发。',
+        pinyin: 'Wànyī zhè tiáo lù zǒu bu tōng, yě qǐng bié zéguài jīntiān de juédìng. Bìjìng, jīnglì běnshēn jiù shì zuì hǎo de jīlěi, kuàngqiě nǐ yǒngyuǎn kěyǐ zhuǎnshēn, chóngxīn chūfā.',
+        meaning: 'Lỡ con đường này không đi được, cũng xin đừng trách quyết định hôm nay. Dù sao, trải nghiệm tự nó đã là vốn quý nhất, hơn nữa bạn luôn có thể quay người, xuất phát lại từ đầu.'
+      },
+      {
+        hanzi: '所以，深呼吸，然后提起笔吧。我会在未来的某一天，微笑着等你讲述这段故事。',
+        pinyin: 'Suǒyǐ, shēn hūxī, ránhòu tí qǐ bǐ ba. Wǒ huì zài wèilái de mǒu yì tiān, wēixiào zhe děng nǐ jiǎngshù zhè duàn gùshi.',
+        meaning: 'Vậy nên, hít thở sâu rồi cầm bút lên đi. Một ngày nào đó trong tương lai, mình sẽ mỉm cười đợi bạn kể lại câu chuyện này.'
+      },
+      {
+        hanzi: '永远支持你的，未来的自己。',
+        pinyin: 'Yǒngyuǎn zhīchí nǐ de, wèilái de zìjǐ.',
+        meaning: 'Người luôn ủng hộ bạn, chính bạn của tương lai.'
+      }
+    ]
+  },
+  {
+    key: 'gui-minh-sau-that-bai',
+    icon: '🌱',
+    title: 'Sau một lần vấp ngã',
+    level: 'HSK7-9',
+    paragraphs: [
+      {
+        hanzi: '亲爱的自己：这几天你一定过得很难熬吧。我想先抱抱你，什么道理都不讲，只想告诉你：我在这里。',
+        pinyin: 'Qīn\'ài de zìjǐ: zhè jǐ tiān nǐ yídìng guò de hěn nán\'áo ba. Wǒ xiǎng xiān bào bao nǐ, shénme dàolǐ dōu bù jiǎng, zhǐ xiǎng gàosu nǐ: wǒ zài zhèlǐ.',
+        meaning: 'Thân gửi chính mình: mấy ngày nay chắc bạn đã trải qua thật khó khăn. Mình muốn ôm bạn trước đã, chẳng giảng đạo lý gì cả, chỉ muốn nói với bạn: mình ở đây.'
+      },
+      {
+        hanzi: '那个项目倾注了你无数个夜晚的心血，如今却落得一场空，难怪你会整夜睡不着，一遍遍地问自己：当初为什么没有再谨慎一点？',
+        pinyin: 'Nàge xiàngmù qīngzhù le nǐ wúshù ge yèwǎn de xīnxuè, rújīn què luò de yì chǎng kōng, nánguài nǐ huì zhěngyè shuì bu zháo, yí biàn yí biàn de wèn zìjǐ: dāngchū wèishénme méiyǒu zài jǐnshèn yìdiǎn?',
+        meaning: 'Dự án ấy đã thấm bao tâm huyết của vô số đêm của bạn, giờ lại thành công cốc, thảo nào bạn thức trắng đêm, hết lần này đến lần khác tự hỏi: lúc đầu sao mình không cẩn thận thêm một chút?'
+      },
+      {
+        hanzi: '但是请你停一停。人非圣贤，孰能无过？你当时的判断，是以当时所掌握的信息做出的最好选择，事后诸葛亮式的苛责，对那时的你并不公平。',
+        pinyin: 'Dànshì qǐng nǐ tíng yi tíng. Rén fēi shèngxián, shú néng wú guò? Nǐ dāngshí de pànduàn, shì yǐ dāngshí suǒ zhǎngwò de xìnxī zuòchū de zuì hǎo xuǎnzé, shìhòu Zhūgě Liàng shì de kēzé, duì nàshí de nǐ bìng bù gōngpíng.',
+        meaning: 'Nhưng xin bạn dừng lại một chút. Người không phải thánh hiền, ai mà chẳng có lỗi? Phán đoán của bạn khi ấy là lựa chọn tốt nhất dựa trên thông tin bạn nắm được lúc đó; lối trách móc kiểu “xong chuyện mới khôn” chẳng công bằng với bạn của thuở ấy.'
+      },
+      {
+        hanzi: '我们总是对朋友宽容，对自己却苛刻得近乎残忍。倘若今天跌倒的是你最好的朋友，你难道会责骂他，还是会递上一杯热茶，陪他坐一会儿？',
+        pinyin: 'Wǒmen zǒngshì duì péngyou kuānróng, duì zìjǐ què kēkè de jìnhū cánrěn. Tǎngruò jīntiān diēdǎo de shì nǐ zuì hǎo de péngyou, nǐ nándào huì zémà tā, háishi huì dì shàng yì bēi rè chá, péi tā zuò yíhuìr?',
+        meaning: 'Ta luôn khoan dung với bạn bè mà khắt khe với bản thân đến mức gần như tàn nhẫn. Nếu hôm nay người ngã là người bạn thân nhất của bạn, lẽ nào bạn lại mắng mỏ họ, hay sẽ đưa một tách trà nóng và ngồi bên họ một lúc?'
+      },
+      {
+        hanzi: '失败固然让人痛，但它从来不是对你价值的审判。跌倒的地方，往往藏着你最需要的教训；那些看似走不过去的坎，日后回头看，都会变成你的底气。',
+        pinyin: 'Shībài gùrán ràng rén tòng, dàn tā cónglái bú shì duì nǐ jiàzhí de shěnpàn. Diēdǎo de dìfang, wǎngwǎng cáng zhe nǐ zuì xūyào de jiàoxùn; nàxiē kànsì zǒu bu guòqù de kǎn, rìhòu huítóu kàn, dōu huì biànchéng nǐ de dǐqi.',
+        meaning: 'Thất bại tuy làm người ta đau, nhưng chưa bao giờ là bản án phán xét giá trị của bạn. Nơi ngã xuống thường giấu bài học bạn cần nhất; những cái dốc tưởng chừng không vượt nổi, sau này ngoảnh lại đều sẽ thành nội lực của bạn.'
+      },
+      {
+        hanzi: '所以，不妨允许自己难过几天，哭也好，发呆也好，随它去。等心里的风浪平息了，再一点一点把碎掉的信心拾起来，拍拍身上的灰，重新站起来。',
+        pinyin: 'Suǒyǐ, bùfáng yǔnxǔ zìjǐ nánguò jǐ tiān, kū yě hǎo, fādāi yě hǎo, suí tā qù. Děng xīn li de fēnglàng píngxī le, zài yìdiǎn yìdiǎn bǎ suì diào de xìnxīn shí qǐlái, pāi pai shēn shang de huī, chóngxīn zhàn qǐlái.',
+        meaning: 'Cho nên cứ cho phép mình buồn vài hôm, khóc cũng được, thẫn thờ cũng được, mặc kệ. Đợi sóng gió trong lòng lặng xuống, hãy từng chút nhặt lại niềm tin đã vỡ, phủi bụi trên người, rồi đứng dậy lần nữa.'
+      },
+      {
+        hanzi: '无论明天的路怎么走，你都不是一个人。胜败乃兵家常事，只要你还愿意向前，就从未真正输过。',
+        pinyin: 'Wúlùn míngtiān de lù zěnme zǒu, nǐ dōu bú shì yí gè rén. Shèngbài nǎi bīngjiā chángshì, zhǐyào nǐ hái yuànyì xiàng qián, jiù cóngwèi zhēnzhèng shū guo.',
+        meaning: 'Dù ngày mai đi thế nào, bạn cũng không đơn độc. Thắng bại là chuyện thường của nhà binh, chỉ cần bạn còn muốn tiến lên thì chưa từng thật sự thua.'
+      },
+      {
+        hanzi: '深爱着你的，自己。',
+        pinyin: 'Shēn ài zhe nǐ de, zìjǐ.',
+        meaning: 'Người yêu bạn sâu sắc, chính bạn.'
+      }
+    ]
+  },
+  {
+    key: 'cam-on-bo-me-khi-truong-thanh',
+    icon: '🏡',
+    title: 'Gửi bố mẹ, một lời cảm ơn muộn',
+    level: 'HSK7-9',
+    paragraphs: [
+      {
+        hanzi: '敬爱的爸爸妈妈：见字如面。今晚城里下起了小雨，我忽然很想你们，于是提笔写下这封迟到了许多年的信。',
+        pinyin: 'Jìng\'ài de bàba māma: jiàn zì rú miàn. Jīnwǎn chéng li xià qǐ le xiǎoyǔ, wǒ hūrán hěn xiǎng nǐmen, yúshì tí bǐ xiě xià zhè fēng chídào le xǔduō nián de xìn.',
+        meaning: 'Bố mẹ kính yêu: đọc thư như gặp mặt. Tối nay trong thành phố đổ mưa phùn, con bỗng rất nhớ bố mẹ, nên cầm bút viết lá thư đã đến muộn nhiều năm này.'
+      },
+      {
+        hanzi: '小时候，我总以为你们无所不能：饭桌上永远有热腾腾的菜，下雨天永远有一把伞，仿佛生活本来就是这样轻而易举。直到自己独立生活，我才明白，那些理所当然的背后，是你们数不清的辛劳。',
+        pinyin: 'Xiǎoshíhou, wǒ zǒng yǐwéi nǐmen wú suǒ bù néng: fànzhuō shang yǒngyuǎn yǒu rèténgténg de cài, xià yǔ tiān yǒngyuǎn yǒu yì bǎ sǎn, fǎngfú shēnghuó běnlái jiù shì zhèyàng qīng ér yì jǔ. Zhídào zìjǐ dúlì shēnghuó, wǒ cái míngbai, nàxiē lǐ suǒ dāng rán de bèihòu, shì nǐmen shǔ bu qīng de xīnláo.',
+        meaning: 'Hồi nhỏ, con luôn tưởng bố mẹ không gì không làm được: trên mâm cơm lúc nào cũng có món nóng hổi, ngày mưa lúc nào cũng có một chiếc ô, tựa như cuộc sống vốn dĩ nhẹ nhàng dễ dàng như thế. Mãi đến khi tự lập, con mới hiểu rằng đằng sau những điều tưởng hiển nhiên ấy là biết bao vất vả không đếm xuể của bố mẹ.'
+      },
+      {
+        hanzi: '我记得那年冬天，家里为了凑齐我的学费，爸爸把心爱的摩托车卖了，却笑着说自己早就骑腻了；妈妈连一件新棉衣都舍不得买，还说旧的更暖和。那时的我年少无知，竟信以为真。',
+        pinyin: 'Wǒ jìde nà nián dōngtiān, jiā li wèile còuqí wǒ de xuéfèi, bàba bǎ xīn\'ài de mótuōchē mài le, què xiào zhe shuō zìjǐ zǎo jiù qí nì le; māma lián yí jiàn xīn miányī dōu shěbude mǎi, hái shuō jiù de gèng nuǎnhuo. Nà shí de wǒ niánshào wúzhī, jìng xìn yǐ wéi zhēn.',
+        meaning: 'Con nhớ mùa đông năm ấy, để gom đủ học phí cho con, bố bán chiếc xe máy yêu quý mà vẫn cười bảo mình đã chán đi từ lâu; mẹ đến một chiếc áo bông mới cũng không nỡ mua, còn nói áo cũ ấm hơn. Con khi đó còn trẻ dại, lại tin là thật.'
+      },
+      {
+        hanzi: '如今我也为生计奔波，才懂得所谓的“没关系”，不过是你们把委屈咽进肚子里的温柔；所谓的“我不饿”，不过是把最后一口留给孩子的爱。这些爱从不张扬，却比任何誓言都沉重。',
+        pinyin: 'Rújīn wǒ yě wèi shēngjì bēnbō, cái dǒngde suǒwèi de “méi guānxi”, búguò shì nǐmen bǎ wěiqu yàn jìn dùzi li de wēnróu; suǒwèi de “wǒ bú è”, búguò shì bǎ zuìhòu yì kǒu liú gěi háizi de ài. Zhèxiē ài cóng bù zhāngyáng, què bǐ rènhé shìyán dōu chénzhòng.',
+        meaning: 'Giờ con cũng tất tả mưu sinh mới hiểu cái gọi là “không sao đâu” chỉ là sự dịu dàng của bố mẹ nuốt tủi hờn vào bụng; cái gọi là “bố mẹ không đói” chỉ là tình thương dành miếng cuối cùng cho con. Tình yêu ấy chẳng bao giờ phô trương, nhưng nặng hơn bất kỳ lời thề nào.'
+      },
+      {
+        hanzi: '我也曾因为你们的唠叨而不耐烦，因为观念不同而争得面红耳赤。现在回想起来，那些絮絮叨叨的叮嘱，何尝不是你们笨拙却真诚的牵挂？可惜我明白得太晚，让你们的头发在等待中白了大半。',
+        pinyin: 'Wǒ yě céng yīnwèi nǐmen de láodao ér bú nàifán, yīnwèi guānniàn bù tóng ér zhēng de miàn hóng ěr chì. Xiànzài huíxiǎng qǐlái, nàxiē xùxù dāodāo de dīngzhǔ, hécháng bú shì nǐmen bènzhuō què zhēnchéng de qiānguà? Kěxī wǒ míngbai de tài wǎn, ràng nǐmen de tóufa zài děngdài zhōng bái le dàbàn.',
+        meaning: 'Con cũng từng bực bội vì lời cằn nhằn của bố mẹ, từng cãi nhau đỏ mặt tía tai vì quan niệm khác biệt. Giờ nhớ lại, những lời dặn dò lải nhải ấy, há chẳng phải là nỗi lo lắng vụng về mà chân thành của bố mẹ sao? Tiếc là con hiểu quá muộn, để tóc bố mẹ bạc quá nửa trong chờ đợi.'
+      },
+      {
+        hanzi: '与其等到追悔莫及的那一天，不如趁你们还在身边，把这些年没说出口的话讲出来：谢谢你们给了我生命，谢谢你们把全部的爱都倾注在我身上，从不索求回报。',
+        pinyin: 'Yǔqí děngdào zhuī huǐ mò jí de nà yì tiān, bùrú chèn nǐmen hái zài shēnbiān, bǎ zhèxiē nián méi shuō chūkǒu de huà jiǎng chūlái: xièxie nǐmen gěi le wǒ shēngmìng, xièxie nǐmen bǎ quánbù de ài dōu qīngzhù zài wǒ shēn shang, cóng bù suǒqiú huíbào.',
+        meaning: 'Thay vì đợi đến ngày hối hận không kịp, chi bằng nhân lúc bố mẹ còn bên cạnh, con nói ra những lời bao năm chưa nói: cảm ơn bố mẹ đã cho con sinh mệnh, cảm ơn đã dồn trọn yêu thương cho con mà chưa từng đòi hồi báo.'
+      },
+      {
+        hanzi: '无论我将来走得多远，飞得多高，你们永远都是我最温暖的归处。这个周末，我想回家，陪你们吃一顿饭，听你们再唠叨一次，我一定会笑着听完。',
+        pinyin: 'Wúlùn wǒ jiānglái zǒu de duō yuǎn, fēi de duō gāo, nǐmen yǒngyuǎn dōu shì wǒ zuì wēnnuǎn de guīchù. Zhège zhōumò, wǒ xiǎng huí jiā, péi nǐmen chī yí dùn fàn, tīng nǐmen zài láodao yí cì, wǒ yídìng huì xiào zhe tīng wán.',
+        meaning: 'Dù mai này con đi xa đến đâu, bay cao đến mấy, bố mẹ mãi mãi vẫn là nơi trở về ấm áp nhất của con. Cuối tuần này, con muốn về nhà, ăn với bố mẹ một bữa cơm, nghe bố mẹ cằn nhằn thêm một lần nữa, con nhất định sẽ mỉm cười nghe hết.'
+      },
+      {
+        hanzi: '永远爱你们的孩子，敬上。',
+        pinyin: 'Yǒngyuǎn ài nǐmen de háizi, jìng shàng.',
+        meaning: 'Đứa con luôn yêu bố mẹ, kính thư.'
+      }
+    ]
   }
 ]
 
