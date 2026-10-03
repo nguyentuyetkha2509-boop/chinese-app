@@ -7,10 +7,10 @@ import { useProgress } from '../store/ProgressContext'
 import { useFirebaseSync } from '../store/FirebaseSyncContext'
 import { fetchSpeedGameLeaderboard, fetchSpeedGameStanding } from '../lib/leaderboard'
 import { friendlyError } from '../lib/friendlyError'
-import { speakChinese } from '../lib/tts'
+import { speakChinese, stopSpeaking } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { loadJSON, saveJSON } from '../lib/storage'
-import { ZapIcon } from '../components/Icons'
+import { ZapIcon, VolumeIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
 import CelebrationBadge from '../components/CelebrationBadge'
 
@@ -44,6 +44,8 @@ export default function SpeedGamePage() {
   const [top, setTop] = useState(null) // 3 nguoi dan diem cao nhat
   const [standing, setStanding] = useState(null) // { rank, total } cua chinh minh
   const [boardError, setBoardError] = useState(null)
+  // Tu doc chu moi khi sang cau; nho lua chon vi choi o cho dong nguoi co the muon tat tieng.
+  const [autoRead, setAutoRead] = useState(() => loadJSON('speedGameAutoRead', true))
   const timerRef = useRef(null)
   // Ky luc NGAY TRUOC khi vao van nay. Phai luu rieng vi luc van ket thuc,
   // setHighScore ben duoi da cap nhat highScore bang chinh so diem vua dat - neu
@@ -64,6 +66,27 @@ export default function SpeedGamePage() {
     }, 1000)
     return () => clearInterval(timerRef.current)
   }, [phase])
+
+  // Doc ngay khi hien cau moi (ke ca cau dau van). Phu thuoc vao question chu khong
+  // phai chi so cau: bam dap an nhanh thi lenh doc cu bi huy va doc chu moi, nen
+  // tieng doc luon khop voi chu dang hien tren man hinh.
+  useEffect(() => {
+    if (phase !== 'playing' || !autoRead) return
+    speakChinese(question.word.hanzi, { rate: 1 })
+  }, [question, phase, autoRead])
+
+  // Het van hoac roi trang thi im ngay, khong de chu cu doc tiep sang man hinh khac.
+  useEffect(() => {
+    if (phase !== 'playing') stopSpeaking()
+  }, [phase])
+  useEffect(() => stopSpeaking, [])
+
+  function toggleAutoRead() {
+    setAutoRead((v) => {
+      saveJSON('speedGameAutoRead', !v)
+      return !v
+    })
+  }
 
   useEffect(() => {
     if (phase === 'playing' && timeLeft === 0) {
@@ -187,6 +210,16 @@ export default function SpeedGamePage() {
               <p className="text-2xl font-bold text-brand-700">{score} điểm</p>
               {combo >= 2 && <p className="text-xs font-semibold text-candy-600">🔥 Combo x{combo}</p>}
             </div>
+            <button
+              onClick={toggleAutoRead}
+              aria-label={autoRead ? 'Tắt tự đọc' : 'Bật tự đọc'}
+              aria-pressed={autoRead}
+              className={`flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-600 ${
+                autoRead ? '' : 'opacity-50'
+              }`}
+            >
+              <VolumeIcon width={24} height={24} alt="" /> {autoRead ? 'Tự đọc' : 'Tắt'}
+            </button>
             <div className={`text-2xl font-bold ${timeLeft <= 10 ? 'text-red-500' : 'text-gray-700'}`}>
               {timeLeft}s
             </div>
