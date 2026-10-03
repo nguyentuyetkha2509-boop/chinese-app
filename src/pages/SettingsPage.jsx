@@ -6,7 +6,7 @@ import { useFirebaseAuth, useFirebaseSync } from '../store/FirebaseSyncContext'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { getDeepseekKey, setDeepseekKey } from '../lib/deepseek'
-import { ShieldIcon, BellIcon } from '../components/Icons'
+import { ShieldIcon, BellIcon, RobotIcon } from '../components/Icons'
 
 const REMINDER_KEY = 'dailyReminder'
 const DEFAULT_REMINDER = { enabled: false, hour: 20, minute: 0 }
@@ -100,7 +100,9 @@ function DeepseekKeySection() {
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
-      <p className="text-base text-gray-800">🤖 API key DeepSeek (tính năng AI)</p>
+      <p className="flex items-center gap-2 text-base text-gray-800">
+        <RobotIcon width={32} height={32} /> API key DeepSeek (tính năng AI)
+      </p>
       <p className="mt-1 text-xs text-gray-500">
         Cần key này để dùng Trò chuyện AI, Chấm bài viết AI và Hỏi AI ở phần Ngữ pháp. Lấy key miễn phí tại{' '}
         <a

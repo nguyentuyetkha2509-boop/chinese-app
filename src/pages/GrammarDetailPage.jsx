@@ -6,7 +6,7 @@ import { useProgress } from '../store/ProgressContext'
 import { speakChinese } from '../lib/tts'
 import { playCelebrate, playWrong } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { VolumeIcon } from '../components/Icons'
+import { VolumeIcon, RobotIcon } from '../components/Icons'
 import MiniQuiz from '../components/MiniQuiz'
 import CelebrationBadge from '../components/CelebrationBadge'
 import MarkdownLite from '../components/MarkdownLite'
@@ -52,7 +52,9 @@ function GrammarAskAi({ point }) {
   return (
     <div className="mb-5 rounded-2xl bg-teal-50 p-4">
       <button onClick={() => setOpen((v) => !v)} className="flex w-full items-center justify-between text-left">
-        <p className="text-sm font-semibold text-teal-700">🤖 Hỏi AI về điểm ngữ pháp này</p>
+        <p className="flex items-center gap-2 text-sm font-semibold text-teal-700">
+          <RobotIcon width={32} height={32} /> Hỏi AI về điểm ngữ pháp này
+        </p>
         <span className="text-teal-600">{open ? '−' : '+'}</span>
       </button>
       {open &&

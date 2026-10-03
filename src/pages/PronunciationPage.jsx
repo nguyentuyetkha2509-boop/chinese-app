@@ -6,7 +6,7 @@ import { useProgress } from '../store/ProgressContext'
 import { speakChinese, isTtsSupported } from '../lib/tts'
 import { playCorrect, playWrong, playCelebrate, playFlip } from '../lib/sfx'
 import { XP_REWARDS } from '../lib/gamification'
-import { VolumeIcon, RecordIcon } from '../components/Icons'
+import { VolumeIcon, RecordIcon, RobotIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
 import { accentFor } from '../lib/colors'
 import CelebrationBadge from '../components/CelebrationBadge'
@@ -468,8 +468,8 @@ function RecordCompare({ words, levelId }) {
                 aiChecking ? 'animate-pulse' : ''
               }`}
             >
-              <RecordIcon width={32} height={32} />
-              {aiChecking ? 'Đang nghe...' : aiResult ? '🤖 Thử lại với AI' : '🤖 Chấm điểm bằng AI'}
+              {aiChecking ? <RecordIcon width={32} height={32} /> : <RobotIcon width={32} height={32} />}
+              {aiChecking ? 'Đang nghe...' : aiResult ? 'Thử lại với AI' : 'Chấm điểm bằng AI'}
             </button>
           </>
         )}

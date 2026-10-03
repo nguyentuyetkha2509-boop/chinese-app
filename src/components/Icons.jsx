@@ -17,6 +17,7 @@ import trophyIconImg from '../assets/icons-gemini/trophy.png'
 import zapIconImg from '../assets/icons-gemini/zap.png'
 import chatIconImg from '../assets/icons-gemini/chat.png'
 import aiChatIconImg from '../assets/icons-gemini/ai-chat.png'
+import robotIconImg from '../assets/icons-gemini/ai-robot.png'
 import storyIconImg from '../assets/icons-gemini/story.png'
 import topicIconImg from '../assets/icons-gemini/topic.png'
 import earIconImg from '../assets/icons-gemini/ear.png'
@@ -216,6 +217,21 @@ export function AiChatIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Trò chuyện AI"
       style={{ display: 'inline-block', borderRadius: '22%' }}
+      draggable={false}
+      {...props}
+    />
+  )
+}
+
+// Chu robot AI (hinh dan nen trong suot) thay cho emoji robot o cac cho noi ve tinh nang AI.
+export function RobotIcon({ width = 38, height = 38, ...props }) {
+  return (
+    <img
+      src={robotIconImg}
+      width={width}
+      height={height}
+      alt=""
+      style={{ display: 'inline-block' }}
       draggable={false}
       {...props}
     />
