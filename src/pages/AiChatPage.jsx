@@ -1,64 +1,188 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
-import {  } from '../components/Icons'
 import MarkdownLite from '../components/MarkdownLite'
+import PandaIcon from '../components/PandaIcon'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 import { loadJSON, saveJSON } from '../lib/storage'
-import PandaIcon from '../components/PandaIcon'
+import { speakChinese, stopSpeaking } from '../lib/tts'
+import { playFlip } from '../lib/sfx'
 
 const HISTORY_KEY = 'aiChatHistory'
 const HISTORY_LIMIT = 40
+const HAN_RE = /[一-鿿]/
 
-const SYSTEM_PROMPT = `Bạn là một người bạn Trung Quốc thân thiện tên Gấu Trúc, đang trò chuyện để giúp một người Việt Nam luyện hội thoại tiếng Trung (trình độ HSK1-HSK6).
-Quy tắc trả lời:
-- Luôn trả lời bằng tiếng Trung giản thể trước, sau đó xuống dòng ghi pinyin, rồi xuống dòng ghi nghĩa tiếng Việt.
-- Câu tiếng Trung ngắn gọn, tự nhiên, ưu tiên từ vựng thông dụng HSK1-HSK3 trừ khi người dùng chủ động dùng từ khó hơn.
-- Nếu người dùng viết sai ngữ pháp hoặc dùng từ tiếng Trung không chính xác, nhẹ nhàng chỉ ra chỗ sai và đưa câu đúng, rồi mới tiếp tục hội thoại.
-- Giữ không khí vui vẻ, khích lệ.`
+// Nhan dien giong noi co san cua trinh duyet (Chrome/Android tot, Safari/iOS han che).
+// Khong co thi trang tu chuyen sang o go chu de van dung duoc.
+const SpeechRecognitionCtor =
+  typeof window !== 'undefined' ? window.SpeechRecognition || window.webkitSpeechRecognition : null
+
+const SYSTEM_PROMPT = `Bạn là một người bạn Trung Quốc thân thiện tên Gấu Trúc, đang trò chuyện bằng LỜI NÓI để giúp một người Việt Nam luyện hội thoại tiếng Trung (trình độ HSK1-HSK6). Tin nhắn của người dùng là văn bản do máy nhận dạng giọng nói chuyển ra, nên có thể sai chữ đồng âm hoặc thiếu dấu câu - hãy đoán ý theo ngữ cảnh, đừng bắt lỗi chính tả.
+Quy tắc trả lời, đúng định dạng 3 dòng:
+- Dòng 1: câu trả lời bằng tiếng Trung giản thể, tự nhiên, chỉ 1-2 câu ngắn (dòng này sẽ được đọc thành tiếng, không dùng ký hiệu markdown, emoji hay pinyin trong dòng này).
+- Dòng 2: pinyin của dòng 1.
+- Dòng 3: nghĩa tiếng Việt của dòng 1.
+- Ưu tiên từ vựng thông dụng HSK1-HSK3 trừ khi người dùng chủ động dùng từ khó hơn.
+- Nếu người dùng nói sai ngữ pháp hoặc dùng từ không chính xác, thêm một dòng cuối bắt đầu bằng "💡" (tiếng Việt) chỉ ra chỗ sai và câu đúng, rồi vẫn tiếp tục hội thoại.
+- Nếu người dùng nói tiếng Việt, vẫn trả lời bằng tiếng Trung đơn giản để họ tập nói lại.
+- Giữ không khí vui vẻ, khích lệ, luôn kết thúc bằng một câu hỏi ngắn để người dùng nói tiếp.`
+
+// Chi doc dong tieng Trung dau tien (dong 1 theo SYSTEM_PROMPT), bo ky hieu markdown.
+// Khong doc ca pinyin va phan tieng Viet vi bo doc tieng Trung se doc rat te.
+function extractSpokenLine(reply) {
+  const line = reply.split('\n').find((l) => HAN_RE.test(l)) || ''
+  return line.replace(/[*_#`>~-]/g, '').trim()
+}
+
+const STATUS_TEXT = {
+  idle: 'Bấm vào mic và nói',
+  listening: 'Đang nghe bạn nói...',
+  thinking: 'Gấu Trúc đang nghĩ...',
+  speaking: 'Gấu Trúc đang nói...'
+}
 
 export default function AiChatPage() {
   const navigate = useNavigate()
   const [messages, setMessages] = useState(() => loadJSON(HISTORY_KEY, []))
-  const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [phase, setPhase] = useState('idle') // idle | listening | thinking | speaking
+  const [interim, setInterim] = useState('')
   const [error, setError] = useState('')
+  const [lang, setLang] = useState('zh-CN') // ngon ngu nguoi hoc dang noi
+  const [showText, setShowText] = useState(true)
+  const [typed, setTyped] = useState('')
   const listRef = useRef(null)
+  const recognitionRef = useRef(null)
+  const messagesRef = useRef(messages)
   const keyReady = hasDeepseekKey()
 
   useEffect(() => {
+    messagesRef.current = messages
     saveJSON(HISTORY_KEY, messages.slice(-HISTORY_LIMIT))
   }, [messages])
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' })
-  }, [messages, loading])
+  }, [messages, phase, interim])
 
-  async function handleSend() {
-    const text = input.trim()
-    if (!text || loading) return
+  // Roi trang giua chung thi phai tha mic va im tieng, neu khong mic van mo ngam
+  // va giong doc van chay o trang khac.
+  useEffect(() => {
+    return () => {
+      recognitionRef.current?.abort()
+      stopSpeaking()
+    }
+  }, [])
+
+  function speak(text) {
+    const line = extractSpokenLine(text)
+    if (!line) {
+      setPhase('idle')
+      return
+    }
+    setPhase('speaking')
+    const started = speakChinese(line, {
+      rate: 0.85,
+      onEnd: () => setPhase('idle'),
+      onError: () => setPhase('idle')
+    })
+    if (!started) setPhase('idle')
+  }
+
+  async function sendText(text) {
+    const content = text.trim()
+    if (!content) {
+      setPhase('idle')
+      return
+    }
     setError('')
-    const next = [...messages, { role: 'user', content: text }]
+    const next = [...messagesRef.current, { role: 'user', content }]
     setMessages(next)
-    setInput('')
-    setLoading(true)
+    setPhase('thinking')
     try {
       const reply = await askDeepseek([{ role: 'system', content: SYSTEM_PROMPT }, ...next])
       setMessages((cur) => [...cur, { role: 'assistant', content: reply }])
+      speak(reply)
     } catch (e) {
       setError(e instanceof DeepseekError ? e.message : 'Có lỗi xảy ra, thử lại sau.')
-    } finally {
-      setLoading(false)
+      setPhase('idle')
+    }
+  }
+
+  function startListening() {
+    if (!SpeechRecognitionCtor || phase === 'listening') return
+    // Dung giong doc truoc khi mo mic, neu khong mic se thu luon tieng loa.
+    stopSpeaking()
+    setError('')
+    setInterim('')
+
+    const recognition = new SpeechRecognitionCtor()
+    recognition.lang = lang
+    recognition.interimResults = true
+    recognition.maxAlternatives = 1
+    let finalText = ''
+
+    recognition.onresult = (e) => {
+      let interimText = ''
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const r = e.results[i]
+        if (r.isFinal) finalText += r[0].transcript
+        else interimText += r[0].transcript
+      }
+      setInterim(finalText + interimText)
+    }
+    recognition.onerror = (e) => {
+      const code = e?.error
+      if (code === 'not-allowed' || code === 'service-not-allowed') {
+        setError('Chưa cho phép dùng micro. Hãy cấp quyền micro cho trang web trong cài đặt trình duyệt rồi thử lại.')
+      } else if (code === 'network') {
+        setError('Nhận dạng giọng nói cần kết nối mạng. Kiểm tra mạng rồi thử lại.')
+      } else if (code !== 'aborted') {
+        setError('Chưa nghe rõ, bạn thử nói lại gần micro hơn nhé.')
+      }
+    }
+    recognition.onend = () => {
+      recognitionRef.current = null
+      setInterim('')
+      if (finalText.trim()) sendText(finalText)
+      else setPhase('idle')
+    }
+
+    try {
+      recognition.start()
+      recognitionRef.current = recognition
+      setPhase('listening')
+      playFlip()
+    } catch {
+      setError('Không mở được micro, thử lại sau.')
+      setPhase('idle')
+    }
+  }
+
+  function stopListening() {
+    // stop() (khong phai abort) de engine van tra ket qua cho phan da noi.
+    recognitionRef.current?.stop()
+  }
+
+  function handleMic() {
+    if (phase === 'listening') stopListening()
+    else if (phase === 'idle') startListening()
+    else if (phase === 'speaking') {
+      stopSpeaking()
+      setPhase('idle')
     }
   }
 
   function handleClear() {
+    stopSpeaking()
     setMessages([])
     saveJSON(HISTORY_KEY, [])
+    setPhase('idle')
   }
 
+  const busy = phase === 'thinking'
+
   return (
-    <div className="flex h-[calc(100vh-140px)] flex-col px-4 pt-6">
+    <div className="flex h-[calc(100dvh-290px)] min-h-[380px] flex-col px-4 pt-6">
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <BackButton />
@@ -83,48 +207,113 @@ export default function AiChatPage() {
           <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto pb-3">
             {messages.length === 0 && (
               <p className="rounded-2xl bg-white p-4 text-sm text-gray-500 shadow-sm">
-                Gõ một câu tiếng Trung hoặc tiếng Việt để bắt đầu trò chuyện. AI sẽ trả lời bằng tiếng Trung kèm pinyin
-                và nghĩa tiếng Việt, đồng thời sửa lỗi nếu bạn viết sai.
+                Bấm vào mic và nói một câu tiếng Trung (hoặc tiếng Việt) để bắt đầu. Gấu Trúc sẽ trả lời bằng giọng nói
+                tiếng Trung, đồng thời nhắc bạn nếu nói sai. Chữ chỉ hiện làm phụ đề, bạn có thể ẩn đi để luyện nghe.
               </p>
             )}
-            {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`max-w-[85%] whitespace-pre-wrap rounded-2xl p-3 text-sm shadow-sm ${
-                  m.role === 'user' ? 'ml-auto bg-brand-700 text-white' : 'bg-white text-gray-800'
-                }`}
-              >
-                <MarkdownLite text={m.content} />
-              </div>
-            ))}
-            {loading && (
-              <div className="max-w-[85%] rounded-2xl bg-white p-3 text-sm text-gray-500 shadow-sm">Đang trả lời...</div>
+            {messages.map((m, i) => {
+              const isUser = m.role === 'user'
+              // Khi an phu de van chua lai nut nghe lai de nguoi hoc khong mat tin nhan.
+              return (
+                <div
+                  key={i}
+                  className={`max-w-[85%] rounded-2xl p-3 text-sm shadow-sm ${
+                    isUser ? 'ml-auto bg-brand-700 text-white' : 'bg-white text-gray-800'
+                  }`}
+                >
+                  {showText ? (
+                    <div className="whitespace-pre-wrap">
+                      <MarkdownLite text={m.content} />
+                    </div>
+                  ) : (
+                    <span className="italic opacity-70">{isUser ? 'Bạn đã nói' : 'Gấu Trúc đã trả lời'}</span>
+                  )}
+                  {!isUser && (
+                    <button
+                      onClick={() => speak(m.content)}
+                      className="mt-2 block text-xs font-semibold text-brand-700"
+                    >
+                      🔊 Nghe lại
+                    </button>
+                  )}
+                </div>
+              )
+            })}
+            {interim && (
+              <div className="ml-auto max-w-[85%] rounded-2xl bg-brand-700/70 p-3 text-sm text-white">{interim}</div>
             )}
           </div>
 
           {error && <p className="mb-2 text-xs text-red-500">{error}</p>}
 
-          <div className="flex gap-2 border-t border-gray-100 pt-3">
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault()
-                  handleSend()
-                }
-              }}
-              placeholder="Nhập tin nhắn..."
-              rows={1}
-              className="flex-1 resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm"
-            />
-            <button
-              onClick={handleSend}
-              disabled={loading || !input.trim()}
-              className="rounded-xl bg-brand-700 px-4 text-sm font-semibold text-white disabled:opacity-50"
-            >
-              Gửi
-            </button>
+          <div className="border-t border-gray-100 pt-3">
+            {SpeechRecognitionCtor ? (
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex items-center gap-2 text-xs">
+                  <button
+                    onClick={() => setLang(lang === 'zh-CN' ? 'vi-VN' : 'zh-CN')}
+                    disabled={phase !== 'idle'}
+                    className="rounded-full bg-gray-100 px-3 py-1 font-semibold text-gray-700 disabled:opacity-50"
+                  >
+                    Tôi nói: {lang === 'zh-CN' ? '中文 (tiếng Trung)' : 'Tiếng Việt'}
+                  </button>
+                  <button
+                    onClick={() => setShowText((v) => !v)}
+                    className="rounded-full bg-gray-100 px-3 py-1 font-semibold text-gray-700"
+                  >
+                    {showText ? 'Ẩn phụ đề' : 'Hiện phụ đề'}
+                  </button>
+                </div>
+                <button
+                  onClick={handleMic}
+                  disabled={busy}
+                  aria-label={phase === 'listening' ? 'Dừng nói' : 'Bắt đầu nói'}
+                  className={`flex h-16 w-16 items-center justify-center rounded-full text-3xl text-white shadow-lg disabled:opacity-50 ${
+                    phase === 'listening' ? 'animate-pulse bg-red-500' : 'bg-brand-700'
+                  }`}
+                >
+                  {phase === 'speaking' ? '⏹' : phase === 'listening' ? '⏸' : '🎤'}
+                </button>
+                <p className="text-xs text-gray-500">{STATUS_TEXT[phase]}</p>
+              </div>
+            ) : (
+              // Trinh duyet khong co nhan dien giong noi (thuong la Safari/iOS, Firefox):
+              // van cho go chu, AI van doc tra loi bang giong noi.
+              <div>
+                <p className="mb-2 text-xs text-gray-500">
+                  Trình duyệt này chưa hỗ trợ nhận dạng giọng nói nên bạn tạm gõ chữ. Mở app bằng Chrome để nói chuyện
+                  bằng micro.
+                </p>
+                <div className="flex gap-2">
+                  <textarea
+                    value={typed}
+                    onChange={(e) => setTyped(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault()
+                        if (!busy && typed.trim()) {
+                          sendText(typed)
+                          setTyped('')
+                        }
+                      }
+                    }}
+                    placeholder="Nhập tin nhắn..."
+                    rows={1}
+                    className="flex-1 resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm"
+                  />
+                  <button
+                    onClick={() => {
+                      sendText(typed)
+                      setTyped('')
+                    }}
+                    disabled={busy || !typed.trim()}
+                    className="rounded-xl bg-brand-700 px-4 text-sm font-semibold text-white disabled:opacity-50"
+                  >
+                    Gửi
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}

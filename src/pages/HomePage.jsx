@@ -240,7 +240,7 @@ export default function HomePage() {
     if (to === '/thu') return 'Tự dịch rồi đối chiếu đáp án'
     if (to === '/tro-choi') return 'Trả lời nhanh trong 60 giây!'
     if (to === '/ghep-cap') return 'Lật thẻ ghép chữ với nghĩa'
-    if (to === '/tro-chuyen-ai') return 'Luyện nói với AI, sửa lỗi ngay'
+    if (to === '/tro-chuyen-ai') return 'Nói chuyện bằng giọng nói với AI'
     if (to === '/cham-bai-viet') return 'AI chấm và sửa câu văn bạn viết'
     return null
   }
