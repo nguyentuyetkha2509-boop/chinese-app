@@ -8,6 +8,7 @@ import {
   BookIcon,
   CardsIcon,
   MicIcon,
+  AiChatIcon,
   PencilIcon,
   ArrowRightIcon,
   SpeedIcon,
@@ -99,7 +100,7 @@ const EXTRA_CARDS = [
   },
   {
     to: '/tro-chuyen-ai',
-    icon: ChatIcon,
+    icon: AiChatIcon,
     title: 'Trò chuyện AI',
     className: 'bg-gradient-to-br from-brand-600 to-candy-500'
   },

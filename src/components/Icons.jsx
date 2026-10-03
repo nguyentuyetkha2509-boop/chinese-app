@@ -16,6 +16,7 @@ import settingsIconImg from '../assets/icons-gemini/settings.png'
 import trophyIconImg from '../assets/icons-gemini/trophy.png'
 import zapIconImg from '../assets/icons-gemini/zap.png'
 import chatIconImg from '../assets/icons-gemini/chat.png'
+import aiChatIconImg from '../assets/icons-gemini/ai-chat.png'
 import storyIconImg from '../assets/icons-gemini/story.png'
 import topicIconImg from '../assets/icons-gemini/topic.png'
 import earIconImg from '../assets/icons-gemini/ear.png'
@@ -199,6 +200,21 @@ export function ZapIcon({ width = 38, height = 38, ...props }) {
       width={width}
       height={height}
       alt="Kiên trì"
+      style={{ display: 'inline-block' }}
+      draggable={false}
+      {...props}
+    />
+  )
+}
+
+// Icon rieng cho Tro chuyen AI (gau + robot); ChatIcon o duoi dung cho Hoi thoai.
+export function AiChatIcon({ width = 38, height = 38, ...props }) {
+  return (
+    <img
+      src={aiChatIconImg}
+      width={width}
+      height={height}
+      alt="Trò chuyện AI"
       style={{ display: 'inline-block' }}
       draggable={false}
       {...props}
