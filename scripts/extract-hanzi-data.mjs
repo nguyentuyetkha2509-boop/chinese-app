@@ -1,5 +1,5 @@
 // Trich xuat du lieu net chu (tu package hanzi-writer-data, cai o devDependency)
-// cho DUNG nhung chu Han co xuat hien trong tu vung HSK1-6 cua app, copy vao
+// cho DUNG nhung chu Han co xuat hien trong tu vung HSK1-9 cua app, copy vao
 // public/hanzi-data/ de trang Viet chu Han fetch tu chinh server cua minh
 // (nhanh, on dinh) thay vi phai goi ra CDN ben ngoai (cdn.jsdelivr.net) moi
 // lan hien 1 chu - day la nguyen nhan gay "hien chu cham" nguoi dung bao.

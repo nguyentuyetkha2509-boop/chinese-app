@@ -72,7 +72,7 @@ for (const [cp, value] of readUnihanFields('Unihan_Variants.txt', 'kTraditionalV
 // Chu Han co trong tu vung HSK1-6
 // ---------------------------------------------------------------------------
 const words = []
-for (const lv of [1, 2, 3, 4, 5, 6]) {
+for (const lv of [1, 2, 3, 4, 5, 6, 7]) {
   const mod = await import(`${rootDir}/src/data/hsk${lv}.js`)
   words.push(...mod[`HSK${lv}_WORDS`])
 }
@@ -120,7 +120,7 @@ entries.sort((a, b) => a[0].codePointAt(0) - b[0].codePointAt(0))
 
 const file = [
   '// Chu Han (1 chu) -> phien am (pinyin co dau thanh).',
-  '// Gom MOI chu Han co trong tu vung HSK1-6 cua app, ke ca chu nam trong tu ghep.',
+  '// Gom MOI chu Han co trong tu vung HSK1-9 cua app, ke ca chu nam trong tu ghep.',
   '//',
   '// Sinh tu scripts/build-pinyin.mjs - dung sua tay.',
   '// Nguon: tu MOT chu trong tu vung cua app (uu tien, vi duoc soan theo dung nghia',

@@ -7,6 +7,9 @@ import { accentFor } from '../lib/colors'
 import { ArrowRightIcon, CheckIcon } from '../components/Icons'
 import { useScrollRestoration } from '../lib/useScrollRestoration'
 
+// Cap 7 la bac gop HSK7-9 nen nhan phai ghi ca khoang
+const levelLabel = (n) => (n >= 7 ? 'HSK7-9' : `HSK${n}`)
+
 export default function TopicsPage() {
   useScrollRestoration('topics')
   const { completedTopics } = useProgress()
@@ -71,7 +74,7 @@ export default function TopicsPage() {
               <span className="mt-1 block text-3xl">{topic.icon}</span>
               <p className="mt-2 text-base text-gray-800">{topic.title}</p>
               <div className="flex items-center justify-between">
-                <p className={`text-xs ${accent.text}`}>{count} từ · {topic.tag || `HSK${getTopicLevel(topic.key)}`}</p>
+                <p className={`text-xs ${accent.text}`}>{count} từ · {topic.tag || levelLabel(getTopicLevel(topic.key))}</p>
                 {isNext && (
                   <span className="flex items-center gap-1 text-[10px] font-semibold text-brand-600">
                     <ArrowRightIcon width={18} height={18} /> Tiếp theo

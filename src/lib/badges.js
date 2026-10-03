@@ -10,6 +10,8 @@ export const BADGES = [
   { id: 'hsk1-done', icon: '🥉', title: 'Xong HSK1', desc: 'Hoàn thành hết các bài HSK1', check: (s) => s.hsk1Done },
   { id: 'hsk2-done', icon: '🥈', title: 'Xong HSK2', desc: 'Hoàn thành hết các bài HSK2', check: (s) => s.hsk2Done },
   { id: 'hsk3-done', icon: '🥇', title: 'Xong HSK3', desc: 'Hoàn thành hết các bài HSK3', check: (s) => s.hsk3Done },
+  { id: 'hsk6-done', icon: '🎓', title: 'Xong HSK6', desc: 'Hoàn thành hết các bài HSK6', check: (s) => s.hsk6Done },
+  { id: 'hsk7-done', icon: '🐉', title: 'Xong HSK7-9', desc: 'Hoàn thành hết các bài HSK7-9', check: (s) => s.hsk7Done },
   { id: 'writing-20', icon: '✍️', title: 'Viết đẹp', desc: 'Viết hoàn hảo 20 lần', check: (s) => s.writingPerfectCount >= 20 },
   {
     id: 'tone-master',

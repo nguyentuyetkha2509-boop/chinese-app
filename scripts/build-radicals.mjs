@@ -1,6 +1,6 @@
 // Sinh 2 file du lieu cho tinh nang Bo thu:
 //   src/data/radicalsKangxi.js  - 214 bo thu chuan (ten, nghia, so net, bien the)
-//   src/data/charRadicals.js    - chu Han -> so bo thu, cho tu vung HSK1-6 cua app
+//   src/data/charRadicals.js    - chu Han -> so bo thu, cho tu vung HSK1-9 cua app
 //
 // Chay lai script nay khi them tu vung moi:
 //   npm run build-radicals
@@ -330,7 +330,7 @@ const radicalsFile = [
 // 2. src/data/charRadicals.js
 // ---------------------------------------------------------------------------
 const words = []
-for (const lv of [1, 2, 3, 4, 5, 6]) {
+for (const lv of [1, 2, 3, 4, 5, 6, 7]) {
   const mod = await import(`${rootDir}/src/data/hsk${lv}.js`)
   words.push(...mod[`HSK${lv}_WORDS`])
 }
@@ -352,7 +352,7 @@ for (const ch of singleChars) {
 
 const charRadicalsFile = [
   '// Chu Han (1 chu) -> so bo thu trong danh sach 214 bo Khang Hy.',
-  '// Chi gom nhung chu co trong tu vung HSK1-6 cua app.',
+  '// Chi gom nhung chu co trong tu vung HSK1-9 cua app.',
   '//',
   '// Sinh tu scripts/build-radicals.mjs - dung sua tay.',
   '// Nguon: bang kRSUnicode cua Unicode Unihan (chu gian the tra qua chu phong the',

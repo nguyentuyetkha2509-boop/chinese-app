@@ -225,6 +225,8 @@ export default function HomePage() {
     hsk1Done: isLevelDone('hsk1', completedUnits),
     hsk2Done: isLevelDone('hsk2', completedUnits),
     hsk3Done: isLevelDone('hsk3', completedUnits),
+    hsk6Done: isLevelDone('hsk6', completedUnits),
+    hsk7Done: isLevelDone('hsk7', completedUnits),
     writingPerfectCount,
     toneTotal: toneStats.total,
     toneAccuracy: toneAccuracy ?? 0

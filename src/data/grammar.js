@@ -9,6 +9,7 @@ import { HSK3_GRAMMAR } from './grammar3'
 import { HSK4_GRAMMAR } from './grammar4'
 import { HSK5_GRAMMAR } from './grammar5'
 import { HSK6_GRAMMAR } from './grammar6'
+import { HSK7_GRAMMAR } from './grammar7'
 
 const HSK1_GRAMMAR = [
   {
@@ -342,7 +343,8 @@ export const GRAMMAR_POINTS = [
   ...HSK3_GRAMMAR,
   ...HSK4_GRAMMAR,
   ...HSK5_GRAMMAR,
-  ...HSK6_GRAMMAR
+  ...HSK6_GRAMMAR,
+  ...HSK7_GRAMMAR
 ]
 
 export function getGrammarPoint(key) {
