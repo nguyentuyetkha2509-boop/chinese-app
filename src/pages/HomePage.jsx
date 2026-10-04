@@ -21,7 +21,8 @@ import {
   SettingsIcon,
   TrophyIcon,
   WritingCheckIcon,
-  LetterIcon
+  LetterIcon,
+  MatchGameIcon
 } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import achievementPanda from '../assets/panda/achievement_panda.png'
@@ -137,7 +138,7 @@ const EXTRA_CARDS = [
   },
   {
     to: '/ghep-cap',
-    icon: CardsIcon,
+    icon: MatchGameIcon,
     title: 'Ghép cặp',
     className: 'bg-gradient-to-br from-candy-500 to-sky-500'
   },

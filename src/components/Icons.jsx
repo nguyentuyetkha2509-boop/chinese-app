@@ -17,6 +17,7 @@ import trophyIconImg from '../assets/icons-gemini/trophy.png'
 import zapIconImg from '../assets/icons-gemini/zap.png'
 import chatIconImg from '../assets/icons-gemini/chat.png'
 import aiChatIconImg from '../assets/icons-gemini/ai-chat.png'
+import matchGameIconImg from '../assets/icons-gemini/match-game.png'
 import letterIconImg from '../assets/icons-gemini/letter.png'
 import writingCheckIconImg from '../assets/icons-gemini/writing-check.png'
 import robotIconImg from '../assets/icons-gemini/ai-robot.png'
@@ -204,6 +205,21 @@ export function ZapIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Kiên trì"
       style={{ display: 'inline-block' }}
+      draggable={false}
+      {...props}
+    />
+  )
+}
+
+// Icon rieng cho tro Ghep cap (hai gau lat the); CardsIcon o tren dung chung cho the tu.
+export function MatchGameIcon({ width = 38, height = 38, ...props }) {
+  return (
+    <img
+      src={matchGameIconImg}
+      width={width}
+      height={height}
+      alt="Ghép cặp"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
       draggable={false}
       {...props}
     />
