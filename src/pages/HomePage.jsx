@@ -26,7 +26,7 @@ import {
 } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import achievementPanda from '../assets/panda/achievement_panda.png'
-import headerPanda from '../assets/icons-gemini/header_panda.png'
+import headerPanda from '../assets/icons-gemini/header_panda.webp'
 import goalPanda from '../assets/panda/goal_panda.png'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { getNextVocabCombo, getComboByUnitKey } from '../lib/curriculum'
