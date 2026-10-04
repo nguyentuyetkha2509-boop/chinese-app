@@ -10,6 +10,7 @@ import { XP_REWARDS } from '../lib/gamification'
 import CelebrationBadge from '../components/CelebrationBadge'
 import SessionBar from '../components/SessionBar'
 import SessionNextButton from '../components/SessionNextButton'
+import BackButton from '../components/BackButton'
 import { useSessionSteps } from '../lib/sessionPlan'
 import flashcardPanda from '../assets/panda/flashcard_panda.webp'
 
@@ -159,7 +160,10 @@ export default function FlashcardsPage() {
     return (
       <div className="px-4 pt-6">
         {inSession && <SessionBar steps={steps} currentKey="review" />}
-        <h1 className="mb-2 text-2xl text-brand-800">Ôn tập</h1>
+        <div className="mb-2 flex items-center gap-2">
+        <BackButton />
+        <h1 className="text-2xl text-brand-800">Ôn tập</h1>
+      </div>
 
         {/* Trong phien hoc hom nay chi on het the den han, khong can loc theo cap do */}
         {!inSession && (
@@ -247,7 +251,10 @@ export default function FlashcardsPage() {
     <div className="px-4 pt-6">
       {inSession && <SessionBar steps={steps} currentKey="review" />}
       <div className="mb-1 flex items-center justify-between">
-        <h1 className="text-2xl text-brand-800">Ôn tập</h1>
+        <div className="flex items-center gap-2">
+          <BackButton />
+          <h1 className="text-2xl text-brand-800">Ôn tập</h1>
+        </div>
         <span className="text-sm text-gray-500">
           Thẻ {reviewed + 1}/{sessionTotal}
         </span>

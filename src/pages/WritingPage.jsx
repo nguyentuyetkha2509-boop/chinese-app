@@ -235,7 +235,10 @@ function WritingPageInner() {
         <>
           <img src={writingPanda} alt="Gấu trúc luyện viết chữ" className="mx-auto mb-2 w-36 max-w-full" />
           <div className="mb-4 flex items-center justify-between">
-            <h1 className="text-2xl text-brand-800">Viết chữ Hán</h1>
+            <div className="flex items-center gap-2">
+              <BackButton />
+              <h1 className="text-2xl text-brand-800">Viết chữ Hán</h1>
+            </div>
             <span className="text-sm text-gray-500">
               Đã luyện {practicedCount}/{chars.length}
             </span>

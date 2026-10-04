@@ -595,7 +595,10 @@ function PronunciationPageInner() {
         </div>
       ) : (
         <>
-          <h1 className="mb-1 text-2xl text-brand-800">Phát âm & thanh điệu</h1>
+          <div className="mb-1 flex items-center gap-2">
+            <BackButton />
+            <h1 className="text-2xl text-brand-800">Phát âm & thanh điệu</h1>
+          </div>
           <p className="mb-3 text-xs text-gray-500">Chỉ luyện trong {words.length} từ bạn đã học ở {level.label}.</p>
         </>
       )}

@@ -6,6 +6,7 @@ import { useProgress } from '../store/ProgressContext'
 import { getUnitCombo } from '../lib/curriculum'
 import { CheckIcon, BookIcon, ArrowRightIcon, RadicalIcon, SpeedIcon } from '../components/Icons'
 import LevelTabs from '../components/LevelTabs'
+import BackButton from '../components/BackButton'
 import { accentFor } from '../lib/colors'
 import lessonPanda from '../assets/panda/lesson_panda.webp'
 
@@ -52,7 +53,10 @@ function NumberLessons() {
 
   return (
     <>
-      <h1 className="mb-1 text-2xl text-brand-800">Số và tiền</h1>
+      <div className="mb-1 flex items-center gap-2">
+        <BackButton />
+        <h1 className="text-2xl text-brand-800">Số và tiền</h1>
+      </div>
       <p className="mb-4 text-sm text-gray-500">
         Đọc số, nói giá, diện tích, số điện thoại. Hoàn thành {doneCount}/{NUMBER_LESSONS.length} bài.
       </p>
@@ -102,7 +106,10 @@ function NumberLessons() {
 function RadicalLessons() {
   return (
     <>
-      <h1 className="mb-1 text-2xl text-brand-800">Bộ thủ</h1>
+      <div className="mb-1 flex items-center gap-2">
+        <BackButton />
+        <h1 className="text-2xl text-brand-800">Bộ thủ</h1>
+      </div>
       <p className="mb-4 text-sm text-gray-500">214 bộ dựng nên chữ Hán. Biết bộ thì đoán được nghĩa nhiều chữ lạ.</p>
       <div className="space-y-3">
         <Link to="/bo-thu" className="flex items-center gap-3 rounded-2xl border border-sky-200 bg-white p-4 shadow-sm">
@@ -144,7 +151,10 @@ function HskLessons() {
 
   return (
     <>
-      <h1 className="mb-1 text-2xl text-brand-800">Bài học {level.label}</h1>
+      <div className="mb-1 flex items-center gap-2">
+        <BackButton />
+        <h1 className="text-2xl text-brand-800">Bài học {level.label}</h1>
+      </div>
       <p className="mb-4 text-sm text-gray-500">
         {level.words.length} từ vựng, chia thành {level.units.length} bài, mỗi bài {sizeLabel}.
       </p>
