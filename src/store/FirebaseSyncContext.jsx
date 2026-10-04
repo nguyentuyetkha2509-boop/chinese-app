@@ -152,6 +152,31 @@ export function FirebaseSyncProvider({ children }) {
     })
   }
 
+  // Bang xep hang chi la so lieu tong quan, khong chua tien do chi tiet, nen
+  // khong can cho cong tac an toan cua viec sao luu tien do (autoPushArmed).
+  // Truoc day neu hai ben deu co du lieu thi cong tac bi khoa cho den khi nguoi
+  // dung vao Cai dat chon, khien bang xep hang dung yen o so cu (vd. Cap 5 trong
+  // khi may dang la Cap 80). Chi ghi khi XP local cao hon ban tren bang, de may
+  // co it tien do hon khong lam tut hang cua chinh minh.
+  useEffect(() => {
+    if (!user || nickname === null || progress.xp === 0) return
+    let cancelled = false
+    const timer = setTimeout(async () => {
+      try {
+        const entry = await getMyEntry(user.uid)
+        if (cancelled || (entry?.xp ?? 0) >= progress.xp) return
+        await pushLeaderboardStats()
+      } catch (e) {
+        console.error('Không cập nhật được bảng xếp hạng:', e)
+      }
+    }, AUTO_PUSH_DELAY_MS)
+    return () => {
+      cancelled = true
+      clearTimeout(timer)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, nickname, progress.xp])
+
   // Day ky luc tro "Dua toc do" len bang xep hang, tra ve diem TOT NHAT dang
   // duoc ghi nhan tren bang (khong phai diem cua may nay).
   //
