@@ -29,9 +29,36 @@ service cloud.firestore {
     // da duoc sua de bao ro dieu nay thay vi hien loi ky thuat bang tieng Anh.
     // Neu sau nay muon cho xem bang truoc khi dang nhap thi doi dong read
     // duoi day thanh `allow read: if true;`
+    //
+    // Du lieu ghi len phai hop le (xem hamLeaderboardHopLe): chi cho dung cac
+    // truong app thuc su ghi, dung kieu va nam trong khoang hop ly. Truoc day
+    // chu tai khoan ghi duoc BAT KY truong nao, nen ai cung tu dat duoc xp 99
+    // trieu hoac bi danh dai vo han bang vai dong ma trong trinh duyet. Gioi han
+    // tren van khong chan duoc nguoi gian lan tinh vi (XP tang tung it mot), chi
+    // chan kieu gian lan lo liu; muon chat hon phai dung Cloud Functions.
     match /leaderboard/{userId} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == userId;
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId
+        && hamLeaderboardHopLe(request.resource.data);
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // request.resource.data la ban ghi SAU khi ghi (da gop voi truong cu), nen
+    // kiem tra nay dung ca khi app chi ghi mot phan (vd. chi bi danh hoac chi
+    // speedGameBest). Moi truong deu tuy chon, nhung neu co thi phai dung kieu.
+    // level phai khop xp (100 XP moi cap, xem gamification.js) de khong dat cap
+    // tuy y rieng le voi xp.
+    function hamLeaderboardHopLe(d) {
+      return d.keys().hasOnly(['nickname', 'xp', 'level', 'streak', 'wordsLearned', 'speedGameBest', 'updatedAt'])
+        && (!('nickname' in d) || (d.nickname is string && d.nickname.size() >= 1 && d.nickname.size() <= 20))
+        && (!('xp' in d) || (d.xp is number && d.xp >= 0 && d.xp <= 5000000))
+        && (!('level' in d) || (d.level is number && d.level >= 1 && d.level <= 50001))
+        && (!('xp' in d && 'level' in d) || d.level == math.floor(d.xp / 100) + 1)
+        && (!('streak' in d) || (d.streak is number && d.streak >= 0 && d.streak <= 3650))
+        && (!('wordsLearned' in d) || (d.wordsLearned is number && d.wordsLearned >= 0 && d.wordsLearned <= 12000))
+        && (!('speedGameBest' in d) || (d.speedGameBest is number && d.speedGameBest >= 0 && d.speedGameBest <= 5000))
+        && (!('updatedAt' in d) || d.updatedAt is number);
     }
 
     // Mac dinh: chan tat ca nhung gi khong liet ke o tren. Neu sau nay them
