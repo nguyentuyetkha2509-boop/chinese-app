@@ -20,7 +20,8 @@ import {
   EarIcon,
   SettingsIcon,
   TrophyIcon,
-  WritingCheckIcon
+  WritingCheckIcon,
+  LetterIcon
 } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import achievementPanda from '../assets/panda/achievement_panda.png'
@@ -118,7 +119,7 @@ const EXTRA_CARDS = [
   },
   {
     to: '/thu',
-    icon: PencilIcon,
+    icon: LetterIcon,
     title: 'Thư gửi chính mình',
     className: 'bg-gradient-to-br from-candy-500 to-brand-600'
   },

@@ -17,6 +17,7 @@ import trophyIconImg from '../assets/icons-gemini/trophy.png'
 import zapIconImg from '../assets/icons-gemini/zap.png'
 import chatIconImg from '../assets/icons-gemini/chat.png'
 import aiChatIconImg from '../assets/icons-gemini/ai-chat.png'
+import letterIconImg from '../assets/icons-gemini/letter.png'
 import writingCheckIconImg from '../assets/icons-gemini/writing-check.png'
 import robotIconImg from '../assets/icons-gemini/ai-robot.png'
 import storyIconImg from '../assets/icons-gemini/story.png'
@@ -203,6 +204,21 @@ export function ZapIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Kiên trì"
       style={{ display: 'inline-block' }}
+      draggable={false}
+      {...props}
+    />
+  )
+}
+
+// Icon rieng cho Thu gui chinh minh (gau cam phong bi canh hom thu).
+export function LetterIcon({ width = 38, height = 38, ...props }) {
+  return (
+    <img
+      src={letterIconImg}
+      width={width}
+      height={height}
+      alt="Thư gửi chính mình"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
       draggable={false}
       {...props}
     />
