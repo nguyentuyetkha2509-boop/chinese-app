@@ -20,7 +20,7 @@ import {
   EarIcon,
   SettingsIcon,
   TrophyIcon,
-  ZapIcon
+  WritingCheckIcon
 } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
 import achievementPanda from '../assets/panda/achievement_panda.png'
@@ -106,7 +106,7 @@ const EXTRA_CARDS = [
   },
   {
     to: '/cham-bai-viet',
-    icon: ZapIcon,
+    icon: WritingCheckIcon,
     title: 'Chấm bài viết AI',
     className: 'bg-gradient-to-br from-sun-500 to-candy-600'
   },

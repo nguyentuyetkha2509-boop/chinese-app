@@ -17,6 +17,7 @@ import trophyIconImg from '../assets/icons-gemini/trophy.png'
 import zapIconImg from '../assets/icons-gemini/zap.png'
 import chatIconImg from '../assets/icons-gemini/chat.png'
 import aiChatIconImg from '../assets/icons-gemini/ai-chat.png'
+import writingCheckIconImg from '../assets/icons-gemini/writing-check.png'
 import robotIconImg from '../assets/icons-gemini/ai-robot.png'
 import storyIconImg from '../assets/icons-gemini/story.png'
 import topicIconImg from '../assets/icons-gemini/topic.png'
@@ -202,6 +203,21 @@ export function ZapIcon({ width = 38, height = 38, ...props }) {
       height={height}
       alt="Kiên trì"
       style={{ display: 'inline-block' }}
+      draggable={false}
+      {...props}
+    />
+  )
+}
+
+// Icon rieng cho Cham bai viet AI (gau viet chu + robot cham diem).
+export function WritingCheckIcon({ width = 38, height = 38, ...props }) {
+  return (
+    <img
+      src={writingCheckIconImg}
+      width={width}
+      height={height}
+      alt="Chấm bài viết AI"
+      style={{ display: 'inline-block', borderRadius: '22%' }}
       draggable={false}
       {...props}
     />
