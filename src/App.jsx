@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import BottomNav from './components/BottomNav'
 import TopBar from './components/TopBar'
 import TtsWarning from './components/TtsWarning'
@@ -109,6 +109,8 @@ export default function App() {
         <Route path="/cai-dat" element={<SettingsPage />} />
         <Route path="/tro-chuyen-ai" element={<AiChatPage />} />
         <Route path="/cham-bai-viet" element={<WritingCheckPage />} />
+        {/* Dia chi khong ton tai (go sai, link cu) ve Trang chu thay vi hien trang trang */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <BottomNav />
     </div>
