@@ -147,7 +147,7 @@ export default function RadicalsPage() {
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
         <BackButton />
-        <h1 className="text-2xl text-brand-800">🀄 Bộ thủ</h1>
+        <h1 className="text-2xl text-brand-800">Bộ thủ</h1>
         <Link
           to="/bo-thu/tro-choi"
           className="ml-auto shrink-0 rounded-full bg-gradient-to-br from-teal-500 to-brand-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm"

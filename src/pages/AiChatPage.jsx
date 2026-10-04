@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import MarkdownLite from '../components/MarkdownLite'
-import PandaIcon from '../components/PandaIcon'
 import { VolumeIcon, RecordIcon } from '../components/Icons'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 import { loadJSON, saveJSON } from '../lib/storage'
@@ -212,7 +211,7 @@ export default function AiChatPage() {
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <BackButton />
-          <h1 className="text-xl text-brand-800">Trò chuyện với AI <PandaIcon size={28} /></h1>
+          <h1 className="text-xl text-brand-800">Trò chuyện với AI</h1>
         </div>
         {messages.length > 0 && (
           <button onClick={handleClear} className="text-xs text-gray-500 underline">

@@ -3,7 +3,7 @@ import BackButton from '../components/BackButton'
 import { LETTERS } from '../data/letters'
 import { useProgress } from '../store/ProgressContext'
 import { accentFor } from '../lib/colors'
-import { CheckIcon, LetterIcon } from '../components/Icons'
+import { CheckIcon } from '../components/Icons'
 
 export default function LettersPage() {
   const { completedLetters } = useProgress()
@@ -13,7 +13,6 @@ export default function LettersPage() {
     <div className="px-4 pt-6">
       <div className="mb-1 flex items-center gap-2">
         <BackButton />
-        <LetterIcon width={36} height={36} />
         <h1 className="text-2xl text-brand-800">Thư gửi chính mình</h1>
       </div>
       <p className="mb-4 text-sm text-gray-500">

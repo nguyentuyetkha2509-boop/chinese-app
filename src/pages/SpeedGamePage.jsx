@@ -180,7 +180,7 @@ export default function SpeedGamePage() {
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
         <BackButton />
-        <h1 className="text-xl text-brand-800">⚡ Đua tốc độ</h1>
+        <h1 className="text-xl text-brand-800">Đua tốc độ</h1>
       </div>
 
       {phase === 'idle' && (
