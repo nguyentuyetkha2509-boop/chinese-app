@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
-import {  } from '../components/Icons'
+import { WritingCheckIcon } from '../components/Icons'
 import MarkdownLite from '../components/MarkdownLite'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 
@@ -50,7 +50,8 @@ export default function WritingCheckPage() {
     <div className="px-4 pt-6">
       <div className="mb-4 flex items-center gap-2">
         <BackButton />
-        <h1 className="text-xl text-brand-800">Chấm bài viết AI ✍️</h1>
+        <WritingCheckIcon width={36} height={36} />
+        <h1 className="text-xl text-brand-800">Chấm bài viết AI</h1>
       </div>
 
       {!keyReady ? (
