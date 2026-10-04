@@ -161,9 +161,9 @@ export default function FlashcardsPage() {
       <div className="px-4 pt-6">
         {inSession && <SessionBar steps={steps} currentKey="review" />}
         <div className="mb-2 flex items-center gap-2">
-        <BackButton />
-        <h1 className="text-2xl text-brand-800">Ôn tập</h1>
-      </div>
+          <BackButton />
+          <h1 className="text-2xl text-brand-800">Ôn tập</h1>
+        </div>
 
         {/* Trong phien hoc hom nay chi on het the den han, khong can loc theo cap do */}
         {!inSession && (

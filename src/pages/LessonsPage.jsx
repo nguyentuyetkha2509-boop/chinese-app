@@ -25,6 +25,10 @@ export default function LessonsPage() {
 
   return (
     <div className="px-4 pt-6">
+      <div className="mb-1 flex items-center gap-2">
+        <BackButton />
+        <h1 className="text-2xl text-brand-800">Bài học</h1>
+      </div>
       <img src={lessonPanda} alt="Gấu trúc học bài" className="mx-auto mb-2 w-36 max-w-full" />
       <div className="mb-4 flex gap-2">
         {TABS.map((t) => (
@@ -53,10 +57,6 @@ function NumberLessons() {
 
   return (
     <>
-      <div className="mb-1 flex items-center gap-2">
-        <BackButton />
-        <h1 className="text-2xl text-brand-800">Số và tiền</h1>
-      </div>
       <p className="mb-4 text-sm text-gray-500">
         Đọc số, nói giá, diện tích, số điện thoại. Hoàn thành {doneCount}/{NUMBER_LESSONS.length} bài.
       </p>
@@ -106,10 +106,6 @@ function NumberLessons() {
 function RadicalLessons() {
   return (
     <>
-      <div className="mb-1 flex items-center gap-2">
-        <BackButton />
-        <h1 className="text-2xl text-brand-800">Bộ thủ</h1>
-      </div>
       <p className="mb-4 text-sm text-gray-500">214 bộ dựng nên chữ Hán. Biết bộ thì đoán được nghĩa nhiều chữ lạ.</p>
       <div className="space-y-3">
         <Link to="/bo-thu" className="flex items-center gap-3 rounded-2xl border border-sky-200 bg-white p-4 shadow-sm">
@@ -151,10 +147,7 @@ function HskLessons() {
 
   return (
     <>
-      <div className="mb-1 flex items-center gap-2">
-        <BackButton />
-        <h1 className="text-2xl text-brand-800">Bài học {level.label}</h1>
-      </div>
+      <h2 className="mb-1 text-lg text-brand-800">Bài học {level.label}</h2>
       <p className="mb-4 text-sm text-gray-500">
         {level.words.length} từ vựng, chia thành {level.units.length} bài, mỗi bài {sizeLabel}.
       </p>
