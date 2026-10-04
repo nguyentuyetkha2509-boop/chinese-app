@@ -10,6 +10,9 @@ const SYSTEM_PROMPT = `Bạn là giáo viên tiếng Trung chấm bài viết ch
 3. "Câu đã sửa": viết lại câu/đoạn hoàn chỉnh, đúng, tự nhiên bằng tiếng Trung, kèm pinyin.
 Giữ giọng văn khích lệ, dễ hiểu cho người mới học.`
 
+// Phong chu co chan cho giao dien co phong cua trang nay.
+const SERIF = '"Noto Serif SC", "Songti SC", "STSong", "SimSun", "Noto Serif", serif'
+
 export default function WritingCheckPage() {
   const navigate = useNavigate()
   const [text, setText] = useState('')
@@ -80,7 +83,7 @@ export default function WritingCheckPage() {
                 placeholder="Ví dụ: 我昨天去学校学习汉语了。"
                 className="block w-full resize-none rounded border border-[#c9b27c] px-3 py-0 text-lg text-[#2b211a] placeholder:text-[#a8967a] focus:outline-none"
                 style={{
-                  fontFamily: '"Noto Serif SC", "Songti SC", "STSong", "SimSun", "Noto Serif", serif',
+                  fontFamily: SERIF,
                   lineHeight: '2rem',
                   backgroundColor: '#fbf4de',
                   backgroundImage:
@@ -93,7 +96,8 @@ export default function WritingCheckPage() {
           <button
             onClick={handleCheck}
             disabled={loading || !text.trim()}
-            className="mt-3 w-full rounded-2xl bg-brand-700 py-3 text-lg text-white disabled:opacity-50"
+            className="mt-3 w-full rounded-lg border-2 border-[#e9c9b8] py-3 text-lg tracking-widest text-[#fbf4de] shadow-md disabled:opacity-50"
+            style={{ background: '#a8321f', fontFamily: SERIF }}
           >
             {loading ? 'Đang chấm...' : 'Chấm bài'}
           </button>
@@ -101,15 +105,20 @@ export default function WritingCheckPage() {
           {error && <p className="mt-3 text-sm text-red-500">{error}</p>}
 
           {result && (
-            <div className="mt-4 whitespace-pre-wrap rounded-2xl bg-white p-4 text-sm leading-relaxed text-gray-800 shadow-sm">
-              <MarkdownLite text={result} />
+            <div className="mt-4 rounded-lg p-1.5 shadow-md" style={{ background: '#a8321f' }}>
+              <div
+                className="whitespace-pre-wrap rounded-md border border-[#e9d9b0] p-4 text-sm leading-relaxed text-[#2b211a]"
+                style={{ background: '#f6ecd0', fontFamily: SERIF }}
+              >
+                <MarkdownLite text={result} />
+              </div>
             </div>
           )}
 
           {result && (
             <button
               onClick={handleClear}
-              className="mt-3 w-full rounded-2xl border border-gray-200 bg-white py-2.5 text-sm font-semibold text-gray-600"
+              className="mt-3 w-full rounded-lg border border-[#c9b27c] bg-[#fbf4de] py-2.5 text-sm font-semibold text-[#6b5a3e]"
             >
               🗑 Xóa bài và kết quả
             </button>
