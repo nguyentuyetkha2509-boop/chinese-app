@@ -6,6 +6,7 @@ import { useFirebaseAuth, useFirebaseSync } from '../store/FirebaseSyncContext'
 import { playCorrect, playWrong } from '../lib/sfx'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { getDeepseekKey, setDeepseekKey } from '../lib/deepseek'
+import { friendlyError } from '../lib/friendlyError'
 import { ShieldIcon, BellIcon, RobotIcon } from '../components/Icons'
 
 const REMINDER_KEY = 'dailyReminder'
@@ -157,7 +158,7 @@ function formatTime(ts) {
 }
 
 function FirebaseSyncSection() {
-  const { user, authReady, status, error, lastSyncedAt, signIn, signOut, pushNow, pullNow } = useFirebaseSync()
+  const { user, authReady, status, error, lastSyncedAt, signIn, signOut, pushNow, pullNow, nickname, submitNickname } = useFirebaseSync()
   const [connectChoice, setConnectChoice] = useState(null) // { hasRemoteData, remoteUpdatedAt } | null
   const [busy, setBusy] = useState(false)
 
@@ -268,6 +269,7 @@ function FirebaseSyncSection() {
             {user.photoURL && <img src={user.photoURL} alt="" className="h-8 w-8 rounded-full" />}
             <p className="text-sm text-gray-700">{user.displayName || user.email}</p>
           </div>
+          <NicknameEditor nickname={nickname} onSave={submitNickname} />
           <p className="mt-2 text-xs text-gray-500">
             {status === 'syncing' && 'Đang đồng bộ...'}
             {status === 'synced' && lastSyncedAt && `✅ Đã đồng bộ lúc ${formatTime(lastSyncedAt)}`}
@@ -302,6 +304,86 @@ function FirebaseSyncSection() {
           </button>
         </div>
       )}
+    </div>
+  )
+}
+
+// Doi bi danh hien tren bang xep hang. Dung lai submitNickname cua context nen
+// cung ghi len bang xep hang ngay, khong can dang xuat.
+function NicknameEditor({ nickname, onSave }) {
+  const [editing, setEditing] = useState(false)
+  const [value, setValue] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState(null)
+
+  function startEdit() {
+    setValue(nickname || '')
+    setErr(null)
+    setEditing(true)
+  }
+
+  async function handleSave() {
+    const next = value.trim()
+    if (!next || busy) return
+    if (next === nickname) {
+      setEditing(false)
+      return
+    }
+    setBusy(true)
+    setErr(null)
+    try {
+      await onSave(next)
+      playCorrect()
+      setEditing(false)
+    } catch (e) {
+      playWrong()
+      setErr(friendlyError(e, 'Chưa lưu được biệt danh. Kiểm tra mạng rồi thử lại.'))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  if (!editing) {
+    return (
+      <div className="mt-2 flex items-center justify-between gap-2 rounded-xl bg-gray-50 px-3 py-2">
+        <p className="text-sm text-gray-700">
+          Biệt danh: <span className="font-semibold">{nickname || 'Chưa đặt'}</span>
+        </p>
+        <button onClick={startEdit} className="text-xs font-semibold text-brand-700">
+          {nickname ? 'Đổi' : 'Đặt'}
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="mt-2 rounded-xl bg-gray-50 p-3">
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        maxLength={20}
+        placeholder="Biệt danh trên bảng xếp hạng"
+        className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm"
+        autoFocus
+      />
+      {err && <p className="mt-1 text-xs text-red-600">{err}</p>}
+      <div className="mt-2 flex gap-2">
+        <button
+          onClick={handleSave}
+          disabled={busy || !value.trim()}
+          className="flex-1 rounded-xl bg-brand-700 py-2 text-xs font-semibold text-white disabled:opacity-50"
+        >
+          {busy ? 'Đang lưu...' : 'Lưu'}
+        </button>
+        <button
+          onClick={() => setEditing(false)}
+          disabled={busy}
+          className="flex-1 rounded-xl border border-gray-200 bg-white py-2 text-xs font-semibold text-gray-600"
+        >
+          Hủy
+        </button>
+      </div>
     </div>
   )
 }
