@@ -64,13 +64,32 @@ export default function WritingCheckPage() {
           <p className="mb-2 text-sm text-gray-500">
             Viết một câu hoặc đoạn văn tiếng Trung, AI sẽ chấm và sửa lỗi giúp bạn.
           </p>
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            rows={5}
-            placeholder="Ví dụ: 我昨天去学校学习汉语了。"
-            className="w-full rounded-2xl border border-gray-200 p-3 text-base shadow-sm"
-          />
+          {/* Khung giay Tuyen phong cach co phong: vien do son kep, mau giay nga,
+              dong ke mo (o to lan) de chu viet tay nhin nhu tren giay thu phap.
+              Khong de padding doc de dong ke khop dung voi tung dong chu.
+              Dung CSS thuan, khong tai phong chu ngoai de khong cham trang. */}
+          <div
+            className="rounded-lg p-1.5 shadow-md"
+            style={{ background: '#a8321f', boxShadow: '0 4px 14px rgba(120, 40, 20, 0.25)' }}
+          >
+            <div className="rounded-md border border-[#e9d9b0] p-1" style={{ background: '#f6ecd0' }}>
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                rows={6}
+                placeholder="Ví dụ: 我昨天去学校学习汉语了。"
+                className="block w-full resize-none rounded border border-[#c9b27c] px-3 py-0 text-lg text-[#2b211a] placeholder:text-[#a8967a] focus:outline-none"
+                style={{
+                  fontFamily: '"Noto Serif SC", "Songti SC", "STSong", "SimSun", "Noto Serif", serif',
+                  lineHeight: '2rem',
+                  backgroundColor: '#fbf4de',
+                  backgroundImage:
+                    'repeating-linear-gradient(to bottom, transparent 0, transparent calc(2rem - 1px), rgba(168, 50, 31, 0.28) calc(2rem - 1px), rgba(168, 50, 31, 0.28) 2rem)',
+                  backgroundAttachment: 'local'
+                }}
+              />
+            </div>
+          </div>
           <button
             onClick={handleCheck}
             disabled={loading || !text.trim()}
