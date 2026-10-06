@@ -25,9 +25,9 @@ import {
   MatchGameIcon
 } from '../components/Icons'
 import PandaHero from '../components/PandaHero'
-import achievementPanda from '../assets/panda/achievement_panda.png'
+import achievementPanda from '../assets/panda/achievement_panda.webp'
 import headerPanda from '../assets/icons-gemini/header_panda.webp'
-import goalPanda from '../assets/panda/goal_panda.png'
+import goalPanda from '../assets/panda/goal_panda.webp'
 import { getLevelInfo, DAILY_GOAL_XP } from '../lib/gamification'
 import { getNextVocabCombo, getComboByUnitKey } from '../lib/curriculum'
 import { BADGES, getEarnedBadgeIds } from '../lib/badges'

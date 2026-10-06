@@ -21,15 +21,27 @@ export function shuffle(arr) {
 // 犬 deu la 'con chó', 上午 va 早上 deu la 'buổi sáng', 医生 va 大夫 deu la 'bác sĩ').
 // Truoc day chi loc theo w.id nen cau hoi co the hien 2 lua chon giong het nhau -
 // nguoi hoc chon dung nhung van bi cham sai, va cau hoi tro thanh vo nghia.
-function pickDistractors(word, pool) {
+export function pickDistractors(word, pool) {
   const seenMeanings = new Set([word.meaning])
   const others = []
-  for (const candidate of shuffle(pool)) {
-    if (candidate.id === word.id) continue
-    if (seenMeanings.has(candidate.meaning)) continue
+  const tryAdd = (candidate) => {
+    if (candidate.id === word.id) return
+    if (seenMeanings.has(candidate.meaning)) return
     seenMeanings.add(candidate.meaning)
     others.push(candidate)
-    if (others.length === 3) break
+  }
+  // Boc ngau nhien vai luot thay vi xao ca kho: pool co the toi 11.000 tu, xao
+  // het chi de lay 3 tu lam moi cau hoi bi khung lai tren dien thoai yeu.
+  for (let i = 0; i < 30 && others.length < 3 && pool.length > 0; i++) {
+    tryAdd(pool[Math.floor(Math.random() * pool.length)])
+  }
+  // Pool nho hoac nhieu tu trung nghia thi boc ngau nhien de hut, luc do moi
+  // xao ca pool de chac chan lay du neu co the.
+  if (others.length < 3) {
+    for (const candidate of shuffle(pool)) {
+      tryAdd(candidate)
+      if (others.length === 3) break
+    }
   }
   return others
 }

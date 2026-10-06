@@ -1,6 +1,6 @@
-import medal1 from '../assets/panda/medal_1.png'
-import medal2 from '../assets/panda/medal_2.png'
-import medal3 from '../assets/panda/medal_3.png'
+import medal1 from '../assets/panda/medal_1.webp'
+import medal2 from '../assets/panda/medal_2.webp'
+import medal3 from '../assets/panda/medal_3.webp'
 
 const MEDALS = [medal1, medal2, medal3]
 

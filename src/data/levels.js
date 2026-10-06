@@ -42,6 +42,9 @@ export function getLevel(levelId) {
   return LEVELS.find((l) => l.id === levelId)
 }
 
+// Tra theo Map thay vi duyet ca 11.000 tu moi lan lat the on tap.
+const WORDS_BY_ID = new Map(ALL_WORDS.map((w) => [w.id, w]))
+
 export function getWordById(id) {
-  return ALL_WORDS.find((w) => w.id === id)
+  return WORDS_BY_ID.get(id)
 }

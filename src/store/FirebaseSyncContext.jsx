@@ -1,11 +1,21 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth'
-import { auth, googleProvider } from '../lib/firebase'
 import { useProgress } from './ProgressContext'
-import { pushToFirestore, pullFromFirestore, checkRemote } from '../lib/firebaseSync'
-import { getMyEntry, setNickname as saveNickname, updateMyStats } from '../lib/leaderboard'
 import { getLevelInfo } from '../lib/gamification'
 import { friendlyError } from '../lib/friendlyError'
+
+// Tai Firebase sau khi giao dien da hien (xem lib/firebaseClient.js). Giu lai
+// promise de moi lan goi dung chung mot lan tai.
+let firebasePromise = null
+function loadFirebase() {
+  if (!firebasePromise) {
+    firebasePromise = import('../lib/firebaseClient').catch((e) => {
+      // Tai hong (vd. mat mang khi chua co cache) thi cho phep thu lai lan sau.
+      firebasePromise = null
+      throw e
+    })
+  }
+  return firebasePromise
+}
 
 const FirebaseSyncContext = createContext(null)
 // Context rieng, chi chua { user, authReady } - it doi hon nhieu so voi
@@ -36,10 +46,33 @@ export function FirebaseSyncProvider({ children }) {
   // Tang len moi khi trinh duyet co mang tro lai (xem effect ben duoi).
   const [onlineTick, setOnlineTick] = useState(0)
 
-  useEffect(() => onAuthStateChanged(auth, (u) => {
-    setUser(u)
-    setAuthReady(true)
-  }), [])
+  // Ban Firebase da tai xong, de signIn goi popup NGAY trong luot bam: cho them
+  // mot nhip await truoc signInWithPopup co the bi trinh duyet chan popup.
+  const fbRef = useRef(null)
+
+  useEffect(() => {
+    let unsubscribe = null
+    let cancelled = false
+    loadFirebase()
+      .then((fb) => {
+        if (cancelled) return
+        fbRef.current = fb
+        unsubscribe = fb.onAuthStateChanged(fb.auth, (u) => {
+          setUser(u)
+          setAuthReady(true)
+        })
+      })
+      .catch((e) => {
+        // Khong tai duoc Firebase (offline lan dau) thi van cho vao app nhu
+        // chua dang nhap, hoc offline binh thuong.
+        console.error('Không tải được Firebase:', e)
+        if (!cancelled) setAuthReady(true)
+      })
+    return () => {
+      cancelled = true
+      if (unsubscribe) unsubscribe()
+    }
+  }, [])
 
   // Khi trinh duyet co mang tro lai thi tang so nay de khoi doi chieu ben duoi
   // chay lai. Khong co no thi chi can 1 lan mat mang dung luc dang nhap la viec
@@ -81,7 +114,8 @@ export function FirebaseSyncProvider({ children }) {
 
     setAutoPushArmed(false)
     let cancelled = false
-    checkRemote(user.uid)
+    loadFirebase()
+      .then((fb) => fb.checkRemote(user.uid))
       .then((info) => {
         if (cancelled) return
         reconciledUidRef.current = user.uid
@@ -121,7 +155,7 @@ export function FirebaseSyncProvider({ children }) {
     // Co huy: nguoi dung co the dang xuat truoc khi doc xong, ket qua ve muon
     // khong duoc phep ghi de state cua nguoi da dang xuat.
     let cancelled = false
-    getMyEntry(user.uid).then((entry) => {
+    loadFirebase().then((fb) => fb.getMyEntry(user.uid)).then((entry) => {
       if (cancelled) return
       setNeedsNickname(!entry?.nickname)
       setNicknameState(entry?.nickname ?? null)
@@ -135,7 +169,8 @@ export function FirebaseSyncProvider({ children }) {
 
   async function submitNickname(newNickname) {
     if (!user) return
-    await saveNickname(user.uid, newNickname)
+    const fb = await loadFirebase()
+    await fb.setNickname(user.uid, newNickname)
     setNeedsNickname(false)
     setNicknameState(newNickname)
     await pushLeaderboardStats()
@@ -144,7 +179,8 @@ export function FirebaseSyncProvider({ children }) {
   async function pushLeaderboardStats() {
     if (!user) return
     const { level } = getLevelInfo(progress.xp)
-    await updateMyStats(user.uid, {
+    const fb = await loadFirebase()
+    await fb.updateMyStats(user.uid, {
       xp: progress.xp,
       level,
       streak: progress.streak.count,
@@ -163,7 +199,8 @@ export function FirebaseSyncProvider({ children }) {
     let cancelled = false
     const timer = setTimeout(async () => {
       try {
-        const entry = await getMyEntry(user.uid)
+        const fb = await loadFirebase()
+        const entry = await fb.getMyEntry(user.uid)
         if (cancelled || (entry?.xp ?? 0) >= progress.xp) return
         await pushLeaderboardStats()
       } catch (e) {
@@ -193,10 +230,11 @@ export function FirebaseSyncProvider({ children }) {
   const publishSpeedGameBest = useCallback(
     async (score) => {
       if (!user || !Number.isFinite(score)) return 0
-      const entry = await getMyEntry(user.uid)
+      const fb = await loadFirebase()
+      const entry = await fb.getMyEntry(user.uid)
       const dangLuu = entry?.speedGameBest ?? 0
       if (dangLuu >= score) return dangLuu
-      await updateMyStats(user.uid, { speedGameBest: score })
+      await fb.updateMyStats(user.uid, { speedGameBest: score })
       return score
     },
     [user]
@@ -206,8 +244,9 @@ export function FirebaseSyncProvider({ children }) {
     setStatus('syncing')
     setError(null)
     try {
-      const result = await signInWithPopup(auth, googleProvider)
-      const info = await checkRemote(result.user.uid)
+      const fb = fbRef.current ?? (await loadFirebase())
+      const result = await fb.signInWithPopup(fb.auth, fb.googleProvider)
+      const info = await fb.checkRemote(result.user.uid)
       setStatus('idle')
       return { ...info, uid: result.user.uid }
     } catch (e) {
@@ -218,7 +257,8 @@ export function FirebaseSyncProvider({ children }) {
   }
 
   async function signOutUser() {
-    await firebaseSignOut(auth)
+    const fb = await loadFirebase()
+    await fb.signOut(fb.auth)
     setStatus('idle')
     setError(null)
     setLastSyncedAt(null)
@@ -229,7 +269,8 @@ export function FirebaseSyncProvider({ children }) {
     setStatus('syncing')
     setError(null)
     try {
-      const ts = await pushToFirestore(user.uid)
+      const fb = await loadFirebase()
+      const ts = await fb.pushToFirestore(user.uid)
       await pushLeaderboardStats()
       setLastSyncedAt(ts)
       setStatus('synced')
@@ -251,7 +292,8 @@ export function FirebaseSyncProvider({ children }) {
     setStatus('syncing')
     setError(null)
     try {
-      const remoteUpdatedAt = await pullFromFirestore(uid)
+      const fb = await loadFirebase()
+      const remoteUpdatedAt = await fb.pullFromFirestore(uid)
       setLastSyncedAt(remoteUpdatedAt)
       setStatus('synced')
       // Da tai xong ban tren dam may ve may nay -> khong con gi de ghi de mat,

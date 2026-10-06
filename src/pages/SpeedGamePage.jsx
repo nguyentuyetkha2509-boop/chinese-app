@@ -12,22 +12,16 @@ import { playCorrect, playWrong, playCelebrate } from '../lib/sfx'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { ZapIcon, VolumeIcon } from '../components/Icons'
 import { accentFor } from '../lib/colors'
+import { pickDistractors, shuffle } from '../lib/quiz'
 import CelebrationBadge from '../components/CelebrationBadge'
 
 const GAME_SECONDS = 60
 
-function shuffle(arr) {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
-
+// Dung chung cach chon dap an nhieu voi bai kiem tra: khong xao ca 11.000 tu
+// moi cau, va khong de 2 lua chon trung nghia (vd 狗 va 犬 deu la 'con chó').
 function buildQuestion() {
   const word = ALL_WORDS[Math.floor(Math.random() * ALL_WORDS.length)]
-  const others = shuffle(ALL_WORDS.filter((w) => w.id !== word.id)).slice(0, 3)
+  const others = pickDistractors(word, ALL_WORDS)
   return { word, options: shuffle([word, ...others]) }
 }
 

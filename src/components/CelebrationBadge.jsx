@@ -1,4 +1,4 @@
-import celebratePanda from '../assets/panda/celebrate_panda.png'
+import celebratePanda from '../assets/panda/celebrate_panda.webp'
 
 // size tinh bang px; mac dinh dung cho the hoan thanh, ban nho cho chat hep
 export default function CelebrationBadge({ size = 96, className = 'mx-auto mb-3' }) {

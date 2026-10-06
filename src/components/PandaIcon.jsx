@@ -1,4 +1,4 @@
-import graduatePanda from '../assets/panda/graduate_panda.png'
+import graduatePanda from '../assets/panda/graduate_panda.webp'
 
 // Thay cho emoji gau truc: dung hinh panda doi mu cu nhan hieu cua app
 export default function PandaIcon({ size = 32, className = '' }) {
