@@ -171,11 +171,18 @@ export function ProgressProvider({ children }) {
     })
   }
 
+  // Chuoi luu trong state chi duoc cap nhat khi hoc (touchStreak), nen neu bo hoc
+  // nhieu ngay thi count van la gia tri cu. Khi doc ra phai kiem tra lastDay:
+  // chi con hieu luc neu la hom nay hoac hom qua, nguoc lai chuoi da dut = 0.
+  const streakCount =
+    streak.lastDay === todayKey() || streak.lastDay === todayKey(new Date(Date.now() - DAY_MS)) ? streak.count : 0
+  const activeStreak = useMemo(() => ({ ...streak, count: streakCount }), [streak, streakCount])
+
   const value = useMemo(
     () => ({
       srsState,
       completedUnits,
-      streak,
+      streak: activeStreak,
       toneStats,
       toneStatsByLevel,
       writingStats,
@@ -210,7 +217,7 @@ export function ProgressProvider({ children }) {
     [
       srsState,
       completedUnits,
-      streak,
+      activeStreak,
       toneStats,
       toneStatsByLevel,
       writingStats,
