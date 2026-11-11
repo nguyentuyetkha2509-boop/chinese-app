@@ -48,8 +48,8 @@ const STAT_STYLES = [
 // khong trung tong. "col-span-2" = the dai (ca hang), khong co = the vuong; moi
 // hang deu du 2 cot nen khong the nao bi le.
 //
-// Lo trinh chinh: 5 the vuong. Bo thu da nam trong Bai hoc nen con 1 o trong o cuoi
-// hang 3, de danh cho tinh nang moi sau nay (them the vuong vao day la du hang).
+// Lo trinh chinh: 6 the vuong, 3 hang du. O cuoi la Hanh trinh (ban do theo tinh
+// huong), lap vao cho trong de lai tu khi Bo thu chuyen vao Bai hoc.
 const CORE_CARDS = [
   {
     to: '/on-tap',
@@ -80,8 +80,23 @@ const CORE_CARDS = [
     icon: PencilIcon,
     title: 'Viết chữ Hán',
     className: 'bg-gradient-to-br from-emerald-500 to-teal-600'
+  },
+  {
+    to: '/hanh-trinh',
+    icon: MapIcon,
+    title: 'Hành trình',
+    className: 'bg-gradient-to-br from-sky-500 to-candy-500'
   }
 ]
+
+// Chua co anh bieu tuong rieng cho ban do nen tam dung emoji, cung kich thuoc voi anh.
+function MapIcon({ width = 28, className = '' }) {
+  return (
+    <span className={`inline-block leading-none ${className}`} style={{ fontSize: width * 0.9 }} aria-hidden="true">
+      🗺️
+    </span>
+  )
+}
 
 // Noi dung phu / mo rong - luyen them khi da xong vong hoc chinh, dat cuoi trang.
 // 11 the xep thanh 7 hang: 2 vuong (hoc), 2 vuong (AI), 1 dai (truyen), 2 vuong
@@ -247,6 +262,7 @@ export default function HomePage() {
     if (to === '/ghep-cap') return 'Lật thẻ ghép chữ với nghĩa'
     if (to === '/tro-chuyen-ai') return 'Nói chuyện bằng giọng nói với AI'
     if (to === '/cham-bai-viet') return 'AI chấm và sửa câu văn bạn viết'
+    if (to === '/hanh-trinh') return 'Một ngày làm môi giới ở Thượng Hải'
     return null
   }
 

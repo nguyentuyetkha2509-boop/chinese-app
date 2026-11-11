@@ -11,6 +11,7 @@ import { useFirebaseAuth } from './store/FirebaseSyncContext'
 import HomePage from './pages/HomePage'
 const TodayPlanPage = lazy(() => import('./pages/TodayPlanPage'))
 const RoadmapPage = lazy(() => import('./pages/RoadmapPage'))
+const JourneyPage = lazy(() => import('./pages/JourneyPage'))
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'))
 const AdminPage = lazy(() => import('./pages/AdminPage'))
 const LessonsPage = lazy(() => import('./pages/LessonsPage'))
@@ -82,6 +83,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/hoc-hom-nay" element={<TodayPlanPage />} />
           <Route path="/lo-trinh" element={<RoadmapPage />} />
+          <Route path="/hanh-trinh" element={<JourneyPage />} />
           <Route path="/bang-xep-hang" element={<LeaderboardPage />} />
           <Route path="/quan-tri" element={<AdminPage />} />
           <Route path="/bai-hoc" element={<LessonsPage />} />

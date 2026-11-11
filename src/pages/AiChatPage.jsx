@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import MarkdownLite from '../components/MarkdownLite'
 import { VolumeIcon, RecordIcon } from '../components/Icons'
 import { askDeepseek, hasDeepseekKey, DeepseekError } from '../lib/deepseek'
 import { loadJSON, saveJSON } from '../lib/storage'
 import { speakChinese, stopSpeaking } from '../lib/tts'
-import { playFlip } from '../lib/sfx'
+import { playFlip, playCelebrate } from '../lib/sfx'
+import { getStation } from '../data/journey'
+import { loadJourney, markRoleplayDone, ROLEPLAY_TURNS } from '../lib/journey'
 
 const HISTORY_KEY = 'aiChatHistory'
 const HISTORY_LIMIT = 40
@@ -20,7 +22,9 @@ const AFTER_SPEECH_MS = 3000
 const SpeechRecognitionCtor =
   typeof window !== 'undefined' ? window.SpeechRecognition || window.webkitSpeechRecognition : null
 
-const SYSTEM_PROMPT = `Bạn là một người bạn Trung Quốc thân thiện tên Gấu Trúc, đang trò chuyện bằng LỜI NÓI để giúp một người Việt Nam luyện hội thoại tiếng Trung (trình độ HSK1-HSK9). Tin nhắn của người dùng là văn bản do máy nhận dạng giọng nói chuyển ra, nên có thể sai chữ đồng âm hoặc thiếu dấu câu - hãy đoán ý theo ngữ cảnh, đừng bắt lỗi chính tả.
+const FRIEND_INTRO = 'Bạn là một người bạn Trung Quốc thân thiện tên Gấu Trúc, đang trò chuyện bằng LỜI NÓI để giúp một người Việt Nam luyện hội thoại tiếng Trung (trình độ HSK1-HSK9).'
+
+const RULES = `Tin nhắn của người dùng là văn bản do máy nhận dạng giọng nói chuyển ra, nên có thể sai chữ đồng âm hoặc thiếu dấu câu - hãy đoán ý theo ngữ cảnh, đừng bắt lỗi chính tả.
 Quy tắc trả lời, đúng định dạng 3 dòng:
 - Dòng 1: toàn bộ câu trả lời bằng tiếng Trung giản thể, tự nhiên, tối đa 2 câu ngắn viết liền trên CÙNG một dòng (dòng này sẽ được đọc thành tiếng, không dùng ký hiệu markdown, emoji hay pinyin trong dòng này).
 - Dòng 2: pinyin của toàn bộ dòng 1.
@@ -30,6 +34,21 @@ Quy tắc trả lời, đúng định dạng 3 dòng:
 - Nếu người dùng nói sai ngữ pháp hoặc dùng từ không chính xác, thêm một dòng cuối bắt đầu bằng "💡" (tiếng Việt) chỉ ra chỗ sai và câu đúng, rồi vẫn tiếp tục hội thoại.
 - Nếu người dùng nói tiếng Việt, vẫn trả lời bằng tiếng Trung đơn giản để họ tập nói lại.
 - Giữ không khí vui vẻ, khích lệ, luôn kết thúc bằng một câu hỏi ngắn để người dùng nói tiếp.`
+
+const SYSTEM_PROMPT = `${FRIEND_INTRO}\n${RULES}`
+
+// Nhap vai theo ga cua Hanh trinh: AI dong mot nhan vat, nguoi dung la moi gioi.
+// Cho phep tu chuyen nganh bat dong san vi do chinh la thu nguoi hoc can luyen.
+function rolePrompt(station) {
+  return `Bạn đang NHẬP VAI bằng LỜI NÓI để giúp một người Việt Nam làm môi giới bất động sản luyện nói tiếng Trung. ${station.roleplay.role}
+Luôn giữ vai, không nói mình là AI hay Gấu Trúc. Được dùng thuật ngữ bất động sản thông dụng, còn lại ưu tiên câu ngắn dễ hiểu.
+${RULES}`
+}
+
+function openingMessage(station) {
+  const o = station.roleplay.opening
+  return { role: 'assistant', content: `${o.hanzi}\n${o.pinyin}\n${o.meaning}` }
+}
 
 // Chi doc cac dong tieng Trung, bo pinyin va nghia tieng Viet (khong co chu Han) vi bo
 // doc tieng Trung doc chung rat te. AI doi khi tra loi thanh nhieu khoi 3 dong thay vi
@@ -50,9 +69,19 @@ const STATUS_TEXT = {
   speaking: 'Gấu Trúc đang nói...'
 }
 
+// Doi ga thi phai dung lai trang tu dau (lich su, loi chao rieng), nen gan key theo vai.
 export default function AiChatPage() {
+  const [params] = useSearchParams()
+  const station = getStation(params.get('vai'))
+  return <AiChat key={station?.key || 'free'} station={station} />
+}
+
+function AiChat({ station }) {
   const navigate = useNavigate()
-  const [messages, setMessages] = useState(() => loadJSON(HISTORY_KEY, []))
+  const historyKey = station ? `${HISTORY_KEY}:${station.key}` : HISTORY_KEY
+  const initialMessages = station ? [openingMessage(station)] : []
+  const [messages, setMessages] = useState(() => loadJSON(historyKey, initialMessages))
+  const [roleDone, setRoleDone] = useState(() => !!station && loadJourney().roleplayDone.includes(station.key))
   const [phase, setPhase] = useState('idle') // idle | listening | thinking | speaking
   const [interim, setInterim] = useState('')
   const [error, setError] = useState('')
@@ -66,8 +95,13 @@ export default function AiChatPage() {
 
   useEffect(() => {
     messagesRef.current = messages
-    saveJSON(HISTORY_KEY, messages.slice(-HISTORY_LIMIT))
-  }, [messages])
+    saveJSON(historyKey, messages.slice(-HISTORY_LIMIT))
+    if (station && !roleDone && messages.filter((m) => m.role === 'user').length >= ROLEPLAY_TURNS) {
+      markRoleplayDone(station.key)
+      setRoleDone(true)
+      playCelebrate()
+    }
+  }, [messages, historyKey, station, roleDone])
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' })
@@ -108,7 +142,8 @@ export default function AiChatPage() {
     setMessages(next)
     setPhase('thinking')
     try {
-      const reply = await askDeepseek([{ role: 'system', content: SYSTEM_PROMPT }, ...next])
+      const system = station ? rolePrompt(station) : SYSTEM_PROMPT
+      const reply = await askDeepseek([{ role: 'system', content: system }, ...next])
       setMessages((cur) => [...cur, { role: 'assistant', content: reply }])
       speak(reply)
     } catch (e) {
@@ -199,8 +234,8 @@ export default function AiChatPage() {
 
   function handleClear() {
     stopSpeaking()
-    setMessages([])
-    saveJSON(HISTORY_KEY, [])
+    setMessages(initialMessages)
+    saveJSON(historyKey, initialMessages)
     setPhase('idle')
   }
 
@@ -211,9 +246,9 @@ export default function AiChatPage() {
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <BackButton />
-          <h1 className="text-xl text-brand-800">Trò chuyện với AI</h1>
+          <h1 className="text-xl text-brand-800">{station ? `Nhập vai: ${station.name}` : 'Trò chuyện với AI'}</h1>
         </div>
-        {messages.length > 0 && (
+        {messages.length > initialMessages.length && (
           <button onClick={handleClear} className="text-xs text-gray-500 underline">
             Xóa hội thoại
           </button>
@@ -229,6 +264,22 @@ export default function AiChatPage() {
         </div>
       ) : (
         <>
+          {station && (
+            <div className={`mb-2 rounded-2xl p-3 text-xs ${roleDone ? 'bg-emerald-50 text-emerald-800' : 'bg-sun-100 text-gray-700'}`}>
+              {roleDone ? (
+                <>
+                  ⭐ Hoàn thành nhập vai!{' '}
+                  <button onClick={() => navigate(-1)} className="font-semibold underline">
+                    Về bản đồ
+                  </button>
+                </>
+              ) : (
+                <>
+                  🎯 {station.roleplay.mission} (nói {ROLEPLAY_TURNS} lượt để nhận ⭐)
+                </>
+              )}
+            </div>
+          )}
           <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto pb-3">
             {messages.length === 0 && (
               <p className="rounded-2xl bg-white p-4 text-sm text-gray-500 shadow-sm">

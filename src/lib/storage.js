@@ -37,7 +37,8 @@ export const SYNCED_KEYS = [
   'xp',
   'dailyXp',
   'newWordsToday',
-  'dailyCombo'
+  'dailyCombo',
+  'journeyProgress'
 ]
 
 // Xuat tien do hoc de day len dam may. Chi gom SYNCED_KEYS.

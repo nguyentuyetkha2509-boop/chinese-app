@@ -27,5 +27,6 @@ export const XP_REWARDS = {
   grammarComplete: 10,
   dictationCorrect: 5,
   memoryMatchDone: 10,
-  memoryMatchStar: 5
+  memoryMatchStar: 5,
+  journeyStation: 30
 }
