@@ -42,6 +42,20 @@ const STAT_STYLES = [
   { key: 'due', label: 'Cần ôn', className: 'bg-brand-100 text-brand-700' }
 ]
 
+// Chua co anh bieu tuong rieng cho Hanh trinh va So do chu nen tam dung emoji,
+// cung kich thuoc voi anh.
+function emojiIcon(emoji) {
+  return function EmojiIcon({ width = 28, className = '' }) {
+    return (
+      <span className={`inline-block leading-none ${className}`} style={{ fontSize: width * 0.9 }} aria-hidden="true">
+        {emoji}
+      </span>
+    )
+  }
+}
+const MapIcon = emojiIcon('🗺️')
+const BrainIcon = emojiIcon('🧠')
+
 // Vong lap hoc chinh moi ngay - hien ngay sau nut "tiep tuc hoc", khong can cuon.
 // Moi the la mot cap mau chuyen sac. Bang mau gom 5 tong: tim, hong, xanh duong,
 // xanh la (emerald/teal) va cam - xep sao cho hai the ke nhau (ngang va doc)
@@ -89,17 +103,9 @@ const CORE_CARDS = [
   }
 ]
 
-// Chua co anh bieu tuong rieng cho ban do nen tam dung emoji, cung kich thuoc voi anh.
-function MapIcon({ width = 28, className = '' }) {
-  return (
-    <span className={`inline-block leading-none ${className}`} style={{ fontSize: width * 0.9 }} aria-hidden="true">
-      🗺️
-    </span>
-  )
-}
 
 // Noi dung phu / mo rong - luyen them khi da xong vong hoc chinh, dat cuoi trang.
-// 11 the xep thanh 7 hang: 2 vuong (hoc), 2 vuong (AI), 1 dai (truyen), 2 vuong
+// 12 the xep thanh 8 hang: 2 vuong (hoc), 1 dai (so do chu), 2 vuong (AI), 1 dai (truyen), 2 vuong
 // (thu, nghe chep), 2 vuong (tro choi), roi 2 thanh dai lien nhau o cuoi (dua
 // toc do, bang xep hang).
 const EXTRA_CARDS = [
@@ -114,6 +120,12 @@ const EXTRA_CARDS = [
     icon: ChatIcon,
     title: 'Hội thoại',
     className: 'bg-gradient-to-br from-emerald-500 to-sky-600'
+  },
+  {
+    to: '/so-do-chu',
+    icon: BrainIcon,
+    title: 'Sơ đồ chữ',
+    className: 'col-span-2 bg-gradient-to-br from-sun-500 to-brand-600'
   },
   {
     to: '/tro-chuyen-ai',
@@ -262,6 +274,7 @@ export default function HomePage() {
     if (to === '/ghep-cap') return 'Lật thẻ ghép chữ với nghĩa'
     if (to === '/tro-chuyen-ai') return 'Nói chuyện bằng giọng nói với AI'
     if (to === '/cham-bai-viet') return 'AI chấm và sửa câu văn bạn viết'
+    if (to === '/so-do-chu') return '1 chữ mở ra 10 từ, kèm ví dụ'
     if (to === '/hanh-trinh') return 'Một ngày làm môi giới ở Thượng Hải'
     return null
   }
