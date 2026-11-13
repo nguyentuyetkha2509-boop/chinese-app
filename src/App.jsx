@@ -12,6 +12,7 @@ import HomePage from './pages/HomePage'
 const TodayPlanPage = lazy(() => import('./pages/TodayPlanPage'))
 const RoadmapPage = lazy(() => import('./pages/RoadmapPage'))
 const JourneyPage = lazy(() => import('./pages/JourneyPage'))
+const Village3DPage = lazy(() => import('./pages/Village3DPage'))
 const CharWebsPage = lazy(() => import('./pages/CharWebsPage'))
 const CharWebDetailPage = lazy(() => import('./pages/CharWebDetailPage'))
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'))
@@ -86,6 +87,7 @@ export default function App() {
           <Route path="/hoc-hom-nay" element={<TodayPlanPage />} />
           <Route path="/lo-trinh" element={<RoadmapPage />} />
           <Route path="/hanh-trinh" element={<JourneyPage />} />
+          <Route path="/hanh-trinh/lang-3d" element={<Village3DPage />} />
           <Route path="/so-do-chu" element={<CharWebsPage />} />
           <Route path="/so-do-chu/:char" element={<CharWebDetailPage />} />
           <Route path="/bang-xep-hang" element={<LeaderboardPage />} />

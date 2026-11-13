@@ -170,7 +170,13 @@ export default function JourneyPage() {
     <div className="px-4 pt-6 pb-10">
       <div className="mb-3 flex items-center gap-2">
         <BackButton />
-        <h1 className="text-xl text-brand-800">Hành trình</h1>
+        <h1 className="flex-1 text-xl text-brand-800">Hành trình</h1>
+        <Link
+          to="/hanh-trinh/lang-3d"
+          className="rounded-full bg-gradient-to-r from-sky-500 to-candy-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm"
+        >
+          🏝️ Làng 3D (thử)
+        </Link>
       </div>
 
       <div className="rounded-2xl bg-gradient-to-br from-sky-500 to-brand-600 p-4 text-white shadow-sm">
